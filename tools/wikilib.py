@@ -300,14 +300,27 @@ _SEARCH_WEIGHTS = [
 ]
 
 
+_SUFFIXES = ("izations", "ization", "izing", "ized", "izes", "ize", "ations", "ation", "ing", "ed", "es", "s")
+
+
+def _stem(word: str) -> str:
+    """A deliberately crude stem, so that 'generalised', 'generalization' and 'generalizes' meet.
+    British -is- spellings are folded into -iz- first. A stem is never shorter than four letters."""
+    if not word.isalpha() or len(word) <= 4:
+        return word
+    word = re.sub(r"is(e|ed|es|ing|ation|ations)$", r"iz\1", word)
+    for suffix in _SUFFIXES:
+        if word.endswith(suffix) and len(word) - len(suffix) >= 4 and not word.endswith("ss"):
+            return word[: -len(suffix)]
+    return word
+
+
 def tokenize(text: str) -> list[str]:
     tokens = []
     for raw in re.findall(r"[a-z0-9]+", str(text).lower()):
         if raw in _STOPWORDS:
             continue
-        if len(raw) > 3 and raw.endswith("s") and not raw.endswith("ss"):
-            raw = raw[:-1]
-        tokens.append(raw)
+        tokens.append(_stem(raw))
     return tokens
 
 
@@ -318,20 +331,43 @@ def _token_match(query_token: str, field_token: str) -> bool:
     return len(shorter) >= 4 and longer.startswith(shorter)
 
 
-def score_entry(entry: Entry, query_tokens: list[str]) -> tuple[int, list[str]]:
-    """Keyword score and the query tokens that matched. Plain and transparent on purpose."""
-    score = 0
+def _field_tokens(entry: Entry) -> list[tuple[int, list[str]]]:
+    tokens = [(weight, tokenize(" ".join(str(v) for v in get_values(entry.data, path)))) for path, weight in _SEARCH_WEIGHTS]
+    tokens.append((1, tokenize(entry.body)))
+    return tokens
+
+
+def score_entry(entry: Entry, query_tokens: list[str], rarity: dict[str, float] | None = None) -> tuple[float, list[str]]:
+    """Keyword score and the query tokens that matched. Plain and transparent on purpose.
+
+    Each field a token occurs in adds that field's weight, scaled by the token's rarity (1.0 for a
+    word few entries use, near 0 for a word every entry uses). Without `rarity` every token counts in full.
+    """
+    score = 0.0
     matched: set[str] = set()
-    field_tokens = [
-        (weight, tokenize(" ".join(str(v) for v in get_values(entry.data, path)))) for path, weight in _SEARCH_WEIGHTS
-    ]
-    field_tokens.append((1, tokenize(entry.body)))
+    field_tokens = _field_tokens(entry)
     for token in query_tokens:
         for weight, tokens in field_tokens:
             if any(_token_match(token, candidate) for candidate in tokens):
-                score += weight
+                score += weight * (rarity or {}).get(token, 1.0)
                 matched.add(token)
-    return score, sorted(matched)
+    return round(score, 1), sorted(matched)
+
+
+def token_rarity(entries: list[Entry], query_tokens: list[str]) -> dict[str, float]:
+    """How much each query token tells entries apart: 1.0 when one entry uses it, near 0 when all do."""
+    import math
+
+    total = len(entries)
+    if total == 0:
+        return {}
+    haystacks = [[candidate for _, tokens in _field_tokens(entry) for candidate in tokens] for entry in entries]
+    top = math.log((total + 1) / 1.5)
+    rarity = {}
+    for token in set(query_tokens):
+        used_by = sum(1 for haystack in haystacks if any(_token_match(token, candidate) for candidate in haystack))
+        rarity[token] = 1.0 if used_by <= 1 or top <= 0 else max(0.05, math.log((total + 1) / (used_by + 0.5)) / top)
+    return rarity
 
 
 def matches_filters(data: dict, filters: dict | None) -> bool:
@@ -378,6 +414,24 @@ def _comparable(value: Any) -> Any:
         return text
 
 
+def reviewed_by(data: dict) -> str | None:
+    """Who stands behind review.status 'reviewed': a person, or an agent only. None when the entry is not reviewed.
+
+    'reviewed' alone reads as vetted. An agent's review is weaker than a person's, and weakest when the
+    reviewing model is the one that wrote the entry, so readers (people and agents) are told which it was.
+    """
+    review = data.get("review") or {}
+    if review.get("status") != "reviewed":
+        return None
+    reviewers = [r for r in review.get("reviewers") or [] if isinstance(r, dict)]
+    if any(r.get("type") == "human" for r in reviewers):
+        return "a person"
+    author_model = (data.get("contributor") or {}).get("agent_model")
+    if author_model and any(r.get("agent_model") == author_model for r in reviewers):
+        return "an agent only, the same model that wrote the entry"
+    return "an agent only"
+
+
 def summarize(entry: Entry) -> dict:
     data = entry.data
     return {
@@ -392,6 +446,7 @@ def summarize(entry: Entry) -> dict:
         "retry_welcome": data.get("retry_welcome"),
         "evidence_level": data.get("evidence_level"),
         "review_status": (data.get("review") or {}).get("status"),
+        "reviewed_by": reviewed_by(data),
         "contributor_type": (data.get("contributor") or {}).get("type"),
         "badges": badges(data),
         "source_url": (data.get("source") or {}).get("url"),
@@ -402,27 +457,37 @@ def search(entries: Iterable[Entry], query: str = "", filters: dict | None = Non
     """Keyword search plus field filters. An empty query lists everything that passes the filters."""
     entries = list(entries)
     query_tokens = tokenize(query or "")
+    # Matching is done on stems; what is reported back is the word the caller typed.
+    as_typed: dict[str, str] = {}
+    for raw in re.findall(r"[a-z0-9]+", str(query or "").lower()):
+        if raw not in _STOPWORDS:
+            as_typed.setdefault(_stem(raw), raw)
+    rarity = token_rarity(entries, query_tokens) if query_tokens else {}
     results = []
     for entry in entries:
         if not matches_filters(entry.data, filters):
             continue
-        score, matched = score_entry(entry, query_tokens) if query_tokens else (0, [])
-        if query_tokens and score == 0:
+        score, matched = score_entry(entry, query_tokens, rarity) if query_tokens else (0, [])
+        if query_tokens and not matched:
             continue
         summary = summarize(entry)
         summary["score"] = score
-        summary["matched_terms"] = matched
+        summary["matched_terms"] = sorted(as_typed.get(token, token) for token in matched)
         results.append(summary)
     results.sort(key=lambda item: (-item["score"], item["id"]))
     return {
         "query": query,
-        "query_terms": query_tokens,
+        "query_terms": [as_typed.get(token, token) for token in dict.fromkeys(query_tokens)],
         "filters": filters or {},
         "total_entries_in_wiki": len(entries),
         "match_count": len(results),
         "results": results[:limit],
         "note": "Keyword match only, ranked: an entry is listed when it contains ANY of the query terms, so check "
-        "matched_terms and score; a hit on one common word is a weak match, not a finding. No match here means no entry "
+        "matched_terms and score; a hit on one common word is a weak match, not a finding. Words that many entries use "
+        "count for less, and word forms are folded (generalised, generalization). An empty query scores every entry 0: "
+        "filters alone do not rank. Free-text tags (method, checks_done, models.name, benchmarks) are not a controlled "
+        "vocabulary, so a filter on one spelling can miss entries: prefer a text query, or check list_facets for variants. "
+        "No match here means no entry "
         "uses these words, not that nothing related exists: retry with synonyms and with filters from list_facets before "
         "concluding 'not found'.",
     }
