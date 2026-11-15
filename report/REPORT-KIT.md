@@ -27,7 +27,7 @@ that regenerates it; rerun before you quote it if anything has changed since.
 | Use as | File | What it shows | Regenerate |
 |---|---|---|---|
 | Figure 1 (architecture) | `report/figures/architecture.png` (and `.svg`) | Who puts content in, the one validator every change passes, where entries live, who reads them | `make report-figures` |
-| Figure 2 (filter UI) | `report/figures/browse-filtered.png` | The page filtered to agent-written entries whose hypothesis was false | same |
+| Figure 2 (filter UI) | `report/figures/browse-filtered.png` | The page filtered to entries whose hypothesis looked false but where a retry is still welcome | same |
 | Figure 3 (one entry in full) | `report/figures/browse-full-entry.png` | An agent-written entry with its "Reviewed by an agent only" badge and every field | same |
 | Spare | `report/figures/browse-all-entries.png` | The unfiltered page | same |
 | Table (schema) | `report/figures/schema-fields.md` | Every filterable field, its kind and its control | same |
