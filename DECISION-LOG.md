@@ -24,7 +24,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 
 | ID | Constraint | What was done about it |
 |---|---|---|
-| DEC-05 | The sandbox refuses writes to `.git/config`, so `git init` could not run in this folder. | Not worked around: that guard exists to stop sandboxed commands from planting git hooks or config. The maintainer was asked to run `git init -b main` once. See `DONE.md` for the state of git history. |
+| DEC-05 | The sandbox refuses writes to `.git/config`, so `git init` could not run in this folder. | Not worked around: that guard exists to stop sandboxed commands from planting git hooks or config. The maintainer was asked to run `git init -b main` once; it had not happened by the end of the run. See DEC-44 for how history was kept. |
 | DEC-06 | `gh` could not read its config in the sandbox, so the GitHub handle is unknown. | Entries use the visible placeholder `HANDLE-TBD` for `contributor.handle` rather than a guessed handle. `FEWIKI_HANDLE` or a working `gh` login replaces it for new entries. |
 | DEC-07 | The sandbox forbids listening on a local port. | Datasette is verified through its in-process request mode (`datasette --get`), which needs no port. Serving on a port is untested here; the command is in `DONE.md`. |
 | DEC-08 | No headless `claude` command is available, and subagents cannot use an MCP server that the session has not loaded. | Skills were exercised by subagents that read the skill file and call `tools/cli.py`, the command-line twin of the MCP tools (same functions, same JSON). The MCP layer itself is tested in process with a FastMCP client. Loading the plugin inside Claude Code is untested; see `DONE.md`. |
@@ -89,6 +89,18 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 |---|---|---|
 | DEC-43 | No test issue was filed and no agent-written entry was stored as `human` to demonstrate D2. | There is no GitHub repository to file it in (DEC-02), and an entry filed by an agent must not sit in the wiki as a person's. D2 is demonstrated by tests that run the form-to-entry conversion on a realistic issue body; the live run is a step in the demo script. |
 
+## H. Decisions made later in the run
+
+| ID | Decision | Reason |
+|---|---|---|
+| DEC-44 | Commit history was kept in a scratch git directory outside this folder and handed over as one file, `history.bundle`, with a one-line command to load it. | `git init` never ran in this folder (DEC-05), and ending the build with no history would have thrown away the audit trail the project is about. A bundle plants no git config or hooks here, so it does not sidestep the guard that blocked `git init`. Commits were made in build order from files that already existed, so their timestamps do not show the real pace of work. |
+| DEC-45 | The tenth seed, `fe-2026-0010`, was admitted with one required field unsupported (`hypothesis`). | Only 9 of 49 audited posts met the full bar. The post asks a question and states no prediction; the entry records the proposition tested and says the post poses it as a question. It is the only exception, and `scouting/selection.md` names it. The alternative was 9 entries. |
+| DEC-46 | Subagents were limited to reading and writing files. The orchestrator ran every command. | Two code-building subagents stalled for about an hour without writing a file, and the maintainer asked for unattended operation with a time limit on subagents. Consequences: the orchestrator wrote both browse UIs itself; skill subagents read the post and the wiki from files holding the same JSON the tools return, and the orchestrator ran the submit and review steps with the values the subagents chose. |
+| DEC-47 | Each seed post got exactly one entry, for the experiment named in the audit, although the skill normally writes one entry per distinct failed experiment. | The PRD asks for 10 seed entries from 10 posts. The eval runs were not restricted this way; two of them produced two drafts. |
+| DEC-48 | Two gold drafts were edited by the orchestrator before publication: `fe-2026-0001` (model name written as the post gives it) and `fe-2026-0005` (developer set to `unknown` where the drafter had used outside knowledge). | To keep one rule across the gold set: every field sourced from the post. Both edits are recorded in the files' verification notes for the maintainer to accept or reverse. |
+| DEC-49 | The agent review of `fe-2026-0007` was recorded as `reviewed` although the reviewer was the same model that wrote the entry. | The review skill allows it and requires the notes to say so, which they do; the web page labels it "Reviewed by an agent only". It demonstrates the mechanism. It is not independent vetting. |
+| DEC-50 | The test fixtures now clear `GIT_DIR` and related variables. | Running the suite with those variables exported let the fixtures write to the scratch history: its author settings were changed and four commits were recorded under the test identity. They were recreated with the same trees and messages under the right author. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.
@@ -105,3 +117,11 @@ Not decisions, but things the build turned up that belong in the report.
 4. **Experiments without a model** (for example human-judge studies) cannot be
    entered, because `models` is required.
 5. **LessWrong has no tag for negative results.**
+6. **Free tags do not converge.** In the eval, `method` and `checks_done`
+   never matched the gold entry exactly: two careful passes over the same post
+   chose different tags. A controlled vocabulary would help filtering as well
+   as scoring.
+7. **The validator caught real mistakes on first use.** Two of the five
+   skill-written seed drafts were rejected for a wrong field type.
+8. **Experiments on synthetic data** have no model to name either
+   (`fe-2026-0007` records `models: unknown`), a second case of finding 4.

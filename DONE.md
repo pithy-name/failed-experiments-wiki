@@ -235,9 +235,10 @@ become "here is the form and the workflow file", and you say so.
 ## 6. Decisions and findings
 
 `DECISION-LOG.md` holds every non-trivial decision with its reason (DEC-01 to
-DEC-43) and a short list of findings for the report. Start with DEC-32 (why the
-bar stayed strict), DEC-37 (the gold drafts labelled `human`) and the findings
-at the end.
+DEC-50) and a short list of findings for the report. Start with DEC-32 (why the
+bar stayed strict), DEC-37 (the gold drafts labelled `human`), DEC-44 (how the
+commit history was kept), DEC-46 (what subagents did and did not do) and the
+findings at the end.
 
 Things for the report that the build surfaced:
 
