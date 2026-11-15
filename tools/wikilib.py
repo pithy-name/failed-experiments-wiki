@@ -828,6 +828,7 @@ def submit_entry(data: dict, body: str = "", *, repo: Path | None = None, contri
     pr = open_pull_request(repo, branch, f"Add entry {entry_id}: {prepared['title']}"[:240], pr_body)
     return {
         "ok": True, "id": entry_id, "branch": branch, "commit": commit, "file": f"entries/{entry_id}.md",
+        "recorded_as": {key: value for key, value in prepared["contributor"].items() if key != "note"},
         "badges": badges(prepared), "quote_checked": quote_checked, **pr,
         "issues": [i.as_dict() for i in issues],
     }
@@ -875,6 +876,8 @@ def review_entry(entry_id: str, status: str, notes: str, *, repo: Path | None = 
     pr = open_pull_request(repo, branch, f"Review {entry_id}: {previous} -> {status}", f"Reviewer: {who}\n\n{notes}")
     return {
         "ok": True, "id": entry_id, "previous_status": previous, "new_status": status, "branch": branch, "commit": commit,
+        "recorded_as": {key: value for key, value in reviewer.items() if key not in {"notes", "date"}},
+        "reviewed_by": reviewed_by(data),
         "badges": badges(data), **pr, "issues": [i.as_dict() for i in issues],
     }
 
