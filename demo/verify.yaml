@@ -343,6 +343,55 @@ checks:
         reject: ["failed", "error"]
         timeout: 1200
 
+  # ---- Optional: the plugin inside Claude Code (starts headless sessions; uses model credits) ----
+  # The sessions get no built-in tools (no shell, no file edits): only the plugin's own read tools and, for the
+  # skill checks, the Skill tool. User settings are not loaded, so the run does not depend on one person's setup.
+  - id: plugin-tools-live
+    requirement: D1
+    optional: plugin
+    title: Claude Code loads the plugin and its tools answer
+    proves: A Claude Code session started with the plugin sees all six wiki tools and a live search returns the right entries.
+    commands:
+      - run: >-
+          claude -p "List the exact names of every MCP tool you have whose name contains failed-experiments-wiki, one per line.
+          Then call the search_entries tool with query steganography and list the entry IDs it returns."
+          --plugin-dir plugin --setting-sources project --tools ""
+          --allowedTools "mcp__plugin_failed-experiments-wiki_failed-experiments-wiki"
+          --permission-prompts none --no-session-persistence --model haiku
+        timeout: 600
+        expect: ["search_entries", "get_entry", "list_facets", "fetch_source", "submit_entry", "review_entry", "fe-2026-0010", "fe-2026-0011"]
+
+  - id: plugin-skills-live
+    requirement: D1
+    optional: plugin
+    title: Claude Code sees the three skills
+    proves: The contribute, ask and review skills are registered when the plugin is loaded.
+    commands:
+      - run: >-
+          claude -p "List the exact names of every skill you have that comes from the failed-experiments-wiki plugin, one per line.
+          Do not invoke any skill."
+          --plugin-dir plugin --setting-sources project --tools "Skill"
+          --permission-prompts none --no-session-persistence --model haiku
+        timeout: 600
+        expect: ["failed-experiments-wiki:ask", "failed-experiments-wiki:contribute", "failed-experiments-wiki:review"]
+
+  - id: plugin-ask-live
+    requirement: D1
+    optional: plugin
+    title: The ask skill answers a real question through the plugin
+    proves: Asked about a planned experiment, the skill searches the wiki through the plugin's tools and answers from the matching entry, with its trust labels and a not-found section.
+    commands:
+      - run: >-
+          claude -p "/failed-experiments-wiki:ask I want to find a direction for the model thinking it is being evaluated
+          and steer along it to stop a model from sandbagging on a benchmark. What has been tried, and what should I avoid?"
+          --plugin-dir plugin --setting-sources project --tools "Skill"
+          --allowedTools "mcp__plugin_failed-experiments-wiki_failed-experiments-wiki__search_entries"
+          "mcp__plugin_failed-experiments-wiki_failed-experiments-wiki__get_entry"
+          "mcp__plugin_failed-experiments-wiki_failed-experiments-wiki__list_facets"
+          --permission-prompts none --no-session-persistence --model sonnet | cut -c1-600 | head -40
+        timeout: 900
+        expect: ["fe-2026-0005", "unreviewed", "Not found"]
+
 # Every function of the proof of concept and how it was checked.
 #   recorded        a check above ran it and a frame shows the result
 #   tests only      covered by the test suite, not by a frame of its own
@@ -404,12 +453,17 @@ coverage:
     status: recorded
     checks: [test-suite]
     evidence: "Run in this repository; it writes only caches."
-  - function: The three skills run by a model (contribute, ask, review)
-    status: not checkable
-    evidence: "They are instructions for a model. Their saved outputs from the build are in `evals/results/` and scored by the evals; a run inside Claude Code with the plugin loaded has not been done."
-  - function: Plugin loading in Claude Code
-    status: not checkable
-    evidence: "Needs an interactive Claude Code session with `--plugin-dir plugin`. The MCP launcher it uses is recorded above."
+  - function: Plugin loading in Claude Code (tools and skills registered, a live tool call)
+    status: recorded
+    checks: [plugin-tools-live, plugin-skills-live]
+    evidence: "Optional checks (`make verify PLUGIN=1`): headless Claude Code sessions started with `--plugin-dir plugin`. If they show NOT RUN above, this report was made without them. `claude plugin validate plugin` also passes, with warnings for a missing author, licence and icon."
+  - function: The ask skill, run by a model through the plugin
+    status: recorded
+    checks: [plugin-ask-live]
+    evidence: "Optional check, as above. One question, one run: it shows the path works, not how often the answer is right; the evals measure that on saved outputs."
+  - function: The contribute and review skills, run by a model through the plugin
+    status: tests only
+    evidence: "Not run live in this report. Their saved outputs from the build are in `evals/results/` and `entries/`; the tools they call are recorded above. A live run writes branches, so it belongs in a throwaway clone."
   - function: GitHub (pull requests, the issue-form workflow, the validation Action)
     status: not checkable
     evidence: "The repository has no remote and nothing may be pushed without the maintainer. The scripts the workflows call are recorded above; the workflow files themselves have never run."
