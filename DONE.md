@@ -164,14 +164,14 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 | ID | Item | Why | What makes it final |
 |---|---|---|---|
 | P1 | The 5 gold entries (`evals/gold/`) | Drafted by a model, not by you. `gold_status: pending_maintainer_verification`. | T7. |
-| P2 | The copies of those 5 in `entries/` | Marked `contributor.type: human` as you instructed, with a note saying they are model drafts awaiting verification. They do not carry the agent-written badge. | `make sync-gold` after T7. |
+| P2 | The copies of those 5 in `entries/` | **Changed 2026-11-15 (DEC-71):** now `contributor.type: agent` with the model named, the note kept, and the agent-written badge shown. Before: marked `contributor.type: human` as you instructed, with the note, and no agent-written badge. | Confirm or undo (T11 a); `make sync-gold` after T7 makes them yours. |
 | P3 | Every eval number | Gold is unverified; one vendor's models wrote the drafts, the grades and the gold. | T7, then `make evals`. |
 | P4 | The exception post (`fe-2026-0010`, `fe-2026-0011`) | Does not meet your qualification rule: no stated hypothesis. | Your decision (T3). |
-| P5 | `contributor.handle: HANDLE-TBD` in all 15 entries | The session could not read your `gh` login. | T2. |
+| P5 | The handle on all 15 entries | **Resolved 2026-11-15 (DEC-72):** set to your `gh` login. Before: `contributor.handle: HANDLE-TBD`, because the session could not read it. | Confirm or undo (T11 b). |
 | P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder, then loaded here from `history.bundle` once you ran `git init` (T1, done; the bundle is now in `_trash-review/`). Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | Nothing: it is what it is. Say so if anyone reads the history as a timeline. |
 | P7 | Pull requests, the issue-form workflow, the validation Action | No remote. | T6. |
-| P8 | Plugin loaded in Claude Code | Never loaded. | T8. |
-| P9 | Web page in a real browser, Datasette on a port | Sandbox. | T5. |
+| P8 | Plugin loaded in Claude Code | **Resolved 2026-11-15:** loaded in headless sessions; tools, skills and all three skills' live runs checked (DEC-68, DEC-75). Before: never loaded. | An interactive try is optional (T8). |
+| P9 | Web page in a real browser, Datasette on a port | **Resolved 2026-11-15:** both rendered and checked in headless Chromium, Datasette also on a port (DEC-64, DEC-65). Before: blocked by the sandbox. | Your own look, and other browsers (T5). |
 
 **Cut:** nothing from the PRD's cut list.
 
