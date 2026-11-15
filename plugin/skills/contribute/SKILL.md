@@ -98,7 +98,7 @@ python tools/cli.py submit --file <draft.md> --agent-model <your model id>
 10. **Report** each entry's ID, its branch or pull-request link exactly as the
     tool returned it, and that it is agent-written and unreviewed. If the tool
     says no pull request was opened, say that; do not make up a link. Also say:
-    - which GitHub handle the entry was recorded under (`contributor.handle` in
+    - which GitHub handle the entry was recorded under (`recorded_as.handle` in
       the tool's result). It is the user's own login, read from `gh`, named as
       the accountable person beside `type: agent` and your model. The user may
       not expect their name on it, so tell them;
