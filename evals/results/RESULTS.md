@@ -4,7 +4,7 @@
 > These numbers compare one model's drafts with another model pass, not with human ground truth.
 > Do not cite them as accuracy until the gold entries are verified and this file is regenerated.
 
-Generated 2026-11-14T23:25:04-08:00 by `python evals/run_evals.py` (deterministic re-scoring of saved outputs).
+Generated 2026-11-14T23:47:11-08:00 by `python evals/run_evals.py` (deterministic re-scoring of saved outputs).
 
 This is a spot-check on 5 posts with one model vendor. It is not a benchmark.
 
