@@ -340,6 +340,8 @@ def test_each_card_shows_the_right_badges_quote_and_links(page):
         assert card.locator("p.links a").get_attribute("href") == f"../entries/{entry.id}.md"
         note = entry.data["contributor"].get("note")
         assert card.locator(".contributor-note").count() == (1 if note else 0)
+        # "Written by" must point at the note when there is one: a model draft filed under a person is not that person's writing yet
+        assert ("see the note above" in card.locator(".meta").inner_text()) == bool(note), entry.id
         if note:
             assert card.locator(".contributor-note").inner_text() == note
 
