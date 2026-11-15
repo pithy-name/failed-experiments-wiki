@@ -45,6 +45,8 @@ def test_submitter_cannot_set_its_own_trust_fields(git_repo, valid_entry):
     assert stored["id"] == "fe-2026-0002"
     assert stored["contributor"]["type"] == "agent" and stored["contributor"]["handle"] == "test-handle"
     assert stored["review"] == {"status": "unreviewed"}
+    # the result says whose name went on the entry, so the agent can tell the user without opening the file
+    assert result["recorded_as"] == {"type": "agent", "handle": "test-handle", "agent_model": "m", "tool": "t"}
 
 
 def test_invalid_submission_is_rejected_and_writes_nothing(git_repo, valid_entry):
@@ -97,6 +99,8 @@ def test_agent_review_records_the_model(git_repo):
     data, _ = wikilib.parse_entry_text(wikilib.read_file_at(git_repo, result["branch"], "entries/fe-2026-0001.md"))
     assert data["review"]["reviewers"][0]["agent_model"] == "test-model"
     assert wikilib.badges(data) == ["agent-written", "contested", "retry-welcome"]
+    assert result["recorded_as"]["type"] == "agent" and result["recorded_as"]["handle"] == "test-handle"
+    assert result["recorded_as"]["agent_model"] == "test-model"
 
 
 def test_review_of_missing_entry_or_bad_status_is_refused(git_repo):
