@@ -1,0 +1,295 @@
+{
+  "batch": 4,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "LXQBcztrWKhtcgQfJ",
+      "title": "Current activation oracles are hard to use",
+      "genuine": "yes",
+      "genuine_reason": "Main content is the authors own series of tests of activation oracles on safety tasks, most ending negative, with a few small positives reported separately.",
+      "experiments": [
+        "Number prediction from control-token activations with no chain of thought",
+        "Sycophancy detection on Scruples prompts",
+        "Missing-information detection with identical tokens across complete and incomplete prompts",
+        "Identifying why a reasoning model is about to backtrack",
+        "Editing upstream reasoning to test whether answers track activations or nearby words",
+        "Extracting censored knowledge from Qwen models on politically sensitive prompts",
+        "Audit of free-form answers for vagueness and hallucination"
+      ],
+      "primary_experiment": "Missing-information detection with identical tokens across complete and incomplete prompts",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Only a conditional pass criterion appears: answers should differ if activations were used. No stated expectation or hope for the outcome of this test."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "25 paired word problems, 54 neutral text segments, three conditions (complete, incomplete, incomplete with spliced tokens), Qwen 3 32B target with its released oracle."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Spliced tokens from the complete-prompt rollout into the incomplete-prompt rollout, then asked the oracle if information was missing; compared rates across three conditions."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen 3 32B as target model, plus the activation oracle released with the original paper."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Oracle gave the same verdict in 53 of 54 matched cases, flagged missing info when none was missing, and never named the real gap."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors attribute it to the oracle relying on surface cues over activations in this setup, hedged; no bug or power discussion."
+        },
+        "quote": {
+          "supported": true,
+          "value": "It also never correctly identifies the missing information (0/54)",
+          "evidence": "States the zero success rate at naming the absent information."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Summary and body disagree on 1/54 versus 0/54, sycophancy AUC and rollout counts; body used. Also reports small positives."
+    },
+    {
+      "post_id": "8dXzDzk7nNK64jBve",
+      "title": "Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes",
+      "genuine": "yes",
+      "genuine_reason": "Null-result report: four behavioral tests failed to elicit alignment faking, so the planned probe study was never run.",
+      "experiments": [
+        "Eliciting alignment faking in the 8B checkpoint (Test 1)",
+        "Eliciting alignment faking in the 70B checkpoint without training details in the prompt (Test 2)",
+        "Eliciting alignment faking in the 70B checkpoint with training details in the prompt (20, then 50 prompts)"
+      ],
+      "primary_experiment": "Eliciting alignment faking in the 70B checkpoint with training details in the prompt (20, then 50 prompts)",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Author expected explicit training details to raise alignment faking, as the source paper reports, and wanted a reliably faking setting before probing."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "20 prompts, then 50 across 6 harm categories, free versus paid tier, hand-scored scratchpads; author notes the source paper used 200."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Compared compliance rates between free and paid tier prompts, and read each scratchpad against the source paper four-part definition of alignment faking."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Llama 70B alignment-faking checkpoint from Hughes et al, fine-tuned on about 30k synthetic documents; exact Llama version is not stated."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "did_not_replicate",
+          "evidence": "Training details were reported to raise the faking rate substantially, but free versus paid gaps stayed near zero or slightly negative."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Author calls the non-reproduction unresolved, lists unconfirmed guesses (prompt file mismatch, checkpoint, prompts), and separately flags small sample versus 200."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Not one of the scratchpad, across all 4 tests, met all 4 criteria",
+          "evidence": "States that no hand-read scratchpad met the full alignment-faking definition."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Probe study never run. Scored by hand, about 90 pairs; author flags underpowered versus source paper."
+    },
+    {
+      "post_id": "LzeZW9PvR6Njc9ngr",
+      "title": "Whack-a-mole with a broken hammer: does a model internally track its automaton state?",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive result (probe tracks most states); the counting failure and an abandoned follow-up are sub-findings described in real detail.",
+      "experiments": [
+        "Probe separating the two-failures state from the locked state (counting)",
+        "Planned bait experiment to catch rule-breaking via the probe (never run)"
+      ],
+      "primary_experiment": "Probe separating the two-failures state from the locked state (counting)",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Poses the question of whether the model keeps count but states no expectation or hope about the answer for the counting case."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "One 1.5B model, one six-state login automaton, about 4000 synthetic sessions, logistic-regression probe, all layers swept; authors say single model and single design."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Logistic-regression probes on activations at each event, compared with order-blind baselines, random-weight model, and split-half probe agreement."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen2.5-1.5B, which only read the synthetic transcripts."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Probe separated two-failures from locked at roughly chance, 50.8 percent, across layers; 56 percent when the rule was in the prompt."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors conclude the model holds no count at all, rather than a faulty one, using split-half probe agreement of 34 percent."
+        },
+        "quote": {
+          "supported": true,
+          "value": "the probe only gets it right in 50.8% of cases",
+          "evidence": "States chance-level accuracy on the two-state counting distinction."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly positive tracking result; counting gap is sub-finding. Bait follow-up planned but never run. Single small model."
+    },
+    {
+      "post_id": "XHpta8X85TzugNNn2",
+      "title": "Broken Latents: Studying SAEs and Feature Co-occurrence in Toy Models",
+      "genuine": "partial",
+      "genuine_reason": "Mostly toy-model SAE findings plus a fix that works there; the narrow-SAE test and the real-LLM attempt are negative sub-results with real detail.",
+      "experiments": [
+        "One-latent SAE learning only the parent feature (Matryoshka assumption)",
+        "Tied SAE with fewer latents than true features under co-occurrence (merged latents)",
+        "Orthogonality fix when the parent feature is also a high-error feature, with and without superposition (parent not represented)",
+        "Orthogonality fix applied to SAEs on a real LLM (Gemma-2-2b)"
+      ],
+      "primary_experiment": "One-latent SAE learning only the parent feature (Matryoshka assumption)",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors expected and hoped a one-latent SAE would represent the parent feature cleanly, without child-feature interference."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Four synthetic features (one parent, two children, one independent) with stated firing probabilities; untied and tied one-latent SAEs; authors note other probabilities may differ."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Trained untied and tied SAEs with a single latent on synthetic parent-child data and inspected what the latent learned relative to the true features."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Only synthetic toy SAEs, no named pretrained model for this test; Gemma-2-2b appears only in the separate real-LLM attempt."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "Single latent merged the parent with both child features instead of isolating the parent, in both untied and tied SAEs."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors say their assumption was incorrect, while cautioning that other firing probabilities may soften the effect."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Both of these SAEs learn a single broken latent",
+          "evidence": "States that both SAE types learned a broken merged latent."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Toy-model post; most findings positive. Real-LLM attempt gets one paragraph and no numbers. Results mainly in plots."
+    },
+    {
+      "post_id": "2CoLkSdwirr2WnNH6",
+      "title": "(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits",
+      "genuine": "yes",
+      "genuine_reason": "The whole post is a replication-style attempt to explain GPT-2 forward passes with SAE circuits, which the authors say did not work.",
+      "experiments": [
+        "Gradient-based SAE circuit discovery to explain GPT-2-small forward passes"
+      ],
+      "primary_experiment": "Gradient-based SAE circuit discovery to explain GPT-2-small forward passes",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors hoped SAE circuits would give a concrete, algorithm-level explanation of an ordinary forward pass, or else show how they fail."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "GPT-2-small, one gradient-based circuit method, five example prompts examined by hand; total prompts tried is not stated; authors call it one datapoint."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Gradient-based node and edge attributions between SAE features, correcting for confounded paths, then inspecting top proximal nodes and upstream edges."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-2-small with residual-stream sparse autoencoders; interpretability data from Neuronpedia."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Sanity check passed, but only two of five top nodes predicted the top next token and upstream edges stayed uninformative; no mechanistic explanation emerged."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors conclude local SAE approximations cannot chain into explanatory circuits and that cross-layer approximations are needed; the sanity check passed."
+        },
+        "quote": {
+          "supported": true,
+          "value": "localistic approximations of vanilla sparse autoencoders cannot be strung together into fully explanatory circuits",
+          "evidence": "States the authors negative conclusion about chaining local SAE approximations into circuits."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "SPAR project written up later. Results mostly figures; conclusion goes beyond five prompts."
+    },
+    {
+      "post_id": "ogvyWqJtSrpgXfc7t",
+      "title": "Eval-Awareness Steering detects the Test, Not the Sabotage",
+      "genuine": "yes",
+      "genuine_reason": "Core findings are two null results (steering does not change sandbagging; the direction does not predict per-item sandbagging), alongside one positive detection result.",
+      "experiments": [
+        "Steering the eval-awareness direction to change sandbagging",
+        "Using the direction as a per-item sandbagging detector"
+      ],
+      "primary_experiment": "Steering the eval-awareness direction to change sandbagging",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Author hoped the eval-awareness direction was linear and steerable, so removing it would suppress sandbagging, and set out to test that causal claim."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "One 8B model, one prompted organism, 300 multiple-choice items, layer 12, doses within plus or minus 2, 24 random-direction controls; dose possibly too gentle."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Difference-of-means direction added or projected out via hooks, with pre-registered swing and random-direction null criteria; ground truth from honest-baseline gap and noise injection."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Llama-3.1-8B-Instruct."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Accuracy swing across doses was under 2 points against a 5-point bar, and did not beat random directions (p about 0.20)."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hyperparams_unexplored",
+          "evidence": "Author says the dose was gentle, barely shifting outputs, and a higher-dose sweep would make the null defensible."
+        },
+        "quote": {
+          "supported": true,
+          "value": "the dose response is a total flat",
+          "evidence": "States the flat dose response at the headline layer."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Single 8B model, one prompted organism; author calls it preliminary. Some results appear only in figures."
+    }
+  ]
+}

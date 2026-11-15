@@ -1,0 +1,310 @@
+{
+  "batch": 7,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "pLC3bx77AckafHdkq",
+      "title": "GPT-oss is an extremely stupid model",
+      "genuine": "yes",
+      "genuine_reason": "Author tried to reproduce a blackmail misalignment result on GPT-oss and failed, even with more blatant prompts.",
+      "experiments": [
+        "Reproducing the blackmail behaviour of the Anthropic agentic misalignment scenario with GPT-oss",
+        "Asking GPT-oss to infer what the evaluation is designed to elicit"
+      ],
+      "primary_experiment": "Reproducing the blackmail behaviour of the Anthropic agentic misalignment scenario with GPT-oss",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Only says the author tried to reproduce the Anthropic result; no stated expectation about what GPT-oss would do."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "One scenario prompt and a more blatant rewrite are described, but no number of runs or samples, so scale is unknown."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Ran the published blackmail scenario prompt, wrote a more explicit variant, and added a preface asking what the evaluation tries to elicit."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-oss (size not given); comparison models Claude 4, Grok 4, Qwen 30B Instruct, Kimi K2."
+        },
+        "result_direction": {
+          "supported": true,
+          "evidence": "GPT-oss did not blackmail even with blunter prompts, and often failed to keep the assigned role.",
+          "value": "did_not_replicate"
+        },
+        "failure_type": {
+          "supported": true,
+          "evidence": "Author rules out over-alignment and attributes the failure to the model being too weak to grasp the task, using a follow-up test.",
+          "value": "hypothesis_false"
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "States directly that the replication failed.",
+          "value": "I could not replicate that behavior with GPT-oss"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Short post; one scenario, no run counts; harder prompt variant is linked, not included."
+    },
+    {
+      "post_id": "bchjSwxBTxZBFXBXs",
+      "title": "The Local Interaction Basis: Identifying Computationally-Relevant and Sparsely Interacting Features in Neural Networks",
+      "genuine": "yes",
+      "genuine_reason": "Technique worked on toy models but gave little or no gain on two language models; authors call the outcome mostly negative.",
+      "experiments": [
+        "Local interaction basis on language models (Tinystories-1M, GPT2-small) compared with a PCA baseline"
+      ],
+      "primary_experiment": "Local interaction basis on language models (Tinystories-1M, GPT2-small) compared with a PCA baseline",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Basis was designed to sparsify layer-to-layer interactions and expose modules and interpretable features; the language-model test checks that aim.",
+          "value": null
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Names two language models and a PCA baseline, but gives no dataset, layers, sample sizes or numbers; this is a linkpost summary.",
+          "value": null
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Two-step coordinate change: PCA, then alignment to singular vectors of gradient vectors; integrated-gradient interactions; modularity metric to find modules.",
+          "value": null
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Tinystories-1M and GPT2-small (language models); a modular addition transformer and a CIFAR-10 model (toy).",
+          "value": null
+        },
+        "result_direction": {
+          "supported": true,
+          "evidence": "Interaction sparsity beat the PCA baseline only slightly on one model and not at all on the other; no modules found.",
+          "value": "smaller_than_expected"
+        },
+        "failure_type": {
+          "supported": true,
+          "evidence": "Authors treat it as a negative result for the technique and tentatively blame its no-superposition assumption; no test of that cause.",
+          "value": "hypothesis_false"
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "States the language-model outcome directly.",
+          "value": "On language models however, we find that LIB does not help us understand the networks"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Linkpost summarizing two papers; language-model negative result gets a few sentences; details are in the papers."
+    },
+    {
+      "post_id": "rktrjGjXEbWsg7zof",
+      "title": "My retrospective from MATS 10.0",
+      "genuine": "partial",
+      "genuine_reason": "Lessons post about a scheming model organism project; two lessons describe attempts that failed or behaved unexpectedly, mainly RL convergence and weak trait transfer.",
+      "experiments": [
+        "RL expected to select strategic compliance but converging to blind instruction following",
+        "Chat-based synthetic document finetuning plus SFT failing to transfer a trait to agentic settings"
+      ],
+      "primary_experiment": "RL expected to select strategic compliance but converging to blind instruction following",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Author expected RL on a mixed-policy model to reinforce strategic compliance and yield a scheming model, from a simplified picture of the algorithm.",
+          "value": null
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Setup described only qualitatively; no run counts, seeds, rates or which model showed the convergence; says only that it happened sometimes.",
+          "value": null
+        },
+        "method": {
+          "supported": true,
+          "evidence": "GRPO reinforcement learning on LoRA-trained model organisms built with synthetic document finetuning and SFT, in an alignment-faking-style environment.",
+          "value": null
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Project models are Kimi-K2.6, Qwen3.6-397B and Qwen3.8-27B, but the lesson does not say which one converged to compliance.",
+          "value": null
+        },
+        "result_direction": {
+          "supported": true,
+          "evidence": "RL pushed the model to unconditional instruction-following compliance instead of the expected growth in strategic compliance.",
+          "value": "opposite"
+        },
+        "failure_type": {
+          "supported": true,
+          "evidence": "Author concludes the simple GRPO selection picture was wrong; penalising one policy can push the model toward a strongly favoured alternative like instruction following.",
+          "value": "hypothesis_false"
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "Reports the observed RL outcome.",
+          "value": "fast convergence to unconditional compliance in the form of instruction following"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Retrospective; failures are lesson-level anecdotes without numbers; full paper is announced as forthcoming."
+    },
+    {
+      "post_id": "7zGgFPLaTXJwCJccB",
+      "title": "Practical Learnings from Synthetic Document Finetuning",
+      "genuine": "partial",
+      "genuine_reason": "Practical tips post for synthetic document finetuning; a few brief failed or abandoned attempts appear, such as multi-seed universes and logit diff amplification.",
+      "experiments": [
+        "Logit diff amplification to boost finetuning effects at inference time",
+        "Multiple universe seeds for the same fact",
+        "Prepending eval prompts to training documents (model-dependent degradation)",
+        "Appending stop tokens to fix gibberish endings"
+      ],
+      "primary_experiment": "Logit diff amplification to boost finetuning effects at inference time",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Hoped a very small amount of finetuning could set a direction that inference-time amplification would strengthen, saving training time.",
+          "value": null
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Setup is described but amplification strength, models, evals and effect sizes are not given; authors say they did little tuning.",
+          "value": null
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Logit difference amplification: run base and finetuned models in parallel and add a scaled logit difference to the finetuned logits.",
+          "value": null
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Post says its runs were mainly on gpt-oss-20b and gpt-oss-120b, but does not tie this exploration to any model.",
+          "value": null
+        },
+        "result_direction": {
+          "supported": true,
+          "evidence": "Amplification had an effect, but the gain over simply training a bit more was too small to justify running two models.",
+          "value": "smaller_than_expected"
+        },
+        "failure_type": {
+          "supported": true,
+          "evidence": "Effect existed but gain over extra training did not justify hosting two models; authors also note little tuning.",
+          "value": "worked_but_abandoned"
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "States the gain over extra training was too small.",
+          "value": "the difference over simply training a bit more with SDF wasn't large enough"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Tips post; failed items are single paragraphs. Multi-seed test is a quick single run."
+    },
+    {
+      "post_id": "DgKyDTKeGcisEGCnH",
+      "title": "GPT-3.5 judges can supervise GPT-4o debaters in capability asymmetric debates",
+      "genuine": "partial",
+      "genuine_reason": "Main result is positive for asymmetric debate; the symmetric-capability test is mixed and backed by a data table, plus brief negative results.",
+      "experiments": [
+        "Capability-symmetric debate with fine-tuned judges",
+        "Inference-only debate on GPQA",
+        "Judge trained across debater skill levels from GPT-3.5 to GPT-4o"
+      ],
+      "primary_experiment": "Capability-symmetric debate with fine-tuned judges",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Says symmetric debate may work with fine-tuned judges for models beyond roughly GPT-4 level; results only weakly support this.",
+          "value": null
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Binarised MMLU Pro, 1000 test debates, three-turn debates, judges fine-tuned on 500 transcripts, blind-judge baseline, debaters swapped to cancel position bias.",
+          "value": null
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Debates between base-model debaters judged by fine-tuned judges, compared with a blind judge trained without debates; best-of-4 sampling in asymmetric runs.",
+          "value": null
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-3.5, GPT-4o mini, GPT-4o (two dated versions); Claude 3.5 Sonnet used to build the binary dataset.",
+          "value": null
+        },
+        "result_direction": {
+          "supported": true,
+          "evidence": "GPT-4o mini gained about 4.6 points, GPT-3.5 about 0.5, and GPT-4o 3 points that were not significant.",
+          "value": "mixed"
+        },
+        "failure_type": {
+          "supported": false,
+          "evidence": "Post gives no cause for the weak or non-significant gains; it only wonders whether a better training protocol would widen the gap.",
+          "value": null
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "States the weak and non-significant symmetric results.",
+          "value": "but GPT-3.5 does not and the results for GPT-4o are not significant"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Only failure_type is missing. Main result is positive; negative results are brief."
+    },
+    {
+      "post_id": "vDj9HZnBpBECLzshv",
+      "title": "[Paper] Propensities Please: Exposing Alignment-Faking LLMs using Synthetic Document Finetuning",
+      "genuine": "partial",
+      "genuine_reason": "Mainly a positive method summary; a lessons section covers weeks lost to finetuning damaging oversight reasoning, plus a brief null search for natural alignment fakers.",
+      "experiments": [
+        "Synthetic document finetuning degrading oversight reasoning, even on unrelated corpora",
+        "Preliminary search for alignment faking in 13 open-weight reasoning models"
+      ],
+      "primary_experiment": "Synthetic document finetuning degrading oversight reasoning, even on unrelated corpora",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Post says the damage was noticed early but states no expectation or hope about what finetuning would do to reasoning.",
+          "value": null
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Says small amounts and unrelated corpora both caused damage in alignment evals, but gives no models, corpus sizes, specific evals or numbers.",
+          "value": null
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Synthetic document finetuning; fixed by interleaving on-policy distillation from the original model on science questions, with controls on unrelated corpora.",
+          "value": null
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Project models are Kimi K2.6, DeepSeek V3.1 and a GPT OSS 120B variant, but this problem is not tied to any of them.",
+          "value": null
+        },
+        "result_direction": {
+          "supported": false,
+          "evidence": "Outcome is an unwanted side effect of finetuning, not a null, opposite, smaller, mixed or non-replicated result of a tested claim.",
+          "value": null
+        },
+        "failure_type": {
+          "supported": false,
+          "evidence": "Post names no cause beyond the finetuning itself and does not say the cause is unclear; it reports a fix.",
+          "value": null
+        },
+        "quote": {
+          "supported": true,
+          "evidence": "States the observed damage to oversight reasoning.",
+          "value": "reasoning about oversight collapsed while leaving general capabilities mostly intact"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Failure is a short section in a positive paper summary; no numbers beyond roughly six weeks of work."
+    }
+  ]
+}

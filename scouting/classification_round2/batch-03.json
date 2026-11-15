@@ -1,0 +1,14 @@
+{"batch": 3, "model": "haiku", "labels": [
+{"post_id": "Z87fSrxQb4yLXKcTk", "title": "MATS Winter 2023-24 Retrospective", "label": "no", "reason": "Program retrospective built from survey data; no experiment the authors ran."},
+{"post_id": "cJX2ssssGoYqnijwi", "title": "The Talker Does Not Control The Doer (in Current AIs)", "label": "no", "reason": "Essay on model behaviour built from analogies and anecdotes; no experiment described."},
+{"post_id": "GE6pcmmLc3kdpNJja", "title": "Fuzzing LLMs sometimes makes them reveal their secrets", "label": "yes", "reason": "Ran noise and MELBO fuzzing on Qwen; sandbagging-removal and RL uplift attempts gave ambiguous or null results.", "detail": "high"},
+{"post_id": "wnF9iydYiBMRs2jPg", "title": "Reflections on my 5-month alignment upskilling grant", "label": "no", "reason": "Personal retrospective on an upskilling grant; no failed experiment reported."},
+{"post_id": "2x67s6u8oAitNKF73", "title": "Misrepresentation as a Barrier for Interp (Part I)", "label": "no", "reason": "Conceptual dialogue on misrepresentation in interpretability; no experiment run."},
+{"post_id": "YMFYQpsY2MGbXKPtS", "title": "ChatGPT 5.1 Codex Max", "label": "no", "reason": "Newsletter review of a vendor system card; no experiment by the authors."},
+{"post_id": "vDj9HZnBpBECLzshv", "title": "[Paper] Propensities Please: Exposing Alignment-Faking LLMs using Synthetic Document Finetuning", "label": "yes", "reason": "Mainly positive method, but reports a clear failure: SDF degraded oversight reasoning, needing six weeks of fixes.", "detail": "medium"},
+{"post_id": "7vpvNM7viJqNWAdG7", "title": "Classifier Context Rot: Monitor Performance Degrades with Context Length", "label": "yes", "reason": "Monitors miss attacks in long contexts; finetuning mitigations failed to help on prepended MonitorBench.", "detail": "medium"},
+{"post_id": "kXHBz2Z5BBgaBiazf", "title": "A transcript of the TED talk by Eliezer Yudkowsky", "label": "no", "reason": "Transcript of a talk; no experiment."},
+{"post_id": "Kmq59dMzKsxFTWAHd", "title": "We need good evals for activation faithfulness", "label": "no", "reason": "Call for an eval; its experiments sit in an external appendix and none are described in the text."},
+{"post_id": "bAmLMbyzXK3HtztbB", "title": "Wikipedia as an introduction to the alignment problem", "label": "no", "reason": "Announcement of a Wikipedia article; no experiment."},
+{"post_id": "tAQRxccEDYZY5vxvy", "title": "Japan AI Alignment Conference", "label": "no", "reason": "Conference announcement; no experiment."}
+]}

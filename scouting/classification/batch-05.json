@@ -1,0 +1,70 @@
+{
+  "batch": 5,
+  "model": "haiku",
+  "labels": [
+    {
+      "post_id": "3onCb5ph3ywLQZMX2",
+      "title": "Alignment Newsletter One Year Retrospective",
+      "label": "no",
+      "reason": "Retrospective on a newsletter's reach and costs; no experiment run by the authors."
+    },
+    {
+      "post_id": "eFD3rozNCZKMe4rTs",
+      "title": "MATS 9 Retrospective & Advice",
+      "label": "no",
+      "reason": "Personal MATS retrospective and advice; describes no specific failed experiment."
+    },
+    {
+      "post_id": "x8BbjZqooS4LFXS8Z",
+      "title": "AlgZoo: uninterpreted models with fewer than 1,500 parameters",
+      "label": "no",
+      "reason": "Interpretability analysis of tiny models; positive explanations, with the unsolved model framed as a challenge, not a failed experiment."
+    },
+    {
+      "post_id": "4Gt42jX7RiaNaxCwP",
+      "title": "More information about the dangerous capability evaluations we did with GPT-4 and Claude.",
+      "label": "yes",
+      "reason": "Null result: GPT-4 and Claude did not autonomously replicate in ARC's evals. Borderline, as model-level results are withheld.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "i3b9uQfjJjJkwZF4f",
+      "title": "Tips On Empirical Research Slides",
+      "label": "no",
+      "reason": "Advice on presenting empirical research slides; describes no specific failed experiment."
+    },
+    {
+      "post_id": "eaEqAzGN3uJfpfGoc",
+      "title": "Trusted monitoring, but with deception probes.",
+      "label": "yes",
+      "reason": "Mostly positive probe-monitoring results, but reports failed sub-methods (follow-up questions, LLM reasoning over probe scores) with setup detail.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "sYFNGRdDQYQrSJAd8",
+      "title": "SAE regularization produces more interpretable models",
+      "label": "no",
+      "reason": "Main result is positive; the inconsistent layer-3 gain is a caveat, not a reported failed experiment."
+    },
+    {
+      "post_id": "EEvsL9cpgDAxAhTzt",
+      "title": "Some negative steganography results",
+      "label": "yes",
+      "reason": "Two RL steganography experiments with controls that failed to produce hidden 1-bit communication; setups and hyperparameters given.",
+      "detail": "high"
+    },
+    {
+      "post_id": "vTvPvCH2G9cbcFY8a",
+      "title": "OpenAI Responses API changes models' behavior",
+      "label": "yes",
+      "reason": "Ungrammatical-model training appeared to fail under the Responses API; the API difference confounds safety evals.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "pQ6e7QaAGoaHzfj3e",
+      "title": "Did Human Forecasters Improve Preseen’s Performance?",
+      "label": "no",
+      "reason": "Inconclusive forecasting-bot tournament result with about 99 words of detail; not clearly AI safety research."
+    }
+  ]
+}

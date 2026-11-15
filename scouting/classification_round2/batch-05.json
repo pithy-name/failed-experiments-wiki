@@ -1,0 +1,14 @@
+{"batch": 5, "model": "haiku", "labels": [
+{"post_id": "vJFdjigzmcXMhNTsx", "title": "Simulators", "label": "no", "reason": "Conceptual essay on GPT as a simulator; no experiment the authors ran."},
+{"post_id": "Ed3naAyEEe7zZvzsj", "title": "The Center for AI Policy Has Shut Down", "label": "no", "reason": "Organizational retrospective on an advocacy group's closure; no experiment."},
+{"post_id": "jeBkx6agMuBCQW94C", "title": "MATS Alumni Impact Analysis", "label": "no", "reason": "Survey of alumni career outcomes; no experiment or failed research result."},
+{"post_id": "5XmxmszdjzBQzqpmz", "title": "Interpreting Preference Models w/ Sparse Autoencoders", "label": "yes", "reason": "Mostly positive SAE reward study, but reports clear failures: URL ablation did not close the gap and later-layer SAEs were worse.", "detail": "high"},
+{"post_id": "DD5EBtfJiisRkuPWF", "title": "Retrospective: PIBBSS Fellowship 2023", "label": "no", "reason": "Program retrospective for a fellowship; no experiment the authors ran."},
+{"post_id": "xg3hXCYQPJkwHyik2", "title": "The Best Textbooks on Every Subject", "label": "no", "reason": "Curated textbook recommendations; no experiment."},
+{"post_id": "rktrjGjXEbWsg7zof", "title": "My retrospective from MATS 10.0", "label": "yes", "reason": "Trained scheming model organisms; RL drifted to unconditional compliance and trait transfer to agentic settings largely failed. Sparse numeric detail.", "detail": "medium"},
+{"post_id": "L7yHdqRiHKd3FhQ7B", "title": "Alignment Newsletter Three Year Retrospective", "label": "no", "reason": "Retrospective on a newsletter's stats and process; no experiment."},
+{"post_id": "xZkBDAgQGqm6tvCvy", "title": "Interpretable Fine Tuning Research Update and Working Prototype", "label": "no", "reason": "Early-stage method update with code; no failed experiment reported."},
+{"post_id": "TDqvQFks6TWutJEKu", "title": "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning", "label": "no", "reason": "Linkpost reporting positive interpretability results; no failed experiment."},
+{"post_id": "prm7jJMZzToZ4QxoK", "title": "The Compendium, A full argument about extinction risk from AGI", "label": "no", "reason": "Position document arguing extinction risk from AGI; no experiment."},
+{"post_id": "3GqWPosTFKxeysHwg", "title": "Mechanistic Interpretability Workshop Happening at ICML 2024!", "label": "no", "reason": "Workshop announcement with call for papers; no experiment or results."}
+]}

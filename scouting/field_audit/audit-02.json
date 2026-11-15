@@ -1,0 +1,295 @@
+{
+  "batch": 2,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "LPHMMMZFAWog6ty5x",
+      "title": "Ctrl-Z: Controlling AI Agents via Resampling",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive results summary of a control-protocol paper, but it reports that statistical ways of combining suspicion scores across steps barely beat the naive baseline and were fragile under red-teaming.",
+      "experiments": [
+        "Cross-step aggregation of monitor scores (Kolmogorov-Smirnov test, autoregressive surprise) for audit decisions",
+        "Attack policy that gives up after repeated deferral to the trusted model"
+      ],
+      "primary_experiment": "Cross-step aggregation of monitor scores (Kolmogorov-Smirnov test, autoregressive surprise) for audit decisions",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors expected that combining past suspicion scores with statistical tests would easily beat judging only the current step's score."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Only the general BashBench monitoring setup is given; no data size, evaluation details or scale for these aggregation tests."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Names a Kolmogorov-Smirnov test and autoregressive surprise models for combining per-step scores, compared against using only the current step."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Untrusted model is GPT-4o mini, but the trusted monitor that produced the scores is described only as an 8-billion-parameter model, unnamed."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "Techniques gave only a marginal gain over the naive current-step baseline, far below the expected easy win."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors suggest the monitor already folds earlier context into each score, so extra aggregation adds little; attackers could also exploit it."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Ultimately, these techniques performed little better than just looking at the current step",
+          "evidence": "Contiguous fragment from the aggregation paragraph stating the negative result."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Summary of a larger paper; failed sub-experiments get one short passage each; a separate hackathon failed for operational reasons."
+    },
+    {
+      "post_id": "tgn3pD2gLpZvepkWk",
+      "title": "J-Lens: A Failed Replication on GPT-2",
+      "genuine": "yes",
+      "genuine_reason": "The whole post reports the authors' own tests of J-Lens against Logit Lens on GPT-2, all with a negative outcome, plus several follow-up stress tests that did not rescue it.",
+      "experiments": [
+        "J-Lens vs Logit Lens on GPT-2 small and medium",
+        "Refitting J on more sequences",
+        "Token-frequency control for the rank metric",
+        "Sparsity thresholding of the fitted J",
+        "Tuning skip_first when fitting J"
+      ],
+      "primary_experiment": "J-Lens vs Logit Lens on GPT-2 small and medium",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Tested the J-Lens paper's claim that it fixes the Logit Lens's layer misalignment; authors expected it to win, especially on future-token prediction."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "30 sequences (150 in a refit), 60 held-out prompts, 11 small-model layers, 23 medium layers, two metrics; authors limit the claim to this scope."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Compares J-Lens against Logit Lens using median rank of the model's own next token and a future-token metric; checks included identity-matrix and gradient tests."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-2 small (124M) and GPT-2 medium (355M in most places, 255M once); the post's own numbers conflict."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "did_not_replicate",
+          "evidence": "Presented as a replication that did not hold: J-Lens scored worse than Logit Lens at every small-model layer and all but one medium layer."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors conclude the lens fails on both GPT-2 sizes; implementation checks passed, and more data, tuning and scaling did not change the outcome."
+        },
+        "quote": {
+          "supported": true,
+          "value": "J-Lens does not work on GPT-2 small or medium",
+          "evidence": "Headline sentence of the result section."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Beginner author, AI-written code; GPT-2 medium size stated inconsistently; Logit Lens may be unusually strong on GPT-2."
+    },
+    {
+      "post_id": "jKKbRKuXNaLujnojw",
+      "title": "Negative Results on Group SAEs",
+      "genuine": "yes",
+      "genuine_reason": "The author says the project's results were mostly negative and unpublished, and the post is a write-up of what was tried and why none of it gave a compelling result.",
+      "experiments": [
+        "Group SAEs on synthetic superposed circles",
+        "Group SAEs on GPT-2 layer 7 activations",
+        "Gated and TopK Group SAEs",
+        "Learned group space on synthetic co-occurrence data"
+      ],
+      "primary_experiment": "Group SAEs on GPT-2 layer 7 activations",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Hoped a modified sparsity penalty would let SAEs find multi-dimensional features directly, without clustering latents afterwards."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Names GPT-2 layer 7, a ReLU-SAE baseline and matched sparsity, but not dictionary width, group size, training data or token count for these runs."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Group SAEs with an L1-of-L2 group sparsity penalty over equal-sized groups, compared with ordinary ReLU SAEs; also checked months and weekdays circular subspaces."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-2, layer 7 activations; the post does not give the GPT-2 size."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Group SAEs gave slightly better variance and loss metrics and semantically related groups, but no interesting multi-dimensional structure beyond what clustering would likely find."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "worked_but_abandoned",
+          "evidence": "The method broadly worked but yielded nothing useful beyond baselines; author lost interest after about three months and lists doubts about the approach."
+        },
+        "quote": {
+          "supported": true,
+          "value": "none of our results were that compelling",
+          "evidence": "Author's summary of the project's outcome, covering this experiment."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Written a year after the work; figures not in text; teammates' circuits and learned-group results excluded."
+    },
+    {
+      "post_id": "HpAr8k74mW4ivCvCu",
+      "title": "[Summary] Progress Update #1 from the GDM Mech Interp Team",
+      "genuine": "no",
+      "genuine_reason": "A short index of research snippets. The negative items (a ghost-grads replication, SAEs on Tracr and toy models, replicated dictionary-learning tweaks) get one to three sentences each, with no experimental detail.",
+      "experiments": [
+        "Replication of ghost grads for SAE dead features",
+        "SAEs on compressed Tracr models",
+        "SAEs on the ReLU output toy model of superposition",
+        "Replication of Anthropic's dictionary-learning improvements"
+      ],
+      "primary_experiment": "Replication of ghost grads for SAE dead features",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Says Anthropic proposed ghost grads as a possible improvement over resampling, but not what the authors themselves expected from replicating it."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "No dataset, SAE size, layer, scale or evaluation setup is given for the replication in this summary."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Names ghost grads and resampling as dead-feature remedies, plus the authors' tweak of weighting that loss by the share of features that are dead."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "No model is named for the ghost-grads replication in this summary."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "did_not_replicate",
+          "evidence": "Ghost grads came out worse than resampling in the authors' replication, until their modification made it competitive."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "No cause is given for the underperformance, and the post does not say the cause is unclear."
+        },
+        "quote": {
+          "supported": true,
+          "value": "We replicate their work, and find that it under-performs resampling",
+          "evidence": "Sentence stating the replication outcome."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Summary only; each snippet's detail is in the longer companion post. Audit that post before selecting."
+    },
+    {
+      "post_id": "vTvPvCH2G9cbcFY8a",
+      "title": "OpenAI Responses API changes models' behavior",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a report of a behaviour gap between two API endpoints. The one failed experiment, training an ungrammatical model, only appeared to fail because the playground's default API hid the effect.",
+      "experiments": [
+        "Fine-tuning a model to write ungrammatically, apparently failing under the Responses API"
+      ],
+      "primary_experiment": "Fine-tuning a model to write ungrammatically, apparently failing under the Responses API",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors wanted a fine-tuned model that writes ungrammatically, and generally expected identical behaviour from both OpenAI APIs."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "One example model sampled at temperature 0 via both APIs; no fine-tuning data, prompt count or training details given."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "OpenAI fine-tuning, then sampling the same fine-tuned model at temperature 0 through the Responses API and the Chat Completions API."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Refers only to unnamed OpenAI fine-tuned models; the base model is never named."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Via the Responses API the model showed errors in only about a tenth of cases, but in nearly nine tenths via Chat Completions."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "infrastructure",
+          "evidence": "The apparent failure came from the playground defaulting to the Responses API; the authors' theory is a different prompt encoding, unconfirmed."
+        },
+        "quote": {
+          "supported": true,
+          "value": "grammatical errors in only 10% of cases when sampled via the Responses API",
+          "evidence": "States the apparent negative outcome under the Responses API."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Failure was apparent and API-caused; model worked under Chat Completions. Short post; mechanism is a theory; figures show examples."
+    },
+    {
+      "post_id": "eaEqAzGN3uJfpfGoc",
+      "title": "Trusted monitoring, but with deception probes.",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive benchmark of deception probes for monitoring, with a few failed sub-results: elaborate scoring methods and LLM reasoning over probe scores did worse than plain averaging, and the evasion attack was weaker than expected.",
+      "experiments": [
+        "Elaborate probe-scoring methods (peak score, critical-token averaging, follow-up question) vs full averaging",
+        "LLM monitor reasoning over per-token probe scores",
+        "Deception dilution attack against full averaging"
+      ],
+      "primary_experiment": "Elaborate probe-scoring methods (peak score, critical-token averaging, follow-up question) vs full averaging",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "No expectation or hope for these methods is stated; they are simply listed as other methods that were tried."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Names probes, five datasets, control data and metrics, but gives no sizes for the five datasets; numeric results sit only in figures and tables."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Names the methods: peak score, averaging over critical-claim tokens, and probing the single-token answer to a follow-up question, versus full averaging."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Llama-3.3-70B-Instruct (probed model); Claude 3.5 Haiku identifies critical claims; Claude 3.5 Sonnet serves as monitor in other methods."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "The more elaborate methods scored worse than the plain full-averaging baseline."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "measurement_noise",
+          "evidence": "Authors attribute this to noisy probe scores, which favour methods that average over many tokens."
+        },
+        "quote": {
+          "supported": true,
+          "value": "These sophisticated methods worked worse than simply averaging all probe scores",
+          "evidence": "Sentence stating the negative result."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly positive paper summary; failed items get a sentence or two; numbers in figures; post carries a do-not-train canary."
+    }
+  ]
+}

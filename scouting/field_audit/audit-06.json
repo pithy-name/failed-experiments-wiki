@@ -1,0 +1,290 @@
+{
+  "batch": 6,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "ExB6KYDcznaFS72eT",
+      "title": "Evaluating Explanations of LLM Behavior In The Wild with Counterfactual Experiments",
+      "genuine": "yes",
+      "genuine_reason": "Summary and body lead with a null result: three tools that read model activations did not help predictors beyond reading the transcript. The positive training result is secondary.",
+      "experiments": [
+        "Activation-reading interpretability tools as uplift for predicting counterfactual prompt-edit outcomes",
+        "Training models to write open-ended explanations of their own behavior (weaker, mixed; detail only in the paper appendix)"
+      ],
+      "primary_experiment": "Activation-reading interpretability tools as uplift for predicting counterfactual prompt-edit outcomes",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Tools were chosen because each helped in earlier auditing games, and the authors call the null surprising, implying they expected uplift."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Predictor sees transcript, behavior and one proposed edit, plus five read-only activation calls; data from thousands of in-the-wild investigations; authors flag behaviors as simple."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Three activation-reading tools (activation oracles, natural-language autoencoders, sparse autoencoders) versus a transcript-only baseline, scoring probability that a counterfactual prompt edit changes behavior."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Only the predictor, Claude Opus 4.8, is named; the two target models are unnamed, and Gemma appears only in an example."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Predictors using any of the tools scored no better than transcript-only predictors, in every variant tried, including model swaps and hyperparameter sweeps."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors report the tools simply did not help, and explain outputs duplicate transcript content and rarely state causal links; result held across hyperparameter sweeps."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Our evaluation is a close checkable proxy, and the tools provided no uplift",
+          "evidence": "Sentence in the discussion section reporting that the evaluated activation tools gave predictors no gain over reading the transcript."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Summary of a longer paper; numeric results are only in figures; target models unnamed for this evaluation."
+    },
+    {
+      "post_id": "n3LAgnHg6ashQK3fF",
+      "title": "Takeaways from our robust injury classifier project [Redwood Research]",
+      "genuine": "yes",
+      "genuine_reason": "The post reports an adversarial-training project that missed its goal by a wide margin, plus follow-ups where the classifier still let severe cases through.",
+      "experiments": [
+        "Adversarial training with contractor-written attacks to build an injury classifier with near-zero failures",
+        "Follow-up: fitting roughly 6,000 adversarial examples with small classifiers"
+      ],
+      "primary_experiment": "Adversarial training with contractor-written attacks to build an injury classifier with near-zero failures",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Goal was a classifier made reliably safe against injurious story completions through adversarial training; the authors say alignment progress fell far below hopes."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Contractor attacks via rewriting tools on an injury classifier; about 6,000 adversarial examples, small models, one model update; authors say not a clean negative."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Adversarial training on contractor-found failures using attack tools (saliency highlighting, greedy word replacements), checked at a conservative threshold and by random sampling."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Mentions only small models and a classifier; no model names or sizes are given in the post."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "Failures remained under random sampling and egregious attacks, though some adversarial robustness gains were measured; outcome was far under the original goal."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hyperparams_unexplored",
+          "evidence": "Authors say results could stem from suboptimal training choices, such as one model update and borderline training attacks, so the negative is not conclusive."
+        },
+        "quote": {
+          "supported": true,
+          "value": "we did not produce a classifier that was actually adversarially robust",
+          "evidence": "Sentence in the overall-takeaways section stating that no robust classifier resulted from the project."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Authors say this is not a demonstrated negative result; setup details are in the linked paper."
+    },
+    {
+      "post_id": "hMBTaFvAzdMNnj29c",
+      "title": "Evolutionary prompt optimization for SAE feature visualization",
+      "genuine": "partial",
+      "genuine_reason": "Leads with a positive method result and most of the body shows working visualizations; the two-feature attempt is one short section plus an appendix.",
+      "experiments": [
+        "Maximizing two SAE features on the same token with a readable prompt",
+        "AdvPrompter for maximizing arbitrary features (one sentence only)"
+      ],
+      "primary_experiment": "Maximizing two SAE features on the same token with a readable prompt",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "No expectation is stated for the two-feature attempt; the post only says the authors tried it."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "One pair of GPT-2 SAE features (layer 10), several combination objectives, very low fluency weight, plus a brief hand-search baseline; run counts not reported."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Evolutionary prompt optimization with fluency penalty; objectives combining both feature activations via sum, min, max or a sub-one Lp norm."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-2 (Small, per the summary) with layer-10 residual SAEs from a named author; Gemma 1 2B is used in other sections."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Both features got high activations only with fluency nearly ignored, below their individual maxima; hand search also failed to co-activate them."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Post says the two features are too distinct to co-activate on one token, but gives no cause fitting any listed category."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Both features have high activations, but the activations are not maximum-activating",
+          "evidence": "Caption under the two-feature results: both features were strongly activated, but short of their individual maxima."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly positive method post; two-feature failure is a short section plus appendix; activation values are in images."
+    },
+    {
+      "post_id": "5XmxmszdjzBQzqpmz",
+      "title": "Interpreting Preference Models w/ Sparse Autoencoders",
+      "genuine": "partial",
+      "genuine_reason": "The post is mostly a positive demonstration of features that move reward; ablations that fail to close reward gaps appear in several sections but are secondary.",
+      "experiments": [
+        "Ablating top reward-relevant SAE features to fully close reward gaps (URL, repeated-text, uncertainty-phrase features)",
+        "Famous-name and movie features for jailbreak prompts (detail only in a linked comment)",
+        "Later-layer SAEs being less interpretable"
+      ],
+      "primary_experiment": "Ablating top reward-relevant SAE features to fully close reward gaps (URL, repeated-text, uncertainty-phrase features)",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Only a directional expectation is stated (ablating a negative feature raises reward) and it held; no expectation of fully closing gaps appears."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Six SAEs (layers 2 to 20, 32k features) on one 7B preference model; top 2k of roughly 155k dataset points; custom prompts under 100 tokens."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Gated SAEs on a preference model, attribution patching with integrated gradients to rank features, then single-feature ablation on chosen and custom completions."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Open-source 7B preference model built on GPT-J (6.9B); SAEs are Gated SAEs; checkpoint name is only linked, not written."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Ablation moved reward the expected way, but even the top five URL features, or several repeated-text features, left the gap unclosed."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Post only floats maybes (feature splitting, other unexplained reasons, SAE limits) and never settles on a cause or says it is unclear."
+        },
+        "quote": {
+          "supported": true,
+          "value": "We do not explain 100% of reward differences through SAE features",
+          "evidence": "Takeaway bullet near the top: after a couple of hours of trying, SAE features leave part of the reward difference unexplained."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly positive post; most reward-gap results are in images, not text."
+    },
+    {
+      "post_id": "BLHBhpJcusmsNjGio",
+      "title": "Training Model to Predict Its Own Generalization: A Preliminary Study",
+      "genuine": "partial",
+      "genuine_reason": "Summary leads with early positive results and most of the body reports wins (4B, 14B); the 0.5B result and the failed replication are shorter sections.",
+      "experiments": [
+        "MetaSFT on Qwen-2.5-0.5B-Base predicting emergent-misalignment generalization",
+        "Replicating human-unpredictable surprising generalization with models up to 14B for validation"
+      ],
+      "primary_experiment": "MetaSFT on Qwen-2.5-0.5B-Base predicting emergent-misalignment generalization",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors give reasons to expect the meta-training pipeline to work (existing introspection, learnable behavior modes); the 0.5B run contradicted this."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "100 advice domains split 50 and 50, 2,500 training domain pairs, three held-out quadrants; LLM-judge evilness score with RMSE; one 0.5B base model."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Meta-training the model on ICL-versus-SFT outcome pairs, compared with ground-truth fine-tuning baselines, untrained in-context learning, and correlation after calibration adjustment."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen-2.5-0.5B-Base for the failed run; Qwen-3-4B-Base for the positive contrast run."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "MetaSFT lost to ground-truth baselines on RMSE because of miscalibration; on correlation it beat one baseline but not the other, a weak outcome."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Post cites miscalibration and a degenerate evaluation where training barely matters, but gives no root cause mapping to a listed category."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Results are negative for the former (0.5B) but positive for the latter (4B)",
+          "evidence": "Sentence in the emergent-misalignment section giving the outcome by model size: failure at the smaller model, success at the larger."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly positive preliminary study; 0.5B result and failed replication are brief; numbers are in figures."
+    },
+    {
+      "post_id": "YyAMz52wDxnLhwvWL",
+      "title": "Training Models to Predict and Explain Their In-the-Wild Behavior",
+      "genuine": "partial",
+      "genuine_reason": "Summary leads with positive held-out generalization and most of the body covers it; the weaker open-ended results and the privileged-access null are real but secondary sections.",
+      "experiments": [
+        "Privileged-access test: training a subject model versus a different 8B model on the same behavior data",
+        "Open-ended self-explanation training generalizing to the hint setting",
+        "Self-explanations as aids for counterfactual simulators (help weak, hurt strong)"
+      ],
+      "primary_experiment": "Privileged-access test: training a subject model versus a different 8B model on the same behavior data",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "A model with introspective access should beat a cross-trained one on its own behavior; one author had guessed some privileged access would show."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Self and cross training of two 8B models on counterfactual claim data from in-the-wild investigations, evaluated on held-out claims; claim counts not stated."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Standard privileged-access design: train the subject and a different model on the subject's claims, compare predictors against an Opus transcript-reading reference."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen3-8B and Llama-3.1-8B-Instruct as subjects, with Opus 4.8 as the transcript-reading reference."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "A model trained on another model's data predicted the subject as well as the subject trained on itself, in both directions."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Relies on the closing discussion: authors read the null as consistent with a prior null and conclude training struggles to surface self-only information."
+        },
+        "quote": {
+          "supported": true,
+          "value": "We find no privileged access for our self-explanations",
+          "evidence": "Opening sentence of the privileged-access results paragraph, reporting that training gave the subject model no self-advantage."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Authors are uncertain why a prior study found privileged access with the same models; follow-up to the evaluation post."
+    }
+  ]
+}

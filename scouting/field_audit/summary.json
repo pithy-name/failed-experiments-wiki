@@ -1,0 +1,1260 @@
+[
+  {
+    "post_id": "4uXCAJNuPKtKBsi28",
+    "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "Negative result: SAEs underperformed linear probes",
+    "quote_words": 6,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "hypothesis_false",
+    "models": "Gemma 2 9B IT probed at layer 20, with GemmaScope SAEs and chat-finetuned versions of them.",
+    "experiments": [
+      "SAE probes vs linear probes for OOD harmful-intent detection",
+      "Training chat-specialised SAEs (from scratch or finetuned) to close the probing gap"
+    ],
+    "primary_experiment": "SAE probes vs linear probes for OOD harmful-intent detection",
+    "info_hazard": "none",
+    "notes": "Long multi-snippet roundup; SAE probing is the primary failure; JumpReLU snippet is positive; plots are images, not text.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "kiCZzHDkRtupek2mc",
+    "title": "My Failed AI Safety Research Projects (Q1/Q2 2025)",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "I found no evidence for an equivalent of angular encoding for log(token value).",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "hypothesis_false",
+    "models": "No model is named for the multiplication runs; the post only refers to an earlier paper on addition.",
+    "experiments": [
+      "LLM multiplication: log-space analogue of the addition helix",
+      "Toy model of memorisation",
+      "ITDA SAE investigation"
+    ],
+    "primary_experiment": "LLM multiplication: log-space analogue of the addition helix",
+    "info_hazard": "none",
+    "notes": "Three short projects; memorisation has a stated expectation but an inconclusive outcome; multiplication names no LLM; details in linked writeups.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "WqjkqrEyFDXoHzz9K",
+    "title": "Steering Gemini with BiDPO",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "BiDPO did not beat the stronger baselines, ending the project.",
+    "quote_words": 10,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "Gemini 1.5v1 Flash and Pro, then Gemini 1.5v2.",
+    "experiments": [
+      "BiDPO steering vectors vs prompt-based steering baselines on Gemini 1.5v2"
+    ],
+    "primary_experiment": "BiDPO steering vectors vs prompt-based steering baselines on Gemini 1.5v2",
+    "info_hazard": "none",
+    "notes": "Short pointer post; method details and postmortem live on an external site, not in this text.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "CL8RFFCdsBwWWfKYS",
+    "title": "A Small Negative Result on Debate",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Our human annotators answered at the same low accuracy with and without the arguments.",
+    "quote_words": 14,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Not applicable: arguments were written by humans and answered by human annotators; no model was used.",
+    "experiments": [
+      "Single-turn oracle debate for time-limited reading-comprehension QA on QuALITY"
+    ],
+    "primary_experiment": "Single-turn oracle debate for time-limited reading-comprehension QA on QuALITY",
+    "info_hazard": "none",
+    "notes": "No ML model involved (human annotators), so models is not applicable; full results are in the arXiv paper it introduces.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "pn5nBBcLYrnmWXfnY",
+    "title": "Classifying representations of sparse autoencoders (SAEs)",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "So the sparse encodings consistently under-perform compared to the original hidden states.",
+    "quote_words": 12,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "unknown",
+    "models": "Pythia-70m-deduped and Pythia-410m-deduped, with pretrained sparse autoencoders taken from a cited prior release.",
+    "experiments": [
+      "Sentiment classification on SAE encodings vs raw hidden states"
+    ],
+    "primary_experiment": "Sentiment classification on SAE encodings vs raw hidden states",
+    "info_hazard": "none",
+    "notes": "Test accuracy numbers are in an image, not text; author unsure if own pipeline caused the result.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "EEvsL9cpgDAxAhTzt",
+    "title": "Some negative steganography results",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "the classifier never had a >50% accuracy",
+    "quote_words": 7,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hyperparams_unexplored",
+    "models": "gpt2-large and bert-base-uncased in the first experiment; GPT-3.5-Turbo and GPT-4-Turbo in the second.",
+    "experiments": [
+      "PPO on GPT2-large with a BERT classifier reward to learn red/blue 1-bit steganography",
+      "Iterated fine-tuning of GPT-3.5-Turbo to hide a user's age bracket"
+    ],
+    "primary_experiment": "PPO on GPT2-large with a BERT classifier reward to learn red/blue 1-bit steganography",
+    "info_hazard": "none",
+    "notes": "Two experiments; second run by a collaborator; a later update points to positive results from other work.",
+    "audit_file": "audit-01.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "LPHMMMZFAWog6ty5x",
+    "title": "Ctrl-Z: Controlling AI Agents via Resampling",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Ultimately, these techniques performed little better than just looking at the current step",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "hypothesis_false",
+    "models": "Untrusted model is GPT-4o mini, but the trusted monitor that produced the scores is described only as an 8-billion-parameter model, unnamed.",
+    "experiments": [
+      "Cross-step aggregation of monitor scores (Kolmogorov-Smirnov test, autoregressive surprise) for audit decisions",
+      "Attack policy that gives up after repeated deferral to the trusted model"
+    ],
+    "primary_experiment": "Cross-step aggregation of monitor scores (Kolmogorov-Smirnov test, autoregressive surprise) for audit decisions",
+    "info_hazard": "none",
+    "notes": "Summary of a larger paper; failed sub-experiments get one short passage each; a separate hackathon failed for operational reasons.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "tgn3pD2gLpZvepkWk",
+    "title": "J-Lens: A Failed Replication on GPT-2",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "J-Lens does not work on GPT-2 small or medium",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "did_not_replicate",
+    "failure_type": "hypothesis_false",
+    "models": "GPT-2 small (124M) and GPT-2 medium (355M in most places, 255M once); the post's own numbers conflict.",
+    "experiments": [
+      "J-Lens vs Logit Lens on GPT-2 small and medium",
+      "Refitting J on more sequences",
+      "Token-frequency control for the rank metric",
+      "Sparsity thresholding of the fitted J",
+      "Tuning skip_first when fitting J"
+    ],
+    "primary_experiment": "J-Lens vs Logit Lens on GPT-2 small and medium",
+    "info_hazard": "none",
+    "notes": "Beginner author, AI-written code; GPT-2 medium size stated inconsistently; Logit Lens may be unusually strong on GPT-2.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "jKKbRKuXNaLujnojw",
+    "title": "Negative Results on Group SAEs",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "claim_scope"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "none of our results were that compelling",
+    "quote_words": 7,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "worked_but_abandoned",
+    "models": "GPT-2, layer 7 activations; the post does not give the GPT-2 size.",
+    "experiments": [
+      "Group SAEs on synthetic superposed circles",
+      "Group SAEs on GPT-2 layer 7 activations",
+      "Gated and TopK Group SAEs",
+      "Learned group space on synthetic co-occurrence data"
+    ],
+    "primary_experiment": "Group SAEs on GPT-2 layer 7 activations",
+    "info_hazard": "none",
+    "notes": "Written a year after the work; figures not in text; teammates' circuits and learned-group results excluded.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "HpAr8k74mW4ivCvCu",
+    "title": "[Summary] Progress Update #1 from the GDM Mech Interp Team",
+    "genuine": "no",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope",
+      "models",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "We replicate their work, and find that it under-performs resampling",
+    "quote_words": 10,
+    "quote_verbatim_in_post": true,
+    "result_direction": "did_not_replicate",
+    "failure_type": null,
+    "models": "No model is named for the ghost-grads replication in this summary.",
+    "experiments": [
+      "Replication of ghost grads for SAE dead features",
+      "SAEs on compressed Tracr models",
+      "SAEs on the ReLU output toy model of superposition",
+      "Replication of Anthropic's dictionary-learning improvements"
+    ],
+    "primary_experiment": "Replication of ghost grads for SAE dead features",
+    "info_hazard": "none",
+    "notes": "Summary only; each snippet's detail is in the longer companion post. Audit that post before selecting.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "vTvPvCH2G9cbcFY8a",
+    "title": "OpenAI Responses API changes models' behavior",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "grammatical errors in only 10% of cases when sampled via the Responses API",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "infrastructure",
+    "models": "Refers only to unnamed OpenAI fine-tuned models; the base model is never named.",
+    "experiments": [
+      "Fine-tuning a model to write ungrammatically, apparently failing under the Responses API"
+    ],
+    "primary_experiment": "Fine-tuning a model to write ungrammatically, apparently failing under the Responses API",
+    "info_hazard": "none",
+    "notes": "Failure was apparent and API-caused; model worked under Chat Completions. Short post; mechanism is a theory; figures show examples.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "eaEqAzGN3uJfpfGoc",
+    "title": "Trusted monitoring, but with deception probes.",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "These sophisticated methods worked worse than simply averaging all probe scores",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "measurement_noise",
+    "models": "Llama-3.3-70B-Instruct (probed model); Claude 3.5 Haiku identifies critical claims; Claude 3.5 Sonnet serves as monitor in other methods.",
+    "experiments": [
+      "Elaborate probe-scoring methods (peak score, critical-token averaging, follow-up question) vs full averaging",
+      "LLM monitor reasoning over per-token probe scores",
+      "Deception dilution attack against full averaging"
+    ],
+    "primary_experiment": "Elaborate probe-scoring methods (peak score, critical-token averaging, follow-up question) vs full averaging",
+    "info_hazard": "none",
+    "notes": "Mostly positive paper summary; failed items get a sentence or two; numbers in figures; post carries a do-not-train canary.",
+    "audit_file": "audit-02.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "peKrvZ6t9PSCzoQDa",
+    "title": "Steering Evaluation-Aware Models to Act Like They Are Deployed",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "it just means the adversarial setting we tested against was weaker than we initially thought",
+    "quote_words": 15,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "hypothesis_false",
+    "models": "Llama 3.3 Nemotron Super 49B v1 (Llama Nemotron), fine-tuned into the type-hint model organism.",
+    "experiments": [
+      "Prompt-resistant evaluation-cue setting that declarative user prompts later broke",
+      "Training a model organism that assumes evaluation unless a deployment cue appears"
+    ],
+    "primary_experiment": "Prompt-resistant evaluation-cue setting that declarative user prompts later broke",
+    "info_hazard": "none",
+    "notes": "Failed part is a Jan 2026 edit; main paper result is positive; numbers are in figures, not text.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "Fjoy5SxgBmxfy7FNB",
+    "title": "Gradient surfing: the hidden role of regularization",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "But nothing approaches the sustained grokking of Adam with weight decay.",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "hypothesis_false",
+    "models": "No network or model is named; only the modular addition task and the Adam optimizer are mentioned.",
+    "experiments": [
+      "Inducing grokking without weight decay via repulsive or large-norm regularization and extra noise",
+      "Hamiltonian Monte Carlo exploration of the minimum-loss set"
+    ],
+    "primary_experiment": "Inducing grokking without weight decay via repulsive or large-norm regularization and extra noise",
+    "info_hazard": "none",
+    "notes": "Early-stage work; author calls evidence inconclusive; no model or training details; few numbers beyond rough percentages.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "3ecs6duLmTfyra3Gp",
+    "title": "Some Lessons Learned from Studying Indirect Object Identification in GPT-2 small",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "we initially found that mean-ablating the induction and duplicate token heads had little effect",
+    "quote_words": 14,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": null,
+    "models": "GPT-2 small.",
+    "experiments": [
+      "Early circuit knockouts using mean ablation over the IOI template distribution"
+    ],
+    "primary_experiment": "Early circuit knockouts using mean ablation over the IOI template distribution",
+    "info_hazard": "none",
+    "notes": "Lessons post; failed knockout version is one paragraph without numbers; main findings are positive and in the companion paper.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "4Gt42jX7RiaNaxCwP",
+    "title": "More information about the dangerous capability evaluations we did with GPT-4 and Claude.",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "no models produced a plausible complete plan for how to achieve autonomous replication",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": null,
+    "models": "GPT-4 (an early version, not the release model, no image input) and Claude (version not stated).",
+    "experiments": [
+      "Autonomous replication and resource-gathering elicitation on GPT-4 and Claude",
+      "Agent setting up a 2Captcha account without human help"
+    ],
+    "primary_experiment": "Autonomous replication and resource-gathering elicitation on GPT-4 and Claude",
+    "info_hazard": "possible: dangerous-capability elicitation (phishing, impersonation, deceiving a crowdworker); the post stays high level and withholds specifics, so risk is low.",
+    "notes": "Overview only; per-model results and methods withheld pending a technical report; negative outcome matched authors' prior expectation.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "HGwjBmCKWtj5apGkK",
+    "title": "Model whisperers: optimized token prefixes can imitate function vectors, filter heads, and steering directions",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "anti_top actually makes the model lose coherence rather than turn hostile",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "unknown",
+    "models": "Olmo-3-1125-32B base model.",
+    "experiments": [
+      "Anti-human end: GCG prefix and negative-direction injection on Olmo-3 32B",
+      "Early brute-force and beam search for pro/anti-human token strings on Llama 3.1 8B"
+    ],
+    "primary_experiment": "Anti-human end: GCG prefix and negative-direction injection on Olmo-3 32B",
+    "info_hazard": "possible: posts optimized gibberish prefixes that push an open model toward hostile or incoherent output and asks about lowering refusals; GCG is public and this attempt largely failed.",
+    "notes": "Mostly positive post; failed part is the anti-human result; charts are images; footnote counts degraded output as anti-human.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "wsXCXoyvRi3DnWZ2M",
+    "title": "NYU Code Debates Update/Postmortem",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "both correct and incorrect models made too many mistakes on harder questions",
+    "quote_words": 12,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": null,
+    "models": "Claude 3 Opus as debaters in pilot 2 (GPT-4-turbo-preview in pilot 1); GPT-4 only generated the wrong-answer distractors.",
+    "experiments": [
+      "Pilot 1: HumanEval questions, GPT-4-turbo, non-coder judges",
+      "Pilot 2: APPS interview questions, Claude 3 Opus, non-coder judges, execution traces"
+    ],
+    "primary_experiment": "Pilot 2: APPS interview questions, Claude 3 Opus, non-coder judges, execution traces",
+    "info_hazard": "none",
+    "notes": "Postmortem of two small pilots; author calls setup invalid, not a negative result for debate; failure cause fits no label.",
+    "audit_file": "audit-03.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "LXQBcztrWKhtcgQfJ",
+    "title": "Current activation oracles are hard to use",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "It also never correctly identifies the missing information (0/54)",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Qwen 3 32B as target model, plus the activation oracle released with the original paper.",
+    "experiments": [
+      "Number prediction from control-token activations with no chain of thought",
+      "Sycophancy detection on Scruples prompts",
+      "Missing-information detection with identical tokens across complete and incomplete prompts",
+      "Identifying why a reasoning model is about to backtrack",
+      "Editing upstream reasoning to test whether answers track activations or nearby words",
+      "Extracting censored knowledge from Qwen models on politically sensitive prompts",
+      "Audit of free-form answers for vagueness and hallucination"
+    ],
+    "primary_experiment": "Missing-information detection with identical tokens across complete and incomplete prompts",
+    "info_hazard": "none",
+    "notes": "Summary and body disagree on 1/54 versus 0/54, sycophancy AUC and rollout counts; body used. Also reports small positives.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "8dXzDzk7nNK64jBve",
+    "title": "Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "Not one of the scratchpad, across all 4 tests, met all 4 criteria",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "did_not_replicate",
+    "failure_type": "unknown",
+    "models": "Llama 70B alignment-faking checkpoint from Hughes et al, fine-tuned on about 30k synthetic documents; exact Llama version is not stated.",
+    "experiments": [
+      "Eliciting alignment faking in the 8B checkpoint (Test 1)",
+      "Eliciting alignment faking in the 70B checkpoint without training details in the prompt (Test 2)",
+      "Eliciting alignment faking in the 70B checkpoint with training details in the prompt (20, then 50 prompts)"
+    ],
+    "primary_experiment": "Eliciting alignment faking in the 70B checkpoint with training details in the prompt (20, then 50 prompts)",
+    "info_hazard": "none",
+    "notes": "Probe study never run. Scored by hand, about 90 pairs; author flags underpowered versus source paper.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "LzeZW9PvR6Njc9ngr",
+    "title": "Whack-a-mole with a broken hammer: does a model internally track its automaton state?",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "the probe only gets it right in 50.8% of cases",
+    "quote_words": 10,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Qwen2.5-1.5B, which only read the synthetic transcripts.",
+    "experiments": [
+      "Probe separating the two-failures state from the locked state (counting)",
+      "Planned bait experiment to catch rule-breaking via the probe (never run)"
+    ],
+    "primary_experiment": "Probe separating the two-failures state from the locked state (counting)",
+    "info_hazard": "none",
+    "notes": "Mostly positive tracking result; counting gap is sub-finding. Bait follow-up planned but never run. Single small model.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "XHpta8X85TzugNNn2",
+    "title": "Broken Latents: Studying SAEs and Feature Co-occurrence in Toy Models",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Both of these SAEs learn a single broken latent",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "hypothesis_false",
+    "models": "Only synthetic toy SAEs, no named pretrained model for this test; Gemma-2-2b appears only in the separate real-LLM attempt.",
+    "experiments": [
+      "One-latent SAE learning only the parent feature (Matryoshka assumption)",
+      "Tied SAE with fewer latents than true features under co-occurrence (merged latents)",
+      "Orthogonality fix when the parent feature is also a high-error feature, with and without superposition (parent not represented)",
+      "Orthogonality fix applied to SAEs on a real LLM (Gemma-2-2b)"
+    ],
+    "primary_experiment": "One-latent SAE learning only the parent feature (Matryoshka assumption)",
+    "info_hazard": "none",
+    "notes": "Toy-model post; most findings positive. Real-LLM attempt gets one paragraph and no numbers. Results mainly in plots.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "2CoLkSdwirr2WnNH6",
+    "title": "(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "localistic approximations of vanilla sparse autoencoders cannot be strung together into fully explanatory circuits",
+    "quote_words": 14,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "GPT-2-small with residual-stream sparse autoencoders; interpretability data from Neuronpedia.",
+    "experiments": [
+      "Gradient-based SAE circuit discovery to explain GPT-2-small forward passes"
+    ],
+    "primary_experiment": "Gradient-based SAE circuit discovery to explain GPT-2-small forward passes",
+    "info_hazard": "none",
+    "notes": "SPAR project written up later. Results mostly figures; conclusion goes beyond five prompts.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "ogvyWqJtSrpgXfc7t",
+    "title": "Eval-Awareness Steering detects the Test, Not the Sabotage",
+    "genuine": "yes",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "the dose response is a total flat",
+    "quote_words": 7,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hyperparams_unexplored",
+    "models": "Llama-3.1-8B-Instruct.",
+    "experiments": [
+      "Steering the eval-awareness direction to change sandbagging",
+      "Using the direction as a per-item sandbagging detector"
+    ],
+    "primary_experiment": "Steering the eval-awareness direction to change sandbagging",
+    "info_hazard": "none",
+    "notes": "Single 8B model, one prompted organism; author calls it preliminary. Some results appear only in figures.",
+    "audit_file": "audit-04.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "eowhY5NaCaqY6Pkj9",
+    "title": "Behavioural statistics for a maze-solving agent",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "we found no loss at all when dropping this variable from 1)-3)",
+    "quote_words": 12,
+    "quote_verbatim_in_post": true,
+    "result_direction": "did_not_replicate",
+    "failure_type": "measurement_noise",
+    "models": "Agent is only described as the maze-solving policy network from earlier work; no model name or architecture appears in the post.",
+    "experiments": [
+      "Second-batch check of the Euclidean cheese-to-decision-square distance effect",
+      "Single-variable screen where five of eleven distance variables failed to beat the baseline",
+      "Decision-square-to-top-right 5x5 distance effect from the earlier post, dismissed as an artifact"
+    ],
+    "primary_experiment": "Second-batch check of the Euclidean cheese-to-decision-square distance effect",
+    "info_hazard": "none",
+    "notes": "Mostly a positive analysis; the negative result is one sentence plus a footnote; second-batch numbers are not given.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "GE6pcmmLc3kdpNJja",
+    "title": "Fuzzing LLMs sometimes makes them reveal their secrets",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "only a small uplift at temperature 1, and no uplift at temperature 0",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "hyperparams_unexplored",
+    "models": "Password-locked model is identified only by its source paper title; Qwen2.5-7B-Instruct is named only for the other, positive experiments.",
+    "experiments": [
+      "Random noise on a password-locked math model to unlock sandbagged answers",
+      "Noise-augmented expert iteration for RL exploration on the same password-locked model"
+    ],
+    "primary_experiment": "Random noise on a password-locked math model to unlock sandbagged answers",
+    "info_hazard": "none",
+    "notes": "Mostly a positive elicitation post; failure numbers are in plots, not text; one subsection plus the RL attempt.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "QYmnkQyZD2fDjHCJ8",
+    "title": "Models don’t seem to be dishonest in the way humans are",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "True and false training usually produced nearly identical downstream effects",
+    "quote_words": 10,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Qwen 2.5 32B and Gemma 3 27B trained; Claude used as judge and answer rephraser.",
+    "experiments": [
+      "Training on own true versus false gender-inference reasoning (filter and overwrite arms), tested on dishonesty evals",
+      "Off-policy reveal versus rephrase targets",
+      "GRPO and DPO variants of the training setup",
+      "Persuasive-but-false subset confirmed by a belief probe",
+      "Deceptive versus neutral framing in the prompt"
+    ],
+    "primary_experiment": "Training on own true versus false gender-inference reasoning (filter and overwrite arms), tested on dishonesty evals",
+    "info_hazard": "none",
+    "notes": "Several results are in figures missing from the text; training hyperparameters and number of steps are not given.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "uH5oo57r24xGXQGKM",
+    "title": "Do capabilities generalize across propensities?",
+    "genuine": "partial",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "we observe substantially less capability transfer between propensities",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "unknown",
+    "models": "gpt-oss-120b for the Chess figure; Llama 3.1-8B in the appendix; Claude Sonnet generates training completions.",
+    "experiments": [
+      "Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap",
+      "Reasoning versus no-reasoning swap: reduced transfer on post-cutoff facts",
+      "Propensity adherence collapse under swapped prompts",
+      "Pre-training named personas before main training, with no improvement"
+    ],
+    "primary_experiment": "Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap",
+    "info_hazard": "none",
+    "notes": "Results are in figures; no numeric gaps in text; the performance-gap formula is missing from the extracted text.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "6iPEuEnguEtmtaqyJ",
+    "title": "Function vectors as a model diffing tool: 17 heads repair a bad fine-tune",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Adding it to the clean model does almost nothing",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Qwen2.5-7B-Instruct and Llama-3.1-8B-Instruct bad-medical-advice LoRAs are named; the injection section does not say which one was used.",
+    "experiments": [
+      "Adding the mean-difference direction to the clean model to install bad medical behavior",
+      "Removing that direction from the bad model, which helps but does not cure",
+      "First Llama transfer run with a guardrail tuned on Qwen",
+      "Probe-peak layers as a guide to where persona traits are load-bearing",
+      "Crosscoder search for a feature unique to the bad model"
+    ],
+    "primary_experiment": "Adding the mean-difference direction to the clean model to install bad medical behavior",
+    "info_hazard": "possible: the failed experiment is an activation-injection attack meant to install unsafe medical behavior; it failed and relies on standard steering, so risk looks low",
+    "notes": "Mostly a positive repair result; injection test is one section; persona half never names its model; one seed.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "EC5H7xakTgxxNXm5g",
+    "title": "Sanity Checks for Sanity Checks for Sparse Autoencoders",
+    "genuine": "partial",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "Instead of improving performance, it actively degrades it",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "hypothesis_false",
+    "models": "BatchTopK SAE trained on synthetic activations; TopK and JumpReLU in related runs; GPT-2 appears only as a source of activation statistics.",
+    "experiments": [
+      "Per-feature loudness added to synthetic activations to explain BatchTopK failure",
+      "Raising d_model to 800 and resampling to fix dead latents",
+      "Sample-level magnitude variance as the explanation",
+      "More true features than latents",
+      "Doubling the active feature count to 40",
+      "AuxK, hyperparameter sweeps and resampling at d_model 100"
+    ],
+    "primary_experiment": "Per-feature loudness added to synthetic activations to explain BatchTopK failure",
+    "info_hazard": "none",
+    "notes": "Footnote calls the loudness motivation poor; no seeds or error bars reported; the post mainly rebuts a published sanity-check paper.",
+    "audit_file": "audit-05.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "ExB6KYDcznaFS72eT",
+    "title": "Evaluating Explanations of LLM Behavior In The Wild with Counterfactual Experiments",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Our evaluation is a close checkable proxy, and the tools provided no uplift",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Only the predictor, Claude Opus 4.8, is named; the two target models are unnamed, and Gemma appears only in an example.",
+    "experiments": [
+      "Activation-reading interpretability tools as uplift for predicting counterfactual prompt-edit outcomes",
+      "Training models to write open-ended explanations of their own behavior (weaker, mixed; detail only in the paper appendix)"
+    ],
+    "primary_experiment": "Activation-reading interpretability tools as uplift for predicting counterfactual prompt-edit outcomes",
+    "info_hazard": "none",
+    "notes": "Summary of a longer paper; numeric results are only in figures; target models unnamed for this evaluation.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "n3LAgnHg6ashQK3fF",
+    "title": "Takeaways from our robust injury classifier project [Redwood Research]",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "we did not produce a classifier that was actually adversarially robust",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "hyperparams_unexplored",
+    "models": "Mentions only small models and a classifier; no model names or sizes are given in the post.",
+    "experiments": [
+      "Adversarial training with contractor-written attacks to build an injury classifier with near-zero failures",
+      "Follow-up: fitting roughly 6,000 adversarial examples with small classifiers"
+    ],
+    "primary_experiment": "Adversarial training with contractor-written attacks to build an injury classifier with near-zero failures",
+    "info_hazard": "none",
+    "notes": "Authors say this is not a demonstrated negative result; setup details are in the linked paper.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "hMBTaFvAzdMNnj29c",
+    "title": "Evolutionary prompt optimization for SAE feature visualization",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Both features have high activations, but the activations are not maximum-activating",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "GPT-2 (Small, per the summary) with layer-10 residual SAEs from a named author; Gemma 1 2B is used in other sections.",
+    "experiments": [
+      "Maximizing two SAE features on the same token with a readable prompt",
+      "AdvPrompter for maximizing arbitrary features (one sentence only)"
+    ],
+    "primary_experiment": "Maximizing two SAE features on the same token with a readable prompt",
+    "info_hazard": "none",
+    "notes": "Mostly positive method post; two-feature failure is a short section plus appendix; activation values are in images.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "5XmxmszdjzBQzqpmz",
+    "title": "Interpreting Preference Models w/ Sparse Autoencoders",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "We do not explain 100% of reward differences through SAE features",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "Open-source 7B preference model built on GPT-J (6.9B); SAEs are Gated SAEs; checkpoint name is only linked, not written.",
+    "experiments": [
+      "Ablating top reward-relevant SAE features to fully close reward gaps (URL, repeated-text, uncertainty-phrase features)",
+      "Famous-name and movie features for jailbreak prompts (detail only in a linked comment)",
+      "Later-layer SAEs being less interpretable"
+    ],
+    "primary_experiment": "Ablating top reward-relevant SAE features to fully close reward gaps (URL, repeated-text, uncertainty-phrase features)",
+    "info_hazard": "none",
+    "notes": "Mostly positive post; most reward-gap results are in images, not text.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "BLHBhpJcusmsNjGio",
+    "title": "Training Model to Predict Its Own Generalization: A Preliminary Study",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Results are negative for the former (0.5B) but positive for the latter (4B)",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "Qwen-2.5-0.5B-Base for the failed run; Qwen-3-4B-Base for the positive contrast run.",
+    "experiments": [
+      "MetaSFT on Qwen-2.5-0.5B-Base predicting emergent-misalignment generalization",
+      "Replicating human-unpredictable surprising generalization with models up to 14B for validation"
+    ],
+    "primary_experiment": "MetaSFT on Qwen-2.5-0.5B-Base predicting emergent-misalignment generalization",
+    "info_hazard": "none",
+    "notes": "Mostly positive preliminary study; 0.5B result and failed replication are brief; numbers are in figures.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "YyAMz52wDxnLhwvWL",
+    "title": "Training Models to Predict and Explain Their In-the-Wild Behavior",
+    "genuine": "partial",
+    "unsupported_fields": [],
+    "auditor_says_all_supported": true,
+    "quote": "We find no privileged access for our self-explanations",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "hypothesis_false",
+    "models": "Qwen3-8B and Llama-3.1-8B-Instruct as subjects, with Opus 4.8 as the transcript-reading reference.",
+    "experiments": [
+      "Privileged-access test: training a subject model versus a different 8B model on the same behavior data",
+      "Open-ended self-explanation training generalizing to the hint setting",
+      "Self-explanations as aids for counterfactual simulators (help weak, hurt strong)"
+    ],
+    "primary_experiment": "Privileged-access test: training a subject model versus a different 8B model on the same behavior data",
+    "info_hazard": "none",
+    "notes": "Authors are uncertain why a prior study found privileged access with the same models; follow-up to the evaluation post.",
+    "audit_file": "audit-06.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": true
+  },
+  {
+    "post_id": "pLC3bx77AckafHdkq",
+    "title": "GPT-oss is an extremely stupid model",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "I could not replicate that behavior with GPT-oss",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "did_not_replicate",
+    "failure_type": "hypothesis_false",
+    "models": "GPT-oss (size not given); comparison models Claude 4, Grok 4, Qwen 30B Instruct, Kimi K2.",
+    "experiments": [
+      "Reproducing the blackmail behaviour of the Anthropic agentic misalignment scenario with GPT-oss",
+      "Asking GPT-oss to infer what the evaluation is designed to elicit"
+    ],
+    "primary_experiment": "Reproducing the blackmail behaviour of the Anthropic agentic misalignment scenario with GPT-oss",
+    "info_hazard": "none",
+    "notes": "Short post; one scenario, no run counts; harder prompt variant is linked, not included.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "bchjSwxBTxZBFXBXs",
+    "title": "The Local Interaction Basis: Identifying Computationally-Relevant and Sparsely Interacting Features in Neural Networks",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "claim_scope"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "On language models however, we find that LIB does not help us understand the networks",
+    "quote_words": 15,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "hypothesis_false",
+    "models": "Tinystories-1M and GPT2-small (language models); a modular addition transformer and a CIFAR-10 model (toy).",
+    "experiments": [
+      "Local interaction basis on language models (Tinystories-1M, GPT2-small) compared with a PCA baseline"
+    ],
+    "primary_experiment": "Local interaction basis on language models (Tinystories-1M, GPT2-small) compared with a PCA baseline",
+    "info_hazard": "none",
+    "notes": "Linkpost summarizing two papers; language-model negative result gets a few sentences; details are in the papers.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "rktrjGjXEbWsg7zof",
+    "title": "My retrospective from MATS 10.0",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "fast convergence to unconditional compliance in the form of instruction following",
+    "quote_words": 11,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "hypothesis_false",
+    "models": "Project models are Kimi-K2.6, Qwen3.6-397B and Qwen3.8-27B, but the lesson does not say which one converged to compliance.",
+    "experiments": [
+      "RL expected to select strategic compliance but converging to blind instruction following",
+      "Chat-based synthetic document finetuning plus SFT failing to transfer a trait to agentic settings"
+    ],
+    "primary_experiment": "RL expected to select strategic compliance but converging to blind instruction following",
+    "info_hazard": "none",
+    "notes": "Retrospective; failures are lesson-level anecdotes without numbers; full paper is announced as forthcoming.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "7zGgFPLaTXJwCJccB",
+    "title": "Practical Learnings from Synthetic Document Finetuning",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "the difference over simply training a bit more with SDF wasn't large enough",
+    "quote_words": 13,
+    "quote_verbatim_in_post": true,
+    "result_direction": "smaller_than_expected",
+    "failure_type": "worked_but_abandoned",
+    "models": "Post says its runs were mainly on gpt-oss-20b and gpt-oss-120b, but does not tie this exploration to any model.",
+    "experiments": [
+      "Logit diff amplification to boost finetuning effects at inference time",
+      "Multiple universe seeds for the same fact",
+      "Prepending eval prompts to training documents (model-dependent degradation)",
+      "Appending stop tokens to fix gibberish endings"
+    ],
+    "primary_experiment": "Logit diff amplification to boost finetuning effects at inference time",
+    "info_hazard": "none",
+    "notes": "Tips post; failed items are single paragraphs. Multi-seed test is a quick single run.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "DgKyDTKeGcisEGCnH",
+    "title": "GPT-3.5 judges can supervise GPT-4o debaters in capability asymmetric debates",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "but GPT-3.5 does not and the results for GPT-4o are not significant",
+    "quote_words": 12,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "GPT-3.5, GPT-4o mini, GPT-4o (two dated versions); Claude 3.5 Sonnet used to build the binary dataset.",
+    "experiments": [
+      "Capability-symmetric debate with fine-tuned judges",
+      "Inference-only debate on GPQA",
+      "Judge trained across debater skill levels from GPT-3.5 to GPT-4o"
+    ],
+    "primary_experiment": "Capability-symmetric debate with fine-tuned judges",
+    "info_hazard": "none",
+    "notes": "Only failure_type is missing. Main result is positive; negative results are brief.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "vDj9HZnBpBECLzshv",
+    "title": "[Paper] Propensities Please: Exposing Alignment-Faking LLMs using Synthetic Document Finetuning",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis",
+      "claim_scope",
+      "models",
+      "result_direction",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "reasoning about oversight collapsed while leaving general capabilities mostly intact",
+    "quote_words": 10,
+    "quote_verbatim_in_post": true,
+    "result_direction": null,
+    "failure_type": null,
+    "models": "Project models are Kimi K2.6, DeepSeek V3.1 and a GPT OSS 120B variant, but this problem is not tied to any of them.",
+    "experiments": [
+      "Synthetic document finetuning degrading oversight reasoning, even on unrelated corpora",
+      "Preliminary search for alignment faking in 13 open-weight reasoning models"
+    ],
+    "primary_experiment": "Synthetic document finetuning degrading oversight reasoning, even on unrelated corpora",
+    "info_hazard": "none",
+    "notes": "Failure is a short section in a positive paper summary; no numbers beyond roughly six weeks of work.",
+    "audit_file": "audit-07.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "aJ3NTJ6tM7yc49kQn",
+    "title": "Retrospective on my unsupervised elicitation challenge",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "No submission that used Opus 4.6 was successful",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "unknown",
+    "models": "Claude Opus 4.6 (main), Claude Opus 4.7, GPT-5.4 Pro.",
+    "experiments": [
+      "Crowd-submitted elicitation strategies (self-check, best-of-N) on Opus 4.6 for the Ancient Greek accent exercise"
+    ],
+    "primary_experiment": "Crowd-submitted elicitation strategies (self-check, best-of-N) on Opus 4.6 for the Ancient Greek accent exercise",
+    "info_hazard": "none",
+    "notes": "Retrospective of a crowd challenge; failed attempts were by participants, not the author; test exercise and answers withheld.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "mfn32QHwKb55afHq4",
+    "title": "I was Wrong, Simulator Theory is Real",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "with the bug, Y was basically flat",
+    "quote_words": 7,
+    "quote_verbatim_in_post": true,
+    "result_direction": "null",
+    "failure_type": "implementation_bug_suspected",
+    "models": "Only an unnamed LLM called through the OpenAI ChatCompletion API; no model name is given.",
+    "experiments": [
+      "Original study run with a message-role bug (assistant turns sent as system), showing no effect of prior wrong answers"
+    ],
+    "primary_experiment": "Original study run with a message-role bug (assistant turns sent as system), showing no effect of prior wrong answers",
+    "info_hazard": "none",
+    "notes": "Original null result was a message-role bug; fix reverses it. Plots hold the data; model unnamed.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "y7TpjDtKFcJSGzunm",
+    "title": "Why LLMs Aren't Scientists Yet.",
+    "genuine": "yes",
+    "unsupported_fields": [
+      "hypothesis",
+      "failure_type"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "Of these four, three failed during implementation or evaluation",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": null,
+    "models": "Gemini 2.5 Pro (all six agents), Claude Code (implementation and writing).",
+    "experiments": [
+      "Autonomous AI-scientist pipeline on four research ideas (three failed in implementation or evaluation)",
+      "Semantic entropy as a black-box jailbreak detector",
+      "Differentiable tree search planner collapsing into a simple actor-critic"
+    ],
+    "primary_experiment": "Autonomous AI-scientist pipeline on four research ideas (three failed in implementation or evaluation)",
+    "info_hazard": "none",
+    "notes": "Crosspost summary of a longer report; per-failure detail is in the report. The semantic entropy result lacks models.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "Av3frxNy3y3i2kpaa",
+    "title": "Does Circuit Analysis Interpretability Scale? Evidence from Multiple Choice Capabilities in Chinchilla",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "we find that it is only a partial explanation",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "unknown",
+    "models": "Chinchilla 70B.",
+    "experiments": [
+      "Explaining correct-letter head semantics with an nth-item-in-enumeration feature, tested on randomized answer labels"
+    ],
+    "primary_experiment": "Explaining correct-letter head semantics with an nth-item-in-enumeration feature, tested on randomized answer labels",
+    "info_hazard": "none",
+    "notes": "Cross-post of paper abstract and summary; failure part is brief, detail is in the arXiv paper; figures omitted.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "u9Kr97di29CkMvjaj",
+    "title": "Evaluating What 2026 Looks Like So Far",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "the results are substantially worse than human evaluations",
+    "quote_words": 8,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "hyperparams_unexplored",
+    "models": "o3-mini-2025-01-31 with high reasoning effort.",
+    "experiments": [
+      "Automated resolution of predictions (correctness and difficulty scores) with o3-mini",
+      "Automated extraction of predictions from text with o3-mini"
+    ],
+    "primary_experiment": "Automated resolution of predictions (correctness and difficulty scores) with o3-mini",
+    "info_hazard": "none",
+    "notes": "Mostly a positive human grading of predictions; the o3-mini automation is the failed part; results partly in figures.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "7vpvNM7viJqNWAdG7",
+    "title": "Classifier Context Rot: Monitor Performance Degrades with Context Length",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "hypothesis"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "on prepended MonitorBench performance did not increase statistically significantly",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "mixed",
+    "failure_type": "hypothesis_false",
+    "models": "GPT-4.1 (fine-tuned).",
+    "experiments": [
+      "Fine-tuning GPT-4.1 on synthetic needle data and on proxy-task logs to fix long-context monitor degradation",
+      "Periodic reminders to the monitor after each tool call"
+    ],
+    "primary_experiment": "Fine-tuning GPT-4.1 on synthetic needle data and on proxy-task logs to fix long-context monitor degradation",
+    "info_hazard": "none",
+    "notes": "Mostly a positive finding; fine-tuning section is the failure. Results sit in figures; padding-evasion finding is attack-adjacent.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  },
+  {
+    "post_id": "h8FKusANBWfnNoTyc",
+    "title": "My Minor AI Safety Research Projects (Q3 2025)",
+    "genuine": "partial",
+    "unsupported_fields": [
+      "claim_scope",
+      "models"
+    ],
+    "auditor_says_all_supported": false,
+    "quote": "any steering at all reduced the salience of text",
+    "quote_words": 9,
+    "quote_verbatim_in_post": true,
+    "result_direction": "opposite",
+    "failure_type": "unknown",
+    "models": "None named; only an unnamed more advanced instruct model is mentioned.",
+    "experiments": [
+      "Uppishcase: steering with an uppercaseness direction to control prompt salience"
+    ],
+    "primary_experiment": "Uppishcase: steering with an uppercaseness direction to control prompt salience",
+    "info_hazard": "none",
+    "notes": "One of three small projects; failed part is brief, no numbers or model names; code linked on GitHub.",
+    "audit_file": "audit-08.json",
+    "auditor_model": "sonnet",
+    "passes_machine_checks": false
+  }
+]

@@ -1,0 +1,325 @@
+{
+  "batch": 8,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "aJ3NTJ6tM7yc49kQn",
+      "title": "Retrospective on my unsupervised elicitation challenge",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a challenge retrospective, not an experiment report, but it describes in real detail how crowd-submitted self-check and best-of-N strategies all failed on Opus 4.6 before a newer model solved the task.",
+      "experiments": [
+        "Crowd-submitted elicitation strategies (self-check, best-of-N) on Opus 4.6 for the Ancient Greek accent exercise"
+      ],
+      "primary_experiment": "Crowd-submitted elicitation strategies (self-check, best-of-N) on Opus 4.6 for the Ancient Greek accent exercise",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Poses the challenge as a question (can the model be made to do it) and believes Opus 4.6 holds the knowledge, but states no expectation about the strategies."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "One textbook fill-in-the-blank accent exercise, a bit over 20 crowd submissions, mostly self-check or best-of-N, scoped to Opus 4.6."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Asking the model to double-check its work, generating many attempts and having it pick the best, plus extended thinking; translate-back used to show the model knows the rules."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Claude Opus 4.6 (main), Claude Opus 4.7, GPT-5.4 Pro."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "No Opus 4.6 submission succeeded, and the author impression is that these strategies did slightly worse than the raw prompt."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Author calls the blindness to accents somehow unexplained, offers only an unproven guess (model in learner mode) and cannot see how to test it."
+        },
+        "quote": {
+          "supported": true,
+          "value": "No submission that used Opus 4.6 was successful"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Retrospective of a crowd challenge; failed attempts were by participants, not the author; test exercise and answers withheld."
+    },
+    {
+      "post_id": "mfn32QHwKb55afHq4",
+      "title": "I was Wrong, Simulator Theory is Real",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a corrected, positive result, but it explains in detail how an earlier study showed a flat null because of a message-role bug.",
+      "experiments": [
+        "Original study run with a message-role bug (assistant turns sent as system), showing no effect of prior wrong answers"
+      ],
+      "primary_experiment": "Original study run with a message-role bug (assistant turns sent as system), showing no effect of prior wrong answers",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Hypothesis 1: more earlier wrong answers in context means more wrong answers; Hypothesis 2: effect grows with flattery. Simulator theory predicts rising errors."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Defines variables (error rate, prior wrong answers up to about 10, ten prompt supplements) but gives no question set, sample sizes or model."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Wrong answers placed in earlier turns via OpenAI ChatCompletion API, varying their number and a prompt supplement; statistical tests on the outcomes."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Only an unnamed LLM called through the OpenAI ChatCompletion API; no model name is given."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "With the bug, the error rate stayed essentially flat as prior wrong answers increased; the fixed run reversed this."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "implementation_bug_suspected",
+          "evidence": "Author found and fixed a message-role bug that flattened the data; the bug is confirmed, so suspected is only the closest available label."
+        },
+        "quote": {
+          "supported": true,
+          "value": "with the bug, Y was basically flat"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Original null result was a message-role bug; fix reverses it. Plots hold the data; model unnamed."
+    },
+    {
+      "post_id": "y7TpjDtKFcJSGzunm",
+      "title": "Why LLMs Aren't Scientists Yet.",
+      "genuine": "yes",
+      "genuine_reason": "Main content is four autonomous research attempts by LLM agents, three of which failed in implementation or evaluation, with documented failure modes.",
+      "experiments": [
+        "Autonomous AI-scientist pipeline on four research ideas (three failed in implementation or evaluation)",
+        "Semantic entropy as a black-box jailbreak detector",
+        "Differentiable tree search planner collapsing into a simple actor-critic"
+      ],
+      "primary_experiment": "Autonomous AI-scientist pipeline on four research ideas (three failed in implementation or evaluation)",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "States only a goal (see how far LLMs get toward autonomous research with little scaffolding); no expectation or prediction about the outcome."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Six Gemini-based agents plus Claude Code, four ideas from a 135-plus-paper corpus across three subdomains, no ablations, failures observed qualitatively."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Six role-specific agents (idea, hypothesis, planning, evaluation, revision, outline) sharing a file system, Claude Code implementing; zero-shot reviewer filtering of ideas."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Gemini 2.5 Pro (all six agents), Claude Code (implementation and writing)."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Three of four ideas failed during implementation or evaluation; one AI safety idea completed the pipeline and was published."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Failures are attributed to six agent failure modes (drift, context loss, overexcitement and others), which fit no single schema type."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Of these four, three failed during implementation or evaluation"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Crosspost summary of a longer report; per-failure detail is in the report. The semantic entropy result lacks models."
+    },
+    {
+      "post_id": "Av3frxNy3y3i2kpaa",
+      "title": "Does Circuit Analysis Interpretability Scale? Evidence from Multiple Choice Capabilities in Chinchilla",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive scaling result, but it reports that the nth-item explanation of the correct-letter heads was only partial and messy on randomized labels.",
+      "experiments": [
+        "Explaining correct-letter head semantics with an nth-item-in-enumeration feature, tested on randomized answer labels"
+      ],
+      "primary_experiment": "Explaining correct-letter head semantics with an nth-item-in-enumeration feature, tested on randomized answer labels",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "States aims (test scaling, understand head semantics) but no prior expectation; only a later personal guess that circuits are messy at all scales."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Chinchilla 70B, multiple-choice answer-letter circuit, correct-letter attention heads, normal versus randomized answer labels; dataset and sample sizes not stated in the post."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Direct logit attribution, activation patching, attention pattern visualization, query/key/value subspace compression, and label mutation experiments (random letters or numbers, shuffled ABCD)."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Chinchilla 70B."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Authors call results mixed: the head subspaces compress without loss on normal labels, but the nth-item explanation is only partial on randomized labels."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Post says only that more remains to learn about these heads; separate guess that such circuits are messy at every scale."
+        },
+        "quote": {
+          "supported": true,
+          "value": "we find that it is only a partial explanation"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Cross-post of paper abstract and summary; failure part is brief, detail is in the arXiv paper; figures omitted."
+    },
+    {
+      "post_id": "u9Kr97di29CkMvjaj",
+      "title": "Evaluating What 2026 Looks Like So Far",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a human grading of old predictions with a positive verdict, but it details a second experiment where o3-mini resolved predictions much worse than the human grader.",
+      "experiments": [
+        "Automated resolution of predictions (correctness and difficulty scores) with o3-mini",
+        "Automated extraction of predictions from text with o3-mini"
+      ],
+      "primary_experiment": "Automated resolution of predictions (correctness and difficulty scores) with o3-mini",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Only says the author tried to see whether o3-mini could automate the process; a question, with no stated expectation beforehand."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "o3-mini on 2022 and 2023 predictions only (model cutoff), no web search, chunks up to 1000 tokens, compared with human grading by the post author."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Two-pass prediction extraction prompts, chunked input, then scoring each prediction for correctness (0 to 2) and difficulty (1 to 5) using the Arb rubric."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "o3-mini-2025-01-31 with high reasoning effort."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Extraction looked promising; resolution was mediocre, with mean correctness gap of 0.75 on a 0 to 2 scale and difficulty gap of 0.83."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hyperparams_unexplored",
+          "evidence": "Author blames crude technique and missing web search, and plans multi-step flows with search and multi-model averaging; closest available label."
+        },
+        "quote": {
+          "supported": true,
+          "value": "the results are substantially worse than human evaluations"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly a positive human grading of predictions; the o3-mini automation is the failed part; results partly in figures."
+    },
+    {
+      "post_id": "7vpvNM7viJqNWAdG7",
+      "title": "Classifier Context Rot: Monitor Performance Degrades with Context Length",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive finding that monitors degrade with long context, but it describes in detail two fine-tuning mitigations that did not transfer or got worse.",
+      "experiments": [
+        "Fine-tuning GPT-4.1 on synthetic needle data and on proxy-task logs to fix long-context monitor degradation",
+        "Periodic reminders to the monitor after each tool call"
+      ],
+      "primary_experiment": "Fine-tuning GPT-4.1 on synthetic needle data and on proxy-task logs to fix long-context monitor degradation",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Fine-tuning is described as something tried; no stated expectation for it, apart from a general remark that better post-training might help."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "GPT-4.1 fine-tuned via OpenAI API at 65k-token context on two dataset types, tested on needle injection and prepended MonitorBench; sizes not given."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Fine-tuning on synthetic one-line attacks inserted into real transcripts, and on algorithmically generated logs with an approval policy."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-4.1 (fine-tuned)."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Synthetic needle data helped a lot on needle injection but not significantly on prepended MonitorBench; proxy task helped slightly on needles but hurt MonitorBench."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Author thinks in-distribution gains likely come from making the model notice out-of-place bash calls, so these datasets would not help real monitors."
+        },
+        "quote": {
+          "supported": true,
+          "value": "on prepended MonitorBench performance did not increase statistically significantly"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly a positive finding; fine-tuning section is the failure. Results sit in figures; padding-evasion finding is attack-adjacent."
+    },
+    {
+      "post_id": "h8FKusANBWfnNoTyc",
+      "title": "My Minor AI Safety Research Projects (Q3 2025)",
+      "genuine": "partial",
+      "genuine_reason": "A roundup of small projects, mostly not experiment reports, but one project (steering with an uppercaseness direction) is described as failing on an instruct model.",
+      "experiments": [
+        "Uppishcase: steering with an uppercaseness direction to control prompt salience"
+      ],
+      "primary_experiment": "Uppishcase: steering with an uppercaseness direction to control prompt salience",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Author proposed that steering along an uppercaseness direction could give continuous control over instruction salience, and early results looked promising."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "No model names, training data, or scale given; says only that a more advanced instruct model failed and a second attempt used a residual-stream direction."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Uppercaseness direction from token embeddings with per-token steering via a Hugging Face hook; second attempt learned a residual-stream direction from training data using TransformerLens."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "None named; only an unnamed more advanced instruct model is mentioned."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "On the more advanced instruct model, any steering reduced text salience, the reverse of the intended effect; second attempt gave similar, confusing results."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Author only presumes out-of-distribution activations made text hard to read; second attempt gave confusing plots; the right intervention is still unknown."
+        },
+        "quote": {
+          "supported": true,
+          "value": "any steering at all reduced the salience of text"
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "One of three small projects; failed part is brief, no numbers or model names; code linked on GitHub."
+    }
+  ]
+}

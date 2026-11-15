@@ -1,0 +1,14 @@
+{"batch": 4, "model": "haiku", "labels": [
+{"post_id": "3375SZNGA5dKHQMie", "title": "I Did This Without Your Knowledge", "label": "no", "reason": "Fiction story; no experiment the authors ran."},
+{"post_id": "htrZrxduciZ5QaCjw", "title": "Language models seem to be much better than humans at next-token prediction", "label": "no", "reason": "Ran a human-vs-model comparison, but the result is a capability measurement, not a failed experiment."},
+{"post_id": "86zcwvuBpE4vxAeQz", "title": "GPT 5.5: The System Card", "label": "no", "reason": "Commentary on another lab's system card; no experiment run by the author."},
+{"post_id": "uH5oo57r24xGXQGKM", "title": "Do capabilities generalize across propensities?", "label": "yes", "reason": "SFT runs on gpt-oss-120b; reasoning/no-reasoning and chess show growing transfer gaps, undercutting inoculation hopes.", "detail": "high"},
+{"post_id": "BLHBhpJcusmsNjGio", "title": "Training Model to Predict Its Own Generalization: A Preliminary Study", "label": "yes", "reason": "Meta-training experiments mostly positive, but failed to replicate surprising generalization at 14B and below; reported in detail.", "detail": "medium"},
+{"post_id": "ogvyWqJtSrpgXfc7t", "title": "Eval-Awareness Steering detects the Test, Not the Sabotage", "label": "yes", "reason": "Steering and noise-injection experiments on Llama-3.1-8B; steering null, per-item probe at chance.", "detail": "high"},
+{"post_id": "RoWabfQxabWBiXwxP", "title": "Go home GPT-4o, you’re drunk: emergent misalignment as lowered inhibitions", "label": "no", "reason": "Replication of emergent misalignment whose tests support the authors own hypothesis; main result is positive."},
+{"post_id": "iBBK4j6RWC7znEiDv", "title": "History of the Development of Logical Induction", "label": "no", "reason": "Personal history of a theory project; no experiments run."},
+{"post_id": "sHpJascyEuEibzFyg", "title": "Retrospective: PIBBSS Fellowship 2024", "label": "no", "reason": "Programme retrospective; no experiment described."},
+{"post_id": "M2GzdAGbxwinERSEt", "title": "A widely shared AI productivity paper was retracted, is possibly fraudulent", "label": "no", "reason": "Critique of another paper; the author ran no experiment."},
+{"post_id": "f2C4CWNmrSKMs6SaK", "title": "Linkpost: Github Copilot productivity experiment", "label": "no", "reason": "Link post on a third-party experiment with a positive result; not a failure."},
+{"post_id": "82f3o2SuS3pwaZt8Y", "title": "Paper in Science: Managing extreme AI risks amid rapid progress", "label": "no", "reason": "Announcement of a policy paper; no experiment."}
+]}

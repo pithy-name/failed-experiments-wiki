@@ -1,0 +1,107 @@
+{
+  "run_date": "2026-11-14",
+  "endpoint_search": "https://www.lesswrong.com/api/search",
+  "endpoint_graphql": "https://www.lesswrong.com/graphql",
+  "hits_per_page": 5,
+  "pages_per_phrase": 8,
+  "tag_post_limit": 100,
+  "unique_candidates": 211,
+  "routes": {
+    "phrase:negative result": {
+      "returned": 40,
+      "ai_related": 23
+    },
+    "phrase:null result": {
+      "returned": 40,
+      "ai_related": 13
+    },
+    "phrase:didn't work": {
+      "returned": 40,
+      "ai_related": 6
+    },
+    "phrase:did not improve": {
+      "returned": 40,
+      "ai_related": 16
+    },
+    "phrase:failed to replicate": {
+      "returned": 40,
+      "ai_related": 7
+    },
+    "phrase:we tried": {
+      "returned": 40,
+      "ai_related": 27
+    },
+    "phrase:what went wrong": {
+      "returned": 40,
+      "ai_related": 8
+    },
+    "phrase:lessons learned": {
+      "returned": 40,
+      "ai_related": 16
+    },
+    "phrase:postmortem": {
+      "returned": 40,
+      "ai_related": 14
+    },
+    "phrase:retrospective": {
+      "returned": 40,
+      "ai_related": 16
+    },
+    "tag:postmortems-and-retrospectives": {
+      "returned": 100,
+      "ai_related": 26,
+      "tag_post_count": 234,
+      "filter": "AI-related"
+    },
+    "tag:negative-results": {
+      "returned": 0,
+      "ai_related": 0,
+      "note": "tag not found"
+    },
+    "tag:replication-crisis": {
+      "returned": 100,
+      "ai_related": 30,
+      "tag_post_count": 77,
+      "filter": "AI-related"
+    },
+    "tag:interpretability-ml-and-ai": {
+      "returned": 100,
+      "ai_related": 3,
+      "tag_post_count": 1674,
+      "filter": "AI-related and local failure-phrase match"
+    },
+    "tag:sparse-autoencoders-saes": {
+      "returned": 100,
+      "ai_related": 10,
+      "tag_post_count": 216,
+      "filter": "AI-related and local failure-phrase match"
+    },
+    "tag:activation-engineering": {
+      "returned": 100,
+      "ai_related": 9,
+      "tag_post_count": 114,
+      "filter": "AI-related and local failure-phrase match"
+    },
+    "tag:ai-evaluations": {
+      "returned": 100,
+      "ai_related": 5,
+      "tag_post_count": 509,
+      "filter": "AI-related and local failure-phrase match"
+    },
+    "tag:ai-control": {
+      "returned": 100,
+      "ai_related": 4,
+      "tag_post_count": 885,
+      "filter": "AI-related and local failure-phrase match"
+    },
+    "tag:mats-program": {
+      "returned": 100,
+      "ai_related": 8,
+      "tag_post_count": 401,
+      "filter": "AI-related and local failure-phrase match"
+    }
+  },
+  "notes": [
+    "tag 'negative-results' does not exist on LessWrong; skipped"
+  ]
+}

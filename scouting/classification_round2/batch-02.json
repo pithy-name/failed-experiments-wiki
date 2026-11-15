@@ -1,0 +1,12 @@
+{"batch": 2, "model": "haiku", "labels": [
+{"post_id": "Q54wBeeNGreq6KyfG", "title": "HuggingFace Attack Postmortem: Civilizations, Reactions and Next Actions", "label": "no", "reason": "Newsletter commentary on an incident and others' reports; the author ran no experiment."},
+{"post_id": "i2rCbxuskrarrprwA", "title": "One Year of PauseAI UK", "label": "no", "reason": "Organisation retrospective on protests, campaigns and funding; no experiment."},
+{"post_id": "9PiLfo6iQbbDWFHv7", "title": "Some Memories of Early Anthropic", "label": "no", "reason": "Personal memoir about a workplace; no experiment."},
+{"post_id": "PEiiRuSKpmjPxS4pW", "title": "The AFFINE Superintelligence Alignment Seminar – A Retrospective", "label": "no", "reason": "Retrospective of a seminar and its programme; no experiment."},
+{"post_id": "WgroAK7N3jAfBBpct", "title": "Autonomous researchers will strain peer review, funding, and oversight", "label": "no", "reason": "Essay on research ecosystem risks; no experiment the author ran."},
+{"post_id": "sZvMLWrWomN28uWA9", "title": "JargonBot Beta Test", "label": "no", "reason": "Product feature announcement with no experimental results."},
+{"post_id": "YqrAoCzNytYWtnsAx", "title": "The Failed Strategy of Artificial Intelligence Doomers", "label": "no", "reason": "Political strategy essay; no experiment."},
+{"post_id": "8CvkNa6FKSrK4Nj83", "title": "Ban development of unpredictable powerful models?", "label": "no", "reason": "Policy proposal for a prediction-based eval; no experiment was run."},
+{"post_id": "mfn32QHwKb55afHq4", "title": "I was Wrong, Simulator Theory is Real", "label": "yes", "reason": "Mostly positive, but reports a bugged null run and a failed flattery hypothesis (H2) with detail.", "detail": "medium"},
+{"post_id": "iNsy7MsbodCyNTwKs", "title": "Eliezer and I wrote a book: If Anyone Builds It, Everyone Dies", "label": "no", "reason": "Book launch announcement; no experiment."}
+]}

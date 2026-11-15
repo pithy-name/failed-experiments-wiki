@@ -1,0 +1,68 @@
+{
+  "batch": 2,
+  "model": "haiku",
+  "labels": [
+    {
+      "post_id": "4uXCAJNuPKtKBsi28",
+      "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)",
+      "label": "yes",
+      "reason": "SAE probes underperformed linear probes on OOD harmful-intent detection; chat finetuning closed only half the gap.",
+      "detail": "high"
+    },
+    {
+      "post_id": "SqjQFhn5KTarfW8v7",
+      "title": "Lessons learned from talking to >100 academics about AI safety",
+      "label": "no",
+      "reason": "Advice and outreach reflections from conversations; no experiment the author ran."
+    },
+    {
+      "post_id": "3ecs6duLmTfyra3Gp",
+      "title": "Some Lessons Learned from Studying Indirect Object Identification in GPT-2 small",
+      "label": "yes",
+      "reason": "Mostly a positive circuit result, but early mean-ablation knockouts were misleading because the mean retained duplicate-name information.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "JzTfKrgC7Lfz3zcwM",
+      "title": "Theories of Modularity in the Biological Literature",
+      "label": "no",
+      "reason": "Literature review; one-line mention of a failed replication with no experimental detail."
+    },
+    {
+      "post_id": "nnvn6kaBLajiicH8e",
+      "title": "Sabotage Evaluations for Frontier Models",
+      "label": "no",
+      "reason": "Main results are demonstrations of evaluations on Claude models, not failures; abandoned evals are not described."
+    },
+    {
+      "post_id": "yQJxi5mMZQopYXZk5",
+      "title": "A Quick List of Some Problems in AI Alignment As A Field",
+      "label": "no",
+      "reason": "Opinion and field-strategy essay with no experiment."
+    },
+    {
+      "post_id": "xzFQp7bmkoKfnae9R",
+      "title": "But exactly how complex and fragile?",
+      "label": "no",
+      "reason": "Theoretical essay on value complexity; no experiment."
+    },
+    {
+      "post_id": "YEXSNmHGudtw3Qdzz",
+      "title": "AI Doom Will Retrospectively Look Preventable",
+      "label": "no",
+      "reason": "Opinion essay on hindsight bias; no experiment the author ran."
+    },
+    {
+      "post_id": "DQLhMN72RYecgwajk",
+      "title": "Chat Bankman-Fried: an Exploration of LLM Alignment in Finance",
+      "label": "no",
+      "reason": "Main result is positive; earlier failed replication attempts and a governance mismatch get one line each, without detail."
+    },
+    {
+      "post_id": "koNsuop5AHxBG5D7t",
+      "title": "Can someone explain to me what went wrong with ChatGPT?",
+      "label": "no",
+      "reason": "Explanation of a production incident; not an experiment the author ran."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{"batch": 6, "model": "haiku", "labels": [
+{"post_id": "TpSFoqoG2M5MAAesg", "title": "AI 2027: What Superintelligence Looks Like", "label": "no", "reason": "Scenario forecast and fiction; the authors ran no experiment."},
+{"post_id": "GxhtzqMwdTHo6326y", "title": "Statistical suggestions for mech interp research and beyond", "label": "no", "reason": "Methods advice essay; illustrations are hypothetical, no specific failed experiment reported."},
+{"post_id": "YMo5PuXnZDwRjhHhE", "title": "LessWrong's (first) album: I Have Been A Good Bing", "label": "no", "reason": "April Fools album; not AI safety research."},
+{"post_id": "w8jE7FRQzFGJZdaao", "title": "Shutdown Resistance in Reasoning Models", "label": "no", "reason": "Experiments ran and found shutdown sabotage; a positive misbehaviour finding, not a research failure. Borderline."},
+{"post_id": "aJ3NTJ6tM7yc49kQn", "title": "Retrospective on my unsupervised elicitation challenge", "label": "yes", "reason": "Challenge where many elicitation strategies on Opus 4.6 failed; the challenge was retired.", "detail": "medium"},
+{"post_id": "Ckhek3mXXq7TWvvEh", "title": "Lessons from a year of university AI safety field building", "label": "no", "reason": "Organizational update about student group activities; no experiment."},
+{"post_id": "ZvQfcLbcNHYqmvWyo", "title": "The paper that killed deep learning theory", "label": "no", "reason": "Historical discussion of another paper; no experiment run by the authors; not safety."},
+{"post_id": "ZRrYsZ626KSEgHv8s", "title": "Self-driving car bets", "label": "no", "reason": "Reflection on forecasting bets about self-driving cars; no AI safety experiment."},
+{"post_id": "BwfydMhjuroqiZs4x", "title": "ControlAI 2025 Impact Report: our progress toward an international ban on ASI", "label": "no", "reason": "Advocacy and outreach impact report; no experiment."},
+{"post_id": "bchjSwxBTxZBFXBXs", "title": "The Local Interaction Basis: Identifying Computationally-Relevant and Sparsely Interacting Features in Neural Networks", "label": "yes", "reason": "Interpretability method works on toy models but fails to help on GPT-2-small and Tinystories, reported as a mostly negative result.", "detail": "medium"},
+{"post_id": "Av3frxNy3y3i2kpaa", "title": "Does Circuit Analysis Interpretability Scale? Evidence from Multiple Choice Capabilities in Chinchilla", "label": "yes", "reason": "Mostly positive scaling result, but the semantic explanation of correct-letter heads only partially holds on randomized labels.", "detail": "medium"}
+]}

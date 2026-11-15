@@ -1,0 +1,71 @@
+{
+  "batch": 6,
+  "model": "haiku",
+  "labels": [
+    {
+      "post_id": "LPHMMMZFAWog6ty5x",
+      "title": "Ctrl-Z: Controlling AI Agents via Resampling",
+      "label": "yes",
+      "reason": "Mostly positive control-protocol paper; clearly reports failed cross-step score aggregation methods that did little better than the current step.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "peKrvZ6t9PSCzoQDa",
+      "title": "Steering Evaluation-Aware Models to Act Like They Are Deployed",
+      "label": "yes",
+      "reason": "Mostly positive steering paper; reports failed attempts to train a canary-cued model organism and a prompt baseline that worked better than expected.",
+      "detail": "low"
+    },
+    {
+      "post_id": "Q4rcvgjbgjTwmn8Xa",
+      "title": "Research Lessons I Learned at MATS & Redwood",
+      "label": "no",
+      "reason": "Advice and lessons essay; describes no specific failed experiment."
+    },
+    {
+      "post_id": "jKKbRKuXNaLujnojw",
+      "title": "Negative Results on Group SAEs",
+      "label": "yes",
+      "reason": "Empirical SAE work on group SAEs and learned groups; authors report the approaches did not beat baselines or yield useful results.",
+      "detail": "high"
+    },
+    {
+      "post_id": "Z8KLLHvsEkukxpTCD",
+      "title": "‘GiveWell for AI Safety’: Lessons learned in a week",
+      "label": "no",
+      "reason": "Essay on prioritizing AI safety orgs for donations; no experiment run."
+    },
+    {
+      "post_id": "JusJcepE2qohiC3hm",
+      "title": "Predictions for shard theory mechanistic interpretability results",
+      "label": "no",
+      "reason": "Pre-registered prediction questionnaire; no experimental results or failed experiment reported."
+    },
+    {
+      "post_id": "HpAr8k74mW4ivCvCu",
+      "title": "[Summary] Progress Update #1 from the GDM Mech Interp Team",
+      "label": "yes",
+      "reason": "Snippet summary; reports a replication where ghost grads underperformed resampling, plus failed Tracr compression. Little detail.",
+      "detail": "low"
+    },
+    {
+      "post_id": "G993PFTwqqdQv4eTg",
+      "title": "Is AI Progress Impossible To Predict?",
+      "label": "no",
+      "reason": "Forecasting analysis of published capability-scaling data; not a safety-relevant experiment. Borderline on the topic criterion."
+    },
+    {
+      "post_id": "CL8RFFCdsBwWWfKYS",
+      "title": "A Small Negative Result on Debate",
+      "label": "yes",
+      "reason": "Human study of single-turn debate; supplied arguments did not improve annotator accuracy. Reported as a null result, briefly.",
+      "detail": "medium"
+    },
+    {
+      "post_id": "CwdCYmsutwXwnYtEF",
+      "title": "[Paper] Safety by Measurement: A Systematic Literature Review of AI Safety Evaluation Methods",
+      "label": "no",
+      "reason": "Literature review of safety evaluation methods; no experiment run by the authors."
+    }
+  ]
+}

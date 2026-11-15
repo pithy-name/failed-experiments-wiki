@@ -1,0 +1,12 @@
+{"batch": 3, "model": "haiku", "labels": [
+{"post_id": "zwf68YaySvXhWYCdh", "title": "MATS Summer 2023 Retrospective", "label": "no", "reason": "Programme retrospective with survey and outcome metrics; no experiment the authors ran."},
+{"post_id": "Fjoy5SxgBmxfy7FNB", "title": "Gradient surfing: the hidden role of regularization", "label": "yes", "reason": "Toy-model and grokking experiments on SGD exploration; the hypothesis and HMC attempts failed. Safety link is indirect (generalization).", "detail": "medium"},
+{"post_id": "wsXCXoyvRi3DnWZ2M", "title": "NYU Code Debates Update/Postmortem", "label": "yes", "reason": "Two pilots of human-judged LLM debate on code; models could not argue incorrect answers well, so the project was dropped.", "detail": "high"},
+{"post_id": "CA7iLZHNT5xbLK59Y", "title": "Did Bengio and Tegmark lose a debate about AI x-risk against LeCun and Mitchell?", "label": "no", "reason": "Commentary on a public debate; no experiment run."},
+{"post_id": "j4FnzvwTnReC3bH5y", "title": "What we know about machine learning's replication crisis", "label": "no", "reason": "Literature review of others' replication studies; no experiment by the authors and not AI safety."},
+{"post_id": "MmfzfGcQ3h3p6N9pD", "title": "Empirical safety claims from frontier labs should be replicated, scrutinized, and open-sourced", "label": "no", "reason": "Position piece advocating replication; reports no experiment the authors ran."},
+{"post_id": "oKxc8maZGtnzgpNzx", "title": "Rerunning AI safety papers on every frontier release would be pretty easy and valuable", "label": "no", "reason": "Proposal and fellowship announcement; no specific experiment or result described in detail."},
+{"post_id": "kiCZzHDkRtupek2mc", "title": "My Failed AI Safety Research Projects (Q1/Q2 2025)", "label": "yes", "reason": "Several interpretability projects (LLM multiplication, memorisation toy model, ITDA SAEs) that gave negative or inconclusive results.", "detail": "medium"},
+{"post_id": "aRxDLju75KXD6PCpB", "title": "Wolf Incident Postmortem", "label": "no", "reason": "Satirical incident postmortem about a sentinel wolf; not an AI experiment."},
+{"post_id": "pFzctpJBat95SrCyC", "title": "AI 2040: Plan A", "label": "no", "reason": "Scenario and forecasting announcement; no experiment the authors ran."}
+]}

@@ -1,0 +1,314 @@
+[
+  [
+    {
+      "post_id": "bvBQmLrF5QKut8gRH",
+      "title": "METR and Redwood Offer Holy #%^@ Postmortem Of The HuggingFace Hack",
+      "word_count": 11411
+    },
+    {
+      "post_id": "ciH5JXSvP7CLoq4MJ",
+      "title": "Starburst: Unsaturated Since Summer 2024",
+      "word_count": 3064
+    },
+    {
+      "post_id": "Yc6cpGmBieS7ADxcS",
+      "title": "Japan AI Alignment Conference Postmortem",
+      "word_count": 2498
+    },
+    {
+      "post_id": "tgn3pD2gLpZvepkWk",
+      "title": "J-Lens: A Failed Replication on GPT-2",
+      "word_count": 1975
+    },
+    {
+      "post_id": "EPefYWjuHNcNH4C7E",
+      "title": "Attribution-based parameter decomposition",
+      "word_count": 1266
+    },
+    {
+      "post_id": "EaNkLdsuDQMFCW7ow",
+      "title": "Bayeswatch: a Retrospective",
+      "word_count": 1094
+    },
+    {
+      "post_id": "pn5nBBcLYrnmWXfnY",
+      "title": "Classifying representations of sparse autoencoders (SAEs)",
+      "word_count": 687
+    },
+    {
+      "post_id": "YwqSijHybF9GFkDab",
+      "title": "Transformer language models are doing something more general",
+      "word_count": 508
+    },
+    {
+      "post_id": "Fg2gAgxN6hHSaTjkf",
+      "title": "Scaling and evaluating sparse autoencoders",
+      "word_count": 192
+    },
+    {
+      "post_id": "88xgGLnLo64AgjGco",
+      "title": "Where are the AI safety replications?",
+      "word_count": 92
+    }
+  ],
+  [
+    {
+      "post_id": "4uXCAJNuPKtKBsi28",
+      "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)",
+      "word_count": 8735
+    },
+    {
+      "post_id": "SqjQFhn5KTarfW8v7",
+      "title": "Lessons learned from talking to >100 academics about AI safety",
+      "word_count": 3694
+    },
+    {
+      "post_id": "3ecs6duLmTfyra3Gp",
+      "title": "Some Lessons Learned from Studying Indirect Object Identification in GPT-2 small",
+      "word_count": 2723
+    },
+    {
+      "post_id": "JzTfKrgC7Lfz3zcwM",
+      "title": "Theories of Modularity in the Biological Literature",
+      "word_count": 2049
+    },
+    {
+      "post_id": "nnvn6kaBLajiicH8e",
+      "title": "Sabotage Evaluations for Frontier Models",
+      "word_count": 1715
+    },
+    {
+      "post_id": "yQJxi5mMZQopYXZk5",
+      "title": "A Quick List of Some Problems in AI Alignment As A Field",
+      "word_count": 1712
+    },
+    {
+      "post_id": "xzFQp7bmkoKfnae9R",
+      "title": "But exactly how complex and fragile?",
+      "word_count": 948
+    },
+    {
+      "post_id": "YEXSNmHGudtw3Qdzz",
+      "title": "AI Doom Will Retrospectively Look Preventable",
+      "word_count": 666
+    },
+    {
+      "post_id": "DQLhMN72RYecgwajk",
+      "title": "Chat Bankman-Fried: an Exploration of LLM Alignment in Finance",
+      "word_count": 299
+    },
+    {
+      "post_id": "koNsuop5AHxBG5D7t",
+      "title": "Can someone explain to me what went wrong with ChatGPT?",
+      "word_count": 164
+    }
+  ],
+  [
+    {
+      "post_id": "zwf68YaySvXhWYCdh",
+      "title": "MATS Summer 2023 Retrospective",
+      "word_count": 7928
+    },
+    {
+      "post_id": "Fjoy5SxgBmxfy7FNB",
+      "title": "Gradient surfing: the hidden role of regularization",
+      "word_count": 4186
+    },
+    {
+      "post_id": "wsXCXoyvRi3DnWZ2M",
+      "title": "NYU Code Debates Update/Postmortem",
+      "word_count": 2892
+    },
+    {
+      "post_id": "CA7iLZHNT5xbLK59Y",
+      "title": "Did Bengio and Tegmark lose a debate about AI x-risk against LeCun and Mitchell?",
+      "word_count": 2053
+    },
+    {
+      "post_id": "j4FnzvwTnReC3bH5y",
+      "title": "What we know about machine learning's replication crisis",
+      "word_count": 1925
+    },
+    {
+      "post_id": "MmfzfGcQ3h3p6N9pD",
+      "title": "Empirical safety claims from frontier labs should be replicated, scrutinized, and open-sourced",
+      "word_count": 1143
+    },
+    {
+      "post_id": "oKxc8maZGtnzgpNzx",
+      "title": "Rerunning AI safety papers on every frontier release would be pretty easy and valuable",
+      "word_count": 1112
+    },
+    {
+      "post_id": "kiCZzHDkRtupek2mc",
+      "title": "My Failed AI Safety Research Projects (Q1/Q2 2025)",
+      "word_count": 842
+    },
+    {
+      "post_id": "aRxDLju75KXD6PCpB",
+      "title": "Wolf Incident Postmortem",
+      "word_count": 418
+    },
+    {
+      "post_id": "pFzctpJBat95SrCyC",
+      "title": "AI 2040: Plan A",
+      "word_count": 238
+    }
+  ],
+  [
+    {
+      "post_id": "otoPaykRRAkjfzpHN",
+      "title": "Reviewing failure modes in science as we prepare for AI researchers",
+      "word_count": 7125
+    },
+    {
+      "post_id": "JPfJaXTDQKQQocc2f",
+      "title": "MATS Spring 2024 Extension Retrospective",
+      "word_count": 4582
+    },
+    {
+      "post_id": "HGwjBmCKWtj5apGkK",
+      "title": "Model whisperers: optimized token prefixes can imitate function vectors, filter heads, and steering directions",
+      "word_count": 3062
+    },
+    {
+      "post_id": "8ZR3xsWb6TdvmL8kx",
+      "title": "Optimistic Assumptions, Longterm Planning, and \"Cope\"",
+      "word_count": 2158
+    },
+    {
+      "post_id": "8NKu9WES7KeKRWEKK",
+      "title": "Why all the fuss about recursive self-improvement?",
+      "word_count": 2002
+    },
+    {
+      "post_id": "LuKCepxdb8HpEd9TF",
+      "title": "Coordinal: A Postmortem.",
+      "word_count": 1278
+    },
+    {
+      "post_id": "xyYss3oCzovibHxAF",
+      "title": "LLM in-context learning as (approximating) Solomonoff induction",
+      "word_count": 1095
+    },
+    {
+      "post_id": "BEyAWbCdtWpSGxmun",
+      "title": "Retrospective on the 2022 Conjecture AI Discussions",
+      "word_count": 697
+    },
+    {
+      "post_id": "NQ85WRcLkjnTudzdg",
+      "title": "ARC tests to see if GPT-4 can escape human control; GPT-4 failed to do so",
+      "word_count": 502
+    },
+    {
+      "post_id": "WqjkqrEyFDXoHzz9K",
+      "title": "Steering Gemini with BiDPO",
+      "word_count": 195
+    }
+  ],
+  [
+    {
+      "post_id": "3onCb5ph3ywLQZMX2",
+      "title": "Alignment Newsletter One Year Retrospective",
+      "word_count": 6373
+    },
+    {
+      "post_id": "eFD3rozNCZKMe4rTs",
+      "title": "MATS 9 Retrospective & Advice",
+      "word_count": 5359
+    },
+    {
+      "post_id": "x8BbjZqooS4LFXS8Z",
+      "title": "AlgZoo: uninterpreted models with fewer than 1,500 parameters",
+      "word_count": 2993
+    },
+    {
+      "post_id": "4Gt42jX7RiaNaxCwP",
+      "title": "More information about the dangerous capability evaluations we did with GPT-4 and Claude.",
+      "word_count": 2398
+    },
+    {
+      "post_id": "i3b9uQfjJjJkwZF4f",
+      "title": "Tips On Empirical Research Slides",
+      "word_count": 1841
+    },
+    {
+      "post_id": "eaEqAzGN3uJfpfGoc",
+      "title": "Trusted monitoring, but with deception probes.",
+      "word_count": 1152
+    },
+    {
+      "post_id": "sYFNGRdDQYQrSJAd8",
+      "title": "SAE regularization produces more interpretable models",
+      "word_count": 1135
+    },
+    {
+      "post_id": "EEvsL9cpgDAxAhTzt",
+      "title": "Some negative steganography results",
+      "word_count": 741
+    },
+    {
+      "post_id": "vTvPvCH2G9cbcFY8a",
+      "title": "OpenAI Responses API changes models' behavior",
+      "word_count": 629
+    },
+    {
+      "post_id": "pQ6e7QaAGoaHzfj3e",
+      "title": "Did Human Forecasters Improve Preseen’s Performance?",
+      "word_count": 99
+    }
+  ],
+  [
+    {
+      "post_id": "LPHMMMZFAWog6ty5x",
+      "title": "Ctrl-Z: Controlling AI Agents via Resampling",
+      "word_count": 5915
+    },
+    {
+      "post_id": "peKrvZ6t9PSCzoQDa",
+      "title": "Steering Evaluation-Aware Models to Act Like They Are Deployed",
+      "word_count": 5470
+    },
+    {
+      "post_id": "Q4rcvgjbgjTwmn8Xa",
+      "title": "Research Lessons I Learned at MATS & Redwood",
+      "word_count": 3264
+    },
+    {
+      "post_id": "jKKbRKuXNaLujnojw",
+      "title": "Negative Results on Group SAEs",
+      "word_count": 2426
+    },
+    {
+      "post_id": "Z8KLLHvsEkukxpTCD",
+      "title": "‘GiveWell for AI Safety’: Lessons learned in a week",
+      "word_count": 1853
+    },
+    {
+      "post_id": "JusJcepE2qohiC3hm",
+      "title": "Predictions for shard theory mechanistic interpretability results",
+      "word_count": 1607
+    },
+    {
+      "post_id": "HpAr8k74mW4ivCvCu",
+      "title": "[Summary] Progress Update #1 from the GDM Mech Interp Team",
+      "word_count": 965
+    },
+    {
+      "post_id": "G993PFTwqqdQv4eTg",
+      "title": "Is AI Progress Impossible To Predict?",
+      "word_count": 672
+    },
+    {
+      "post_id": "CL8RFFCdsBwWWfKYS",
+      "title": "A Small Negative Result on Debate",
+      "word_count": 320
+    },
+    {
+      "post_id": "CwdCYmsutwXwnYtEF",
+      "title": "[Paper] Safety by Measurement: A Systematic Literature Review of AI Safety Evaluation Methods",
+      "word_count": 260
+    }
+  ]
+]

@@ -1,0 +1,14 @@
+{"batch": 8, "model": "haiku", "labels": [
+{"post_id": "uMQ3cqWDPHhjtiesc", "title": "AGI Ruin: A List of Lethalities", "label": "no", "reason": "Essay listing AGI risk arguments; no experiment the author ran."},
+{"post_id": "ysHERGduadwJFkKhS", "title": "Lessons from organizing a technical AI safety bootcamp", "label": "no", "reason": "Program-organization retrospective and lessons; no experiment or failed research result."},
+{"post_id": "aPeJE8bSo6rAFoLqg", "title": "SolidGoldMagikarp (plus, prompt generation)", "label": "no", "reason": "Reports glitch-token discovery and a new prompt-generation method; main results positive, no failed experiment."},
+{"post_id": "4q3kMfJHB4rxr3Z8m", "title": "Small Steps Towards Proving Stochastic → Deterministic Natural Latent", "label": "no", "reason": "Information-theory proof attempt with numerical checks; not an AI experiment and the proof failure is not an empirical result."},
+{"post_id": "NvtLJ5nawJ6akWEqH", "title": "You can graft SDF changes from base models onto post-trained models", "label": "no", "reason": "Mostly positive grafting results; caveats are not clearly reported failed experiments."},
+{"post_id": "bXTNKjsD4y3fabhwR", "title": "Conjecture: a retrospective after 8 months of work", "label": "no", "reason": "Organizational retrospective about strategy, funding and operations rather than a specific failed experiment."},
+{"post_id": "LDsSqXf9Dpu3J3gHD", "title": "Why I'm excited about Debate", "label": "no", "reason": "Argumentative essay on debate as a safety technique; no experiment run by the author."},
+{"post_id": "kipMvuaK3NALvFHc9", "title": "What an actually pessimistic containment strategy looks like", "label": "no", "reason": "Strategy essay about slowing AI development; no experiment."},
+{"post_id": "DgKyDTKeGcisEGCnH", "title": "GPT-3.5 judges can supervise GPT-4o debaters in capability asymmetric debates", "label": "yes", "reason": "Mostly positive debate results, but reports failed sub-experiments (GPQA, weaker-debater judge training, symmetric GPT-4o) with brief detail.", "detail": "medium"},
+{"post_id": "A5XTgYmGnqEDnJdzJ", "title": "The curious case of Pretty Good human inner/outer alignment", "label": "no", "reason": "Conceptual essay comparing human and AI alignment; no experiment."},
+{"post_id": "AHBejZBsaTR6dkRHs", "title": "AI-Written Critiques Help Humans Notice Flaws", "label": "no", "reason": "Linkpost on critique-writing results; reported results are mostly positive and modest, not a clearly reported failed experiment."},
+{"post_id": "ZYddmLsTGaTLdXGwj", "title": "Is behavioral safety solved in non-adversarial conditions?", "label": "no", "reason": "Opinion question about RLHF behavioral safety; no experiment run."}
+]}

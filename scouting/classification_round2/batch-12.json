@@ -1,0 +1,14 @@
+{"batch": 12, "model": "haiku", "labels": [
+{"post_id": "znbfRXHq285nS7NAh", "title": "The Terrarium", "label": "no", "reason": "Fiction narrative about AI agents; no experiment the authors ran."},
+{"post_id": "6ZnznCaTcbGYsCmqu", "title": "The Rise of Parasitic AI", "label": "no", "reason": "Essay and case survey of Reddit persona reports; no experiment the author ran."},
+{"post_id": "XHpta8X85TzugNNn2", "title": "Broken Latents: Studying SAEs and Feature Co-occurrence in Toy Models", "label": "yes", "reason": "Toy SAE experiments; tied SAEs still learn broken latents, the Matryoshka parent-feature hypothesis fails, and the fix struggled on real LLMs.", "detail": "high"},
+{"post_id": "ySXuvJcqRindQwAk7", "title": "How My Students Think About AI", "label": "no", "reason": "Survey-style synthesis of student views from teaching; no experiment run."},
+{"post_id": "ofYejKKiSFYH2gLBb", "title": "Gemini 1.0", "label": "no", "reason": "Commentary on the Gemini 1.0 announcement and benchmarks; no experiment by the author."},
+{"post_id": "7zGgFPLaTXJwCJccB", "title": "Practical Learnings from Synthetic Document Finetuning", "label": "yes", "reason": "Mostly practical SDF tips; two reported sub-experiments (multiple universe seeds, logit diff amplification) gave no real improvement.", "detail": "medium"},
+{"post_id": "xknjY568uQp4PGFcW", "title": "Self-Control of LLM Behaviors by Compressing Suffix Gradient into Prefix Controller", "label": "no", "reason": "Mostly positive method paper; the only negative mention is a minor pilot null with no detail."},
+{"post_id": "dkdJDcTgyM2Kbyi5G", "title": "A story on one possible future of AI-driven research", "label": "no", "reason": "Speculative year-by-year forecast story; no experiment run."},
+{"post_id": "id8HHPNqoMQbmkWay", "title": "SB-1047 Documentary: The Post-Mortem", "label": "no", "reason": "Film production retrospective and fundraising lessons; not an AI experiment."},
+{"post_id": "tHxXdAn8Yuiy9y2pZ", "title": "AI safety without goal-directed behavior", "label": "no", "reason": "Conceptual essay on goal-directed AI; no experiment run."},
+{"post_id": "LhXW8ziwnn7Dd8edm", "title": "A Toy Environment For Exploring Reasoning About Reward", "label": "no", "reason": "Characterises model behaviour in a toy environment; persistent gaming is a finding, not a failed experiment. Borderline."},
+{"post_id": "8Ggqf2t8WBtPw33K9", "title": "Minerva", "label": "no", "reason": "Commentary on the Minerva maths model; positive results, no failed experiment, not safety-relevant."}
+]}

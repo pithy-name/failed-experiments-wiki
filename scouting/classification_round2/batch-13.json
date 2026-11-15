@@ -1,0 +1,14 @@
+{"batch": 13, "model": "haiku", "labels": [
+{"post_id": "5CfBDiQNg9upfipWk", "title": "Only Law Can Prevent Extinction", "label": "no", "reason": "Policy essay arguing for an international ASI ban; no experiment run by the author."},
+{"post_id": "CoZhXrhpQxpy9xw9y", "title": "Where I agree and disagree with Eliezer", "label": "no", "reason": "Essay critiquing Yudkowsky's views; argument only, no experiments."},
+{"post_id": "9RL9MuGZjzm4q3gKG", "title": "What just happened? A retrospective of AI alignment", "label": "no", "reason": "Retrospective on alignment community history and governance; no experiment reported."},
+{"post_id": "PA7f9a9ZFcqpjmGEZ", "title": "Dialogue with Eliezer Yudkowsky on Neural Networks", "label": "no", "reason": "Historical discussion of a past forecast about neural networks; no experiment run."},
+{"post_id": "cYvxDjNrYyyjRdAzH", "title": "Grading my 2022 predictions for 2025", "label": "no", "reason": "Self-graded forecasts; retrospective with no experiment."},
+{"post_id": "YyAMz52wDxnLhwvWL", "title": "Training Models to Predict and Explain Their In-the-Wild Behavior", "label": "yes", "reason": "Counterfactual prediction training works, but open-ended self-explanation is weak and the privileged-access test was null.", "detail": "medium"},
+{"post_id": "ursraZGcpfMjCXtnn", "title": "AutoInterpretation Finds Sparse Coding Beats Alternatives", "label": "no", "reason": "Sparse coding beats baselines; the residual-stream null is a metric artifact the authors resolve as positive."},
+{"post_id": "LvswJts75fnpdjAEj", "title": "MATS mentor selection", "label": "no", "reason": "Describes the MATS mentor selection process and cohort statistics; no experiment."},
+{"post_id": "y7TpjDtKFcJSGzunm", "title": "Why LLMs Aren't Scientists Yet.", "label": "yes", "reason": "Three of four autonomous research runs failed; the surviving one found semantic entropy fails as a jailbreak detector.", "detail": "medium"},
+{"post_id": "8qytxHWzSsdsyTfmZ", "title": "Principles for Meta-Science and AI Safety Replications", "label": "no", "reason": "Principles for planning replication work; no experiment reported."},
+{"post_id": "h8FKusANBWfnNoTyc", "title": "My Minor AI Safety Research Projects (Q3 2025)", "label": "yes", "reason": "Steering for uppercase salience failed on a stronger model; a residual-stream retry gave confusing results.", "detail": "low"},
+{"post_id": "Zq2HaihaDy7sSarMz", "title": "How bad a future do ML researchers expect?", "label": "no", "reason": "Reports opinion-survey results on researcher views of AI outcomes; no failed experiment."}
+]}

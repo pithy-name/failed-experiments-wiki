@@ -1,0 +1,13 @@
+{"batch": 1, "model": "haiku", "labels": [
+{"post_id": "r3eEPto5ohzESuqa9", "title": "HuggingFace Attack Postmortem: Fleshing Out the Facts", "label": "no", "reason": "Commentary collecting reactions to the OpenAI and METR incident reports; the author ran no experiment."},
+{"post_id": "eowhY5NaCaqY6Pkj9", "title": "Behavioural statistics for a maze-solving agent", "label": "yes", "reason": "Maze-agent stats: a fourth impression is dropped as an artifact and one variable shows no effect on a second batch.", "detail": "high"},
+{"post_id": "Hna2P8gcTyRgNDYBY", "title": "Race Along Rashomon Ridge", "label": "no", "reason": "Incomplete sprint on loss-landscape ridges; several planned analyses never ran and no clear failed experiment is reported."},
+{"post_id": "nR3DkyivzF4ve97oM", "title": "How Go Players Disempower Themselves to AI", "label": "no", "reason": "Essay built on anecdotes about Go players; no experiment the author ran."},
+{"post_id": "ExB6KYDcznaFS72eT", "title": "Evaluating Explanations of LLM Behavior In The Wild with Counterfactual Experiments", "label": "yes", "reason": "Null result: interpretability tools give no uplift over a transcript-only baseline at predicting counterfactual outcomes.", "detail": "high"},
+{"post_id": "8dXzDzk7nNK64jBve", "title": "Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes", "label": "yes", "reason": "Null result: no strict alignment faking found across four behavioural tests on Llama 70B checkpoints.", "detail": "high"},
+{"post_id": "jgmmMa7AqJNausrqx", "title": "Don't trust Lean4 alone", "label": "no", "reason": "Opinion essay on Lean kernel soundness; no experiment the author ran."},
+{"post_id": "gS5skwXeeQdStwsPu", "title": "What comes with cheap math?", "label": "no", "reason": "Essay on AI-assisted math research and trust; no experiment or failed result reported."},
+{"post_id": "J7CekMF7WRwsud8Df", "title": "MIRI Comms is hiring", "label": "no", "reason": "Hiring announcement for a communications team; no experiment."},
+{"post_id": "wvbGiHwbie24mmhXw", "title": "[April Fools'] Definitive confirmation of shard theory", "label": "no", "reason": "April Fools satire claiming shard theory was confirmed; no genuine experiment or failure."},
+{"post_id": "cLMuF9v9SSKAkEu58", "title": "Freiburg - AI Safety Bootcamp - Lessons Learned", "label": "no", "reason": "Link-only post with a four-word body; no experimental detail."}
+]}

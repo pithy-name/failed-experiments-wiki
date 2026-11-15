@@ -1,0 +1,286 @@
+{
+  "batch": 1,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "4uXCAJNuPKtKBsi28",
+      "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)",
+      "genuine": "yes",
+      "genuine_reason": "The central experiment tested whether sparse-autoencoder probes beat dense linear probes for out-of-distribution harmful-intent detection; they did worse, and the team deprioritised SAE research as a result.",
+      "experiments": [
+        "SAE probes vs linear probes for OOD harmful-intent detection",
+        "Training chat-specialised SAEs (from scratch or finetuned) to close the probing gap"
+      ],
+      "primary_experiment": "SAE probes vs linear probes for OOD harmful-intent detection",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors expected sparse SAE probes, especially few-latent ones, to generalise better out of distribution than dense probes, since sparsity should resist spurious correlations."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Harmful-intent detection, HarmBench vs Alpaca training data, held-out jailbreaks and other datasets as OOD; roughly 4k train, 3.9k OOD examples; authors warn against over-generalising."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Single-latent and k-sparse SAE probes, linear probes on SAE reconstructions, dense residual-stream probes, max-pooling vs fixed-position probing, chat-finetuned SAEs."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Gemma 2 9B IT probed at layer 20, with GemmaScope SAEs and chat-finetuned versions of them."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "Moderately sparse SAE probes fit in-distribution data but generalised worse out of distribution than dense probes, the reverse of what the authors predicted."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors treat it as real evidence against SAEs for this task, though they leave the mechanism open among several explanations."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Negative result: SAEs underperformed linear probes",
+          "evidence": "Summary line stating the headline negative result of the probing comparison."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Long multi-snippet roundup; SAE probing is the primary failure; JumpReLU snippet is positive; plots are images, not text."
+    },
+    {
+      "post_id": "kiCZzHDkRtupek2mc",
+      "title": "My Failed AI Safety Research Projects (Q1/Q2 2025)",
+      "genuine": "yes",
+      "genuine_reason": "The post collects several short independent projects that mostly ended in negative or inconclusive results or were dropped.",
+      "experiments": [
+        "LLM multiplication: log-space analogue of the addition helix",
+        "Toy model of memorisation",
+        "ITDA SAE investigation"
+      ],
+      "primary_experiment": "LLM multiplication: log-space analogue of the addition helix",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "States the question (do LLMs use a trig-style trick for multiplication after a log transform) but gives no expectation or hope about the outcome."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Adapted code from a prior addition paper and varied parameters; the model, layers, token range and settings used are not stated."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Adapted prior code, used PCA to find a log-value direction, ran ablation studies, and searched for angular encodings."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "No model is named for the multiplication runs; the post only refers to an earlier paper on addition."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Found a linear direction tracking log of the token value, but ablations showed no significant effect and no angular encoding turned up."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Author concludes multiplication is probably handled differently from addition, giving three reasons such as log/exp being hard for ReLU models."
+        },
+        "quote": {
+          "supported": true,
+          "value": "I found no evidence for an equivalent of angular encoding for log(token value).",
+          "evidence": "Reports no angular-encoding analogue in log space."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Three short projects; memorisation has a stated expectation but an inconclusive outcome; multiplication names no LLM; details in linked writeups."
+    },
+    {
+      "post_id": "WqjkqrEyFDXoHzz9K",
+      "title": "Steering Gemini with BiDPO",
+      "genuine": "yes",
+      "genuine_reason": "Main content is a short report that a steering method stopped beating stronger baselines after a model update, which ended the project.",
+      "experiments": [
+        "BiDPO steering vectors vs prompt-based steering baselines on Gemini 1.5v2"
+      ],
+      "primary_experiment": "BiDPO steering vectors vs prompt-based steering baselines on Gemini 1.5v2",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "No explicit expectation for the Gemini 1.5v2 comparison; only an aside that a skeptic predicted the outcome better than the author did."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Names Gemini 1.5 Flash and Pro and TruthfulQA, but leaves out the prompt baselines, training data, steering setup and capability checks."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "BiDPO-trained steering vectors compared with prompt-based steering baselines; no implementation detail given here."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Gemini 1.5v1 Flash and Pro, then Gemini 1.5v2."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "Steering vectors lifted TruthfulQA by over 10 percent on 1.5v1, but on 1.5v2 the prompt baselines improved and steering no longer came out ahead."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Notes the prompt baselines improved on 1.5v2 and defers the why to an external postmortem; no failure category is stated."
+        },
+        "quote": {
+          "supported": true,
+          "value": "BiDPO did not beat the stronger baselines, ending the project.",
+          "evidence": "Opening summary sentence stating the negative outcome."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Short pointer post; method details and postmortem live on an external site, not in this text."
+    },
+    {
+      "post_id": "CL8RFFCdsBwWWfKYS",
+      "title": "A Small Negative Result on Debate",
+      "genuine": "yes",
+      "genuine_reason": "The post reports an early experiment in which human-written debate arguments did not improve annotators' accuracy on long-document questions.",
+      "experiments": [
+        "Single-turn oracle debate for time-limited reading-comprehension QA on QuALITY"
+      ],
+      "primary_experiment": "Single-turn oracle debate for time-limited reading-comprehension QA on QuALITY",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "States the question tested (whether single-turn debate yields reliable answers) but gives no expectation or hope about the outcome."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Single-turn debate, oracle setting with human-written arguments and quote pointers, QuALITY passages of about 5k words; sample size and time limit not given."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Annotators answered multiple-choice questions with or without human-written arguments and quote pointers for each option, compared under a time limit."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Not applicable: arguments were written by humans and answered by human annotators; no model was used."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Annotators scored equally poorly whether or not they saw the arguments; the quote pointers on their own gave a small gain."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Author reads this as a very slight sign that debate is hard to use in practice; no cause analysis is given."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Our human annotators answered at the same low accuracy with and without the arguments.",
+          "evidence": "States the null effect of adding arguments."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "No ML model involved (human annotators), so models is not applicable; full results are in the arXiv paper it introduces."
+    },
+    {
+      "post_id": "pn5nBBcLYrnmWXfnY",
+      "title": "Classifying representations of sparse autoencoders (SAEs)",
+      "genuine": "yes",
+      "genuine_reason": "The post reports a classification experiment where sparse-autoencoder encodings did worse than raw hidden states, and the author dropped follow-up work because of it.",
+      "experiments": [
+        "Sentiment classification on SAE encodings vs raw hidden states"
+      ],
+      "primary_experiment": "Sentiment classification on SAE encodings vs raw hidden states",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Expected that projecting activations into a higher-dimensional sparse space would make features more linearly separable, helping classification."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Pythia-70m and 410m, short IMDB reviews with a sentiment prompt, last-token states, logistic regression, only some layers; author says the task is kept easy."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Logistic regression on raw hidden states versus on sparse-autoencoder encodings; reconstruction error checked first; hidden states cross-checked against transformer-lens."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Pythia-70m-deduped and Pythia-410m-deduped, with pretrained sparse autoencoders taken from a cited prior release."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "Classifiers on the autoencoder features scored lower on held-out data than ones on untouched activations; the numbers are in an image."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Author is unsure how to interpret it; lists missing high-level features or their own mistake as open options, with a partial hidden-state check."
+        },
+        "quote": {
+          "supported": true,
+          "value": "So the sparse encodings consistently under-perform compared to the original hidden states.",
+          "evidence": "States the negative accuracy result."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Test accuracy numbers are in an image, not text; author unsure if own pipeline caused the result."
+    },
+    {
+      "post_id": "EEvsL9cpgDAxAhTzt",
+      "title": "Some negative steganography results",
+      "genuine": "yes",
+      "genuine_reason": "The post reports two RL experiments, on a small open model and a hosted API model, where hidden 1-bit communication was never learned.",
+      "experiments": [
+        "PPO on GPT2-large with a BERT classifier reward to learn red/blue 1-bit steganography",
+        "Iterated fine-tuning of GPT-3.5-Turbo to hide a user's age bracket"
+      ],
+      "primary_experiment": "PPO on GPT2-large with a BERT classifier reward to learn red/blue 1-bit steganography",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Asks whether current RL methods can teach LLMs hidden 1-bit communication, but states no prediction or hope for these runs."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "GPT2-large PPO rewarded by a BERT classifier on IMDB reviews, 200 steps, LoRA rank 16; author says it does not show RL cannot do this."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "SFT on color-prefixed reviews, then PPO with LoRA where the reward is a jointly trained BERT classifier's accuracy; controls with word hints and sentiment reward."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "gpt2-large and bert-base-uncased in the first experiment; GPT-3.5-Turbo and GPT-4-Turbo in the second."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "In both experiments the hidden-bit detector never rose meaningfully above chance."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hyperparams_unexplored",
+          "evidence": "Author thinks better tuning or extra training would likely succeed; only KL penalty and classifier steps were varied; controls make a pipeline bug unlikely."
+        },
+        "quote": {
+          "supported": true,
+          "value": "the classifier never had a >50% accuracy",
+          "evidence": "States the null result of the first experiment."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Two experiments; second run by a collaborator; a later update points to positive results from other work."
+    }
+  ]
+}

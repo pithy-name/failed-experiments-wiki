@@ -1,0 +1,12 @@
+{"batch": 1, "model": "haiku", "labels": [
+{"post_id": "bvBQmLrF5QKut8gRH", "title": "METR and Redwood Offer Holy #%^@ Postmortem Of The HuggingFace Hack", "label": "no", "reason": "Commentary on a third-party incident report; the authors ran no experiment of their own."},
+{"post_id": "ciH5JXSvP7CLoq4MJ", "title": "Starburst: Unsaturated Since Summer 2024", "label": "no", "reason": "Benchmark-progress narrative; a missed prediction about model ability, not a failed experiment as the main result."},
+{"post_id": "Yc6cpGmBieS7ADxcS", "title": "Japan AI Alignment Conference Postmortem", "label": "no", "reason": "Event retrospective for a conference; no experiment."},
+{"post_id": "tgn3pD2gLpZvepkWk", "title": "J-Lens: A Failed Replication on GPT-2", "label": "yes", "reason": "Replication of J-Lens on GPT-2 fails to beat Logit Lens at any layer; stress tests also fail.", "detail": "high"},
+{"post_id": "EPefYWjuHNcNH4C7E", "title": "Attribution-based parameter decomposition", "label": "no", "reason": "Method-introduction linkpost with positive toy-model results; limitations only, no failed experiment written up."},
+{"post_id": "EaNkLdsuDQMFCW7ow", "title": "Bayeswatch: a Retrospective", "label": "no", "reason": "Retrospective on the authors' own 2021 fiction; no experiment."},
+{"post_id": "pn5nBBcLYrnmWXfnY", "title": "Classifying representations of sparse autoencoders (SAEs)", "label": "yes", "reason": "SAE-encoded representations classify sentiment worse than raw hidden states; negative result with per-layer numbers.", "detail": "medium"},
+{"post_id": "YwqSijHybF9GFkDab", "title": "Transformer language models are doing something more general", "label": "no", "reason": "Speculative essay on transformer priors; no experiment."},
+{"post_id": "Fg2gAgxN6hHSaTjkf", "title": "Scaling and evaluating sparse autoencoders", "label": "no", "reason": "Method-paper abstract reporting positive scaling results; no failure reported."},
+{"post_id": "88xgGLnLo64AgjGco", "title": "Where are the AI safety replications?", "label": "no", "reason": "Discussion question about replications; no experiment."}
+]}

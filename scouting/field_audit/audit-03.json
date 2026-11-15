@@ -1,0 +1,287 @@
+{
+  "batch": 3,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "peKrvZ6t9PSCzoQDa",
+      "title": "Steering Evaluation-Aware Models to Act Like They Are Deployed",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive steering result. A later edit reports that simple declarative prompts defeated the setting where prompting was supposed to fail, and an attempt to train an inverse model organism was unsuccessful.",
+      "experiments": [
+        "Prompt-resistant evaluation-cue setting that declarative user prompts later broke",
+        "Training a model organism that assumes evaluation unless a deployment cue appears"
+      ],
+      "primary_experiment": "Prompt-resistant evaluation-cue setting that declarative user prompts later broke",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors hoped to show steering works where prompting fails, i.e. a setting where prompts alone cannot elicit deployment behavior."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Setup is stated (Wood Labs system prompt, declarative user formats, type-hint rate), but question set, format count and sample sizes are not given."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Wood Labs system prompt combined with declarative deployment statements in the user prompt, measuring Python type-hint rate; steering is the comparison point."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Llama 3.3 Nemotron Super 49B v1 (Llama Nemotron), fine-tuned into the type-hint model organism."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "Some declarative formats cut the type-hint rate to near no-cue levels, the reverse of the hoped-for finding that prompting fails here."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "The premise that prompting fails here was false; authors say the model is easily fooled and the test was weaker than assumed."
+        },
+        "quote": {
+          "supported": true,
+          "value": "it just means the adversarial setting we tested against was weaker than we initially thought",
+          "evidence": "Authors concede the prompt-resistant test setting was easier to beat than intended."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Failed part is a Jan 2026 edit; main paper result is positive; numbers are in figures, not text."
+    },
+    {
+      "post_id": "Fjoy5SxgBmxfy7FNB",
+      "title": "Gradient surfing: the hidden role of regularization",
+      "genuine": "yes",
+      "genuine_reason": "Author presents the attempts to induce grokking without weight decay, via lateral drift and Hamiltonian Monte Carlo, explicitly as a null result.",
+      "experiments": [
+        "Inducing grokking without weight decay via repulsive or large-norm regularization and extra noise",
+        "Hamiltonian Monte Carlo exploration of the minimum-loss set"
+      ],
+      "primary_experiment": "Inducing grokking without weight decay via repulsive or large-norm regularization and extra noise",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Author expected that drifting along the minimum-loss set, without explicit regularization, could improve generalization and make a model grok."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Task (modular addition) and variants are listed, but model architecture, training length, seeds and hyperparameters are not given; author calls evidence inconclusive."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Three variants: repulsive regularization away from the starting point, a large-weight-norm target, and extra noise, compared with Adam with and without weight decay."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "No network or model is named; only the modular addition task and the Adam optimizer are mentioned."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "Variants gave modest gains, about 5% sustained over Adam without weight decay, or larger but unstable ones, far short of sustained grokking."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Author's overall verdict is that the strong claim, regularization enabling navigation of the minimum-loss set, likely fails, though the evidence is not conclusive."
+        },
+        "quote": {
+          "supported": true,
+          "value": "But nothing approaches the sustained grokking of Adam with weight decay.",
+          "evidence": "States that no variant matched the sustained grokking of Adam with weight decay."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Early-stage work; author calls evidence inconclusive; no model or training details; few numbers beyond rough percentages."
+    },
+    {
+      "post_id": "3ecs6duLmTfyra3Gp",
+      "title": "Some Lessons Learned from Studying Indirect Object Identification in GPT-2 small",
+      "genuine": "partial",
+      "genuine_reason": "A mostly positive circuit-discovery lessons post. One paragraph describes early mean-ablation knockouts that failed to disable key heads because of a badly chosen replacement distribution.",
+      "experiments": [
+        "Early circuit knockouts using mean ablation over the IOI template distribution"
+      ],
+      "primary_experiment": "Early circuit knockouts using mean ablation over the IOI template distribution",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Stated intent: mean ablation should remove a node's effect while keeping model internals intact; the post treats little effect on key heads as unexpected."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Setup is stated (mean ablation with template-specific IOI means, GPT-2 small, three circuit criteria), but no prompt counts, effect sizes or other scale appear."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Mean ablation (knockouts) of attention heads, evaluated with faithfulness, completeness and minimality criteria."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-2 small."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Mean-ablating the induction and duplicate-token heads barely changed behavior, unexpectedly, in the early knockout setup."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Stated cause is a poorly chosen replacement distribution that still carried task information; this fits none of the listed labels without stretching."
+        },
+        "quote": {
+          "supported": true,
+          "value": "we initially found that mean-ablating the induction and duplicate token heads had little effect",
+          "evidence": "States that ablating those heads in the early setup had little effect."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Lessons post; failed knockout version is one paragraph without numbers; main findings are positive and in the companion paper."
+    },
+    {
+      "post_id": "4Gt42jX7RiaNaxCwP",
+      "title": "More information about the dangerous capability evaluations we did with GPT-4 and Claude.",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a high-level overview of an evaluation program. The null outcome (no autonomous replication) matched prior expectation and per-model results are withheld; one CAPTCHA sub-task shows where the agent got stuck.",
+      "experiments": [
+        "Autonomous replication and resource-gathering elicitation on GPT-4 and Claude",
+        "Agent setting up a 2Captcha account without human help"
+      ],
+      "primary_experiment": "Autonomous replication and resource-gathering elicitation on GPT-4 and Claude",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors expected going in that current models could not autonomously gain resources and evade oversight; the evaluation was meant to check this."
+        },
+        "claim_scope": {
+          "supported": false,
+          "evidence": "Only a high-level setup is given; task counts, trials and per-model results are withheld, and the authors say it is not replicable."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Prompted agent with code execution, browser, and self-delegation tools; model wrote plans, then tasks were stepped through with a supervising researcher simulating the environment."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "GPT-4 (an early version, not the release model, no image input) and Claude (version not stated)."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "No tested model showed ability to replicate autonomously; the result matched the authors' prior expectation."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Post lists model weaknesses (errors, hallucinations, derailment), not a cause of experimental failure; no label fits and cause is not called unclear."
+        },
+        "quote": {
+          "supported": true,
+          "value": "no models produced a plausible complete plan for how to achieve autonomous replication",
+          "evidence": "States that no tested model produced a plausible full plan for autonomous replication."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "possible: dangerous-capability elicitation (phishing, impersonation, deceiving a crowdworker); the post stays high level and withholds specifics, so risk is low.",
+      "notes": "Overview only; per-model results and methods withheld pending a technical report; negative outcome matched authors' prior expectation."
+    },
+    {
+      "post_id": "HGwjBmCKWtj5apGkK",
+      "title": "Model whisperers: optimized token prefixes can imitate function vectors, filter heads, and steering directions",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive result (optimized prefixes mimic function vectors and filter heads). The anti-human prefix attempt is a failed sub-experiment reported with judged counts.",
+      "experiments": [
+        "Anti-human end: GCG prefix and negative-direction injection on Olmo-3 32B",
+        "Early brute-force and beam search for pro/anti-human token strings on Llama 3.1 8B"
+      ],
+      "primary_experiment": "Anti-human end: GCG prefix and negative-direction injection on Olmo-3 32B",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "General aim is stated, but no expectation for the anti-human prefix or negative injection; a hostility expectation is only implied."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Olmo-3 32B base, direction at layer 24 from synthetic accepted/rejected pairs, 50 replies per condition scored by two blind LLM judges, versus random-direction injection."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "GCG search for token prefixes maximizing a direction score, compared with residual-stream injection and a human-written hostile prompt."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Olmo-3-1125-32B base model."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "mixed",
+          "evidence": "The prefix topped the leaderboard and shifted behavior, but mostly broke coherence instead of producing cruelty; negative injection did nothing beyond random."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Author is unsure why; guesses hostility needs more than the opposite of the pro-human direction, or that the synthetic data limits the direction."
+        },
+        "quote": {
+          "supported": true,
+          "value": "anti_top actually makes the model lose coherence rather than turn hostile",
+          "evidence": "States that the top anti-human prefix degraded coherence instead of producing hostility."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "possible: posts optimized gibberish prefixes that push an open model toward hostile or incoherent output and asks about lowering refusals; GCG is public and this attempt largely failed.",
+      "notes": "Mostly positive post; failed part is the anti-human result; charts are images; footnote counts degraded output as anti-human."
+    },
+    {
+      "post_id": "wsXCXoyvRi3DnWZ2M",
+      "title": "NYU Code Debates Update/Postmortem",
+      "genuine": "yes",
+      "genuine_reason": "Authors dropped the project after two pilots because they could not get safety-trained models to argue wrong answers competently, so the setup was invalid; written as a postmortem.",
+      "experiments": [
+        "Pilot 1: HumanEval questions, GPT-4-turbo, non-coder judges",
+        "Pilot 2: APPS interview questions, Claude 3 Opus, non-coder judges, execution traces"
+      ],
+      "primary_experiment": "Pilot 2: APPS interview questions, Claude 3 Opus, non-coder judges, execution traces",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors hoped non-coder judges could pick correct code outputs with debating LLMs, and needed incorrect consultants to fool judges to validate the setup."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Five hired non-coder judges, 10 debates and 10 consultancies in the pilot; APPS interview-level questions; Claude 3 Opus debaters; judges had a search box."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Debate versus consultancy with human judges, Bing search, and execution traces, the wrong-side trace altered by a second Claude instance."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Claude 3 Opus as debaters in pilot 2 (GPT-4-turbo-preview in pilot 1); GPT-4 only generated the wrong-answer distractors."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "Judges still reached 90% accuracy under consultancy, so models misled them less than needed; the correct side also made more mistakes."
+        },
+        "failure_type": {
+          "supported": false,
+          "value": null,
+          "evidence": "Main stated cause (safety-trained models would not argue wrong answers convincingly) matches no label; the aside about under-iterating prompts is only a hedge."
+        },
+        "quote": {
+          "supported": true,
+          "value": "both correct and incorrect models made too many mistakes on harder questions",
+          "evidence": "States that on the harder questions both the correct and incorrect debaters erred too often."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Postmortem of two small pilots; author calls setup invalid, not a negative result for debate; failure cause fits no label."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{"batch": 10, "model": "haiku", "labels": [
+{"post_id": "Khmh3ghqaGEpmpC9r", "title": "OpenAI Offers Straight-Laced Postmortem Of The HuggingFace Hack", "label": "no", "reason": "Commentary on OpenAI's incident report; the author ran no experiment."},
+{"post_id": "LXQBcztrWKhtcgQfJ", "title": "Current activation oracles are hard to use", "label": "yes", "reason": "Authors ran activation-oracle probes on sycophancy, missing information and backtracking; the oracles failed or stayed near chance.", "detail": "high"},
+{"post_id": "k43v47eQjaj6fY7LE", "title": "Solving the Mechanistic Interpretability challenges: EIS VII Challenge 2", "label": "no", "reason": "Reverse-engineering of a toy transformer that succeeded; the main result is positive."},
+{"post_id": "2GxhAyn9aHqukap2S", "title": "Looking back on my alignment PhD", "label": "no", "reason": "Personal retrospective on a PhD; no experiment write-up."},
+{"post_id": "QYmnkQyZD2fDjHCJ8", "title": "Models don’t seem to be dishonest in the way humans are", "label": "yes", "reason": "Trained models on their own false reasoning; true and false arms behaved the same and transfer to dishonesty evals was weak.", "detail": "high"},
+{"post_id": "8wXRuHQqCbRsbap6q", "title": "11 Open Empirical Problems in Reward-Seeking", "label": "no", "reason": "Agenda of open problems; the failed-experiment asides are too brief to count as reported experiments."},
+{"post_id": "Z6Zz2vQHM5ReWqiZ5", "title": "AI Safety at the Frontier: Paper Highlights of December 2025", "label": "no", "reason": "Newsletter summarising other groups' papers; the authors ran no experiment themselves."},
+{"post_id": "2CoLkSdwirr2WnNH6", "title": "(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits", "label": "yes", "reason": "Replicated an unsupervised SAE circuit discovery method on GPT-2-small; the resulting explanations did not hold up.", "detail": "high"},
+{"post_id": "4zGbB9dcdpiz4vaF6", "title": "Lessons learned and review of the AI Safety Nudge Competition", "label": "no", "reason": "Retrospective on a competition run for AI safety projects; not an experiment on AI."},
+{"post_id": "QX4ScmPFbmyosWhw3", "title": "Why did ChatGPT say that? Prompt engineering and more, with PIZZA.", "label": "no", "reason": "Tool announcement with illustrative examples; no failed experiment reported."},
+{"post_id": "LBKjnyKDEwEJ45Wjf", "title": "Self-reward can elicit diverse model personas", "label": "no", "reason": "Toy RL persona study whose main results are descriptive or positive; the null baselines appear only in an appendix."},
+{"post_id": "DQ4y5tvotag5KPzcu", "title": "[Linkpost] Interpretability Dreams", "label": "no", "reason": "Linkpost to an essay on interpretability vision; no experiment."}
+]}

@@ -1,0 +1,12 @@
+{"batch": 4, "model": "haiku", "labels": [
+{"post_id": "otoPaykRRAkjfzpHN", "title": "Reviewing failure modes in science as we prepare for AI researchers", "label": "no", "reason": "Review essay cataloguing failure modes in science; no experiment the authors ran."},
+{"post_id": "JPfJaXTDQKQQocc2f", "title": "MATS Spring 2024 Extension Retrospective", "label": "no", "reason": "Program retrospective based on surveys and interviews; no experiment."},
+{"post_id": "HGwjBmCKWtj5apGkK", "title": "Model whisperers: optimized token prefixes can imitate function vectors, filter heads, and steering directions", "label": "yes", "reason": "Mostly positive prefix-search work; its anti-human arm failed: prefixes broke coherence instead of producing hostility, and injecting the negative direction changed nothing.", "detail": "medium"},
+{"post_id": "8ZR3xsWb6TdvmL8kx", "title": "Optimistic Assumptions, Longterm Planning, and \"Cope\"", "label": "no", "reason": "Human planning workshop exercise on a puzzle game, not an AI experiment or safety experiment the authors ran."},
+{"post_id": "8NKu9WES7KeKRWEKK", "title": "Why all the fuss about recursive self-improvement?", "label": "no", "reason": "Essay defending past arguments about recursive self-improvement; no experiment."},
+{"post_id": "LuKCepxdb8HpEd9TF", "title": "Coordinal: A Postmortem.", "label": "no", "reason": "Startup postmortem about organization, fundraising and admin; experiments are secondary to the org story."},
+{"post_id": "xyYss3oCzovibHxAF", "title": "LLM in-context learning as (approximating) Solomonoff induction", "label": "no", "reason": "Theory-of-ICL test with an inconclusive result; no clear safety link and no clear failure."},
+{"post_id": "BEyAWbCdtWpSGxmun", "title": "Retrospective on the 2022 Conjecture AI Discussions", "label": "no", "reason": "Retrospective on a discussion programme and its publication refusals; no experiment."},
+{"post_id": "NQ85WRcLkjnTudzdg", "title": "ARC tests to see if GPT-4 can escape human control; GPT-4 failed to do so", "label": "no", "reason": "Summary of a third-party GPT-4 evaluation report; the authors ran no experiment themselves."},
+{"post_id": "WqjkqrEyFDXoHzz9K", "title": "Steering Gemini with BiDPO", "label": "yes", "reason": "Authors ran BiDPO steering against prompt baselines on Gemini; it failed to beat them and the project ended.", "detail": "low"}
+]}

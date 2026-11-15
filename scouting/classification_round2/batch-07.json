@@ -1,0 +1,14 @@
+{"batch": 7, "model": "haiku", "labels": [
+{"post_id": "iKm2FhpWkuuBojm82", "title": "Why I Left Google DeepMind", "label": "no", "reason": "Essay on an employee's departure and the company's military AI deal; no experiment was run."},
+{"post_id": "D7PumeYTDPfBTp3i7", "title": "The Waluigi Effect (mega-post)", "label": "no", "reason": "Theoretical essay on simulator theory; no experiment with a reported failed outcome."},
+{"post_id": "ywKhqjgdKuHoQohYL", "title": "Takeaways from the Intelligence Rising RPG", "label": "no", "reason": "Write-up of a tabletop role-playing game session; no empirical AI experiment."},
+{"post_id": "5qyytGqZWv5bt6723", "title": "The Power of High Speed Stupidity", "label": "no", "reason": "Opinion essay on iterative development; no experiment run by the authors."},
+{"post_id": "LzeZW9PvR6Njc9ngr", "title": "Whack-a-mole with a broken hammer: does a model internally track its automaton state?", "label": "yes", "reason": "Probe study is mostly positive, but the counting sub-task is a clearly reported failure with detail.", "detail": "high"},
+{"post_id": "qK79p9xMxNaKLPuog", "title": "Apollo Research 1-year update", "label": "no", "reason": "Organisation one-year update; the negative interpretability result gets one line and no detail."},
+{"post_id": "n3LAgnHg6ashQK3fF", "title": "Takeaways from our robust injury classifier project [Redwood Research]", "label": "yes", "reason": "Adversarial training classifier failed to reach robustness; follow-up experiments are described in detail.", "detail": "high"},
+{"post_id": "9ixerpx4DCQTaRYCz", "title": "Five Types of Corrigibility Projects I Don't Want to Fund", "label": "no", "reason": "Opinion on grant applications; describes no experiment the authors ran."},
+{"post_id": "3zZjF3YKJ257x79mu", "title": "What I Learned Running Refine", "label": "no", "reason": "Retrospective on running an alignment researcher incubator; no specific failed experiment."},
+{"post_id": "5kEezahvkEiQuWEfx", "title": "Should we benchmark conceptual capabilities using judgment prediction tasks?", "label": "no", "reason": "Proposal for a benchmark methodology; no experiment was run."},
+{"post_id": "pLC3bx77AckafHdkq", "title": "GPT-oss is an extremely stupid model", "label": "yes", "reason": "Attempted replication of an agentic misalignment blackmail eval on GPT-oss failed to elicit the behavior.", "detail": "medium"},
+{"post_id": "FSm92N8bcDujRZPMH", "title": "Formalizing Embeddedness Failures in Universal Artificial Intelligence", "label": "no", "reason": "Formal theoretical results on AIXI; no empirical experiment."}
+]}

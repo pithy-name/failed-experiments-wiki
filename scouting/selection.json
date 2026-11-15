@@ -1,0 +1,31 @@
+{
+  "decided_by": "orchestrator (Claude Fable 5.2), standing in for the maintainer as instructed for this run",
+  "decided_on": "2026-11-14",
+  "selected": [
+    {"post_id": "4uXCAJNuPKtKBsi28", "entry_id": "fe-2026-0001", "role": "gold", "topic": "SAE probing, out-of-distribution detection",
+     "why": "The PRD's first named example. Headline negative result with a stated prediction, a dense-probe baseline and explicit limits on what it shows."},
+    {"post_id": "tgn3pD2gLpZvepkWk", "entry_id": "fe-2026-0002", "role": "gold", "topic": "Logit-lens variants, replication",
+     "why": "A whole post about one failed replication, with implementation checks and follow-up stress tests. Shows the did_not_replicate direction."},
+    {"post_id": "8dXzDzk7nNK64jBve", "entry_id": "fe-2026-0003", "role": "gold", "topic": "Alignment faking, model organisms",
+     "why": "A null result the author calls unexplained and small-sample. A good test of low confidence and failure_type unknown."},
+    {"post_id": "2CoLkSdwirr2WnNH6", "entry_id": "fe-2026-0004", "role": "gold", "topic": "SAE circuits",
+     "why": "One experiment, clearly scoped as one data point, with a sanity check that passed and a stated reason the approach fell short."},
+    {"post_id": "ogvyWqJtSrpgXfc7t", "entry_id": "fe-2026-0005", "role": "gold", "topic": "Activation steering, sandbagging",
+     "why": "A pre-registered null with random-direction controls, where the author says the dose may have been too gentle. Shows hyperparams_unexplored and retry welcome."},
+    {"post_id": "pn5nBBcLYrnmWXfnY", "entry_id": "fe-2026-0006", "role": "contribute", "topic": "SAE encodings for classification",
+     "why": "Short, self-contained negative result on small open models, with the author unsure whether a pipeline mistake is the cause."},
+    {"post_id": "uH5oo57r24xGXQGKM", "entry_id": "fe-2026-0007", "role": "contribute", "topic": "Fine-tuning, capability transfer across propensities",
+     "why": "Mostly positive post with one clearly reported shortfall. Tests whether the skill scopes a failure inside a positive write-up. Only non-interpretability training topic among the posts that passed."},
+    {"post_id": "EC5H7xakTgxxNXm5g", "entry_id": "fe-2026-0008", "role": "contribute", "topic": "SAE training on synthetic data",
+     "why": "A failed explanatory hypothesis reported with numbers, inside a post whose final diagnosis is positive."},
+    {"post_id": "YyAMz52wDxnLhwvWL", "entry_id": "fe-2026-0009", "role": "contribute", "topic": "Introspection, self-explanation",
+     "why": "A null on privileged access with a cross-model control, in tension with earlier work the authors cite."},
+    {"post_id": "EEvsL9cpgDAxAhTzt", "entry_id": "fe-2026-0010", "role": "contribute", "topic": "Steganography, reinforcement learning",
+     "exception": "hypothesis",
+     "why": "EXCEPTION, the only one. Supports six of the seven required fields. The post asks a question (can current RL methods teach hidden 1-bit communication?) and states no prediction, so `hypothesis` is recorded as the proposition tested and says the post poses it as a question. Chosen over the other near-misses because it is a dedicated negative-results post with controls, careful scoping by the author, a different topic from the other nine, and a later note that other work succeeded: the case the retry-welcome fields exist for."}
+  ],
+  "prd_named_examples": [
+    {"post_id": "4uXCAJNuPKtKBsi28", "outcome": "selected (fe-2026-0001)"},
+    {"post_id": "kiCZzHDkRtupek2mc", "outcome": "not selected: the post is a roundup of three short projects whose detail is in linked write-ups; for the audited project it does not give the exact setup (claim_scope) or a named model (models)"}
+  ]
+}

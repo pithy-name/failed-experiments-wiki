@@ -1,0 +1,14 @@
+{"batch": 11, "model": "haiku", "labels": [
+{"post_id": "vMNTWTDWLorDqd3LS", "title": "Claude Opus 5.5: The System Card", "label": "no", "reason": "Commentary on another lab's system card; the author ran no experiment."},
+{"post_id": "6iPEuEnguEtmtaqyJ", "title": "Function vectors as a model diffing tool: 17 heads repair a bad fine-tune", "label": "yes", "reason": "Author patched heads and a direction between two fine-tuned models; the direction-injection test failed to install the behavior in written answers.", "detail": "high"},
+{"post_id": "rtp6n7Z23uJpEH7od", "title": "SAEs are highly dataset dependent: a case study on the refusal direction", "label": "no", "reason": "Author-run SAE comparison whose main result, a chat-data SAE recovering the refusal direction, is positive."},
+{"post_id": "CCxB3e2oL8yeLKESH", "title": "LASR Retrospective and Advice", "label": "no", "reason": "Program retrospective and advice with no experiment of the author's own."},
+{"post_id": "EC5H7xakTgxxNXm5g", "title": "Sanity Checks for Sanity Checks for Sparse Autoencoders", "label": "yes", "reason": "Replicates a toy SAE result, then tests many fixes (AuxK, resampling, loudness, more features) that mostly failed; main claim is a critique.", "detail": "high"},
+{"post_id": "KerENNLyiqQ5ew7Kz", "title": "The first AI Safety Camp & onwards", "label": "no", "reason": "Event and camp summary from 2018; no experiment."},
+{"post_id": "u9Kr97di29CkMvjaj", "title": "Evaluating What 2026 Looks Like So Far", "label": "yes", "reason": "Author ran o3-mini prediction extraction and resolution, which performed much worse than humans; main result is a human-graded forecast review.", "detail": "medium"},
+{"post_id": "wYZMmdWEt5QLM3m3e", "title": "Steering towards automated grading degrades alignment", "label": "no", "reason": "Main steering results are positive; the null results, such as refusals and the J-Lens readout, are too thin to count."},
+{"post_id": "HDXLTFnSndhpLj2XZ", "title": "I'm leaving AI alignment – you better stay", "label": "no", "reason": "Personal career retrospective; no experiment with reported results."},
+{"post_id": "czNgEuaxkXHL2g8mQ", "title": "You should go to ML conferences", "label": "no", "reason": "Advice post on attending ML conferences; no experiment."},
+{"post_id": "nB8KKapnWGBXtKKiM", "title": "Brief independent investigation of agents behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident", "label": "no", "reason": "Incident investigation of agent transcripts; describes observed behavior, not a failed experiment."},
+{"post_id": "BY8fBKR6sjiPXRBia", "title": "The way AGI wins could look very stupid", "label": "no", "reason": "Essay on AGI strategy with no experiment."}
+]}

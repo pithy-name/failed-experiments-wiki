@@ -1,0 +1,301 @@
+{
+  "batch": 5,
+  "model": "sonnet",
+  "audits": [
+    {
+      "post_id": "eowhY5NaCaqY6Pkj9",
+      "title": "Behavioural statistics for a maze-solving agent",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive statistical analysis confirming most distance effects; it holds one brief failed sub-result, a second-batch non-replication of one distance effect.",
+      "experiments": [
+        "Second-batch check of the Euclidean cheese-to-decision-square distance effect",
+        "Single-variable screen where five of eleven distance variables failed to beat the baseline",
+        "Decision-square-to-top-right 5x5 distance effect from the earlier post, dismissed as an artifact"
+      ],
+      "primary_experiment": "Second-batch check of the Euclidean cheese-to-decision-square distance effect",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Authors expected both spatial and legal-step closeness between decision square and cheese to raise cheese-getting; spatial effect held only at low confidence."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Single agent; 10,000 runs, 5,239 levels with a decision square, logistic regressions with 80/20 splits, then a second independent 10,000-run batch."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Logistic regression per variable, L1-regularized multiple regression, variable-dropping accuracy comparisons, variance inflation factors, manual maze edits."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Agent is only described as the maze-solving policy network from earlier work; no model name or architecture appears in the post."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "did_not_replicate",
+          "evidence": "Effect seen in the first batch but absent in a second independent batch, while other results reproduced."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "measurement_noise",
+          "evidence": "Authors only suspect the effect would be clearer with action-logit statistics rather than cheese-getting frequencies; not tested because of overhead."
+        },
+        "quote": {
+          "supported": true,
+          "value": "we found no loss at all when dropping this variable from 1)-3)",
+          "evidence": "Reports that a second independent batch showed zero accuracy cost from removing that variable."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly a positive analysis; the negative result is one sentence plus a footnote; second-batch numbers are not given."
+    },
+    {
+      "post_id": "GE6pcmmLc3kdpNJja",
+      "title": "Fuzzing LLMs sometimes makes them reveal their secrets",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive elicitation write-up; the password-locked model and noisy-exploration RL experiments gave little or no benefit and are described in detail.",
+      "experiments": [
+        "Random noise on a password-locked math model to unlock sandbagged answers",
+        "Noise-augmented expert iteration for RL exploration on the same password-locked model"
+      ],
+      "primary_experiment": "Random noise on a password-locked math model to unlock sandbagged answers",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "States a hope that added noise can surface hidden or sandbagged behavior; cites earlier weight-noise work that partly unlocked password-locked models."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "32 random MATH test problems, random noise only, best of 100 vectors, temperatures 0 and 1; post lists many untried noise variants."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Adding random noise to activations, choosing the best of 100 noise vectors; also noisy sampling inside an expert-iteration RL loop."
+        },
+        "models": {
+          "supported": false,
+          "evidence": "Password-locked model is identified only by its source paper title; Qwen2.5-7B-Instruct is named only for the other, positive experiments."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "Noise barely helped at temperature 1 and not at all at temperature 0, weaker than the Qwen runs and earlier weight-noise work."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hyperparams_unexplored",
+          "evidence": "Author suspects improved search methods could help far more and lists untried options: more noise vectors, other noise placements, smarter noise tuning."
+        },
+        "quote": {
+          "supported": true,
+          "value": "only a small uplift at temperature 1, and no uplift at temperature 0",
+          "evidence": "Says noise gave the locked model a slight gain at the higher sampling temperature and no gain at the lower one."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Mostly a positive elicitation post; failure numbers are in plots, not text; one subsection plus the RL attempt."
+    },
+    {
+      "post_id": "QYmnkQyZD2fDjHCJ8",
+      "title": "Models don’t seem to be dishonest in the way humans are",
+      "genuine": "yes",
+      "genuine_reason": "The post reports fine-tuning on true versus false model-written reasoning and finding no differential effect on dishonesty evals; stronger variants gave only weak transfer.",
+      "experiments": [
+        "Training on own true versus false gender-inference reasoning (filter and overwrite arms), tested on dishonesty evals",
+        "Off-policy reveal versus rephrase targets",
+        "GRPO and DPO variants of the training setup",
+        "Persuasive-but-false subset confirmed by a belief probe",
+        "Deceptive versus neutral framing in the prompt"
+      ],
+      "primary_experiment": "Training on own true versus false gender-inference reasoning (filter and overwrite arms), tested on dishonesty evals",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Poses a fork between human-like dishonesty and arbitrary faulty mapping and asks which training teaches; no stated expectation for the true-versus-false comparison."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Qwen 2.5 32B, 400 blog posts (284 correct), gender inference only; transfer tested on a 90-question censorship set and others; Gemma 3 27B replicates."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Filter and overwrite arm constructions, Claude-judge scoring and a linear belief probe are named; GRPO and DPO appear as variant runs; base recipe left unspecified."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen 2.5 32B and Gemma 3 27B trained; Claude used as judge and answer rephraser."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Deception-related censorship scores matched between false and true arms; both shifted from baseline equally, so the training itself explains the change."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors conclude wrong-answer targets by themselves do not teach broad deception, though they also name a narrow, short-horizon training setup as a possible cause."
+        },
+        "quote": {
+          "supported": true,
+          "value": "True and false training usually produced nearly identical downstream effects",
+          "evidence": "Summary line saying the two arms, trained on correct versus incorrect labels, led to almost the same downstream behavior."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "none",
+      "notes": "Several results are in figures missing from the text; training hyperparameters and number of steps are not given."
+    },
+    {
+      "post_id": "uH5oo57r24xGXQGKM",
+      "title": "Do capabilities generalize across propensities?",
+      "genuine": "partial",
+      "genuine_reason": "Descriptive intermediate results, mostly showing full transfer on simple tasks; the negative pieces are low transfer on Chess and reasoning, and propensity adherence collapsing.",
+      "experiments": [
+        "Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap",
+        "Reasoning versus no-reasoning swap: reduced transfer on post-cutoff facts",
+        "Propensity adherence collapse under swapped prompts",
+        "Pre-training named personas before main training, with no improvement"
+      ],
+      "primary_experiment": "Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Background calls bold formatting cosmetic with no bearing on problem-solving; hedging/confident gets only a descriptive line, so the stated expectation covers bold/plain alone."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Lichess puzzles, gpt-oss-120b, SFT, toy tasks, no RL; adherence loss limits bold/plain Chess results to about 1000 steps; puzzle count not given."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Supervised fine-tuning on paired tasks with opposite propensities, evaluation under swapped propensity prompts, performance-gap and adherence metrics, Claude Sonnet-generated training completions."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "gpt-oss-120b for the Chess figure; Llama 3.1-8B in the appendix; Claude Sonnet generates training completions."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "smaller_than_expected",
+          "evidence": "For the formatting and hedging pairs, swapping propensity cost much more accuracy on Chess than on the lookup task, so less skill carried over."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "unknown",
+          "evidence": "Task difficulty is offered tentatively, but the post says other differences such as longer outputs confound it and no confident conclusion is possible."
+        },
+        "quote": {
+          "supported": true,
+          "value": "we observe substantially less capability transfer between propensities",
+          "evidence": "Summary line saying capability carries over far less across propensity swaps on the most difficult task, the chess puzzles."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Results are in figures; no numeric gaps in text; the performance-gap formula is missing from the extracted text."
+    },
+    {
+      "post_id": "6iPEuEnguEtmtaqyJ",
+      "title": "Function vectors as a model diffing tool: 17 heads repair a bad fine-tune",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a positive result (pasting 17 heads repairs the bad fine-tune) but with detailed negative results: direction injection, a first failed Llama transfer run, and probe-guided layer choice for personas.",
+      "experiments": [
+        "Adding the mean-difference direction to the clean model to install bad medical behavior",
+        "Removing that direction from the bad model, which helps but does not cure",
+        "First Llama transfer run with a guardrail tuned on Qwen",
+        "Probe-peak layers as a guide to where persona traits are load-bearing",
+        "Crosscoder search for a feature unique to the bad model"
+      ],
+      "primary_experiment": "Adding the mean-difference direction to the clean model to install bad medical behavior",
+      "fields": {
+        "hypothesis": {
+          "supported": false,
+          "evidence": "Cites prior work where one direction works both ways and frames injection as half of a two-way test; no stated expectation of success."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Layer 15 injection at half the internal-state scale, 15 questions, matched random-direction control, one seed, LoRA bad-medical-advice fine-tunes only; blind LLM judge."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Mean-difference direction between the two models, added to the clean model at scaled doses with random-direction controls; blind LLM judging."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "Qwen2.5-7B-Instruct and Llama-3.1-8B-Instruct bad-medical-advice LoRAs are named; the injection section does not say which one was used."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "null",
+          "evidence": "Injection cut safe answers from 14 to 9 versus 12 under a random direction; just a single additional unsafe answer, despite a big score shift."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Authors judge the direction explains part of the bad behavior yet cannot create it; their frozen-weights account is labeled their own read, not a finding."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Adding it to the clean model does almost nothing",
+          "evidence": "Summary line reporting that injecting the direction into the unbroken model barely changes its behavior."
+        }
+      },
+      "all_required_supported": false,
+      "info_hazard": "possible: the failed experiment is an activation-injection attack meant to install unsafe medical behavior; it failed and relies on standard steering, so risk looks low",
+      "notes": "Mostly a positive repair result; injection test is one section; persona half never names its model; one seed."
+    },
+    {
+      "post_id": "EC5H7xakTgxxNXm5g",
+      "title": "Sanity Checks for Sanity Checks for Sparse Autoencoders",
+      "genuine": "partial",
+      "genuine_reason": "Mostly a rebuttal with a positive diagnosis (per-sample normalization fixes BatchTopK), but a long section of failed explanatory hypotheses is described in detail.",
+      "experiments": [
+        "Per-feature loudness added to synthetic activations to explain BatchTopK failure",
+        "Raising d_model to 800 and resampling to fix dead latents",
+        "Sample-level magnitude variance as the explanation",
+        "More true features than latents",
+        "Doubling the active feature count to 40",
+        "AuxK, hyperparameter sweeps and resampling at d_model 100"
+      ],
+      "primary_experiment": "Per-feature loudness added to synthetic activations to explain BatchTopK failure",
+      "fields": {
+        "hypothesis": {
+          "supported": true,
+          "evidence": "Reasoned that different natural loudness per feature might make magnitude a useful signal and improve performance; a footnote calls this motivation poor reasoning."
+        },
+        "claim_scope": {
+          "supported": true,
+          "evidence": "Synthetic activations at d_model 800 with 25,600 features and latents, about 20 active features, BatchTopK SAE, loudness drawn from a log-normal with sigma 0.5."
+        },
+        "method": {
+          "supported": true,
+          "evidence": "Train BatchTopK SAE on synthetic activations with per-feature loudness multiplier; measure fraction of true features recovered (cosine at least 0.8) and dead latent rate."
+        },
+        "models": {
+          "supported": true,
+          "evidence": "BatchTopK SAE trained on synthetic activations; TopK and JumpReLU in related runs; GPT-2 appears only as a source of activation statistics."
+        },
+        "result_direction": {
+          "supported": true,
+          "value": "opposite",
+          "evidence": "BatchTopK recovered 19.6% of features with 78.3% dead latents, worse than the 53.5% baseline at the same size, rather than better."
+        },
+        "failure_type": {
+          "supported": true,
+          "value": "hypothesis_false",
+          "evidence": "Author finds loudness by itself fails to account for the difference; a footnote says real SAEs never rely on overall magnitude when picking latents."
+        },
+        "quote": {
+          "supported": true,
+          "value": "Instead of improving performance, it actively degrades it",
+          "evidence": "Says per-feature loudness hurt BatchTopK recovery rather than helping."
+        }
+      },
+      "all_required_supported": true,
+      "info_hazard": "none",
+      "notes": "Footnote calls the loudness motivation poor; no seeds or error bars reported; the post mainly rebuts a published sanity-check paper."
+    }
+  ]
+}

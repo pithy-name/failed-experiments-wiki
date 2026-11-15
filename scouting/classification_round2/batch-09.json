@@ -1,0 +1,14 @@
+{"batch": 9, "model": "haiku", "labels": [
+{"post_id": "WewsByywWNhX9rtwi", "title": "Current AIs seem pretty misaligned to me", "label": "no", "reason": "Essay on observed misalignment from personal usage; no designed experiment with a reported outcome."},
+{"post_id": "6Xgy6CAf2jqHhynHL", "title": "What 2026 looks like", "label": "no", "reason": "Forecast vignette of a future history; no experiment run by the authors."},
+{"post_id": "keiYkaeoLHoKK4LYA", "title": "Six Dimensions of Operational Adequacy in AGI Projects", "label": "no", "reason": "Strategy essay on requirements for AGI projects; no experiment."},
+{"post_id": "Gi8NP9CMwJMMSCWvc", "title": "AI for Epistemics Hackathon", "label": "no", "reason": "Hackathon event writeup and project showcase; no experimental results from the authors."},
+{"post_id": "hMBTaFvAzdMNnj29c", "title": "Evolutionary prompt optimization for SAE feature visualization", "label": "yes", "reason": "Mostly positive method paper, but reports failed two-feature maximization and a failed AdvPrompter attempt with detail.", "detail": "high"},
+{"post_id": "nwpyhyagpPYDn4dAW", "title": "The Field of AI Alignment: A Postmortem, and What To Do About It", "label": "no", "reason": "Field-level opinion essay on streetlighting in alignment research; no experiment."},
+{"post_id": "rTJrqtDLxAPxiW3sk", "title": "My first year in AI alignment", "label": "no", "reason": "Personal career retrospective; no experiment."},
+{"post_id": "4onALBNDff2LFPyNZ", "title": "Learnings from starting an AI safety research team", "label": "no", "reason": "Organisation-building lessons learned; no specific failed experiment."},
+{"post_id": "2wbW2WY3bP9Jzn4R5", "title": "Control monitors need alignment assessments too", "label": "no", "reason": "Argument about monitor alignment; no experiment the authors ran."},
+{"post_id": "vm7FRyPWGCqDHy6LF", "title": "Dario Amodei’s prepared remarks from the UK AI Safety Summit, on Anthropic’s Responsible Scaling Policy", "label": "no", "reason": "Policy remarks on a Responsible Scaling Policy; no experiment."},
+{"post_id": "9FhweqMooDzfRqgEW", "title": "Chatbot convinces Belgian to commit suicide", "label": "no", "reason": "News translation of a journalist's chatbot test; the harmful output is a product finding, not a failed research experiment."},
+{"post_id": "fG2gFYX2Wo49tRrap", "title": "Anthropic's JumpReLU training method is really good", "label": "no", "reason": "Positive result: JumpReLU training works; earlier failed GDM training is only background, not an experiment in this post."}
+]}

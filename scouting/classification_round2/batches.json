@@ -1,0 +1,788 @@
+[
+  [
+    {
+      "post_id": "r3eEPto5ohzESuqa9",
+      "title": "HuggingFace Attack Postmortem: Fleshing Out the Facts",
+      "word_count": 17231
+    },
+    {
+      "post_id": "eowhY5NaCaqY6Pkj9",
+      "title": "Behavioural statistics for a maze-solving agent",
+      "word_count": 3105
+    },
+    {
+      "post_id": "Hna2P8gcTyRgNDYBY",
+      "title": "Race Along Rashomon Ridge",
+      "word_count": 2625
+    },
+    {
+      "post_id": "nR3DkyivzF4ve97oM",
+      "title": "How Go Players Disempower Themselves to AI",
+      "word_count": 2266
+    },
+    {
+      "post_id": "ExB6KYDcznaFS72eT",
+      "title": "Evaluating Explanations of LLM Behavior In The Wild with Counterfactual Experiments",
+      "word_count": 1981
+    },
+    {
+      "post_id": "8dXzDzk7nNK64jBve",
+      "title": "Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes",
+      "word_count": 1711
+    },
+    {
+      "post_id": "jgmmMa7AqJNausrqx",
+      "title": "Don't trust Lean4 alone",
+      "word_count": 1350
+    },
+    {
+      "post_id": "gS5skwXeeQdStwsPu",
+      "title": "What comes with cheap math?",
+      "word_count": 1173
+    },
+    {
+      "post_id": "J7CekMF7WRwsud8Df",
+      "title": "MIRI Comms is hiring",
+      "word_count": 826
+    },
+    {
+      "post_id": "wvbGiHwbie24mmhXw",
+      "title": "[April Fools'] Definitive confirmation of shard theory",
+      "word_count": 629
+    },
+    {
+      "post_id": "cLMuF9v9SSKAkEu58",
+      "title": "Freiburg - AI Safety Bootcamp - Lessons Learned",
+      "word_count": 4
+    }
+  ],
+  [
+    {
+      "post_id": "Q54wBeeNGreq6KyfG",
+      "title": "HuggingFace Attack Postmortem: Civilizations, Reactions and Next Actions",
+      "word_count": 16445
+    },
+    {
+      "post_id": "i2rCbxuskrarrprwA",
+      "title": "One Year of PauseAI UK",
+      "word_count": 3290
+    },
+    {
+      "post_id": "9PiLfo6iQbbDWFHv7",
+      "title": "Some Memories of Early Anthropic",
+      "word_count": 2811
+    },
+    {
+      "post_id": "PEiiRuSKpmjPxS4pW",
+      "title": "The AFFINE Superintelligence Alignment Seminar – A Retrospective",
+      "word_count": 2379
+    },
+    {
+      "post_id": "WgroAK7N3jAfBBpct",
+      "title": "Autonomous researchers will strain peer review, funding, and oversight",
+      "word_count": 2116
+    },
+    {
+      "post_id": "sZvMLWrWomN28uWA9",
+      "title": "JargonBot Beta Test",
+      "word_count": 1848
+    },
+    {
+      "post_id": "YqrAoCzNytYWtnsAx",
+      "title": "The Failed Strategy of Artificial Intelligence Doomers",
+      "word_count": 1399
+    },
+    {
+      "post_id": "8CvkNa6FKSrK4Nj83",
+      "title": "Ban development of unpredictable powerful models?",
+      "word_count": 1131
+    },
+    {
+      "post_id": "mfn32QHwKb55afHq4",
+      "title": "I was Wrong, Simulator Theory is Real",
+      "word_count": 989
+    },
+    {
+      "post_id": "iNsy7MsbodCyNTwKs",
+      "title": "Eliezer and I wrote a book: If Anyone Builds It, Everyone Dies",
+      "word_count": 521
+    }
+  ],
+  [
+    {
+      "post_id": "Z87fSrxQb4yLXKcTk",
+      "title": "MATS Winter 2023-24 Retrospective",
+      "word_count": 14734
+    },
+    {
+      "post_id": "cJX2ssssGoYqnijwi",
+      "title": "The Talker Does Not Control The Doer (in Current AIs)",
+      "word_count": 3612
+    },
+    {
+      "post_id": "GE6pcmmLc3kdpNJja",
+      "title": "Fuzzing LLMs sometimes makes them reveal their secrets",
+      "word_count": 2842
+    },
+    {
+      "post_id": "wnF9iydYiBMRs2jPg",
+      "title": "Reflections on my 5-month alignment upskilling grant",
+      "word_count": 2535
+    },
+    {
+      "post_id": "2x67s6u8oAitNKF73",
+      "title": "Misrepresentation as a Barrier for Interp (Part I)",
+      "word_count": 2220
+    },
+    {
+      "post_id": "YMFYQpsY2MGbXKPtS",
+      "title": "ChatGPT 5.1 Codex Max",
+      "word_count": 1913
+    },
+    {
+      "post_id": "vDj9HZnBpBECLzshv",
+      "title": "[Paper] Propensities Please: Exposing Alignment-Faking LLMs using Synthetic Document Finetuning",
+      "word_count": 1625
+    },
+    {
+      "post_id": "7vpvNM7viJqNWAdG7",
+      "title": "Classifier Context Rot: Monitor Performance Degrades with Context Length",
+      "word_count": 1292
+    },
+    {
+      "post_id": "kXHBz2Z5BBgaBiazf",
+      "title": "A transcript of the TED talk by Eliezer Yudkowsky",
+      "word_count": 1065
+    },
+    {
+      "post_id": "Kmq59dMzKsxFTWAHd",
+      "title": "We need good evals for activation faithfulness",
+      "word_count": 665
+    },
+    {
+      "post_id": "bAmLMbyzXK3HtztbB",
+      "title": "Wikipedia as an introduction to the alignment problem",
+      "word_count": 234
+    },
+    {
+      "post_id": "tAQRxccEDYZY5vxvy",
+      "title": "Japan AI Alignment Conference",
+      "word_count": 226
+    }
+  ],
+  [
+    {
+      "post_id": "3375SZNGA5dKHQMie",
+      "title": "I Did This Without Your Knowledge",
+      "word_count": 13630
+    },
+    {
+      "post_id": "htrZrxduciZ5QaCjw",
+      "title": "Language models seem to be much better than humans at next-token prediction",
+      "word_count": 3872
+    },
+    {
+      "post_id": "86zcwvuBpE4vxAeQz",
+      "title": "GPT 5.5: The System Card",
+      "word_count": 3050
+    },
+    {
+      "post_id": "uH5oo57r24xGXQGKM",
+      "title": "Do capabilities generalize across propensities?",
+      "word_count": 2545
+    },
+    {
+      "post_id": "BLHBhpJcusmsNjGio",
+      "title": "Training Model to Predict Its Own Generalization: A Preliminary Study",
+      "word_count": 2238
+    },
+    {
+      "post_id": "ogvyWqJtSrpgXfc7t",
+      "title": "Eval-Awareness Steering detects the Test, Not the Sabotage",
+      "word_count": 1930
+    },
+    {
+      "post_id": "RoWabfQxabWBiXwxP",
+      "title": "Go home GPT-4o, you’re drunk: emergent misalignment as lowered inhibitions",
+      "word_count": 1629
+    },
+    {
+      "post_id": "iBBK4j6RWC7znEiDv",
+      "title": "History of the Development of Logical Induction",
+      "word_count": 1397
+    },
+    {
+      "post_id": "sHpJascyEuEibzFyg",
+      "title": "Retrospective: PIBBSS Fellowship 2024",
+      "word_count": 1115
+    },
+    {
+      "post_id": "M2GzdAGbxwinERSEt",
+      "title": "A widely shared AI productivity paper was retracted, is possibly fraudulent",
+      "word_count": 1042
+    },
+    {
+      "post_id": "f2C4CWNmrSKMs6SaK",
+      "title": "Linkpost: Github Copilot productivity experiment",
+      "word_count": 320
+    },
+    {
+      "post_id": "82f3o2SuS3pwaZt8Y",
+      "title": "Paper in Science: Managing extreme AI risks amid rapid progress",
+      "word_count": 201
+    }
+  ],
+  [
+    {
+      "post_id": "vJFdjigzmcXMhNTsx",
+      "title": "Simulators",
+      "word_count": 12304
+    },
+    {
+      "post_id": "Ed3naAyEEe7zZvzsj",
+      "title": "The Center for AI Policy Has Shut Down",
+      "word_count": 4084
+    },
+    {
+      "post_id": "jeBkx6agMuBCQW94C",
+      "title": "MATS Alumni Impact Analysis",
+      "word_count": 3381
+    },
+    {
+      "post_id": "5XmxmszdjzBQzqpmz",
+      "title": "Interpreting Preference Models w/ Sparse Autoencoders",
+      "word_count": 2669
+    },
+    {
+      "post_id": "DD5EBtfJiisRkuPWF",
+      "title": "Retrospective: PIBBSS Fellowship 2023 ",
+      "word_count": 2476
+    },
+    {
+      "post_id": "xg3hXCYQPJkwHyik2",
+      "title": "The Best Textbooks on Every Subject",
+      "word_count": 2161
+    },
+    {
+      "post_id": "rktrjGjXEbWsg7zof",
+      "title": "My retrospective from MATS 10.0",
+      "word_count": 1745
+    },
+    {
+      "post_id": "L7yHdqRiHKd3FhQ7B",
+      "title": "Alignment Newsletter Three Year Retrospective",
+      "word_count": 1563
+    },
+    {
+      "post_id": "xZkBDAgQGqm6tvCvy",
+      "title": "Interpretable Fine Tuning Research Update and Working Prototype",
+      "word_count": 1069
+    },
+    {
+      "post_id": "TDqvQFks6TWutJEKu",
+      "title": "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning",
+      "word_count": 703
+    },
+    {
+      "post_id": "prm7jJMZzToZ4QxoK",
+      "title": "The Compendium, A full argument about extinction risk from AGI",
+      "word_count": 659
+    },
+    {
+      "post_id": "3GqWPosTFKxeysHwg",
+      "title": "Mechanistic Interpretability Workshop Happening at ICML 2024!",
+      "word_count": 198
+    }
+  ],
+  [
+    {
+      "post_id": "TpSFoqoG2M5MAAesg",
+      "title": "AI 2027: What Superintelligence Looks Like",
+      "word_count": 12239
+    },
+    {
+      "post_id": "GxhtzqMwdTHo6326y",
+      "title": "Statistical suggestions for mech interp research and beyond",
+      "word_count": 4443
+    },
+    {
+      "post_id": "YMo5PuXnZDwRjhHhE",
+      "title": "LessWrong's (first) album: I Have Been A Good Bing",
+      "word_count": 3170
+    },
+    {
+      "post_id": "w8jE7FRQzFGJZdaao",
+      "title": "Shutdown Resistance in Reasoning Models",
+      "word_count": 2663
+    },
+    {
+      "post_id": "aJ3NTJ6tM7yc49kQn",
+      "title": "Retrospective on my unsupervised elicitation challenge",
+      "word_count": 2383
+    },
+    {
+      "post_id": "Ckhek3mXXq7TWvvEh",
+      "title": "Lessons from a year of university AI safety field building",
+      "word_count": 2168
+    },
+    {
+      "post_id": "ZvQfcLbcNHYqmvWyo",
+      "title": "The paper that killed deep learning theory",
+      "word_count": 1794
+    },
+    {
+      "post_id": "ZRrYsZ626KSEgHv8s",
+      "title": "Self-driving car bets",
+      "word_count": 1419
+    },
+    {
+      "post_id": "BwfydMhjuroqiZs4x",
+      "title": "ControlAI 2025 Impact Report: our progress toward an international ban on ASI",
+      "word_count": 1157
+    },
+    {
+      "post_id": "bchjSwxBTxZBFXBXs",
+      "title": "The Local Interaction Basis: Identifying Computationally-Relevant and Sparsely Interacting Features in Neural Networks",
+      "word_count": 864
+    },
+    {
+      "post_id": "Av3frxNy3y3i2kpaa",
+      "title": "Does Circuit Analysis Interpretability Scale? Evidence from Multiple Choice Capabilities in Chinchilla",
+      "word_count": 611
+    }
+  ],
+  [
+    {
+      "post_id": "iKm2FhpWkuuBojm82",
+      "title": "Why I Left Google DeepMind",
+      "word_count": 10760
+    },
+    {
+      "post_id": "D7PumeYTDPfBTp3i7",
+      "title": "The Waluigi Effect (mega-post)",
+      "word_count": 4752
+    },
+    {
+      "post_id": "ywKhqjgdKuHoQohYL",
+      "title": "Takeaways from the Intelligence Rising RPG",
+      "word_count": 3605
+    },
+    {
+      "post_id": "5qyytGqZWv5bt6723",
+      "title": "The Power of High Speed Stupidity",
+      "word_count": 2829
+    },
+    {
+      "post_id": "LzeZW9PvR6Njc9ngr",
+      "title": "Whack-a-mole with a broken hammer: does a model internally track its automaton state?",
+      "word_count": 2512
+    },
+    {
+      "post_id": "qK79p9xMxNaKLPuog",
+      "title": "Apollo Research 1-year update",
+      "word_count": 2210
+    },
+    {
+      "post_id": "n3LAgnHg6ashQK3fF",
+      "title": "Takeaways from our robust injury classifier project [Redwood Research]",
+      "word_count": 1878
+    },
+    {
+      "post_id": "9ixerpx4DCQTaRYCz",
+      "title": "Five Types of “Corrigibility Projects” I Don’t Want to Fund",
+      "word_count": 1597
+    },
+    {
+      "post_id": "3zZjF3YKJ257x79mu",
+      "title": "What I Learned Running Refine",
+      "word_count": 1265
+    },
+    {
+      "post_id": "5kEezahvkEiQuWEfx",
+      "title": "Should we benchmark conceptual capabilities using judgment prediction tasks?",
+      "word_count": 1035
+    },
+    {
+      "post_id": "pLC3bx77AckafHdkq",
+      "title": "GPT-oss is an extremely stupid model",
+      "word_count": 383
+    },
+    {
+      "post_id": "FSm92N8bcDujRZPMH",
+      "title": "Formalizing Embeddedness Failures in Universal Artificial Intelligence",
+      "word_count": 105
+    }
+  ],
+  [
+    {
+      "post_id": "uMQ3cqWDPHhjtiesc",
+      "title": "AGI Ruin: A List of Lethalities",
+      "word_count": 9087
+    },
+    {
+      "post_id": "ysHERGduadwJFkKhS",
+      "title": "Lessons from organizing a technical AI safety bootcamp",
+      "word_count": 4821
+    },
+    {
+      "post_id": "aPeJE8bSo6rAFoLqg",
+      "title": "SolidGoldMagikarp (plus, prompt generation)",
+      "word_count": 3639
+    },
+    {
+      "post_id": "4q3kMfJHB4rxr3Z8m",
+      "title": "Small Steps Towards Proving Stochastic → Deterministic Natural Latent",
+      "word_count": 2897
+    },
+    {
+      "post_id": "NvtLJ5nawJ6akWEqH",
+      "title": "You can graft SDF changes from base models onto post-trained models",
+      "word_count": 2580
+    },
+    {
+      "post_id": "bXTNKjsD4y3fabhwR",
+      "title": "Conjecture: a retrospective after 8 months of work",
+      "word_count": 2259
+    },
+    {
+      "post_id": "LDsSqXf9Dpu3J3gHD",
+      "title": "Why I'm excited about Debate",
+      "word_count": 1978
+    },
+    {
+      "post_id": "kipMvuaK3NALvFHc9",
+      "title": "What an actually pessimistic containment strategy looks like",
+      "word_count": 1686
+    },
+    {
+      "post_id": "DgKyDTKeGcisEGCnH",
+      "title": "GPT-3.5 judges can supervise GPT-4o debaters in capability asymmetric debates",
+      "word_count": 1301
+    },
+    {
+      "post_id": "A5XTgYmGnqEDnJdzJ",
+      "title": "The curious case of Pretty Good human inner/outer alignment",
+      "word_count": 1175
+    },
+    {
+      "post_id": "AHBejZBsaTR6dkRHs",
+      "title": "AI-Written Critiques Help Humans Notice Flaws",
+      "word_count": 925
+    },
+    {
+      "post_id": "ZYddmLsTGaTLdXGwj",
+      "title": "Is behavioral safety \"solved\" in non-adversarial conditions?",
+      "word_count": 556
+    }
+  ],
+  [
+    {
+      "post_id": "WewsByywWNhX9rtwi",
+      "title": "Current AIs seem pretty misaligned to me",
+      "word_count": 8091
+    },
+    {
+      "post_id": "6Xgy6CAf2jqHhynHL",
+      "title": "What 2026 looks like",
+      "word_count": 4894
+    },
+    {
+      "post_id": "keiYkaeoLHoKK4LYA",
+      "title": "Six Dimensions of Operational Adequacy in AGI Projects",
+      "word_count": 3881
+    },
+    {
+      "post_id": "Gi8NP9CMwJMMSCWvc",
+      "title": "AI for Epistemics Hackathon",
+      "word_count": 3125
+    },
+    {
+      "post_id": "hMBTaFvAzdMNnj29c",
+      "title": "Evolutionary prompt optimization for SAE feature visualization",
+      "word_count": 2656
+    },
+    {
+      "post_id": "nwpyhyagpPYDn4dAW",
+      "title": "The Field of AI Alignment: A Postmortem, and What To Do About It",
+      "word_count": 2300
+    },
+    {
+      "post_id": "rTJrqtDLxAPxiW3sk",
+      "title": "My first year in AI alignment",
+      "word_count": 2077
+    },
+    {
+      "post_id": "4onALBNDff2LFPyNZ",
+      "title": "Learnings from starting an AI safety research team",
+      "word_count": 1849
+    },
+    {
+      "post_id": "2wbW2WY3bP9Jzn4R5",
+      "title": "Control monitors need alignment assessments too",
+      "word_count": 1413
+    },
+    {
+      "post_id": "vm7FRyPWGCqDHy6LF",
+      "title": "Dario Amodei’s prepared remarks from the UK AI Safety Summit, on Anthropic’s Responsible Scaling Policy",
+      "word_count": 1155
+    },
+    {
+      "post_id": "9FhweqMooDzfRqgEW",
+      "title": "Chatbot convinces Belgian to commit suicide",
+      "word_count": 858
+    },
+    {
+      "post_id": "fG2gFYX2Wo49tRrap",
+      "title": "Anthropic's JumpReLU training method is really good",
+      "word_count": 625
+    }
+  ],
+  [
+    {
+      "post_id": "Khmh3ghqaGEpmpC9r",
+      "title": "OpenAI Offers Straight-Laced Postmortem Of The HuggingFace Hack",
+      "word_count": 7644
+    },
+    {
+      "post_id": "LXQBcztrWKhtcgQfJ",
+      "title": "Current activation oracles are hard to use",
+      "word_count": 4902
+    },
+    {
+      "post_id": "k43v47eQjaj6fY7LE",
+      "title": "Solving the Mechanistic Interpretability challenges: EIS VII Challenge 2",
+      "word_count": 3883
+    },
+    {
+      "post_id": "2GxhAyn9aHqukap2S",
+      "title": "Looking back on my alignment PhD",
+      "word_count": 3319
+    },
+    {
+      "post_id": "QYmnkQyZD2fDjHCJ8",
+      "title": "Models don’t seem to be dishonest in the way humans are",
+      "word_count": 2690
+    },
+    {
+      "post_id": "8wXRuHQqCbRsbap6q",
+      "title": "11 Open Empirical Problems in Reward-Seeking",
+      "word_count": 2444
+    },
+    {
+      "post_id": "Z6Zz2vQHM5ReWqiZ5",
+      "title": "AI Safety at the Frontier: Paper Highlights of December 2025",
+      "word_count": 2169
+    },
+    {
+      "post_id": "2CoLkSdwirr2WnNH6",
+      "title": "(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits",
+      "word_count": 1835
+    },
+    {
+      "post_id": "4zGbB9dcdpiz4vaF6",
+      "title": "Lessons learned and review of the AI Safety Nudge Competition",
+      "word_count": 1403
+    },
+    {
+      "post_id": "QX4ScmPFbmyosWhw3",
+      "title": "Why did ChatGPT say that? Prompt engineering and more, with PIZZA.",
+      "word_count": 1131
+    },
+    {
+      "post_id": "LBKjnyKDEwEJ45Wjf",
+      "title": "Self-reward can elicit diverse model personas",
+      "word_count": 951
+    },
+    {
+      "post_id": "DQ4y5tvotag5KPzcu",
+      "title": "[Linkpost] Interpretability Dreams",
+      "word_count": 540
+    }
+  ],
+  [
+    {
+      "post_id": "vMNTWTDWLorDqd3LS",
+      "title": "Claude Opus 5.5: The System Card",
+      "word_count": 7088
+    },
+    {
+      "post_id": "6iPEuEnguEtmtaqyJ",
+      "title": "Function vectors as a model diffing tool: \n17 heads repair a bad fine-tune",
+      "word_count": 5183
+    },
+    {
+      "post_id": "rtp6n7Z23uJpEH7od",
+      "title": "SAEs are highly dataset dependent: a case study on the refusal direction",
+      "word_count": 4254
+    },
+    {
+      "post_id": "CCxB3e2oL8yeLKESH",
+      "title": "LASR Retrospective and Advice",
+      "word_count": 3212
+    },
+    {
+      "post_id": "EC5H7xakTgxxNXm5g",
+      "title": "Sanity Checks for Sanity Checks for Sparse Autoencoders",
+      "word_count": 2754
+    },
+    {
+      "post_id": "KerENNLyiqQ5ew7Kz",
+      "title": "The first AI Safety Camp & onwards",
+      "word_count": 2433
+    },
+    {
+      "post_id": "u9Kr97di29CkMvjaj",
+      "title": "Evaluating “What 2026 Looks Like” So Far",
+      "word_count": 2118
+    },
+    {
+      "post_id": "wYZMmdWEt5QLM3m3e",
+      "title": "Steering towards “automated grading” degrades alignment",
+      "word_count": 1843
+    },
+    {
+      "post_id": "HDXLTFnSndhpLj2XZ",
+      "title": "I'm leaving AI alignment – you better stay",
+      "word_count": 1405
+    },
+    {
+      "post_id": "czNgEuaxkXHL2g8mQ",
+      "title": "You should go to ML conferences",
+      "word_count": 1125
+    },
+    {
+      "post_id": "nB8KKapnWGBXtKKiM",
+      "title": "Brief independent investigation of agents’ behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident",
+      "word_count": 1010
+    },
+    {
+      "post_id": "BY8fBKR6sjiPXRBia",
+      "title": "The way AGI wins could look very stupid",
+      "word_count": 390
+    }
+  ],
+  [
+    {
+      "post_id": "znbfRXHq285nS7NAh",
+      "title": "The Terrarium",
+      "word_count": 6188
+    },
+    {
+      "post_id": "6ZnznCaTcbGYsCmqu",
+      "title": "The Rise of Parasitic AI",
+      "word_count": 5299
+    },
+    {
+      "post_id": "XHpta8X85TzugNNn2",
+      "title": "Broken Latents: Studying SAEs and Feature Co-occurrence in Toy Models",
+      "word_count": 4512
+    },
+    {
+      "post_id": "ySXuvJcqRindQwAk7",
+      "title": "How My Students Think About AI",
+      "word_count": 3478
+    },
+    {
+      "post_id": "ofYejKKiSFYH2gLBb",
+      "title": "Gemini 1.0",
+      "word_count": 2826
+    },
+    {
+      "post_id": "7zGgFPLaTXJwCJccB",
+      "title": "Practical Learnings from Synthetic Document Finetuning",
+      "word_count": 2503
+    },
+    {
+      "post_id": "xknjY568uQp4PGFcW",
+      "title": "Self-Control of LLM Behaviors by Compressing Suffix Gradient into Prefix Controller",
+      "word_count": 2174
+    },
+    {
+      "post_id": "dkdJDcTgyM2Kbyi5G",
+      "title": "A story on one possible future of AI-driven research",
+      "word_count": 1873
+    },
+    {
+      "post_id": "id8HHPNqoMQbmkWay",
+      "title": "SB-1047 Documentary: The Post-Mortem",
+      "word_count": 1490
+    },
+    {
+      "post_id": "tHxXdAn8Yuiy9y2pZ",
+      "title": "AI safety without goal-directed behavior",
+      "word_count": 1101
+    },
+    {
+      "post_id": "LhXW8ziwnn7Dd8edm",
+      "title": "A Toy Environment For Exploring Reasoning About Reward",
+      "word_count": 797
+    },
+    {
+      "post_id": "8Ggqf2t8WBtPw33K9",
+      "title": "Minerva",
+      "word_count": 635
+    }
+  ],
+  [
+    {
+      "post_id": "5CfBDiQNg9upfipWk",
+      "title": "Only Law Can Prevent Extinction",
+      "word_count": 5972
+    },
+    {
+      "post_id": "CoZhXrhpQxpy9xw9y",
+      "title": "Where I agree and disagree with Eliezer",
+      "word_count": 5436
+    },
+    {
+      "post_id": "9RL9MuGZjzm4q3gKG",
+      "title": "What just happened? A retrospective of AI alignment",
+      "word_count": 4750
+    },
+    {
+      "post_id": "PA7f9a9ZFcqpjmGEZ",
+      "title": "Dialogue with Eliezer Yudkowsky on Neural Networks",
+      "word_count": 3447
+    },
+    {
+      "post_id": "cYvxDjNrYyyjRdAzH",
+      "title": "Grading my 2022 predictions for 2025",
+      "word_count": 2815
+    },
+    {
+      "post_id": "YyAMz52wDxnLhwvWL",
+      "title": "Training Models to Predict and Explain Their In-the-Wild Behavior",
+      "word_count": 2497
+    },
+    {
+      "post_id": "ursraZGcpfMjCXtnn",
+      "title": "AutoInterpretation Finds Sparse Coding Beats Alternatives",
+      "word_count": 2158
+    },
+    {
+      "post_id": "LvswJts75fnpdjAEj",
+      "title": "MATS mentor selection",
+      "word_count": 1716
+    },
+    {
+      "post_id": "y7TpjDtKFcJSGzunm",
+      "title": "Why LLMs Aren't Scientists Yet.",
+      "word_count": 1574
+    },
+    {
+      "post_id": "8qytxHWzSsdsyTfmZ",
+      "title": "Principles for Meta-Science and AI Safety Replications",
+      "word_count": 1093
+    },
+    {
+      "post_id": "h8FKusANBWfnNoTyc",
+      "title": "\nMy Minor AI Safety Research Projects (Q3 2025)",
+      "word_count": 693
+    },
+    {
+      "post_id": "Zq2HaihaDy7sSarMz",
+      "title": "How bad a future do ML researchers expect?",
+      "word_count": 659
+    }
+  ]
+]
