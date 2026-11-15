@@ -17,7 +17,7 @@ def test_every_scene_is_well_formed_and_points_at_real_things():
     ids = [scene["id"] for scene in scenes]
     assert len(ids) == len(set(ids))
     for scene in scenes:
-        assert scene["kind"] in {"card", "page", "terminal", "file"}, scene["id"]
+        assert scene["kind"] in {"card", "page", "terminal", "file", "datasette"}, scene["id"]
         assert len(scene["narration"].split()) >= 10, scene["id"]
         if scene["kind"] == "file":
             path = REPO_ROOT / scene["path"]
@@ -29,6 +29,9 @@ def test_every_scene_is_well_formed_and_points_at_real_things():
             assert scene["beats"] and all(beat["say"].strip() for beat in scene["beats"]), scene["id"]
         if scene["kind"] == "terminal":
             assert scene["commands"], scene["id"]
+            assert all(1 <= position <= len(scene["commands"]) for position in scene.get("expect_fail", [])), scene["id"]
+        if scene["kind"] == "datasette":
+            assert scene["beats"][0].get("path", "").startswith("/"), scene["id"]
         assert scene["narration"] == " ".join(beat["say"] for beat in scene["beats"]), scene["id"]
 
 
@@ -37,7 +40,7 @@ def test_page_actions_only_use_controls_values_and_entries_that_exist():
     entries = build_demo.wikilib.load_entries(REPO_ROOT / "entries")
     by_id = {entry.id: entry for entry in entries}
     catalogue = {field["path"]: field for field in build_demo.build_site.field_catalogue()}
-    known = {"tick", "untick", "type", "clear", "open", "show_field", "scroll", "scroll_to", "scroll_top"}
+    known = {"tick", "untick", "type", "clear", "open", "show_field", "scroll", "scroll_to", "scroll_top", "scroll_panel", "panel_top"}
     for scene in build_demo.load_scenes()["scenes"]:
         for beat in scene["beats"]:
             for action in beat["actions"]:
@@ -64,6 +67,26 @@ def test_demo_runs_five_to_seven_minutes_at_speaking_pace():
     demo = build_demo.load_scenes()
     seconds = sum(build_demo.estimate_seconds(scene, demo["words_per_minute"]) for scene in demo["scenes"])
     assert 5 * 60 <= seconds <= 7 * 60, seconds
+
+
+def test_the_short_cut_fits_a_five_minute_limit_and_still_tells_the_story():
+    """The sprint asks for a video of three to five minutes; the maintainer asked for five to seven. Both are built."""
+    demo = build_demo.load_scenes()
+    kept = [scene for scene in demo["scenes"] if scene.get("short", True)]
+    seconds = sum(build_demo.estimate_seconds(scene, demo["words_per_minute"]) for scene in kept)
+    assert 3 * 60 <= seconds <= 5 * 60, seconds
+    ids = {scene["id"] for scene in kept}
+    # the problem, the page, the question it is for, both write paths' guard, the finding and the close all stay
+    assert {"s01-title", "s03-browse", "s05-entry", "s08-answer", "s10-contribute", "s11-validate", "s16-finding", "s17-close"} <= ids
+
+
+def test_a_terminal_scene_shows_the_command_before_its_output(tmp_path):
+    scene = {"id": "x", "kind": "terminal", "commands": ["echo first-output", "echo second-output"]}
+    pages, record = build_demo.terminal_html(scene, tmp_path)
+    assert len(pages) == 3 and [item["exit_code"] for item in record] == [0, 0]
+    assert "echo first-output" in pages[0] and ">first-output" not in pages[0].replace("echo first-output", "")
+    assert "first-output" in pages[1].replace("echo first-output", "") and "second-output" not in pages[1]
+    assert "second-output" in pages[2].replace("echo second-output", "")
 
 
 def test_paths_with_the_users_name_are_kept_off_screen(tmp_path):
