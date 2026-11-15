@@ -10,6 +10,29 @@ What is left for you to do is in `TODO.md`, shortest task first. This file recor
 Every "verified" below was run in this build session on 2026-11-14. Where
 something was not run, it says so.
 
+**Verification pass, 2026-11-15.** At your request every function was then
+exercised with the demo's recording method (a headless browser, a frame per
+step), including what the demo leaves out. The result is `VERIFICATION.md`:
+every check passed and the run left this repository unchanged. Statuses below
+that this pass changed say so, with what they were before. What the pass
+found and fixed is in the decision log (DEC-64 to DEC-69). Rerun it with
+`make verify` (add `PLUGIN=1` for the live Claude Code checks).
+
+**Cold reviews, 2026-11-15.** Also at your request, two reviewers who were told
+nothing about the project looked at it: one read the demo's frames and
+narration as a first-time viewer, and fresh Claude Code sessions used the
+plugin as a first-time user would. What they found and what was changed is in
+DEC-70 to DEC-79. Three changes touch things stated below, so read these first:
+
+| Changed | Now | Was |
+|---|---|---|
+| Who the five reference entries are attributed to | `contributor.type: agent` until you verify them (DEC-71; confirm or undo in `TODO.md` T11) | `contributor.type: human` with a note |
+| The handle on every entry | Your `gh` login (DEC-72; T11) | The placeholder `HANDLE-TBD` |
+| Live runs of the `contribute` and `review` skills through the plugin | Done, in a scratch clone with no remote (DEC-75) | Never run through the plugin |
+
+So wherever this file says "10 agent-written", the page now shows 15: the ten
+entries the `contribute` skill wrote and the five reference drafts.
+
 ---
 
 ## 1. Definition of done, D1–D8
@@ -21,8 +44,8 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 | D1 | An LLM can contribute | **PASS locally · pull request UNVERIFIED** | Skill drafts → validator → branch → merge worked for 10 entries. No pull request was opened: there is no remote. |
 | D2 | A person can contribute | **BUILT · live run UNVERIFIED** | Issue form and workflow exist; the form-to-entry conversion passes its tests. The workflow has never run on GitHub. |
 | D3 | A person or agent can review | **PASS locally · pull request UNVERIFIED** | An agent review changed `fe-2026-0007` from unreviewed to reviewed, with reviewer, date and notes, in its own commit. The human review is yours to do (T4). |
-| D4 | Browse and filter by hand | **PASS by test · not seen in a browser or on a port** | Both UIs list all 15 entries and filter on every field. The sandbox could not open a browser or listen on a port. |
-| D5 | An agent can ask "what's been tried?" | **PASS for the skill and the MCP server · inside Claude Code UNVERIFIED** | 7 answers in the required five-part format, two of them an honest "not found". The MCP server was started as a real process and answered over stdio. The plugin was never loaded into Claude Code. |
+| D4 | Browse and filter by hand | **PASS, seen in a browser and on a port** (2026-11-15; was "PASS by test · not seen in a browser or on a port") | Both UIs list all 15 entries and filter on every field. Every value of every field was ticked in a real browser and compared with the entry files; Datasette was rendered in process and on a local port. |
+| D5 | An agent can ask "what's been tried?" | **PASS, including inside Claude Code** (2026-11-15; was "inside Claude Code UNVERIFIED") | 7 answers in the required five-part format, two of them an honest "not found". The plugin was then loaded in headless Claude Code sessions: six tools, three skills, a live search, and the `ask` skill answering one question through the plugin's tools. |
 | D6 | The wiki is seeded | **PASS for 9 posts by your rule · the 10th is an exception awaiting your call** | 15 entries; every quote is 15 words or fewer and was found in the fetched post. One post does not meet your qualification rule (T3). |
 | D7 | Validation guards the wiki | **PASS locally · GitHub Action UNVERIFIED** | The validator rejects every class of bad entry in tests, and rejected two real skill drafts during seeding. The Action has never run. |
 | D8 | Skill evals run | **PASS, results PROVISIONAL** | `make evals` writes a results file. Numbers are provisional until you verify the gold entries. |
@@ -44,13 +67,14 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 - **See it:** `.venv/bin/python tools/cli.py get fe-2026-0006` shows the badges `agent-written`, `unreviewed`, `retry-welcome`.
 - **UNVERIFIED, and how to verify:**
   1. A real pull request. After T6, run the skill on a new post and `submit_entry` will push the branch and run `gh pr create`. That code path has never run.
-  2. The plugin loaded in Claude Code (T8).
+  2. The plugin loaded in Claude Code (T8). *Verified 2026-11-15 for loading, the tools and the `ask` skill (`VERIFICATION.md`, the `plugin-…-live` checks). The `contribute` skill has still not been run live through the plugin.*
   3. The subagents had no command access, so they read the post from the cache the orchestrator prepared, not through `fetch_source`, and the orchestrator ran the submit step with their drafts.
 
 ### D2. A person can contribute
 
 - **Built:** `.github/ISSUE_TEMPLATE/new-entry.yml`, `.github/workflows/issue-to-pr.yml`, `tools/issue_to_entry.py`.
 - **Verified:** `.venv/bin/python -m pytest tests/test_issue_to_entry.py -q` → 6 passed. The tests feed a realistic issue-form body and check the result is a schema-valid entry with `contributor.type: human`, that the form's labels and dropdowns match the schema, and that bad forms are refused with a readable reason.
+- **Verified 2026-11-15:** form text built from the form's own labels was run through the converter in a throwaway clone: it produced a valid entry marked human-written and unreviewed, every field came through unchanged, and unticked boxes or a value outside a closed list were refused with the reason (`VERIFICATION.md`: `issue-form`, `issue-form-refusals`, `issue-form-round-trip`).
 - **UNVERIFIED:** the workflow has never run. No test issue was filed: there is no repository to file it in, and an entry filed by an agent must not sit in the wiki as a person's (DEC-43).
 - **To verify:** T6, steps 3–5. Fallback if the Action fails: copy an entry file by hand, `make validate`, open a pull request.
 
@@ -59,6 +83,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 - **What ran:** a Sonnet subagent followed `plugin/skills/review/SKILL.md` on `fe-2026-0007`, checked 11 items against the post and decided `reviewed`. The orchestrator recorded that decision with `tools/cli.py review` (the function behind the MCP tool `review_entry`).
 - **Evidence:** `git log --oneline --grep "Review fe-2026-0007"` shows the review commit on branch `review/fe-2026-0007-20261114` and its merge. `entries/fe-2026-0007.md` has `review.status: reviewed` and a reviewer with `type: agent`, the date, the model and notes.
 - **Read this:** that review was done by the same model that wrote the entry. The notes say so, and the web page labels it "Reviewed by an agent only". Treat it as a demonstration of the mechanism, not as vetting.
+- **Verified 2026-11-15, in a throwaway clone:** a human review marking an entry contested and an agent review marking one reviewed, each on its own branch and merged through validation; and a draft that claimed to be human-written and already reviewed was still stamped agent-written and unreviewed (`VERIFICATION.md`: `review-contested`, `review-by-agent`, `submit-cannot-self-promote`).
 - **Your human review:** T4.
 
 ### D4. Browse and filter by hand
@@ -71,12 +96,15 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
   - the filter logic passes 37 checks in a real JavaScript engine (`tests/js/filter_test.js`);
   - the page's own script was executed against a stand-in DOM: it rendered one card per entry and reacted to search, a facet tick and "clear" (`tests/js/dom_test.js`);
   - entry text containing `</script>` cannot break out of the page.
-- **NOT verified:** nobody has looked at it in a browser. The sandbox blocks opening one. Layout, colours and real click behaviour are unseen. Open it and click through before recording.
+- **Was not verified on 2026-11-14:** nobody had looked at it in a browser; the sandbox blocked opening one.
+- **Verified 2026-11-15 in a real browser engine** (headless Chromium, `tests/test_e2e_browser.py`, run by `make test`): every value of every facet field ticked and the cards compared with the entry files; every range field; search; combined filters; clear; every value written to a link and read back; the full view of every entry; badges and links on every card; the phone layout; the dark scheme; hostile text. Screenshots of each state were looked at (`--snap-dir`). Looking found four defects that no earlier test had, all fixed (DEC-65): an opened entry closed on any filter change and never reached the link; the committed page was stale; on a phone every filter group sat open above the first result; one link test compared two empty lists.
+- **Still unseen:** the page in Safari or Firefox, and by a person. Chromium is the only engine it has run in.
 
 **Datasette**
 
 - **Verified on the real entries:** `make datasette-check` runs Datasette in process and prints a listing, the facets and one filter of each kind (enum, array, boolean, date range, number range, full-text). Output from this build: 15 entries; 10 agent-written; `failure_type = hypothesis_false AND method contains sae` → `fe-2026-0007`, `0012`, `0014`; search "steganography" → `fe-2026-0010`, `0011`.
-- **NOT verified:** serving on a port (`make datasette`, then http://localhost:8001/wiki/entries). The sandbox forbids listening sockets.
+- **Was not verified on 2026-11-14:** serving on a port; the sandbox forbade listening sockets.
+- **Verified 2026-11-15:** Datasette's own pages rendered in a browser twice, answered in process and served on a local port as `make datasette` does: the table with facets, a facet link, list-field filters and full-text search, each compared with the entry files (`VERIFICATION.md`, the `datasette-…` checks).
 
 **Recommendation: use the web page for the demo.** It shows what the project is about at a glance: badges, the "awaiting verification" notes, quotes and scoped claims on every card, with no server to start. Show Datasette for ten seconds as the path for power users and agents (SQL, JSON, facets on any column).
 
@@ -88,8 +116,9 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 - **MCP server, verified:** `make mcp-smoke` starts the server through `plugin/mcp/run.sh` (the launcher the plugin uses), connects over stdio, lists the six tools and runs a search. It returned 5 matches of 10 entries at the time, with badges.
 - **See it yourself without the plugin:**
   `.venv/bin/python tools/cli.py search "steer evaluation awareness direction to stop sandbagging"`
+- **Verified 2026-11-15, inside Claude Code:** headless sessions started with `--plugin-dir plugin` listed the six tools and the three skills, ran a live search, and ran the `ask` skill on the steering question: it searched through the plugin's tools, answered from `fe-2026-0005` with its trust labels, and listed what the wiki does not cover. One question, one run: it shows the path works, not how often the answer is right.
 - **UNVERIFIED:**
-  1. Inside Claude Code (T8).
+  1. Inside Claude Code (T8). *See the line above: done on 2026-11-15, headless. An interactive session is still yours to try.*
   2. The eval subagents had no command access. They read the tools' saved JSON output (facets, a full listing, each entry) instead of calling them, so they could not run keyword searches. With 10 entries a full listing is what the skill asks for anyway, but keyword search by an agent was not exercised. The orchestrator ran searches by hand and they rank the right entry first.
 
 ### D6. The wiki is seeded
@@ -113,6 +142,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 
 - **Verified:** `.venv/bin/python -m pytest tests/test_validate.py -q` → one failing fixture for each class: schema, closed list, missing source URL, quote not in source, quote over 15 words, duplicate ID, ID not matching file name, review without reviewer.
 - **Verified in real use:** the two rejected skill drafts (D1).
+- **Verified 2026-11-15 from the command line:** nine kinds of broken entry each refused with the expected reason, and a draft with an invented quote refused by the submit path with no branch or file created (`VERIFICATION.md`, the `validate-…` checks and `submit-rejected`).
 - **Try it:** change `failure_type` in any entry to `bad_luck` and run `make validate`. It exits 1 and names the field.
 - **UNVERIFIED:** `.github/workflows/validate.yml` has never run. It runs on the first push.
 
@@ -125,7 +155,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
   - The full table and every mismatch are in `evals/results/RESULTS.md`.
 - `make evals` re-scores saved outputs and calls no model. Producing the outputs and the grades is a model step, documented in `evals/README.md`.
 
-**Whole test suite:** `make test` → 101 passed.
+**Whole test suite:** `make test` → 101 passed on 2026-11-14. It has grown since (browser tests, verification-spec tests); `VERIFICATION.md` records the current run under `test-suite`.
 
 ---
 
