@@ -162,6 +162,8 @@
       var label = el("label", "range-bound", bound === "min" ? "from " : "to ");
       var input = document.createElement("input");
       input.type = field.kind === "date" ? "date" : "number";
+      input.setAttribute("data-range", field.path);
+      input.setAttribute("data-bound", bound);
       if (field.kind === "number") { input.step = "any"; }
       input.value = (state.ranges[field.path] || {})[bound] || "";
       input.addEventListener("input", function () {
