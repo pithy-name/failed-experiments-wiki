@@ -7,8 +7,8 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 - **Narration** is written for you to read aloud, in your voice. Change any of it in `demo/scenes.yaml`.
 - **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.
 - **Update when** flags lines that are true today and will need changing as the project moves.
-- Timings are estimated at 150 words a minute, plus 0.9 s of pause per scene.
-- Narration length: 891 words.
+- Timings are estimated at 175 words a minute, plus 0.9 s of pause per scene. A built video's measured timings are in `demo/out/timings.json`; the text-to-speech voice runs a little faster than the estimate.
+- Narration length: 1171 words.
 
 ## What the draft video is, and is not
 
@@ -16,161 +16,173 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 - A headless browser is driven through the real browse page with real clicks, typing and scrolling. A frame is captured after every step and the frames are joined into a video.
 - It is not a capture of a person's screen. The orange pointer ring and the outline around a field are drawn by the recorder, and motion is step by step, not continuous.
 - The caption bar shows the narration. A voice, when present, is macOS text-to-speech: a scratch track for pacing. Record your own over it (`--no-captions` gives a clean picture), or re-record live with `demo/live-demo-script.md`.
-- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent, and the narration says so where it matters.
+- It shows no GitHub screens, because the project has no GitHub repository yet. The narration says so in the scenes where a viewer would otherwise assume one (the file scene, the form scene and the close).
+- The Claude Code session it shows is a saved transcript of a real headless session with the plugin loaded (`demo/answers/plugin-session.md`), not a live capture. The two `ask` answers on screen are saved files too; each scene's note says where its file came from.
+- Scenes marked *(not in the short cut)* are left out by `--short`, which builds `demo/out/demo-short.mp4` for places that ask for a video of five minutes or less.
 
 ## Scenes
 
-### 1. `s01-title` · 0:00–0:23 (23 s)
+### 1. `s01-title` · 0:00–0:29 (29 s)
 
 **On screen:** Title card: A wiki of failed AI-safety experiments
 
 **Narration:**
 
-> AI-safety researchers have no shared place to see what others already tried, and where it failed. Failed experiments stay in file drawers or scattered posts, so people repeat dead ends. This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents can both write to, and both read.
+> When an AI-safety experiment does not work, the result usually stays in a file drawer, or in a post nobody can find. For AI safety, we found no shared record of what was tried and where it failed. So the next team repeats the dead end, and scarce safety compute goes to ideas that were already ruled out. This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents both write to, and both read.
 
-### 2. `s02-idea` · 0:23–0:56 (33 s)
+### 2. `s02-idea` · 0:29–1:04 (35 s)
 
-**On screen:** Title card: Three ideas
+**On screen:** Title card: Less wrong, one experiment at a time
 
 **Narration:**
 
-> Three ideas shape it. First, blameless: entries describe experiments, never the people who ran them. Second, trust is visible: every entry shows who wrote it, a person or an agent and which model, what evidence it rests on, and whether anyone has reviewed it. Third, a failure is scoped. One thin report should not steer the field away from a good idea, so each entry says exactly what was tested, and how confident we can be that it really doesn't work.
+> It starts with LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work. Its own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at. The habit, never the person: entries describe experiments, and do not judge whoever ran them. Every entry shows who wrote it, a person or an AI agent and which model, and whether anyone has checked it. And every failure is scoped, so one thin report is not read as: this never works.
 
-### 3. `s03-browse` · 0:56–1:17 (21 s)
+### 3. `s03-browse` · 1:04–1:32 (28 s)
 
 **On screen:** The browse page in a headless browser: scroll down 420 px; scroll to `fe-2026-0006`; scroll back to the top.
 
 **Narration:**
 
-> This is the wiki as a single web page, built from Markdown files. Fifteen entries so far, all taken from real LessWrong and Alignment Forum posts. Each card carries badges: agent-written, unreviewed, retry welcome. The first five carry a note saying they are model drafts that I still have to verify.
+> This is the wiki: one web page built from plain text files, with no server. Fifteen entries so far, each taken from a real LessWrong or Alignment Forum post. Badges say how far to trust each one: written by an agent, not yet reviewed, open to a retry. The first five are meant to become my own reference entries. For now they are model drafts, labelled as written by an agent until I verify them, and each card says so.
 
 **Update when:** The last sentence goes once the gold entries are verified. The count changes if entries are added.
 
-### 4. `s04-filter` · 1:17–1:31 (14 s)
+### 4. `s04-filter` · 1:32–1:49 (17 s)
 
-**On screen:** The browse page in a headless browser: tick **failure type → hyperparams_unexplored**; untick **failure type → hyperparams_unexplored**; tick **badges → agent-written**; tick **failure type → hypothesis_false**; click **Clear all filters**; type `steganography` in the search box.
+**On screen:** The browse page in a headless browser: scroll the filter panel to show more fields; scroll the filter panel back to the top; tick **failure type → hyperparams_unexplored**; untick **failure type → hyperparams_unexplored**; tick **badges → agent-written**; tick **failure type → hypothesis_false**; click **Clear all filters**; type `steganography` in the search box.
 
 **Narration:**
 
-> Every field is a filter. Here are the failures where the hyperparameters were never properly explored. Here, entries an agent wrote where the hypothesis itself looks false. And full-text search across every field.
+> Every field is a filter: the result, the method, the model, who wrote it, the source, the dates. Here are the failures where the settings were never properly explored. Here, entries an agent wrote where the hypothesis itself looks false. And a search across every field.
 
-### 5. `s05-entry` · 1:31–2:04 (33 s)
+### 5. `s05-entry` · 1:49–2:21 (32 s)
 
 **On screen:** The browse page in a headless browser, starting from the link `#q=steganography`: open **All fields** on `fe-2026-0010`; scroll to **quote** and outline it; scroll to **claim scope** and outline it; scroll to **confidence true negative** and outline it; scroll to **retry welcome** and outline it; scroll to **limitations** and outline it.
 
 **Narration:**
 
-> Open one. It links the original post, and carries a short quote that a validator found, word for word, in that post. Claim scope says exactly what was tested: one setup, one small model, two hundred training steps. Confidence that this is a true negative: low. Retry welcome: yes. That matters: the entry records the author's own view that a better setup would very likely succeed. So it warns you about a pitfall, without telling you the idea is dead.
+> Open one. It links the original post, and carries a short quote that a program found, word for word, in that post. Claim scope says exactly what was tested: one setup, one small model, two hundred training steps. Confidence that this is a true negative, meaning the idea really fails and the test was not just weak: low. Retry welcome: yes. The entry records the post's own view that a stronger setup would very likely succeed. So it warns you about a pitfall, without telling you the idea is dead.
 
-### 6. `s06-file` · 2:04–2:20 (16 s)
+### 6. `s06-file` · 2:21–2:36 (16 s) *(not in the short cut)*
 
-**On screen:** File `entries/fe-2026-0005.md`, lines 1–28
-
-**Narration:**
-
-> Underneath, an entry is one Markdown file with structured fields. It is readable on GitHub as it is, and every change to it goes through git, so the history of what was agreed, and why, is kept.
-
-### 7. `s07-ask` · 2:20–2:46 (26 s)
-
-**On screen:** Terminal, real output of: `python tools/cli.py search "steer evaluation awareness direction to stop sandbagging" --brief --limit 3`; `python tools/mcp_smoke.py 2>/dev/null | grep -E '^(tools|search_entries|list_facets)'`
+**On screen:** File `entries/fe-2026-0005.md`, lines 1–18, then 34–51
 
 **Narration:**
 
-> Now the question this is for. Say I am planning an experiment: steer a model along a direction for "it thinks it is being evaluated", to stop it sandbagging. What has been tried? Agents reach the wiki through a local MCP server, with search, get and facet tools. The same tools are on the command line, and the right entry ranks first.
+> Underneath, an entry is one text file with structured fields: the hypothesis, exactly what was tested, the result, the kind of failure, and its limits. Every change to it goes through git, so the history of what was agreed, and why, is kept.
 
-### 8. `s08-answer` · 2:46–3:09 (24 s)
+### 7. `s07-ask` · 2:36–2:55 (18 s)
 
-**On screen:** File `demo/answers/steering.md`, lines 1–6, then 8–15, then 17–19
+**On screen:** Terminal, real output of: `python tools/cli.py search "steer evaluation awareness direction to stop sandbagging" --brief --limit 3`
 
 **Narration:**
 
-> And this is what the ask skill wrote for that plan. Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found. Every claim cites an entry ID. It says how weak the evidence is, a single unreviewed report with low confidence, and what a better attempt would need.
+> Now the question this is for. Say a researcher plans to steer a model along a direction for "it thinks it is being evaluated", to stop it sandbagging, that is, underperforming on purpose. Has that been tried? A plain keyword search already ranks first the one entry that tested exactly this.
 
-**Note:** The answer on screen was written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. It is not one of the eval answers (those were written when the wiki held 10 entries) and no judge has scored it; the orchestrator read it against the entry it cites.
+### 8. `s07b-plugin` · 2:55–3:13 (18 s) *(not in the short cut)*
 
-### 9. `s09-notfound` · 3:09–3:28 (18 s)
+**On screen:** File `demo/answers/plugin-session.md`, lines 1–18
 
-**On screen:** File `demo/answers/debate.md`, lines 1–16
+**Narration:**
+
+> AI agents reach the wiki through a plugin for Claude Code. This is a real session with the plugin loaded. The agent lists the six tools the wiki gives it, to search, read, submit and review, then runs a search through them, and reports that both entries it found are unreviewed.
+
+**Note:** A saved transcript of a real headless Claude Code session with the plugin loaded, run on 2026-11-15 with only the wiki's own tools available. `make verify PLUGIN=1` repeats it.
+
+### 9. `s08-answer` · 3:13–3:48 (35 s)
+
+**On screen:** File `demo/answers/steering.md`, lines 1–7, then 9–19, then 29–38
+
+**Narration:**
+
+> And this is what the ask skill, a set of instructions the agent follows, wrote for that plan, working through the plugin. Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found. Every claim cites an entry. It does not turn a weak result into a verdict: the dose was gentle, so it says this is not evidence that the idea fails. It ends by saying that all of it rests on one unreviewed entry. This answer was written for the demo, and is not one of the scored ones.
+
+**Note:** Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. It is not one of the scored answers (those were written when the wiki held 10 entries) and no judge has scored it; every statement in it was read against the two entries it cites.
+
+### 10. `s09-notfound` · 3:48–4:04 (16 s) *(not in the short cut)*
+
+**On screen:** File `demo/answers/debate.md`, lines 1–17
 
 **Narration:**
 
 > Ask about something the wiki does not cover, here debate with human judges, and it says so plainly: nothing matches, and that means nobody has filed an entry, not that the idea is untested. It does not fill the gap from its own memory.
 
-**Note:** Written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. Not one of the eval answers.
+**Note:** Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. Not one of the scored answers.
 
-### 10. `s10-contribute` · 3:28–3:48 (20 s)
+### 11. `s10-contribute` · 4:04–4:23 (19 s)
 
-**On screen:** Terminal, real output of: `git log --graph --format='%h %s' --grep='fe-2026-001[2-5]' | cut -c1-112`
+**On screen:** Terminal, real output of: `git log --graph --format='%h %s' --grep='fe-2026-0012'`; `grep -A5 -E '^(contributor|review):' entries/fe-2026-0012.md`
 
 **Narration:**
 
-> Agents also write. The contribute skill reads a post, drafts one entry for each failed experiment, and submits it. Each submission lands on its own branch, and merges only if validation passes. The agent cannot set its own trust fields: the system stamps the entry as agent-written and unreviewed.
+> Agents also write. The contribute skill reads a post, drafts one entry for each failed experiment, and submits it. Each submission lands on its own branch, and merges only if validation passes. The agent cannot set its own trust fields. The system stamps the entry: written by an agent, which model, and unreviewed.
 
 **Update when:** With a GitHub remote, show the pull request instead of the local branch graph.
 
-### 11. `s11-validate` · 3:48–4:12 (23 s)
+### 12. `s11-validate` · 4:23–4:43 (20 s)
 
-**On screen:** Terminal, real output of: `sed 's/^failure_type: .*/failure_type: bad_luck/' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md`; `python tools/validate.py $TMP/fe-2026-0008.md --quotes cached`; `python tools/validate.py --quotes cached`
+**On screen:** Terminal, real output of: `sed 's/^failure_type: .*/failure_type: bad_luck/' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md; python tools/validate.py $TMP/fe-2026-0008.md --quotes cached`; `sed 's/^  quote: .*/  quote: This sentence is not in the post./' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md; python tools/validate.py $TMP/fe-2026-0008.md --quotes cached`; `python tools/validate.py --quotes cached`
 
 **Narration:**
 
-> One validator guards every path. Here I change a failure type to a value that is not on the list, and it refuses. It also fetches the post and checks that the quote is really there. During seeding it rejected two of the agent's own drafts for a wrong field type. They were fixed and resubmitted.
+> One validator guards every path. Change a failure type to a value that is not on the list, and it refuses. Change the quote to a sentence the post never said, and it refuses that too. It checks every quote against the text of the post, here from a saved copy. All fifteen real entries pass.
 
-### 12. `s12-human` · 4:12–4:31 (19 s)
+### 13. `s12-human` · 4:43–5:01 (17 s) *(not in the short cut)*
 
 **On screen:** File `.github/ISSUE_TEMPLATE/new-entry.yml`, lines 1–26
 
 **Narration:**
 
-> People contribute with a GitHub issue form. No git needed. A workflow turns the form into an entry and a pull request, marked as written by a person. The form and the workflow are built and tested locally. They have not run on GitHub yet.
+> People contribute by filling in a form, with no git needed. A script turns the form into an entry marked as written by a person. The form and the script are tested on this machine. There is no GitHub repository yet, so the form has not run there.
 
 **Update when:** Drop the last two sentences, and show the real issue and pull request, once the workflow has run on GitHub.
 
-### 13. `s13-review` · 4:31–4:53 (22 s)
+### 14. `s13-review` · 5:01–5:22 (21 s) *(not in the short cut)*
 
-**On screen:** Terminal, real output of: `git log --date=short --format='%h %ad %s' --grep='Review fe-2026-0007' | cut -c1-112`; `grep -A7 '^review:' entries/fe-2026-0007.md | cut -c1-112`
-
-**Narration:**
-
-> Review is a separate step. A person or an agent checks an entry against its post and records the outcome: who reviewed, when, and what they checked. This one was reviewed by an agent, the same model that wrote it. The record says so, and the page labels it "reviewed by an agent only".
-
-**Update when:** Add your own human review here once it is done.
-
-### 14. `s14-datasette` · 4:53–5:02 (8 s)
-
-**On screen:** Terminal, real output of: `python tools/datasette_check.py | cut -c1-112 | head -22`
+**On screen:** Terminal, real output of: `git log --date=short --format='%h %ad %s' --grep='Review fe-2026-0007'`; `grep -A10 '^review:' entries/fe-2026-0007.md`
 
 **Narration:**
 
-> For people who want SQL and JSON, the same entries load into Datasette, with a facet on every field.
+> Review is a separate step. A person or an agent checks an entry against its post, and records who reviewed, when, and what they checked. This one was reviewed by an agent, the same model that wrote it. The record names the model, and the page labels it: reviewed by an agent only. No person has reviewed an entry yet.
 
-### 15. `s15-evals` · 5:02–5:27 (25 s)
+**Update when:** Add your own human review here once it is done, and drop the last sentence.
 
-**On screen:** Terminal, real output of: `cp -R evals/results $TMP/results && python evals/run_evals.py --results $TMP/results`; `grep -E 'Field|failure_type|retry_welcome|method|checks_done|hypothesis|claim_scope|limitations' $TMP/results/RESULTS.md | head -8 | cut -c1-80`
+### 15. `s14-datasette` · 5:22–5:33 (10 s) *(not in the short cut)*
+
+**On screen:** Datasette's own pages in the headless browser, served in process: `/wiki/entries`; `/wiki/entries?failure_type=hypothesis_false`
 
 **Narration:**
 
-> The skills are evaluated with one command. The contribute skill's drafts are compared, field by field, with five reference entries: seventy-eight percent agreement overall. The ask skill passed six of seven questions. These numbers are provisional. The reference entries are still model drafts that I have to verify, and five posts with one model vendor is a spot-check, not a benchmark.
+> For people who want a table, SQL and JSON, the same entries load into Datasette. It offers a facet on every field, and one click filters the table.
+
+### 16. `s15-evals` · 5:33–6:04 (32 s) *(not in the short cut)*
+
+**On screen:** Terminal, real output of: `cp -R evals/results $TMP/results && python evals/run_evals.py --results $TMP/results`; `grep -E 'Overall field accuracy|^. Field|failure_type|source.url|models.name|.method.|checks_done|hypothesis|claim_scope|limitations' $TMP/results/RESULTS.md | cut -c1-96 | head -10`
+
+**Narration:**
+
+> The skills are scored with one command. The contribute skill's drafts are compared, field by field, with five reference entries: seventy-eight percent agreement overall. Source fields agree fully. Free-text tags never matched exactly: zero percent, because two careful readers pick different words. The ask skill passed six of seven questions, scored when the wiki held ten entries. The miss was a detail the entry does not state. These numbers are provisional. The reference entries are still model drafts, and one company's models wrote the drafts, the references and the grades.
 
 **Update when:** Re-run after the gold entries are verified, and say the new numbers. Drop 'provisional' only then.
 
-### 16. `s16-finding` · 5:27–5:53 (26 s)
+### 17. `s16-finding` · 6:04–6:33 (29 s)
 
 **On screen:** Title card: A finding from building it
 
 **Narration:**
 
-> Building it produced a finding. From two hundred and twelve candidate posts, classifiers found forty-nine genuine write-ups of failed experiments. Only nine stated enough to fill a structured entry. What was missing most often: what the authors expected, and exactly what they tested. Those are the same two things a reader needs, to avoid reading a failure report as "this never works".
+> Building it produced a finding. A small model labelled two hundred and twelve candidate posts, and judged forty-nine to be genuine write-ups of failed experiments. A stronger model then checked each of those, field by field. Only nine stated enough to fill a structured entry. What the other forty most often left out: what the authors expected, and exactly what they tested. Those are the same two things a reader needs, to avoid reading a failure report as: this never works.
 
-### 17. `s17-close` · 5:53–6:11 (18 s)
+### 18. `s17-close` · 6:33–6:57 (24 s)
 
-**On screen:** Title card: Next
+**On screen:** Title card: Where it stands, and what comes next
 
 **Narration:**
 
-> Next steps are a public site, a hosted server so agents can connect without cloning the repository, and asking authors to confirm their entries or opt out. The aim is simple: each experiment can be less wrong than the one before it. Thank you.
+> This is a local proof of concept. It is not public yet. Before it is, the authors of these posts get asked: they can confirm their entries, or opt out. After that, a public site, and a hosted server so agents can connect without cloning anything. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
 
-**Total: 6:11** (372 s).
+**Total: 6:57** (418 s). **Short cut: 4:46** (287 s).
 
 ## Numbers the narration states
 
@@ -190,7 +202,7 @@ The build checks these against the repository and stops if one is out of date.
 
 ## The live-recording variant
 
-Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):
+The plugin loads in Claude Code (checked headless; see `VERIFICATION.md`). Once the repository is also on GitHub, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):
 
 | Scene | Record instead |
 |---|---|
