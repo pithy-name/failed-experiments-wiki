@@ -27,7 +27,7 @@ import lw
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ENTRIES_DIR = REPO_ROOT / "entries"
 SCHEMA_PATH = REPO_ROOT / "schema" / "entry.schema.json"
-TOOL_VERSION = "0.2"
+TOOL_VERSION = "0.3"   # 0.3: the contribute skill declines posts that do not state enough (DEC-78)
 PLACEHOLDER_HANDLE = "HANDLE-TBD"
 MAX_QUOTE_WORDS = 15
 
