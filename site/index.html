@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Failed-experiments wiki</title>
+<style>
+:root {
+  --bg: #f7f6f2; --panel: #ffffff; --ink: #1f2328; --muted: #5f6b76; --line: #d9d6cc;
+  --accent: #1f5f8b; --chip: #ecebe4;
+  --agent: #7a4b00; --agent-bg: #fff1d6; --unrev: #6b2d2d; --unrev-bg: #fde4e1;
+  --contested: #7a0000; --contested-bg: #ffd1cc; --retry: #0b5a3c; --retry-bg: #d9f2e6;
+  --reviewed: #134a7a; --reviewed-bg: #d9e9f7; --note-bg: #fff8d6; --note-line: #c9a400;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a; --panel: #1e2125; --ink: #e6e8ea; --muted: #9aa5b1; --line: #343a41;
+    --accent: #7db8e8; --chip: #2a2f35;
+    --agent: #ffd58a; --agent-bg: #4a3300; --unrev: #ffb4ab; --unrev-bg: #4d1f1b;
+    --contested: #ffb4ab; --contested-bg: #6b1410; --retry: #8fe0b8; --retry-bg: #0f3d2a;
+    --reviewed: #a8d1f5; --reviewed-bg: #12354f; --note-bg: #3d3500; --note-line: #c9a400;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+a { color: var(--accent); }
+header.site { padding: 20px 16px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+header.site h1 { margin: 0 0 6px; font-size: 1.5rem; }
+header.site p { margin: 4px 0; color: var(--muted); max-width: 70ch; }
+.layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; padding: 16px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+aside { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+#search { flex: 1 1 220px; padding: 8px 10px; font: inherit; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); }
+#count { font-weight: 600; }
+button { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--chip); color: var(--ink); cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+details.group { border-top: 1px solid var(--line); padding: 8px 0; }
+details.group:first-child { border-top: 0; }
+details.group > summary { font-weight: 600; cursor: pointer; }
+fieldset { border: 0; margin: 8px 0 0; padding: 0; min-width: 0; }
+legend { padding: 0; font-size: .85rem; color: var(--muted); }
+.facet-values { max-height: 190px; overflow-y: auto; }
+.facet-value { display: flex; gap: 6px; align-items: baseline; font-size: .9rem; padding: 1px 0; }
+.facet-name { flex: 1; overflow-wrap: anywhere; }
+.facet-count { color: var(--muted); font-variant-numeric: tabular-nums; }
+.range-bound { display: inline-flex; gap: 4px; align-items: center; font-size: .85rem; margin-right: 8px; color: var(--muted); }
+.range-bound input { font: inherit; width: 9.5em; padding: 2px 4px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+.card-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.entry-id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; color: var(--muted); }
+.card-title { margin: 6px 0 8px; font-size: 1.15rem; line-height: 1.3; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-right: 4px; }
+.badge-agent-written { color: var(--agent); background: var(--agent-bg); }
+.badge-unreviewed { color: var(--unrev); background: var(--unrev-bg); }
+.badge-contested, .badge-superseded { color: var(--contested); background: var(--contested-bg); }
+.badge-retry-welcome { color: var(--retry); background: var(--retry-bg); }
+.badge-reviewed { color: var(--reviewed); background: var(--reviewed-bg); }
+.contributor-note { background: var(--note-bg); border-left: 4px solid var(--note-line); padding: 6px 10px; margin: 8px 0; font-size: .9rem; }
+.meta { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; font-size: .9rem; }
+.meta-label { color: var(--muted); margin-right: 6px; }
+.chip { display: inline-block; background: var(--chip); border-radius: 4px; padding: 0 6px; margin: 1px 4px 1px 0; font-size: .85rem; }
+.quote { margin: 10px 0 2px; padding-left: 10px; border-left: 3px solid var(--line); font-style: italic; }
+.cite { margin: 0 0 8px; font-size: .9rem; color: var(--muted); }
+details.all-fields > summary { cursor: pointer; color: var(--accent); font-size: .9rem; }
+dl.nested { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; margin: 6px 0; font-size: .9rem; }
+dl.nested dt { color: var(--muted); }
+dl.nested dd { margin: 0; overflow-wrap: anywhere; }
+.nested-list > dl.nested { border-left: 2px solid var(--line); padding-left: 8px; }
+pre.body { white-space: pre-wrap; font: inherit; font-size: .9rem; background: var(--chip); padding: 8px 10px; border-radius: 6px; }
+.muted, .empty { color: var(--muted); }
+footer.site { padding: 12px 16px 28px; color: var(--muted); font-size: .85rem; }
+
+</style>
+</head>
+<body>
+<header class="site">
+  <h1>Failed-experiments wiki</h1>
+  <p>AI-safety experiments that did not work, from LessWrong and the Alignment Forum, so the next attempt can be less wrong than the last.</p>
+  <p>Entries describe experiments. They never judge people. Entries written by an AI agent, and entries nobody has reviewed yet, are labelled.</p>
+</header>
+<div class="layout">
+  <aside aria-label="Filters">
+    <div id="filters"></div>
+  </aside>
+  <main>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search every field…" aria-label="Search every field">
+      <span id="count" role="status">10 entries</span>
+      <button id="clear" type="button" disabled>Clear all filters</button>
+    </div>
+    <div id="results"></div>
+    <noscript><p>This page needs JavaScript to filter entries. The entries are plain Markdown files in <code>entries/</code>.</p></noscript>
+  </main>
+</div>
+<footer class="site">
+  <p>10 entries. Built 2026-11-14 by <code>tools/build_site.py</code>. No GitHub remote is configured yet, so entry links point to the local files.</p>
+  <p>A filter that matches nothing means nobody has filed an entry, not that an idea is untested.</p>
+</footer>
+<script type="application/json" id="fewiki-data">{"built": "2026-11-14", "entries": [{"badges": ["unreviewed", "retry-welcome"], "body": "The GDM mechanistic interpretability team tested whether sparse autoencoders (SAEs) help on a downstream task that can be described without mentioning interpretability: training probes for harmful user intent that still work on new jailbreaks and new datasets. They expected probes on one or a few SAE latents to generalise better out of distribution than a dense linear probe; instead the dense probe was near-perfect on every split, while SAE probes (including ones from SAEs finetuned on chat data) fell short out of distribution. The authors read this as evidence against SAEs being the right tool for this kind of task, say they cannot tell which of several explanations applies, and say they will deprioritise fundamental SAE research while not calling SAEs useless.", "data": {"benchmarks": ["harmbench", "Alpaca", "over-refusal bench", "advbench"], "checks_done": ["dense-probe-baseline", "in-distribution-validation-set", "latent-selection-method-comparison", "token-position-comparison", "reconstruction-probe", "chat-sae-finetuning-variants", "dataset-spurious-correlation-cleanup"], "claim_scope": "Tested only on Gemma 2 9B IT at layer 20, with the original GemmaScope SAEs and versions finetuned on chat data. Probes were a single SAE latent, k-sparse probes on SAE latents for k from 2 to 50, and linear probes on SAE reconstructions, all compared with a dense linear probe on the residual stream. The single concept was harmful user intent (HarmBench versus Alpaca prompts, with jailbreak suffixes and harmless-looking rewrites of harmful prompts). Out of distribution meant other datasets plus two held-out jailbreaks and two held-out rewrites, after the authors had cleaned spurious formatting differences out of the data with the help of SAEs. It says nothing about other models, layers, concepts, SAE types or training recipes, or other kinds of distribution shift, and the authors say they cannot extrapolate to all out-of-distribution settings.", "confidence_true_negative": "medium", "contributor": {"handle": "HANDLE-TBD", "note": "Model draft (claude-sonnet-5-5), written from the post in a separate careful pass. Awaiting verification by the maintainer; not yet human-verified.", "type": "human"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hypothesis_false", "hypothesis": "A sparse probe built on one or a few SAE latents would pick up the few concepts that truly define harmful intent and ignore incidental correlations, so it was expected to generalise better to new jailbreaks and datasets than a dense linear probe on the residual stream, even if it did no better in distribution.", "id": "fe-2026-0001", "info_hazard": "none", "limitations": "Single model, layer and concept, and one train versus out-of-distribution split of jailbreak types. The text gives no AUROC or other scores for the single-latent and k-sparse SAE probes (they appear only in plots). The authors suggest attention-head probes would also do well here but do not report testing them, and they say the setup may be too noisy to separate the SAE finetuning variants and that a larger probing dataset might help. They also used SAEs to clean spurious correlations out of the data before training any probe, which they say slightly stacks the deck against SAEs because the dense probe benefited too.", "method": ["sae-probing", "k-sparse-probing", "dense-linear-probing", "sae-reconstruction-probing", "chat-sae-finetuning", "held-out-jailbreak-split"], "models": [{"access": "unknown", "developer": "unknown", "name": "Gemma 2 9B IT", "size": "9B", "version": "unknown"}], "research_area": ["interpretability", "robustness"], "result": {"direction": "opposite", "n": 3850}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying with SAEs that address known problems such as missing concepts or feature absorption, with a larger probing dataset, on other models, layers or concepts, or where labels are very noisy or data are scarce, which is where related work cited in the post found sparse probes can win. The authors say they would return to SAE research given significant progress on core SAE issues or a particularly important and tractable direction.", "source": {"authors": ["lewis smith", "Senthooran Rajamanoharan", "Arthur Conmy", "CallumMcDougall", "Tom Lieberum", "János Kramár", "Rohin Shah", "Neel Nanda"], "crosspost_url": "https://www.alignmentforum.org/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks", "lw_tags": ["Interpretability (ML \u0026 AI)", "Sparse Autoencoders (SAEs)", "AI"], "published": "2025-03-26", "quote": "on the OOD set, SAE probing does not match the performance of a linear probe", "section": "Using SAEs for OOD Probing", "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)", "type": "alignment_forum", "url": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks"}, "title": "Sparse probes on SAE latents (1 to 50 latents) generalised worse than dense linear probes to held-out jailbreaks and datasets for harmful-intent detection in Gemma 2 9B IT"}, "file_url": "../entries/fe-2026-0001.md", "id": "fe-2026-0001"}, {"badges": ["unreviewed", "retry-welcome"], "body": "The post's author re-implemented the Jacobian Lens (J-Lens) on CPU and compared it with the Logit Lens on GPT-2 small and medium, scoring each lens on how highly it ranks the model's own top-1 next token at each layer and on how well it predicts tokens one to five positions ahead. J-Lens lost at all 11 layers on small and won at only one of 23 on medium, by a margin the post calls rounding error, and five follow-up stress tests did not change this. The author concludes that J-Lens does not work on these models within the scope tested, and cautions that rank metrics can be inflated by token frequency and that magnitude thresholding can surface outlier dimensions instead of structure.", "data": {"checks_done": ["identity-j-check", "gradcheck-float64", "refit-150-sequences", "token-frequency-correlation", "bias-subtraction", "sparsity-thresholding", "top1-token-inspection", "skip-first-sweep", "scale-sweep"], "claim_scope": "One author's clean CPU re-implementation of J-Lens (not the official code), compared with the Logit Lens on GPT-2 small (124M, 11 layers evaluated) and GPT-2 medium (355M, 23 layers evaluated). Metric A: rank of the model's own top-1 next token per layer on 60 held-out prompts. Metric B: logit-minus-J gap in nats for tokens at positions p+1 to p+5 (measured at layer 9 in the headline test). The post uses 30 sequences (read here as the J fitting set; 150 in one refit), against about 1000 in the original paper. It says nothing about larger GPT-2 models, other model families, instruction-tuned models, or J-Lens fitted at the paper's data scale.", "confidence_true_negative": "medium", "contributor": {"handle": "HANDLE-TBD", "note": "Model draft (claude-sonnet-5-5), written from the post in a separate careful pass. Awaiting verification by the maintainer; not yet human-verified.", "type": "human"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hypothesis_false", "hypothesis": "The Jacobian Lens (J-Lens) corrects for how representations change between layers, so it should recover the model's next-token prediction, and tokens a few positions ahead, from earlier layers better than the Logit Lens, which reads every layer in the final layer's coordinates. The scaling test also looked for the J-Lens advantage to emerge or grow with model size.", "id": "fe-2026-0002", "info_hazard": "none", "limitations": "The headline test used 30 sequences (read here as the J fitting set) and one refit used 150, against about 1000 in the original paper, according to the post. The post describes the port as checked by an identity-J test and a float64 finite-difference gradcheck; it does not describe running the official implementation on the same prompts. Only GPT-2 small and medium were tested; gpt2-large, gpt2-xl, other model families (such as OPT-125m) and instruction-tuned models were not. The scale comparison rests on two model sizes, which the post itself calls one data point. Only two metrics were used (Metric A and Metric B). skip_first was tried at 0, 16 and 32 only. A sparsity-thresholded J-Lens beat the Logit Lens at 7/11 layers on Metric A at the 1% keep setting; the post attributes this to the metric rewarding frequent filler tokens and to GPT-2's outlier dimensions, not to real structure. The author's original aim, testing deception under instruction, was not tested.", "method": ["j-lens", "logit-lens", "re-implementation", "rank-metric", "future-token-prediction"], "models": [{"access": "unknown", "developer": "unknown", "name": "GPT-2 small", "size": "124M", "version": "unknown"}, {"access": "unknown", "developer": "unknown", "name": "GPT-2 medium", "size": "355M", "version": "unknown"}], "research_area": ["interpretability"], "result": {"direction": "did_not_replicate", "n": 60}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying with J fitted at the original paper's data scale (about 1000 sequences), with the official implementation run on the same prompts as a cross-check, on larger GPT-2 models (gpt2-large, gpt2-xl) or other model families where the Logit Lens is weaker (the post notes that an improved lens in the Tuned Lens paper's appendix clearly won only on OPT-125m, not on GPT-2 medium), or on an instruction-tuned model.", "source": {"authors": ["Nelith Bandularatne"], "lw_tags": ["AI"], "published": "2026-09-07", "quote": "J-Lens does not work on GPT-2 small or medium.", "section": "1: Result", "title": "J-Lens: A Failed Replication on GPT-2", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/tgn3pD2gLpZvepkWk/j-lens-a-failed-replication-on-gpt-2"}, "title": "A CPU re-implementation of J-Lens did not beat the Logit Lens on GPT-2 small (0/11 layers) or GPT-2 medium (1/23 layers)"}, "file_url": "../entries/fe-2026-0002.md", "id": "fe-2026-0002"}, {"badges": ["unreviewed", "retry-welcome"], "body": "The author wanted a setting where an open Llama 70B alignment-faking checkpoint from Hughes et al. reliably fakes alignment, as a first step toward testing whether a sleeper-agent-style activation probe generalizes to it. With training details added to the system prompt, compliance was 17.5% on the free tier and 20.0% on the paid tier for 20 prompts, and 4% and 6% for 50 prompts across six harm categories, and no scratchpad met all four criteria for alignment faking. The author could not explain why the raised rate that Hughes et al. report for this condition did not appear, offers three unconfirmed guesses, and had not yet run the probe.", "data": {"benchmarks": ["HarmBench"], "checks_done": ["prompt-set-widening", "manual-scratchpad-reading"], "claim_scope": "One open-weight Llama 70B alignment-faking checkpoint (Hughes et al. 2025; the post says it was fine-tuned on 30k documents), with training details added to the system prompt, in two runs of 20 prompts and 50 prompts (the 50 spread over 6 harm categories), each run under a free-tier (monitored) and a paid-tier (unmonitored) condition. Scratchpads that showed reasoning were read by hand against Hughes et al.'s four-part definition of alignment faking, and none met all four criteria. The free minus paid compliance gap was slightly negative in both runs (17.5% vs 20.0% on 20 prompts, 4% vs 6% on 50 prompts). The author's earlier runs on the 8B model and on the 70B model without training details are context only. This says nothing about other checkpoints, other prompt files, larger samples or the published classifier, and it does not show that this checkpoint cannot alignment-fake.", "confidence_true_negative": "low", "contributor": {"handle": "HANDLE-TBD", "note": "Model draft (claude-sonnet-5-5), written from the post in a separate careful pass. Awaiting verification by the maintainer; not yet human-verified.", "type": "human"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "unknown", "hypothesis": "Adding explicit training details to the system prompt of the Llama 70B alignment-faking checkpoint would substantially raise alignment faking, as Hughes et al. report. That would show up as more compliance with harmful requests on the free tier (monitored) than on the paid tier (unmonitored), and as scratchpad reasoning that complies in order to avoid having its values changed.", "id": "fe-2026-0003", "info_hazard": "none", "limitations": "Run sizes of 20 and 50 are well below Hughes et al.'s own n of 200. The author says this is enough to conclude the rate is low, but not to tell near zero from somewhat above zero. Scoring was done by hand by the author, not with the published classifier. The with-training-details system prompt has not been checked against Hughes et al.'s exact file, and the author lists that check as future work. The author's guesses for why Hughes et al.'s reported effect did not appear (a prompt-file difference, this specific checkpoint, or the HarmBench prompts chosen) are not confirmed. The probe that the project was meant to test was not run.", "method": ["behavioral-testing", "free-vs-paid-tier-comparison", "training-details-in-system-prompt", "scratchpad-review", "manual-scoring"], "models": [{"access": "open-weight", "developer": "unknown", "name": "Llama 70B alignment-faking checkpoint (Hughes et al. 2025)", "size": "70B", "version": "unknown"}], "research_area": ["evals", "alignment-training"], "result": {"direction": "null"}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying once the with-training-details system prompt has been checked against Hughes et al.'s exact file, the published classifier has been run on the saved scratchpads, and the sample has been pushed toward 150 to 200 prompts. Also worth comparing against any report from someone who has reliably elicited alignment faking from this checkpoint.", "source": {"authors": ["skn8733"], "lw_tags": ["AI Alignment Fieldbuilding", "Deceptive Alignment", "Interpretability (ML \u0026 AI)", "AI"], "published": "2026-07-20", "quote": "Not one of the scratchpad, across all 4 tests, met all 4 criteria.", "section": "The part I didn't expect... getting to the model alignment fakes was the hard part", "title": "Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/8dXzDzk7nNK64jBve/attempt-at-finding-alignment-faking-on-llama-70b-to-test"}, "title": "Training details in the system prompt did not elicit alignment faking from a Llama 70B alignment-faking checkpoint in two small free-tier versus paid-tier tests (20 and 50 prompts)"}, "file_url": "../entries/fe-2026-0003.md", "id": "fe-2026-0003"}, {"badges": ["unreviewed", "retry-welcome"], "body": "In a SPAR project, the authors replicated the gradient-based unsupervised circuit discovery algorithm of Marks et al. (2024) on GPT-2-small, aiming to show that sparse autoencoder circuits can concretely explain naturalistic forward passes, or else show where they fall short. After a sanity check on the Copyright (C) prompt passed, they examined the top proximal feature and the strongest upstream edges for five prompts; only two of the five top features seemed to call the model's top next token, and the upstream structure was not illuminating even for those two. They concluded that local approximations from vanilla sparse autoencoders probably cannot be strung together into fully explanatory circuits, and that cross-layer approximations are probably needed.", "data": {"checks_done": ["sanity-check"], "claim_scope": "Tested only the replicated gradient-based circuit discovery (nodes and edges from derivatives of the loss, the largest nodes kept at each sublayer, double-counted causal paths corrected) with vanilla sparse autoencoders, which the authors call local approximations, on GPT-2-small. Evidence is the authors' qualitative reading of the resulting graphs: the top proximal feature node for the token after each of five short prompts, and the strongest upstream edges into two of those features. Not tested here are other models, other autoencoder types, cross-layer transcoders, or any quantitative measure of explanatory quality.", "confidence_true_negative": "medium", "contributor": {"handle": "HANDLE-TBD", "note": "Model draft (claude-sonnet-5-5), written from the post in a separate careful pass. Awaiting verification by the maintainer; not yet human-verified.", "type": "human"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hypothesis_false", "hypothesis": "Treating sparse autoencoder features as the right primitives, gradient-based edge-level circuit discovery (a replication of Marks et al., 2024) would give a concrete, algorithmic explanation of why GPT-2-small produces its next token on a naturalistic forward pass, with each node and edge adding to the story.", "id": "fe-2026-0004", "info_hazard": "none", "limitations": "Only five prompts, with upstream edges inspected for just two of them. Whether the circuits explained anything was judged by the authors reading graphs, with no stated quantitative criterion. The post does not say how many top nodes were kept per sublayer or name the autoencoders used. The authors' view that cross-layer approximations are needed is their interpretation and was not tested by them. The sensible logit effects of ablating clearly interpretable causal threads are reported only in passing. No bug audit is described beyond fixing a few bugs during the replication.", "method": ["sparse-autoencoders", "circuit-discovery", "gradient-attribution"], "models": [{"access": "open-weight", "developer": "unknown", "name": "GPT-2-small", "size": "small", "version": "unknown"}], "research_area": ["interpretability"], "result": {"direction": "null", "n": 5}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying with a larger prompt set and an explicit quantitative criterion for what counts as an explanation, or with other autoencoder variants. The authors point to cross-layer transcoder circuit discovery, reported by Anthropic to work on two-digit addition, as the approach that does meet the standard.", "source": {"authors": ["David Udell", "hrdkbhatnagar", "JacksonKaunismaa"], "lw_tags": ["Interpretability (ML \u0026 AI)", "Sparse Autoencoders (SAEs)", "AI"], "published": "2025-07-22", "quote": "We found that that didn't work with this algorithm.", "section": "Conclusion", "title": "(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/2CoLkSdwirr2WnNH6/not-explaining-gpt-2-small-forward-passes-with-edge-level"}, "title": "Gradient-based sparse-autoencoder circuit discovery on GPT-2-small did not yield mechanistic explanations of next-token predictions on five prompts"}, "file_url": "../entries/fe-2026-0004.md", "id": "fe-2026-0004"}, {"badges": ["unreviewed", "retry-welcome"], "body": "The author fits a difference-of-means eval-awareness direction in Llama-3.1-8B-Instruct on a format-controlled eval/deploy dataset, finds that it separates evaluation from deployment framing on novel format-matched framings (about 0.81 AUROC), and then asks whether adding or projecting out that direction changes accuracy on a prompted sandbagging setup. At the pre-registered headline layer (12) the dose response across alpha from -2 to +2 was flat (a swing of -1.77 percentage points against a 5 point bar) and did not beat 24 norm-matched random directions (p = 0.20); layer 14 was also flat, and layer 24 gave a larger swing (+11.3 points) with the wrong sign that random directions matched. The author concludes that the direction tracks the evaluation framing rather than the withholding of capability, while noting the steering dose was gentle and that a higher-dose sweep is needed before the null is firm.", "data": {"benchmarks": ["WMDP-skill MCQs", "MMLU"], "checks_done": ["positive-control", "pre-registration", "random-direction-null", "off-target-control", "coherence-check"], "claim_scope": "One open-weight model (Llama-3.1-8B-Instruct) and one prompted sandbagging setup. A difference-of-means eval-vs-deploy direction, fit on a format-controlled 2x2 minimal-pair dataset, was added to the residual stream through forward hooks at coefficients alpha from -2 to +2 (9 coefficients), with an ablation arm that projects the direction out, on 300 WMDP-skill multiple-choice questions. Headline layer 12, secondary layers 14 and 24. At alpha plus or minus 2 the KL divergence on harmless prompts was about 0.001 and output stayed coherent, so this tests only that gentle dose range. It says nothing about larger doses, other models, fine-tuned or password-locked sandbaggers, or SAE features.", "confidence_true_negative": "low", "contributor": {"handle": "HANDLE-TBD", "note": "Model draft (claude-sonnet-5-5), written from the post in a separate careful pass. Awaiting verification by the maintainer; not yet human-verified.", "type": "human"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hyperparams_unexplored", "hypothesis": "The model's internal 'I'm being evaluated' direction causally drives sandbagging, so adding it should increase deliberate underperformance and removing it should push accuracy back toward the honest baseline. If so, one direction would both detect sandbagging and let you suppress it.", "id": "fe-2026-0005", "info_hazard": "none", "limitations": "Only doses within plus or minus 2 were run, and the author reports the steering was gentle (KL about 0.001 at plus or minus 2, output still fully coherent), so larger doses up to the coherence boundary were not tried. Single 8B model, single prompted sandbagging setup (no fine-tuned or password-locked sandbagger, no adversarial organism), a single difference-of-means direction (no SAE features), and no other models of 8B or smaller. Steering results are reported for layers 12 (headline), 14 and 24. The author calls the results preliminary.", "method": ["activation-steering", "difference-of-means", "direction-ablation", "random-direction-null", "prompted-sandbagging-model"], "models": [{"access": "open-weight", "developer": "unknown", "name": "Llama-3.1-8B-Instruct", "size": "8B", "version": "3.1"}], "research_area": ["steering", "interpretability", "evals"], "result": {"direction": "null", "effect_size": -1.77, "n": 300}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying with a higher-dose sweep at layer 12 (plus or minus 3 or 4, up to the coherence boundary), which the author says could either firm up the null or overturn it. Also worth retrying on a fine-tuned or password-locked sandbagger and an adversarial organism, with SAE features in place of a single difference-of-means direction, and on other models of 8B or smaller.", "source": {"authors": ["sahilraut"], "lw_tags": ["Activation Engineering", "AI Evaluations", "Deceptive Alignment", "Interpretability (ML \u0026 AI)", "Sandbagging (AI)", "AI"], "published": "2026-06-25", "quote": "The real direction's swing does not beat the empirical null of 24 random directions", "section": "Does steering the direction cause sandbagging?", "title": "Eval-Awareness Steering detects the Test, Not the Sabotage", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/ogvyWqJtSrpgXfc7t/eval-awareness-steering-detects-the-test-not-the-sabotage"}, "title": "Steering Llama-3.1-8B-Instruct with a difference-of-means eval-awareness direction (layer 12, alpha -2 to +2) did not change prompted sandbagging beyond random-direction controls"}, "file_url": "../entries/fe-2026-0005.md", "id": "fe-2026-0005"}, {"badges": ["agent-written", "unreviewed", "retry-welcome"], "body": "On the Chess puzzles, accuracy under the propensity the model was not trained on for that task trailed accuracy under the trained one by a wide margin for the bold/plain and hedging/confident pairs, unlike on the simpler tasks. After roughly 5000 steps, accuracy under the untrained propensity began to fall. The author reads this tentatively as capability and propensity becoming more entangled as tasks get harder, shares it as intermediate progress, and lists RL and more realistic tasks as the next step.", "data": {"benchmarks": ["Lichess open database (chess puzzles)"], "checks_done": ["adherence-check", "cross-task-comparison"], "claim_scope": "One model (gpt-oss-120b) fine-tuned with supervised fine-tuning, not RL. Chess puzzles from the Lichess open database were co-trained with the Table Lookup task, each tied to the opposite member of a propensity pair, then evaluated under the propensity prompt the model was not trained with for that task. The Chess comparison rests on the bold/plain and hedging/confident pairs; the reasoning/no-reasoning pair yielded almost no usable Chess evaluation because adherence to the swapped instruction dropped quickly, and bold/plain covers only about 1000 training steps. The post also used Llama 3.1-8B, but its results are in an appendix whose content is not in the text, so no Llama result is covered here. Chess differs from the simpler tasks in more than difficulty (for example it needs longer outputs), so the entry does not show that difficulty causes the drop. On the simpler tasks (Table Lookup and post-knowledge-cutoff facts Q\u0026A) the same two pairs transferred nearly fully, with a slight gap on Table Lookup. Not covered: RL training, math or coding tasks, other models, inoculation prompting itself.", "confidence_true_negative": "low", "contributor": {"agent_model": "claude-sonnet-5-5", "handle": "HANDLE-TBD", "tool": "contribute-skill v0.1", "type": "agent"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "unknown", "hypothesis": "A skill picked up while the model shows one style of behaviour (for example bold or plain formatting, hedged or assertive tone) should stay usable when the model is prompted for the opposite style. Inoculation prompting relies on this, and the post frames it as the question of how much capability different personas share.", "id": "fe-2026-0006", "info_hazard": "none", "limitations": "The author calls the tasks toy-scale and notes that SFT is not how labs mainly train new skills. Adherence to the swapped propensity fell fast on Chess, which left few usable evaluation steps and makes the curves harder to read. Chess differs from the other tasks in several ways besides difficulty, so the author declines to draw firm conclusions from it. The author also saw propensities attach to the training task rather than to the prompt, and an attempt to first tie propensities to named personas did not help. No realistic domain such as math or coding was tested.", "method": ["fine-tuning", "prompting"], "models": [{"access": "unknown", "developer": "unknown", "name": "gpt-oss-120b", "size": "120b", "version": "unknown"}], "research_area": ["alignment-training"], "result": {"direction": "smaller_than_expected"}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "The post proposes moving from SFT to RL and to more realistic tasks such as math or coding, ideally with alignment-relevant propensities such as reward hacking. A retry in which adherence to the swapped propensity stays high long enough to give usable evaluations across training would also address the main reading difficulty the post reports.", "source": {"authors": ["Emil Ryd"], "lw_tags": ["AI"], "published": "2026-05-09", "quote": "Performance gap is larger on Chess, the more difficult setting.", "section": "Capability transfer is lower on our hardest setting", "title": "Do capabilities generalize across propensities?", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/uH5oo57r24xGXQGKM/do-capabilities-generalize-across-propensities"}, "title": "After SFT on Lichess chess puzzles, gpt-oss-120b lost much more accuracy under a swapped style propensity than on simpler tasks"}, "file_url": "../entries/fe-2026-0006.md", "id": "fe-2026-0006"}, {"badges": ["agent-written", "retry-welcome"], "body": "With loudness added, the BatchTopK run recovered 19.6% of the true features and left 78.3% of latents dead, which the post reports as worse than before rather than better, and the author concludes that loudness alone does not account for the gap between the synthetic setup and real SAEs. A footnote says the idea rested on a premise that does not hold, since SAEs do not use total magnitude to choose which latents to activate. The post then moves on to other differences, and later separates sample-level from feature-level magnitude variance.", "data": {"checks_done": ["baseline-comparison"], "claim_scope": "One BatchTopK sparse autoencoder trained on synthetic activations (no language model involved), following the synthetic setup of Korznikov et al. as replicated by the post's author, at d_model 800 with 25,600 true features and 25,600 latents (the size the post uses for its follow-up experiments), about 20 active features per activation, and per-activation strength drawn from LogNormal(0, 0.25 sigma). Each feature also received a fixed loudness drawn once from LogNormal(0, 0.5 sigma) that scales it whenever it is active. A feature counts as recovered if some latent has cosine similarity of at least 0.80 with it. The post reports only this one setting and one architecture for the loudness change, with loudness added on its own and not combined with other changes. It does not state the seed count, training length, or whether the auxiliary loss was on for this run. The post presents the result as a degradation relative to its earlier same-size BatchTopK run (53.5% recovered, 46.3% dead latents, with AuxK); that baseline is implied rather than restated in this section. This says nothing about other SAE architectures, other loudness distributions, or SAEs trained on real language-model activations.", "confidence_true_negative": "low", "contributor": {"agent_model": "claude-sonnet-5-5", "handle": "HANDLE-TBD", "tool": "contribute-skill v0.1", "type": "agent"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hypothesis_false", "hypothesis": "The synthetic activations give every feature the same typical size, whereas features in real models may differ in how strongly they naturally fire. The author guessed that giving each synthetic feature its own fixed loudness would make BatchTopK recover more true features and so help explain why the synthetic setup breaks BatchTopK while real SAEs do not.", "id": "fe-2026-0007", "info_hazard": "none", "method": ["sae", "batchtopk", "synthetic-activations"], "models": [{"access": "unknown", "developer": "unknown", "name": "unknown", "size": "unknown", "version": "unknown"}], "research_area": ["interpretability"], "result": {"direction": "opposite"}, "retry_welcome": true, "review": {"reviewers": [{"agent_model": "claude-sonnet-5-5", "date": "2026-11-14", "handle": "HANDLE-TBD", "notes": "Checked all eleven checklist items against the full post text: the quote is verbatim and 8 words, and the source fields, hypothesis, scope, numbers (19.6% recovered, 78.3% dead, baseline 53.5% and 46.3%), failure type, confidence and body all hold, so no field fails. This is an agent review by claude-sonnet-5-5, the same model as the entry's contributor.agent_model, so it is weaker than an independent review.", "type": "agent"}], "status": "reviewed"}, "source": {"authors": ["Celene Nightingale"], "lw_tags": ["Interpretability (ML \u0026 AI)", "Sparse Autoencoders (SAEs)", "AI"], "published": "2026-10-31", "quote": "Instead of improving performance, it actively degrades it.", "section": "Feature Loudness", "title": "Sanity Checks for Sanity Checks for Sparse Autoencoders", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders"}, "title": "Per-feature loudness added to synthetic activations did not explain BatchTopK SAE failure and lowered feature recovery to 19.6%"}, "file_url": "../entries/fe-2026-0007.md", "id": "fe-2026-0007"}, {"badges": ["agent-written", "unreviewed", "retry-welcome"], "body": "The author first checked how well the pretrained autoencoders reconstruct the hidden states and found larger reconstruction errors than expected, although another researcher confirmed that the squared-error values matched their own. The author was unsure how to interpret the gap between sparse encodings and raw hidden states, and listed three open possibilities: high-level features are missing from the sparse code, sentiment in particular is poorly encoded, or the hidden-state pipeline contains a mistake. Because of this result the author did not go on to test steering or removal with sparse representations.", "data": {"benchmarks": ["IMDB movie review dataset (filtered to relatively short reviews)"], "checks_done": ["baseline-comparison", "reconstruction-sanity-check", "cross-implementation-check"], "claim_scope": "One binary sentiment task (short IMDB movie reviews wrapped in a prompt asking whether the review is positive or negative), using last-token hidden states from two small Pythia models and pretrained sparse autoencoders taken from earlier published work, with a logistic regression classifier compared between raw and encoded hidden states. Results for Pythia-410m cover only a few layers because the same autoencoder configuration could not be loaded for every layer. Other tasks, larger models, other classifiers and other autoencoders were not tested, so this does not show that sparse features never help classification.", "confidence_true_negative": "low", "contributor": {"agent_model": "claude-sonnet-5-5", "handle": "HANDLE-TBD", "tool": "contribute-skill v0.1", "type": "agent"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "unknown", "hypothesis": "Projecting hidden activations into the higher-dimensional sparse feature space of a pretrained sparse autoencoder would make features more easily linearly separable, so classifiers trained on the encodings would do better than classifiers trained on the raw hidden states.", "id": "fe-2026-0008", "info_hazard": "none", "limitations": "Steering and removal with the sparse representations were not tried, because the classification result was negative. Only a few layers of Pythia-410m gave classification results, since the same autoencoder configuration could not be loaded for all layers. Only one sentiment task was used, so it is not known whether other kinds of features behave differently. It is not established whether the transformer-lens library handles left padding and batch processing correctly, so a pipeline mistake is not ruled out.", "method": ["sae", "linear-probing", "logistic-regression"], "models": [{"access": "unknown", "developer": "unknown", "name": "pythia-70m-deduped", "size": "70m", "version": "unknown"}, {"access": "unknown", "developer": "unknown", "name": "pythia-410m-deduped", "size": "410m", "version": "unknown"}], "research_area": ["interpretability"], "result": {"direction": "opposite"}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Worth retrying if the left-padding and batch handling of the hidden-state pipeline is confirmed correct, or if the same comparison is run on tasks other than sentiment.", "source": {"authors": ["Annah"], "lw_tags": ["Activation Engineering", "Language Models (LLMs)", "MATS Program", "Sparse Autoencoders (SAEs)", "AI"], "published": "2023-11-17", "quote": "So the sparse encodings consistently under-perform compared to the original hidden states.", "section": "Test accuracy", "title": "Classifying representations of sparse autoencoders (SAEs)", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/pn5nBBcLYrnmWXfnY/classifying-representations-of-sparse-autoencoders-saes"}, "title": "Sparse-autoencoder encodings gave lower IMDB sentiment accuracy than raw hidden states in logistic regression on Pythia-70m and Pythia-410m"}, "file_url": "../entries/fe-2026-0008.md", "id": "fe-2026-0008"}, {"badges": ["agent-written", "unreviewed"], "body": "The authors saw no self-advantage in either direction, and every trained model scored about the same as the Opus transcript-reading reference. They note that this agrees with Binder et al., who also found no self-advantage in a hint setting, and conflicts with Li et al., who found privileged access in a hint setting with the same model pair. Because of this they treat the training task as a format for reporting on one's own behavior and do not claim it shows introspection.", "data": {"benchmarks": ["CHIVE-generated counterfactual claims"], "checks_done": ["baseline-comparison", "cross-model-control", "both-directions"], "claim_scope": "One setup. Each of two 8B-scale models (Qwen3-8B and Llama-3.1-8B-Instruct) was taken in turn as the subject. The subject (self) and the other model (cross) were both fine-tuned on the subject's claim data, meaning claims about the subject's behavior produced by the authors' counterfactual-investigation pipeline, then both were evaluated on held-out claims about the subject. Results were compared with an Opus transcript-reading reference. The post's text does not give sample sizes, effect sizes or the error method. Not covered: larger models, the open-ended self-explanation target, other model pairs, other training recipes, or other evaluation sets. A null here is not evidence that privileged access can never be trained.", "confidence_true_negative": "medium", "contributor": {"agent_model": "claude-sonnet-5-5", "handle": "HANDLE-TBD", "tool": "contribute-skill v0.1", "type": "agent"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "unknown", "hypothesis": "A model fine-tuned on data about its own behavior should predict that behavior better than a different model fine-tuned on the same data. Such a self-advantage would indicate introspective, privileged access to its own processing rather than learning a general prior over what the model tends to do.", "id": "fe-2026-0009", "info_hazard": "none", "limitations": "The authors do not know why their result differs from Li et al., who found privileged access in the hint setting with the same model pair.", "method": ["fine-tuning", "privileged-access-test", "cross-model-training", "counterfactual-prediction"], "models": [{"access": "unknown", "developer": "unknown", "name": "Qwen3-8B", "size": "8B", "version": "unknown"}, {"access": "unknown", "developer": "unknown", "name": "Llama-3.1-8B-Instruct", "size": "8B", "version": "3.1"}], "research_area": ["interpretability", "honesty"], "result": {"direction": "null"}, "retry_welcome": false, "review": {"status": "unreviewed"}, "source": {"authors": ["Adam Karvonen", "Subhash Kantamneni", "Euan Ong", "Sam Marks"], "lw_tags": ["AI"], "published": "2026-09-04", "quote": "the cross-trained predictor is within error of the self-trained one for both subjects", "section": "Is the self-explanation model introspecting?", "title": "Training Models to Predict and Explain Their In-the-Wild Behavior", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/YyAMz52wDxnLhwvWL/training-models-to-predict-and-explain-their-in-the-wild"}, "title": "A model fine-tuned on its own behavior data showed no advantage over a different model fine-tuned on the same data at predicting counterfactual prompt-edit claims (Qwen3-8B and Llama-3.1-8B-Instruct)"}, "file_url": "../entries/fe-2026-0009.md", "id": "fe-2026-0009"}, {"badges": ["agent-written", "unreviewed", "retry-welcome"], "body": "The author treats this as a quick attempt and as weak evidence that a one-bit hidden channel is a harder target for RL than simple tasks, comparing it to how networks pick up XOR-like features less readily than linear ones. A second experiment in the post, an iterated fine-tuning loop on GPT-3.5-Turbo, also found no clearly above-chance decoding and is not covered by this entry. A later edit to the post says another work obtained positive outcomes in comparable settings.", "data": {"benchmarks": ["IMDB reviews"], "checks_done": ["positive-control", "hyperparameter-variation"], "claim_scope": "One setup only. gpt2-large was first fine-tuned with supervised learning on short IMDB reviews prefixed with a red or blue label, then trained with PPO (LoRA rank 16, learning rate 3e-5, batch size 128, 200 steps, otherwise the default trl PPOTrainer parameters). A bert-base-uncased classifier, trained alongside for 10 supervised steps per PPO step on completions without the label prefix, supplied the reward (its accuracy; BERT logits were also tried). Only a 1-bit payload was tested. Not covered: larger models, longer training, other RL setups (such as those used for instruction tuning), a wider hyperparameter search, or other payloads. The author describes it as a quick effort (a couple of days) and notes limited RL expertise; they say it is weak evidence about whether steganography emerges naturally and does not show that RL cannot teach it.", "confidence_true_negative": "low", "contributor": {"agent_model": "claude-sonnet-5-5", "handle": "HANDLE-TBD", "tool": "contribute-skill v0.1", "type": "agent"}, "dates": {"created": "2026-11-14", "updated": "2026-11-14"}, "evidence_level": "author_report", "failure_type": "hyperparams_unexplored", "hypothesis": "The experiment tested whether PPO can get a language model to hide one bit of information (a red or blue label) in a review completion, so that a separate classifier can recover the bit from the completion once the label prefix is removed. The post frames this as an open question rather than a prediction and states no expected outcome.", "id": "fe-2026-0010", "info_hazard": "none", "limitations": "The author expects that stronger RL setups, such as those used for instruction tuning, or tuned hyperparameters and longer runs, would very likely succeed. Only a lower KL penalty and a different number of classifier steps per epoch were tried, with unchanged results. The author flags the work as a quick effort below their usual standard.", "method": ["rl", "ppo", "fine-tuning", "lora"], "models": [{"access": "unknown", "developer": "unknown", "name": "gpt2-large", "size": "unknown", "version": "unknown"}, {"access": "unknown", "developer": "unknown", "name": "bert-base-uncased", "size": "unknown", "version": "unknown"}], "research_area": ["rlhf", "control"], "result": {"direction": "null"}, "retry_welcome": true, "review": {"status": "unreviewed"}, "revival_conditions": "Retry with a stronger RL setup, such as one used for instruction tuning, with tuned hyperparameters or a longer training run.", "source": {"authors": ["Fabien Roger"], "lw_tags": ["Experiments", "AI"], "published": "2023-12-09", "quote": "never had a \u003e50% accuracy at knowing whether the RLed reviews were red or blue", "section": "Experiment 1: PPO on GPT2-large", "title": "Some negative steganography results", "type": "lesswrong", "url": "https://www.lesswrong.com/posts/EEvsL9cpgDAxAhTzt/some-negative-steganography-results"}, "title": "PPO with LoRA on GPT2-large did not learn hidden 1-bit communication in IMDB review completions (decoder accuracy never above 50%)"}, "file_url": "../entries/fe-2026-0010.md", "id": "fe-2026-0010"}], "fields": [{"control": "facet", "group": "trust", "kind": "list", "label": "badges", "path": "badges"}, {"control": "facet", "group": "dates", "kind": "string", "label": "id", "path": "id"}, {"control": "text", "group": "experiment", "kind": "text", "label": "title", "path": "title"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "research area", "path": "research_area"}, {"control": "text", "group": "experiment", "kind": "text", "label": "hypothesis", "path": "hypothesis"}, {"control": "text", "group": "experiment", "kind": "text", "label": "claim scope", "path": "claim_scope"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "method", "path": "method"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "models › name", "path": "models.name"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "models › developer", "path": "models.developer"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "models › version", "path": "models.version"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "models › size", "path": "models.size"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "models › access", "path": "models.access"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "benchmarks", "path": "benchmarks"}, {"control": "facet", "group": "result", "kind": "enum", "label": "result › direction", "path": "result.direction"}, {"control": "range", "group": "result", "kind": "number", "label": "result › effect size", "path": "result.effect_size"}, {"control": "range", "group": "result", "kind": "number", "label": "result › ci low", "path": "result.ci_low"}, {"control": "range", "group": "result", "kind": "number", "label": "result › ci high", "path": "result.ci_high"}, {"control": "range", "group": "result", "kind": "number", "label": "result › n", "path": "result.n"}, {"control": "facet", "group": "result", "kind": "enum", "label": "failure type", "path": "failure_type"}, {"control": "facet", "group": "result", "kind": "enum", "label": "confidence true negative", "path": "confidence_true_negative"}, {"control": "facet", "group": "experiment", "kind": "list", "label": "checks done", "path": "checks_done"}, {"control": "text", "group": "experiment", "kind": "text", "label": "limitations", "path": "limitations"}, {"control": "text", "group": "experiment", "kind": "text", "label": "revival conditions", "path": "revival_conditions"}, {"control": "facet", "group": "result", "kind": "bool", "label": "retry welcome", "path": "retry_welcome"}, {"control": "facet", "group": "result", "kind": "enum", "label": "evidence level", "path": "evidence_level"}, {"control": "facet", "group": "source", "kind": "enum", "label": "source › type", "path": "source.type"}, {"control": "facet", "group": "source", "kind": "string", "label": "source › url", "path": "source.url"}, {"control": "facet", "group": "source", "kind": "string", "label": "source › crosspost url", "path": "source.crosspost_url"}, {"control": "facet", "group": "source", "kind": "list", "label": "source › lw tags", "path": "source.lw_tags"}, {"control": "text", "group": "source", "kind": "text", "label": "source › title", "path": "source.title"}, {"control": "facet", "group": "source", "kind": "list", "label": "source › authors", "path": "source.authors"}, {"control": "range", "group": "source", "kind": "date", "label": "source › published", "path": "source.published"}, {"control": "text", "group": "source", "kind": "text", "label": "source › section", "path": "source.section"}, {"control": "text", "group": "source", "kind": "text", "label": "source › quote", "path": "source.quote"}, {"control": "facet", "group": "trust", "kind": "enum", "label": "contributor › type", "path": "contributor.type"}, {"control": "facet", "group": "trust", "kind": "string", "label": "contributor › handle", "path": "contributor.handle"}, {"control": "facet", "group": "trust", "kind": "string", "label": "contributor › agent model", "path": "contributor.agent_model"}, {"control": "facet", "group": "trust", "kind": "string", "label": "contributor › tool", "path": "contributor.tool"}, {"control": "text", "group": "trust", "kind": "text", "label": "contributor › note", "path": "contributor.note"}, {"control": "facet", "group": "trust", "kind": "enum", "label": "review › status", "path": "review.status"}, {"control": "facet", "group": "trust", "kind": "list", "label": "review › reviewers › handle", "path": "review.reviewers.handle"}, {"control": "facet", "group": "trust", "kind": "list", "label": "review › reviewers › type", "path": "review.reviewers.type"}, {"control": "facet", "group": "trust", "kind": "list", "label": "review › reviewers › date", "path": "review.reviewers.date"}, {"control": "text", "group": "trust", "kind": "text", "label": "review › reviewers › notes", "path": "review.reviewers.notes"}, {"control": "facet", "group": "trust", "kind": "list", "label": "review › reviewers › agent model", "path": "review.reviewers.agent_model"}, {"control": "range", "group": "dates", "kind": "date", "label": "dates › experiment", "path": "dates.experiment"}, {"control": "range", "group": "dates", "kind": "date", "label": "dates › created", "path": "dates.created"}, {"control": "range", "group": "dates", "kind": "date", "label": "dates › updated", "path": "dates.updated"}, {"control": "facet", "group": "dates", "kind": "list", "label": "related › id", "path": "related.id"}, {"control": "facet", "group": "dates", "kind": "list", "label": "related › relation", "path": "related.relation"}, {"control": "facet", "group": "trust", "kind": "enum", "label": "info hazard", "path": "info_hazard"}], "groups": [{"id": "trust", "label": "Trust and review", "open": true}, {"id": "experiment", "label": "Experiment", "open": true}, {"id": "result", "label": "Result and failure", "open": true}, {"id": "source", "label": "Source", "open": false}, {"id": "dates", "label": "Dates, links and IDs", "open": false}], "repo_url": null}</script>
+<script>
+/* Pure filter logic for the browse page. No DOM access, so it can be unit-tested
+   in any JavaScript engine (tests/js/filter_test.js). */
+var FewikiFilter = (function () {
+  "use strict";
+
+  /* All values at a dotted path, descending into arrays. Missing -> []. */
+  function getValues(data, path) {
+    var current = [data];
+    var parts = path.split(".");
+    for (var i = 0; i < parts.length; i++) {
+      var next = [];
+      for (var j = 0; j < current.length; j++) {
+        var item = current[j];
+        if (item !== null && typeof item === "object" && !Array.isArray(item) &&
+            Object.prototype.hasOwnProperty.call(item, parts[i])) {
+          var value = item[parts[i]];
+          if (Array.isArray(value)) { next = next.concat(value); } else { next.push(value); }
+        }
+      }
+      current = next;
+    }
+    return current.filter(function (value) { return value !== null && value !== undefined; });
+  }
+
+  /* An entry is {id, data, body, badges}. "badges" is a derived pseudo-field. */
+  function entryValues(entry, path) {
+    if (path === "badges") { return entry.badges || []; }
+    return getValues(entry.data, path);
+  }
+
+  function facetKey(value) {
+    if (value === true) { return "true"; }
+    if (value === false) { return "false"; }
+    return String(value);
+  }
+
+  function matchesFacet(entry, path, wanted) {
+    if (!wanted || wanted.length === 0) { return true; }
+    var have = entryValues(entry, path).map(facetKey);
+    for (var i = 0; i < wanted.length; i++) {
+      if (have.indexOf(wanted[i]) !== -1) { return true; }   // OR within one field
+    }
+    return false;
+  }
+
+  function isBlank(value) {
+    return value === undefined || value === null || value === "";
+  }
+
+  /* Inclusive range. Numbers compare numerically, dates (YYYY-MM-DD) as strings.
+     An entry without the field never matches a range that is set. */
+  function matchesRange(entry, path, kind, range) {
+    if (!range || (isBlank(range.min) && isBlank(range.max))) { return true; }
+    var values = entryValues(entry, path);
+    if (values.length === 0) { return false; }
+    function norm(value) { return kind === "number" ? Number(value) : String(value); }
+    for (var i = 0; i < values.length; i++) {
+      var value = norm(values[i]);
+      if (kind === "number" && isNaN(value)) { continue; }
+      if (!isBlank(range.min) && value < norm(range.min)) { continue; }
+      if (!isBlank(range.max) && value > norm(range.max)) { continue; }
+      return true;
+    }
+    return false;
+  }
+
+  /* Everything searchable about an entry, lower-cased: every field value, the body, the badges. */
+  function haystack(entry, fields) {
+    var parts = [entry.id || "", entry.body || ""].concat(entry.badges || []);
+    for (var i = 0; i < fields.length; i++) {
+      var values = getValues(entry.data, fields[i].path);
+      for (var j = 0; j < values.length; j++) {
+        if (typeof values[j] !== "object") { parts.push(String(values[j])); }
+      }
+    }
+    return parts.join(" \n ").toLowerCase();
+  }
+
+  /* Every whitespace-separated term must occur somewhere. */
+  function matchesText(entry, fields, text) {
+    var terms = String(text || "").toLowerCase().split(/\s+/).filter(Boolean);
+    if (terms.length === 0) { return true; }
+    var hay = haystack(entry, fields);
+    for (var i = 0; i < terms.length; i++) {
+      if (hay.indexOf(terms[i]) === -1) { return false; }
+    }
+    return true;
+  }
+
+  /* state = {text: "", facets: {path: [keys]}, ranges: {path: {min, max}}}.
+     Different fields combine with AND. */
+  function matches(entry, state, fields) {
+    state = state || {};
+    if (!matchesText(entry, fields, state.text)) { return false; }
+    var facets = state.facets || {};
+    for (var path in facets) {
+      if (Object.prototype.hasOwnProperty.call(facets, path) && !matchesFacet(entry, path, facets[path])) { return false; }
+    }
+    var ranges = state.ranges || {};
+    for (var i = 0; i < fields.length; i++) {
+      var field = fields[i];
+      if (field.control === "range" && !matchesRange(entry, field.path, field.kind, ranges[field.path])) { return false; }
+    }
+    return true;
+  }
+
+  function filter(entries, state, fields) {
+    return entries.filter(function (entry) { return matches(entry, state, fields); });
+  }
+
+  /* [{value, count}] for one facet field, most frequent first; an entry counts once per value. */
+  function facetCounts(entries, path) {
+    var counts = {};
+    entries.forEach(function (entry) {
+      var seen = {};
+      entryValues(entry, path).map(facetKey).forEach(function (key) {
+        if (!seen[key]) { seen[key] = true; counts[key] = (counts[key] || 0) + 1; }
+      });
+    });
+    return Object.keys(counts).map(function (key) { return {value: key, count: counts[key]}; })
+      .sort(function (a, b) { return b.count - a.count || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0); });
+  }
+
+  function isActive(state) {
+    state = state || {};
+    if (String(state.text || "").trim()) { return true; }
+    var facets = state.facets || {}, ranges = state.ranges || {}, key;
+    for (key in facets) { if (facets[key] && facets[key].length) { return true; } }
+    for (key in ranges) { if (ranges[key] && (!isBlank(ranges[key].min) || !isBlank(ranges[key].max))) { return true; } }
+    return false;
+  }
+
+  return {
+    getValues: getValues, entryValues: entryValues, facetKey: facetKey, matchesFacet: matchesFacet,
+    matchesRange: matchesRange, matchesText: matchesText, matches: matches, filter: filter,
+    facetCounts: facetCounts, isActive: isActive
+  };
+})();
+
+</script>
+<script>
+/* DOM layer of the browse page. Kept thin: all filtering lives in filter.js.
+   Entry content is untrusted, so text only ever enters the page through
+   textContent and createElement, never as markup. */
+(function () {
+  "use strict";
+
+  var payload = JSON.parse(document.getElementById("fewiki-data").textContent);
+  var fields = payload.fields;
+  var entries = payload.entries;
+  var state = {text: "", facets: {}, ranges: {}};
+
+  var BADGE_TEXT = {
+    "agent-written": "Agent-written", "unreviewed": "Unreviewed", "contested": "Contested",
+    "superseded": "Superseded", "retry-welcome": "Retry welcome"
+  };
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) { node.className = className; }
+    if (text !== undefined && text !== null) { node.textContent = String(text); }
+    return node;
+  }
+
+  function safeLink(url, label) {
+    var text = label || url;
+    if (typeof url === "string" && /^https?:\/\//i.test(url)) {
+      var a = el("a", null, text);
+      a.href = url;
+      a.rel = "noopener noreferrer";
+      return a;
+    }
+    return el("span", null, text);
+  }
+
+  function fileLink(entry) {
+    var a = el("a", null, payload.repo_url ? "Entry file on GitHub" : "Entry file");
+    a.href = entry.file_url;   // built by build_site.py: a GitHub URL or a relative path, never entry content
+    return a;
+  }
+
+  /* ---------- filter panel ---------- */
+
+  function renderFilters() {
+    var panel = document.getElementById("filters");
+    panel.textContent = "";
+    payload.groups.forEach(function (group) {
+      var controls = [];
+      fields.filter(function (f) { return f.group === group.id; }).forEach(function (field) {
+        var control = field.control === "facet" ? facetControl(field) : field.control === "range" ? rangeControl(field) : null;
+        if (control) { controls.push(control); }
+      });
+      if (controls.length === 0) { return; }
+      var details = el("details", "group");
+      details.open = !!group.open;
+      details.appendChild(el("summary", null, group.label));
+      controls.forEach(function (control) { details.appendChild(control); });
+      panel.appendChild(details);
+    });
+  }
+
+  function facetControl(field) {
+    var counts = FewikiFilter.facetCounts(entries, field.path);
+    if (counts.length === 0) { return null; }             // hide fields no entry uses
+    var box = el("fieldset", "facet");
+    box.appendChild(el("legend", null, field.label));
+    var list = el("div", "facet-values");
+    counts.forEach(function (item) {
+      var label = el("label", "facet-value");
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = (state.facets[field.path] || []).indexOf(item.value) !== -1;
+      input.addEventListener("change", function () {
+        var chosen = (state.facets[field.path] || []).filter(function (v) { return v !== item.value; });
+        if (input.checked) { chosen.push(item.value); }
+        state.facets[field.path] = chosen;
+        renderResults();
+      });
+      label.appendChild(input);
+      label.appendChild(el("span", "facet-name", field.path === "badges" ? (BADGE_TEXT[item.value] || item.value) : item.value));
+      label.appendChild(el("span", "facet-count", item.count));
+      list.appendChild(label);
+    });
+    box.appendChild(list);
+    return box;
+  }
+
+  function rangeControl(field) {
+    var present = entries.some(function (entry) { return FewikiFilter.entryValues(entry, field.path).length > 0; });
+    if (!present) { return null; }
+    var box = el("fieldset", "range");
+    box.appendChild(el("legend", null, field.label));
+    ["min", "max"].forEach(function (bound) {
+      var label = el("label", "range-bound", bound === "min" ? "from " : "to ");
+      var input = document.createElement("input");
+      input.type = field.kind === "date" ? "date" : "number";
+      if (field.kind === "number") { input.step = "any"; }
+      input.value = (state.ranges[field.path] || {})[bound] || "";
+      input.addEventListener("input", function () {
+        var range = state.ranges[field.path] || {};
+        range[bound] = input.value;
+        state.ranges[field.path] = range;
+        renderResults();
+      });
+      label.appendChild(input);
+      box.appendChild(label);
+    });
+    return box;
+  }
+
+  /* ---------- results ---------- */
+
+  function chips(values, className) {
+    var wrap = el("span", "chips");
+    values.forEach(function (value) { wrap.appendChild(el("span", "chip " + (className || ""), value)); });
+    return wrap;
+  }
+
+  function metaRow(label, node) {
+    var row = el("div", "meta-row");
+    row.appendChild(el("span", "meta-label", label));
+    if (typeof node === "string" || typeof node === "number" || typeof node === "boolean") { node = el("span", null, node); }
+    row.appendChild(node);
+    return row;
+  }
+
+  function renderValue(value) {
+    if (Array.isArray(value)) {
+      if (value.length === 0) { return el("span", "muted", "none"); }
+      if (value.every(function (v) { return v === null || typeof v !== "object"; })) { return chips(value); }
+      var list = el("div", "nested-list");
+      value.forEach(function (item) { list.appendChild(renderValue(item)); });
+      return list;
+    }
+    if (value !== null && typeof value === "object") {
+      var table = el("dl", "nested");
+      Object.keys(value).forEach(function (key) {
+        table.appendChild(el("dt", null, key));
+        var dd = el("dd");
+        dd.appendChild(renderValue(value[key]));
+        table.appendChild(dd);
+      });
+      return table;
+    }
+    if (typeof value === "string" && /^https?:\/\//i.test(value)) { return safeLink(value); }
+    return el("span", null, value === null ? "" : String(value));
+  }
+
+  function card(entry) {
+    var data = entry.data;
+    var article = el("article", "card");
+    var head = el("header", "card-head");
+    head.appendChild(el("span", "entry-id", entry.id));
+    var badges = el("span", "badges");
+    (entry.badges || []).forEach(function (badge) { badges.appendChild(el("span", "badge badge-" + badge, BADGE_TEXT[badge] || badge)); });
+    if ((data.review || {}).status === "reviewed") {
+      // Say who reviewed: an agent review is weaker than a human one, and readers should see which it was.
+      var kinds = FewikiFilter.getValues(data, "review.reviewers.type");
+      var by = kinds.indexOf("human") !== -1 ? "by a person" : kinds.indexOf("agent") !== -1 ? "by an agent only" : "";
+      badges.appendChild(el("span", "badge badge-reviewed", by ? "Reviewed " + by : "Reviewed"));
+    }
+    head.appendChild(badges);
+    article.appendChild(head);
+    article.appendChild(el("h2", "card-title", data.title));
+
+    var note = (data.contributor || {}).note;
+    if (note) { article.appendChild(el("p", "contributor-note", note)); }
+
+    var meta = el("div", "meta");
+    meta.appendChild(metaRow("Area", chips(data.research_area || [])));
+    meta.appendChild(metaRow("Method", chips(data.method || [])));
+    meta.appendChild(metaRow("Models", chips(FewikiFilter.getValues(data, "models.name"))));
+    meta.appendChild(metaRow("Result", (data.result || {}).direction || ""));
+    meta.appendChild(metaRow("Failure type", data.failure_type || ""));
+    meta.appendChild(metaRow("Confidence it is a true negative", data.confidence_true_negative || ""));
+    meta.appendChild(metaRow("Evidence", data.evidence_level || ""));
+    meta.appendChild(metaRow("Review", (data.review || {}).status || ""));
+    meta.appendChild(metaRow("Written by", ((data.contributor || {}).type || "") + " · " + ((data.contributor || {}).handle || "")));
+    article.appendChild(meta);
+
+    var source = data.source || {};
+    var quote = el("blockquote", "quote", source.quote || "");
+    article.appendChild(quote);
+    var cite = el("p", "cite");
+    cite.appendChild(safeLink(source.url, source.title || source.url));
+    cite.appendChild(el("span", null, " — " + (source.authors || []).join(", ") + ", " + (source.published || "")));
+    article.appendChild(cite);
+
+    var details = el("details", "all-fields");
+    details.appendChild(el("summary", null, "All fields"));
+    details.appendChild(renderValue(data));
+    if (entry.body) {
+      details.appendChild(el("h3", null, "Notes"));
+      details.appendChild(el("pre", "body", entry.body));
+    }
+    var links = el("p", "links");
+    links.appendChild(fileLink(entry));
+    details.appendChild(links);
+    article.appendChild(details);
+    return article;
+  }
+
+  function renderResults() {
+    var shown = FewikiFilter.filter(entries, state, fields);
+    document.getElementById("count").textContent = shown.length + " of " + entries.length + " entries";
+    document.getElementById("clear").disabled = !FewikiFilter.isActive(state);
+    var results = document.getElementById("results");
+    results.textContent = "";
+    if (shown.length === 0) {
+      results.appendChild(el("p", "empty", "No entry matches these filters. That means nobody has filed one here, not that the idea is untested."));
+    }
+    shown.forEach(function (entry) { results.appendChild(card(entry)); });
+  }
+
+  /* ---------- wiring ---------- */
+
+  var search = document.getElementById("search");
+  search.addEventListener("input", function () { state.text = search.value; renderResults(); });
+  document.getElementById("clear").addEventListener("click", function () {
+    state = {text: "", facets: {}, ranges: {}};
+    search.value = "";
+    renderFilters();
+    renderResults();
+  });
+
+  renderFilters();
+  renderResults();
+})();
+
+</script>
+</body>
+</html>
