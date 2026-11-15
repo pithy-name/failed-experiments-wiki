@@ -152,7 +152,12 @@
     head.appendChild(el("span", "entry-id", entry.id));
     var badges = el("span", "badges");
     (entry.badges || []).forEach(function (badge) { badges.appendChild(el("span", "badge badge-" + badge, BADGE_TEXT[badge] || badge)); });
-    if ((data.review || {}).status === "reviewed") { badges.appendChild(el("span", "badge badge-reviewed", "Reviewed")); }
+    if ((data.review || {}).status === "reviewed") {
+      // Say who reviewed: an agent review is weaker than a human one, and readers should see which it was.
+      var kinds = FewikiFilter.getValues(data, "review.reviewers.type");
+      var by = kinds.indexOf("human") !== -1 ? "by a person" : kinds.indexOf("agent") !== -1 ? "by an agent only" : "";
+      badges.appendChild(el("span", "badge badge-reviewed", by ? "Reviewed " + by : "Reviewed"));
+    }
     head.appendChild(badges);
     article.appendChild(head);
     article.appendChild(el("h2", "card-title", data.title));

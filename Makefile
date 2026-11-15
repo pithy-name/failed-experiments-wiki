@@ -19,6 +19,7 @@ help:
 	@echo "make datasette-check  list and filter the wiki through Datasette without opening a port"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
 	@echo "make sync-gold HANDLE=<github handle>   publish verified gold entries into entries/"
+	@echo "make set-handle HANDLE=<github handle>  replace the HANDLE-TBD placeholder in the seed entries"
 	@echo "make scout          re-run the candidate search (cached, rate-limited)"
 
 setup:
@@ -51,6 +52,9 @@ evals:
 
 sync-gold:
 	$(PY) tools/sync_gold.py --handle "$(HANDLE)"
+
+set-handle:
+	$(PY) tools/set_handle.py "$(HANDLE)"
 
 scout:
 	$(PY) tools/scout/search_candidates.py

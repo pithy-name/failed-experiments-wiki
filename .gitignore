@@ -9,5 +9,8 @@ __pycache__/
 wiki.db
 .DS_Store
 
+# The commit history of the unattended build, handed over as one file (see DONE.md)
+history.bundle
+
 # Files set aside for the maintainer to review and delete (nothing is deleted automatically)
 _trash-review/

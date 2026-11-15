@@ -27,6 +27,7 @@
   ok(page.indexOf("Draft awaiting verification.") !== -1, "contributor note is rendered on the card");
   ok(page.indexOf("</script><script>alert(1)</script>") !== -1, "hostile title is shown as plain text");
   ok(page.indexOf("All fields") !== -1, "detail view exists");
+  ok(page.indexOf("Reviewed by a person") !== -1, "a reviewed entry says who reviewed it");
 
   var links = results.find(function (n) { return n.tagName === "a"; });
   ok(links.length >= total, "entries have links");
