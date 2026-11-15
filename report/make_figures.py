@@ -123,7 +123,7 @@ def main() -> int:
         page.wait_for_selector("article.card")
         page.screenshot(path=str(FIGURES / "browse-all-entries.png"))
         page.goto("about:blank")
-        page.goto(site.as_uri() + "#f.failure_type=hypothesis_false&f.badges=agent-written")
+        page.goto(site.as_uri() + "#f.failure_type=hypothesis_false&f.badges=retry-welcome")
         page.wait_for_selector("article.card")
         page.screenshot(path=str(FIGURES / "browse-filtered.png"))
         page.goto("about:blank")
