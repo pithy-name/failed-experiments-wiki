@@ -1,0 +1,418 @@
+# The check list for demo/verify.py. See that file for how a check is judged.
+#
+# Commands run in a throwaway clone unless `cwd: repo` (read-only commands only).
+# Available in commands and in expected text:
+#   $FIX   fixtures built for this run (drafts, broken entries, issue-form bodies)
+#   $WORK  the scratch folder
+#   $NEW1, $NEW2, $NEW3   the next three free entry IDs
+#   $DAY   today's date as YYYYMMDD, as review branch names carry it
+#   $REPO  this repository (for reading only)
+# `expect` is text that must be in the output and on the frame. `expect_exit` defaults to 0.
+
+checks:
+  # ---- D5: one validator on every path -------------------------------------------------
+  - id: validate-all
+    requirement: D5
+    title: Every entry passes the validator
+    proves: Every entry in the wiki is schema-valid and its quote is found in its post.
+    commands:
+      - run: python tools/validate.py --quotes cached
+        expect: ["0 error(s), 0 warning(s)"]
+      - run: python tools/validate.py --gold --quotes cached
+        expect: ["0 error(s)"]
+
+  - id: validate-closed-list
+    requirement: D5
+    title: A value outside a closed list is refused
+    proves: Closed lists are enforced; an invented failure type cannot enter the wiki.
+    commands:
+      - run: python tools/validate.py $FIX/bad/value-not-on-the-list/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["bad_luck", "failure_type"]
+
+  - id: validate-source
+    requirement: D5
+    title: An entry without a source link is refused
+    proves: Every entry must link the post it describes.
+    commands:
+      - run: python tools/validate.py $FIX/bad/no-source-url/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["url"]
+
+  - id: validate-quote
+    requirement: D5
+    title: A quote that is not in the post, or too long, is refused
+    proves: Quotes are checked word for word against the post text, and capped at 15 words.
+    commands:
+      - run: python tools/validate.py $FIX/bad/quote-not-in-post/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["quote_not_found"]
+      - run: python tools/validate.py $FIX/bad/quote-too-long/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["quote_length"]
+
+  - id: validate-required-and-types
+    requirement: D5
+    title: Missing fields and wrong field types are refused
+    proves: Required fields must be present and of the right type (the real mistake two agent drafts made during seeding).
+    commands:
+      - run: python tools/validate.py $FIX/bad/no-hypothesis/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["hypothesis"]
+      - run: python tools/validate.py $FIX/bad/wrong-field-type/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["limitations"]
+
+  - id: validate-identity
+    requirement: D5
+    title: IDs must match file names and be unique
+    proves: An entry cannot sit under another entry's ID, and two files cannot share one.
+    commands:
+      - run: python tools/validate.py $FIX/bad/id-does-not-match-file/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["id_filename"]
+      - run: python tools/validate.py $FIX/bad/same-id-twice/fe-2026-0008.md $FIX/bad/same-id-twice/fe-2026-0009.md --quotes cached
+        expect_exit: 1
+        expect: ["duplicate_id"]
+
+  - id: validate-trust-fields
+    requirement: D5
+    title: Trust labels cannot be hollow
+    proves: An entry cannot be marked reviewed without a named reviewer, and an agent-written entry must name its model.
+    commands:
+      - run: python tools/validate.py $FIX/bad/reviewed-without-reviewer/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["review_without_reviewer"]
+      - run: python tools/validate.py $FIX/bad/agent-entry-not-labelled/fe-2026-0008.md --quotes cached
+        expect_exit: 1
+        expect: ["agent_model"]
+
+  # ---- D1: tools for agents and people, reading ------------------------------------------
+  - id: read-search
+    requirement: D1
+    title: Search by words and by fields
+    proves: The command-line twin of the agent tools finds entries by text and by field filters, and says plainly when nothing matches.
+    commands:
+      - run: python tools/cli.py search steganography --brief
+        expect: ["fe-2026-0010", "fe-2026-0011"]
+      - run: python tools/cli.py search --filter failure_type=hypothesis_false --filter method=sae --brief
+        expect: ["fe-2026-0012"]
+        reject: ["fe-2026-0001"]
+      - run: python tools/cli.py search "steer evaluation awareness direction to stop sandbagging" --brief --limit 1
+        expect: ["fe-2026-0005"]
+      - run: python tools/cli.py search zzzqqqxxx --brief
+        expect: ["0 of"]
+        reject: ["fe-2026-00"]
+
+  - id: read-get-and-facets
+    requirement: D1
+    title: Get one entry; list every filterable field
+    proves: An agent can read an entry in full and discover which fields and values exist.
+    commands:
+      - run: python tools/cli.py get fe-2026-0010 | head -12
+        expect: ["fe-2026-0010"]
+      - run: python tools/cli.py get fe-2026-9999
+        expect_exit: 1
+        expect: ["fe-2026-9999"]
+      - run: python tools/cli.py facets | grep -A6 '"failure_type"' | head -12
+        expect: ["hypothesis_false"]
+
+  - id: read-fetch-source
+    requirement: D1
+    title: Fetch a post's metadata from the cache
+    proves: The source reader returns a post's title, authors and date without sending the text anywhere.
+    commands:
+      - run: python tools/cli.py fetch-source https://www.lesswrong.com/posts/EEvsL9cpgDAxAhTzt/some-negative-steganography-results --cached --no-text
+        expect: ["Some negative steganography results"]
+
+  - id: mcp-server
+    requirement: D1
+    title: The MCP server starts the way the plugin starts it
+    proves: The plugin's launcher starts the server over stdio and all six tools answer.
+    commands:
+      - run: python tools/mcp_smoke.py 2>/dev/null
+        expect: ["search_entries", "get_entry", "list_facets", "fetch_source", "submit_entry", "review_entry"]
+
+  # ---- D1 / D3: the agent write path -----------------------------------------------------
+  - id: submit-agent
+    requirement: D1
+    title: An agent submission lands on its own branch, labelled
+    proves: A valid draft is committed on a new branch as agent-written and unreviewed; with no remote, the tool says no pull request was opened.
+    commands:
+      - run: python tools/cli.py next-id
+        expect: ["$NEW1"]
+      - run: python tools/cli.py submit --file $FIX/draft-good.md --agent-model claude-sonnet-5-5 --tool verification-run --quotes cached
+        expect: ["$NEW1", "entry/$NEW1", "branch_only_no_remote"]
+      - run: git show entry/$NEW1:entries/$NEW1.md | grep -A5 -E '^(contributor|review):'
+        expect: ["type: agent", "agent_model: claude-sonnet-5-5", "status: unreviewed"]
+      - run: git status --short
+        expect_no_output: true
+
+  - id: submit-rejected
+    requirement: D1
+    title: A draft with an invented quote is refused and nothing is written
+    proves: The submit path runs the same validator; a bad draft creates no branch and no file.
+    commands:
+      - run: python tools/cli.py submit --file $FIX/draft-invented-quote.md --agent-model claude-sonnet-5-5 --tool verification-run --quotes cached
+        expect_exit: 1
+        expect: ["quote_not_found"]
+      - run: git branch --list 'entry/*' --format='%(refname:short)'
+        expect: ["entry/$NEW1"]
+        reject: ["entry/$NEW2"]
+
+  - id: merge-local
+    requirement: D3
+    title: A submission merges only through validation
+    proves: The stand-in for a pull-request merge validates the branch, merges it, and the entry is then in the wiki.
+    commands:
+      - run: python tools/cli.py merge-local entry/$NEW1
+        expect: ["$NEW1"]
+      - run: python tools/cli.py search --filter id=$NEW1 --brief
+        expect: ["$NEW1"]
+      - run: git log -3 --format='%s'
+        expect: ["$NEW1"]
+
+  - id: submit-cannot-self-promote
+    requirement: D3
+    title: A submitter cannot set its own trust fields
+    proves: A draft that claims to be human-written and already reviewed is still stamped agent-written and unreviewed.
+    commands:
+      - run: grep -A2 -E '^(contributor|review):' $FIX/draft-claims-own-review.md
+        expect: ["type: human", "status: reviewed"]
+      - run: python tools/cli.py submit --file $FIX/draft-claims-own-review.md --agent-model claude-sonnet-5-5 --tool verification-run --quotes cached
+        expect: ["entry/$NEW2"]
+      - run: git show entry/$NEW2:entries/$NEW2.md | grep -A5 -E '^(contributor|review):'
+        expect: ["type: agent", "status: unreviewed"]
+        reject: ["someone-else", "status: reviewed"]
+      - run: python tools/cli.py merge-local entry/$NEW2
+        expect: ["$NEW2"]
+
+  # ---- D3: review ----------------------------------------------------------------------
+  - id: review-contested
+    requirement: D3
+    title: A human review marks an entry contested
+    proves: A review is recorded on its own branch with the reviewer named, merges through validation, and the entry then carries the contested badge.
+    commands:
+      - run: python tools/cli.py review $NEW1 contested --notes "Verification run - the effect size is not stated in the post." --human --quotes cached
+        expect: ["review/$NEW1", "branch_only_no_remote"]
+      - run: python tools/cli.py merge-local review/$NEW1-$DAY
+        expect: ["$NEW1"]
+      - run: grep -A8 '^review:' entries/$NEW1.md
+        expect: ["status: contested", "type: human", "handle: verification-run"]
+      - run: python tools/cli.py search --filter badges=contested --brief
+        expect: ["$NEW1"]
+
+  - id: review-by-agent
+    requirement: D3
+    title: An agent review is recorded as an agent review
+    proves: When an agent reviews, the reviewer is typed agent with its model, so a reader can tell it from a person's review.
+    commands:
+      - run: python tools/cli.py review $NEW2 reviewed --notes "Verification run - checked quote and fields against the cached post." --agent-model claude-sonnet-5-5 --quotes cached
+        expect: ["review/$NEW2"]
+      - run: python tools/cli.py merge-local review/$NEW2-$DAY
+        expect: ["$NEW2"]
+      - run: grep -A8 '^review:' entries/$NEW2.md
+        expect: ["status: reviewed", "type: agent", "agent_model: claude-sonnet-5-5"]
+
+  # ---- D2: the human path, through the issue form ----------------------------------------
+  - id: issue-form
+    requirement: D2
+    title: A submitted issue form becomes a valid entry marked human
+    proves: The script the GitHub workflow runs turns the form text into an entry file, marked human-written and unreviewed, which then validates.
+    commands:
+      - run: head -12 $FIX/issue-body.md
+        expect: ["### Entry title"]
+      - run: python tools/issue_to_entry.py --body-file $FIX/issue-body.md --report $WORK/report.md --quotes cached --repo .
+        expect: ["$NEW3"]
+      - run: grep -A4 -E '^(contributor|review):' entries/$NEW3.md
+        expect: ["type: human", "handle: verification-run", "status: unreviewed"]
+      - run: python tools/validate.py entries/$NEW3.md --quotes cached
+        expect: ["0 error(s)"]
+
+  - id: issue-form-refusals
+    requirement: D2
+    title: A bad form is refused with a reason
+    proves: Unticked confirmation boxes or a value outside a closed list stop the form, and the report says why.
+    commands:
+      - run: python tools/issue_to_entry.py --body-file $FIX/issue-body-boxes-not-ticked.md --report $WORK/report-unticked.md --quotes cached --repo .
+        expect_exit: 1
+      - run: cat $WORK/report-unticked.md
+        expect: ["must be ticked"]
+      - run: python tools/issue_to_entry.py --body-file $FIX/issue-body-bad-value.md --report $WORK/report-bad.md --quotes cached --repo .
+        expect_exit: 1
+      - run: cat $WORK/report-bad.md
+        expect: ["bad_luck"]
+
+  # ---- D4: both browse UIs build ---------------------------------------------------------
+  - id: build-browse-uis
+    requirement: D4
+    title: The page and the database build from the entries
+    proves: Both browse UIs are generated from the entry files, including the entries added in this run.
+    commands:
+      - run: python tools/build_site.py --out $WORK/site/index.html
+        expect: ["entries"]
+      - run: python tools/build_db.py --db $WORK/clone.db --metadata $WORK/clone-metadata.yml
+      - run: python tools/datasette_check.py
+        expect: ["agent-written"]
+
+  # ---- D7: evals -------------------------------------------------------------------------
+  - id: evals
+    requirement: D7
+    title: The eval scores reproduce
+    proves: Re-scoring the saved skill outputs against the gold set gives the published numbers, and they are labelled provisional.
+    commands:
+      - run: python evals/run_evals.py | tail -12
+      - run: grep -n -i -m3 'provisional' evals/results/RESULTS.md
+        expect: ["PROVISIONAL"]
+      - run: >-
+          echo "lines that differ from the committed results, other than the time of the run:
+          $(git diff --unified=0 evals/ | grep -E '^[-+][^-+]' | grep -v -i generated | wc -l | tr -d ' ')"
+        expect: ["the time of the run: 0"]
+
+  - id: check-facts
+    requirement: D6
+    title: Numbers in entries occur in their posts
+    proves: A machine check finds every number of every entry in the post it cites. Names an entry words differently from the post are listed for a person to look at; that list is not a pass or a fail.
+    commands:
+      - run: python tools/check_facts.py | cut -c1-112
+      - run: >-
+          echo "entries with a number that is not in the post:
+          $(python tools/check_facts.py | grep -vc 'numbers, 0 not in post')"
+        expect: ["not in the post: 0"]
+
+  - id: scouting
+    requirement: D6
+    title: The scouting numbers reproduce from the saved labels
+    proves: The yield table and the selection are regenerated from the saved classifications and audits, unchanged.
+    commands:
+      - run: python tools/scout/check_audit.py | tail -4
+      - run: python tools/scout/yields.py --date 2026-11-14 >/dev/null; python tools/scout/selection.py >/dev/null; git status --short scouting/
+        expect_no_output: true
+
+  # ---- Maintainer steps ------------------------------------------------------------------
+  - id: gold-sync
+    requirement: D7
+    title: Verifying a gold entry publishes it as human-reviewed
+    proves: When the maintainer marks a gold entry verified, the sync copies it into the wiki as reviewed by a named person; pending ones are left alone.
+    commands:
+      - run: python tools/sync_gold.py --handle verification-run --quotes cached
+      - run: git status --short entries/fe-2026-000[1-5].md
+        expect_no_output: true
+      - run: >-
+          sed 's/^gold_status:.*/gold_status: verified/' evals/gold/fe-2026-0001.md > $WORK/gold-1.md
+          && cp $WORK/gold-1.md evals/gold/fe-2026-0001.md && grep -n '^gold_status' evals/gold/fe-2026-0001.md
+        expect: ["gold_status: verified"]
+      - run: python tools/sync_gold.py --handle verification-run --quotes cached
+        expect: ["fe-2026-0001"]
+      - run: grep -A6 '^review:' entries/fe-2026-0001.md
+        expect: ["status: reviewed", "type: human", "handle: verification-run"]
+      - run: git status --short entries/fe-2026-000[2-5].md
+        expect_no_output: true
+
+  - id: set-handle
+    requirement: D6
+    title: The handle placeholder is replaced in one step
+    proves: One command replaces the HANDLE-TBD placeholder in every seed entry, and the entries still validate.
+    commands:
+      - run: grep -l HANDLE-TBD entries/*.md | wc -l
+      - run: python tools/set_handle.py verification-run
+      - run: grep -l HANDLE-TBD entries/*.md | wc -l
+        expect: ["0"]
+      - run: python tools/validate.py --quotes cached
+        expect: ["0 error(s)"]
+
+  - id: demo-script
+    requirement: D8
+    title: The demo script regenerates and its numbers are current
+    proves: The narration is generated from one file and the build stops if a number it speaks is out of date.
+    cwd: repo
+    commands:
+      - run: python demo/build_demo.py --script-only
+        expect: ["wrote demo/script.md"]
+      - run: git status --short demo/script.md
+        expect_no_output: true
+
+  - id: test-suite
+    requirement: D5
+    title: The whole test suite passes, browser tests included
+    proves: Unit tests, the page script in a JavaScript engine, and the real-browser end-to-end tests all pass.
+    cwd: repo
+    commands:
+      - run: python -m pytest -q 2>&1 | tail -3
+        expect: ["passed"]
+        reject: ["failed", "error"]
+        timeout: 1200
+
+# Every function of the proof of concept and how it was checked.
+#   recorded        a check above ran it and a frame shows the result
+#   tests only      covered by the test suite, not by a frame of its own
+#   not checkable   cannot be run without something this run does not have; says what
+coverage:
+  - function: Entry schema and validator (closed lists, required fields, types, source link, quote in post, quote length, IDs, trust labels)
+    status: recorded
+    checks: [validate-all, validate-closed-list, validate-source, validate-quote, validate-required-and-types, validate-identity, validate-trust-fields]
+    evidence: "Nine kinds of broken entry are each refused; all real entries pass. Other rules (date order, interval order, self-links) are tests only: `tests/test_validate.py`."
+  - function: Read tools (search, get, facets, fetch source), command line
+    status: recorded
+    checks: [read-search, read-get-and-facets, read-fetch-source]
+    evidence: "Run against the real entries and the cached posts."
+  - function: MCP server (six tools over stdio, started by the plugin's launcher)
+    status: recorded
+    checks: [mcp-server]
+    evidence: "All six tools are listed and the read tools are called. `submit_entry` and `review_entry` over MCP are tests only (`tests/test_mcp.py`); they call the same functions as the command line, which is recorded below."
+  - function: Agent submission (branch per entry, stamped agent-written and unreviewed, refused when invalid)
+    status: recorded
+    checks: [submit-agent, submit-rejected, submit-cannot-self-promote, merge-local]
+    evidence: "In a throwaway clone. Pull-request creation itself is not checkable (see below)."
+  - function: Review (human and agent, contested and reviewed, on a branch)
+    status: recorded
+    checks: [review-contested, review-by-agent]
+    evidence: "In a throwaway clone."
+  - function: Human contribution through the issue form
+    status: recorded
+    checks: [issue-form, issue-form-refusals, issue-form-round-trip]
+    evidence: "The converter is run on form text built from the form's own labels. The GitHub workflow that calls it is not checkable (see below)."
+  - function: Static browse page (every field filterable, search, ranges, link state, full view, badges, narrow and dark layouts, hostile text)
+    status: recorded
+    checks: [page-all-entries, page-one-filter, page-two-filters, page-or-within-field, page-clear, page-search, page-no-match, page-date-range, page-link, page-full-entry, page-dark]
+    evidence: "Frames here show the main paths. Every value of every field, every range field, link round trips, the phone layout and hostile text are in `tests/test_e2e_browser.py` (real browser), with screenshots via `--snap-dir`."
+  - function: Datasette browse UI
+    status: recorded
+    checks: [datasette-inprocess-table, datasette-inprocess-facet, datasette-inprocess-list-fields, datasette-inprocess-search, datasette-port-table, datasette-port-facet, datasette-port-list-fields, datasette-port-search]
+    evidence: "Rendered in a browser twice: answered in process, and served on a local port as `make datasette` does."
+  - function: Building both browse UIs from the entry files
+    status: recorded
+    checks: [build-browse-uis]
+    evidence: "Built in the clone after entries were added there. A test also fails if the committed page lags behind the entries or the script (`tests/test_build_site.py`)."
+  - function: Evals (scorer, staleness detection, provisional label)
+    status: recorded
+    checks: [evals]
+    evidence: "Scores reproduce from the saved outputs; the result files differ from the committed ones only in the time of the run. The skill runs that produced those outputs are not re-run here."
+  - function: Scouting pipeline (yields, audit check, selection)
+    status: recorded
+    checks: [scouting, check-facts]
+    evidence: "Regenerated from the saved labels. The candidate search and the classification by model are not re-run (network and model calls). The fact check covers numbers; whether an entry's wording is faithful to its post still needs a reader."
+  - function: Maintainer steps (gold sync, handle replacement)
+    status: recorded
+    checks: [gold-sync, set-handle]
+    evidence: "In a throwaway clone; the real gold entries stay unverified."
+  - function: Demo script and video build
+    status: recorded
+    checks: [demo-script]
+    evidence: "The script regenerates unchanged. The video build was run and its frames reviewed separately; it is not rebuilt in this run."
+  - function: Test suite
+    status: recorded
+    checks: [test-suite]
+    evidence: "Run in this repository; it writes only caches."
+  - function: The three skills run by a model (contribute, ask, review)
+    status: not checkable
+    evidence: "They are instructions for a model. Their saved outputs from the build are in `evals/results/` and scored by the evals; a run inside Claude Code with the plugin loaded has not been done."
+  - function: Plugin loading in Claude Code
+    status: not checkable
+    evidence: "Needs an interactive Claude Code session with `--plugin-dir plugin`. The MCP launcher it uses is recorded above."
+  - function: GitHub (pull requests, the issue-form workflow, the validation Action)
+    status: not checkable
+    evidence: "The repository has no remote and nothing may be pushed without the maintainer. The scripts the workflows call are recorded above; the workflow files themselves have never run."
+  - function: Demo voice track
+    status: not checkable
+    evidence: "Text-to-speech scratch track; the draft video is captions only."
