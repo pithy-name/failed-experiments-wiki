@@ -44,6 +44,8 @@ def search_entries(query: str = "", filters: dict | None = None, limit: int = 20
 
     query: free text; matched by keyword against titles, hypotheses, scopes, methods, models and more.
       Keyword match only, so try synonyms and several phrasings before concluding nothing exists.
+      Results are ranked and an entry is listed when it contains ANY query term: read `matched_terms` and `score`,
+      and treat a hit on one common word as a weak match. (The browse page's search box requires every word instead.)
     filters: {"field.path": value or [values]} matches any listed value, e.g.
       {"failure_type": ["underpowered", "measurement_noise"], "method": "sae", "models.name": "GPT-2 small",
        "retry_welcome": true, "review.status": "reviewed", "badges": "agent-written"}.
