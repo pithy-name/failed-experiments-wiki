@@ -167,3 +167,11 @@ def test_cli_builds_the_page(site, capsys):
     assert build_site.main(["--entries", str(site["entries"]), "--out", str(out)]) == 0
     assert "3 entries" in capsys.readouterr().out and out.exists()
     assert build_site.main(["--entries", str(site["entries"]), "--out", str(out), "--repo-url", "https://example.com/x/y"]) == 2
+
+
+def test_the_tracked_page_is_what_the_builder_makes_now(tmp_path):
+    """site/index.html is committed so it opens straight from a checkout; it must not lag behind the entries or the script."""
+    fresh = tmp_path / "index.html"
+    build_site.build(REPO_ROOT / "entries", fresh, build_site.github_web_url(wikilib.remote_url(REPO_ROOT)))
+    tracked = REPO_ROOT / "site" / "index.html"
+    assert tracked.read_text(encoding="utf-8") == fresh.read_text(encoding="utf-8"), "run `make site` and commit site/index.html"
