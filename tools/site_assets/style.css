@@ -17,12 +17,15 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
 a { color: var(--accent); }
-header.site { padding: 20px 16px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
-header.site h1 { margin: 0 0 6px; font-size: 1.5rem; }
-header.site p { margin: 4px 0; color: var(--muted); max-width: 70ch; }
+header.site { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); background: var(--panel); }
+header.site h1 { margin: 0 0 4px; font-size: 1.4rem; }
+header.site p { margin: 2px 0; color: var(--muted); max-width: 120ch; font-size: .95rem; }
 .layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; padding: 16px; align-items: start; }
 @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-aside { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+/* The filter panel stays in view and scrolls on its own, so ticking a box far down never moves the results. */
+aside { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px;
+        position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; }
+@media (max-width: 860px) { aside { position: static; max-height: none; } }
 .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
 #search { flex: 1 1 220px; padding: 8px 10px; font: inherit; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); }
 #count { font-weight: 600; }

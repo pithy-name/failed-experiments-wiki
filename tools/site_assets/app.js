@@ -117,6 +117,7 @@
       });
       if (controls.length === 0) { return; }
       var details = el("details", "group");
+      details.setAttribute("data-group", group.id);
       details.open = !!group.open || groupHasActiveFilter(group.id);
       details.appendChild(el("summary", null, group.label));
       controls.forEach(function (control) { details.appendChild(control); });
@@ -134,6 +135,8 @@
       var label = el("label", "facet-value");
       var input = document.createElement("input");
       input.type = "checkbox";
+      input.setAttribute("data-facet", field.path);     // lets tests and scripts find a control without relying on layout
+      input.setAttribute("data-value", item.value);
       input.checked = (state.facets[field.path] || []).indexOf(item.value) !== -1;
       input.addEventListener("change", function () {
         var chosen = (state.facets[field.path] || []).filter(function (v) { return v !== item.value; });

@@ -24,6 +24,8 @@ Object.defineProperty(FakeElement.prototype, "innerHTML", {
   set: function () { throw new Error("innerHTML must never be assigned: entry content is untrusted"); }
 });
 FakeElement.prototype.appendChild = function (child) { this.children.push(child); return child; };
+FakeElement.prototype.setAttribute = function (name, value) { (this.attributes = this.attributes || {})[name] = String(value); };
+FakeElement.prototype.getAttribute = function (name) { return (this.attributes || {})[name]; };
 FakeElement.prototype.addEventListener = function (type, handler) {
   (this.listeners[type] = this.listeners[type] || []).push(handler);
 };

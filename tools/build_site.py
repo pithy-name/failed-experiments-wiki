@@ -26,10 +26,12 @@ import wikilib  # noqa: E402
 ASSETS = Path(__file__).resolve().parent / "site_assets"
 DEFAULT_OUT = wikilib.REPO_ROOT / "site" / "index.html"
 
+# Order matters: the filters people reach for first are at the top and open.
 GROUPS = [
-    {"id": "trust", "label": "Trust and review", "open": True},
-    {"id": "experiment", "label": "Experiment", "open": True},
+    {"id": "badges", "label": "Badges", "open": True},
     {"id": "result", "label": "Result and failure", "open": True},
+    {"id": "experiment", "label": "Experiment", "open": True},
+    {"id": "trust", "label": "Contributor and review", "open": False},
     {"id": "source", "label": "Source", "open": False},
     {"id": "dates", "label": "Dates, links and IDs", "open": False},
 ]
@@ -60,11 +62,22 @@ def label_of(path: str) -> str:
     return path.replace("_", " ").replace(".", " › ")
 
 
+# Within a group, these fields come first, in this order. The rest follow in schema order.
+FIRST_FIELDS = [
+    "failure_type", "confidence_true_negative", "retry_welcome", "result.direction", "evidence_level",
+    "research_area", "method", "models.name", "benchmarks", "checks_done",
+    "review.status", "contributor.type", "contributor.agent_model",
+    "source.type", "source.authors", "source.published",
+]
+
+
 def field_catalogue() -> list[dict]:
     """Every schema field with its control, plus the derived badges as a facet."""
-    catalogue = [{"path": "badges", "kind": "list", "control": "facet", "group": "trust", "label": "badges"}]
+    catalogue = [{"path": "badges", "kind": "list", "control": "facet", "group": "badges", "label": "who wrote it · reviewed or not"}]
     for path, kind in wikilib.FIELDS:
         catalogue.append({"path": path, "kind": kind, "control": control_of(kind), "group": group_of(path), "label": label_of(path)})
+    position = {field["path"]: index for index, field in enumerate(catalogue)}
+    catalogue.sort(key=lambda f: FIRST_FIELDS.index(f["path"]) if f["path"] in FIRST_FIELDS else len(FIRST_FIELDS) + position[f["path"]])
     return catalogue
 
 
@@ -76,7 +89,7 @@ def github_web_url(remote: str | None) -> str | None:
 
 def embed_json(payload: dict) -> str:
     """JSON that is safe inside a <script> element: no character can close the tag or start markup."""
-    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    text = json.dumps(payload, ensure_ascii=False)        # key order is kept: "All fields" lists an entry in schema order
     for raw, escaped in (("&", "\\u0026"), ("<", "\\u003c"), (">", "\\u003e"), (" ", "\\u2028"), (" ", "\\u2029")):
         text = text.replace(raw, escaped)
     return text
