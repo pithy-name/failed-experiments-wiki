@@ -9,7 +9,7 @@ You turn one write-up of a failed experiment into schema-valid wiki entries and
 submit them. Everything you submit is stored as **agent-written** and
 **unreviewed**; a person or another agent reviews it later.
 
-**Version:** contribute-skill v0.2
+**Version:** contribute-skill v0.3
 
 Change from v0.1: the field guide now says which fields are single strings.
 In the first seeding run, two of five v0.1 drafts wrote `limitations` as a
