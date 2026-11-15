@@ -478,7 +478,7 @@ coverage:
     evidence: "Optional check, as above. One question, one run: it shows the path works, not how often the answer is right; the evals measure that on saved outputs."
   - function: The contribute and review skills, run by a model through the plugin
     status: tests only
-    evidence: "Not run live in this report. Their saved outputs from the build are in `evals/results/` and `entries/`; the tools they call are recorded above. A live run writes branches, so it belongs in a throwaway clone."
+    evidence: "Not part of this run, so no frame here. Each was run live through the plugin in a first-use trial on 2026-11-15, in a scratch clone with no remote (`reviews/`, DEC-75): the `contribute` skill filed entries on branches and the `review` skill recorded a review. The tools they call are recorded above."
   - function: GitHub (pull requests, the issue-form workflow, the validation Action)
     status: not checkable
     evidence: "The repository has no remote and nothing may be pushed without the maintainer. The scripts the workflows call are recorded above; the workflow files themselves have never run."
