@@ -70,7 +70,7 @@ demo-video:
 	$(PY) demo/build_demo.py
 
 verify:
-	$(PY) demo/verify.py
+	$(PY) demo/verify.py $(if $(PLUGIN),--with-plugin,)
 
 evals:
 	$(PY) evals/run_evals.py
