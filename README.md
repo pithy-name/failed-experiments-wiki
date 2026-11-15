@@ -137,6 +137,6 @@ logged in.
 
 ## Limits
 
-This is a proof of concept with 10 seed entries. Nothing is hosted. The evals
+This is a proof of concept with 15 entries from 10 posts. Nothing is hosted. The evals
 are a spot-check on 5 posts with one model vendor, not a benchmark. See
 `DONE.md` for what is verified and what is not.
