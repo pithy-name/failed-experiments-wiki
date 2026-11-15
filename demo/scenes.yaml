@@ -91,10 +91,10 @@ scenes:
       - say: "Here are the failures where the settings were never properly explored."
         actions:
           - {do: tick, field: failure_type, value: hyperparams_unexplored}
-      - say: "Here, entries an agent wrote where the hypothesis itself looks false."
+      - say: "Here, the ones where the hypothesis itself looks false, yet a retry is still welcome."
         actions:
           - {do: untick, field: failure_type, value: hyperparams_unexplored}
-          - {do: tick, field: badges, value: agent-written}
+          - {do: tick, field: badges, value: retry-welcome}
           - {do: tick, field: failure_type, value: hypothesis_false}
       - say: "And a search across every field."
         actions:
