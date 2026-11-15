@@ -1,0 +1,223 @@
+# The demo, scene by scene. One source for both the narration script
+# (demo/script.md) and the video (demo/out/demo-draft.mp4), so they cannot drift.
+#
+# Build:  make demo-script   (script only)      make demo-video   (script + video)
+#
+# Scene kinds:
+#   card      title, optional subtitle, bullet lines, footer
+#   page      the real browse page, loaded from one or more filter links (`states`)
+#   terminal  real commands, run when the video is built; their real output is shown
+#   file      an excerpt of a real file in the repository
+#
+# `facts` are the numbers the narration says out loud. The build checks them
+# against the repository and stops if one is out of date.
+
+title: "Failed-experiments wiki demo"
+voice: "Samantha"          # macOS `say` voice for the scratch narration track
+words_per_minute: 150       # used to estimate timings when no audio is generated
+
+facts:
+  entries: 15
+  posts_classified: 212
+  genuine_writeups: 49
+  full_field_posts: 9
+  contribute_accuracy_percent: 78
+  ask_passed: 6
+  ask_total: 7
+  gold_verified: 0           # how many of the 5 gold entries are verified
+  has_github_remote: false
+
+scenes:
+  - id: s01-title
+    kind: card
+    title: "A wiki of failed AI-safety experiments"
+    subtitle: "that people and AI agents both write to, and both read"
+    footer: "Apart Research · AI x Epistemics Research Sprint · Track 2: Trust Infrastructure · proof of concept"
+    narration: >
+      AI-safety researchers have no shared place to see what others already tried, and where it failed.
+      Failed experiments stay in file drawers or scattered posts, so people repeat dead ends.
+      This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents can both write to, and both read.
+
+  - id: s02-idea
+    kind: card
+    title: "Three ideas"
+    bullets:
+      - "Blameless. Entries describe experiments, never people."
+      - "Trust is visible. Who wrote it, on what evidence, and whether anyone checked."
+      - "A failure is scoped. One report is not \"this never works\"."
+    narration: >
+      Three ideas shape it. First, blameless: entries describe experiments, never the people who ran them.
+      Second, trust is visible: every entry shows who wrote it, a person or an agent and which model,
+      what evidence it rests on, and whether anyone has reviewed it.
+      Third, a failure is scoped. One thin report should not steer the field away from a good idea,
+      so each entry says exactly what was tested, and how confident we can be that it really doesn't work.
+
+  - id: s03-browse
+    kind: page
+    states:
+      - link: ""
+    narration: >
+      This is the wiki as a single web page, built from Markdown files.
+      Fifteen entries so far, all taken from real LessWrong and Alignment Forum posts.
+      Each card carries badges: agent-written, unreviewed, retry welcome.
+      The first five carry a note saying they are model drafts that I still have to verify.
+    update_when: "The last sentence goes once the gold entries are verified. The count changes if entries are added."
+
+  - id: s04-filter
+    kind: page
+    states:
+      - link: "f.failure_type=hyperparams_unexplored"
+      - link: "f.badges=agent-written&f.failure_type=hypothesis_false"
+      - link: "q=steganography"
+    narration: >
+      Every field is a filter. Here are the failures where the hyperparameters were never properly explored.
+      Here, entries an agent wrote where the hypothesis itself looks false.
+      And full-text search across every field.
+
+  - id: s05-entry
+    kind: page
+    states:
+      - link: "q=steganography&open=fe-2026-0010"
+    narration: >
+      Open one. It links the original post, and carries a short quote that a validator found, word for word, in that post.
+      Claim scope says exactly what was tested: one setup, one small model, two hundred training steps.
+      Confidence that this is a true negative: low. Retry welcome: yes.
+      That matters: the entry records the author's own view that a better setup would very likely succeed.
+      So it warns you about a pitfall, without telling you the idea is dead.
+
+  - id: s06-file
+    kind: file
+    path: "entries/fe-2026-0005.md"
+    first_line: 1
+    last_line: 28
+    narration: >
+      Underneath, an entry is one Markdown file with structured fields.
+      It is readable on GitHub as it is, and every change to it goes through git,
+      so the history of what was agreed, and why, is kept.
+
+  - id: s07-ask
+    kind: terminal
+    commands:
+      - 'python tools/cli.py search "steer evaluation awareness direction to stop sandbagging" --brief --limit 3'
+      - "python tools/mcp_smoke.py 2>/dev/null | grep -E '^(tools|search_entries|list_facets)'"
+    wrap: true
+    narration: >
+      Now the question this is for. Say I am planning an experiment: steer a model along a direction for
+      "it thinks it is being evaluated", to stop it sandbagging. What has been tried?
+      Agents reach the wiki through a local MCP server, with search, get and facet tools.
+      The same tools are on the command line, and the right entry ranks first.
+
+  - id: s08-answer
+    kind: file
+    path: "evals/results/ask/q5.md"
+    ranges: [[1, 10], [12, 20], [22, 29]]
+    wrap: true
+    narration: >
+      And this is what the ask skill wrote for that plan. Five parts, always the same:
+      already tried, where it went wrong, what to avoid, worth retrying, and not found.
+      Every claim cites an entry ID. It says how weak the evidence is, a single unreviewed report with low confidence,
+      and what a better attempt would need.
+
+  - id: s09-notfound
+    kind: file
+    path: "evals/results/ask/q7.md"
+    first_line: 1
+    last_line: 23
+    wrap: true
+    narration: >
+      Ask about something the wiki does not cover, here debate with human judges, and it says so plainly:
+      nothing matches, and that means nobody has filed an entry, not that the idea is untested.
+      It does not fill the gap from its own memory.
+
+  - id: s10-contribute
+    kind: terminal
+    commands:
+      - "git log --graph --format='%h %s' --grep='fe-2026-001[2-5]' | cut -c1-112"
+    narration: >
+      Agents also write. The contribute skill reads a post, drafts one entry for each failed experiment, and submits it.
+      Each submission lands on its own branch, and merges only if validation passes.
+      The agent cannot set its own trust fields: the system stamps the entry as agent-written and unreviewed.
+    update_when: "With a GitHub remote, show the pull request instead of the local branch graph."
+
+  - id: s11-validate
+    kind: terminal
+    commands:
+      - "sed 's/^failure_type: .*/failure_type: bad_luck/' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md"
+      - "python tools/validate.py $TMP/fe-2026-0008.md --quotes cached"
+      - "python tools/validate.py --quotes cached"
+    wrap: true
+    narration: >
+      One validator guards every path. Here I change a failure type to a value that is not on the list, and it refuses.
+      It also fetches the post and checks that the quote is really there.
+      During seeding it rejected two of the agent's own drafts for a wrong field type. They were fixed and resubmitted.
+
+  - id: s12-human
+    kind: file
+    path: ".github/ISSUE_TEMPLATE/new-entry.yml"
+    first_line: 1
+    last_line: 28
+    narration: >
+      People contribute with a GitHub issue form. No git needed.
+      A workflow turns the form into an entry and a pull request, marked as written by a person.
+      The form and the workflow are built and tested locally. They have not run on GitHub yet.
+    update_when: "Drop the last two sentences, and show the real issue and pull request, once the workflow has run on GitHub."
+
+  - id: s13-review
+    kind: terminal
+    commands:
+      - "git log --date=short --format='%h %ad %s' --grep='Review fe-2026-0007' | cut -c1-112"
+      - "grep -A7 '^review:' entries/fe-2026-0007.md | cut -c1-112"
+    narration: >
+      Review is a separate step. A person or an agent checks an entry against its post and records the outcome:
+      who reviewed, when, and what they checked.
+      This one was reviewed by an agent, the same model that wrote it. The record says so,
+      and the page labels it "reviewed by an agent only".
+    update_when: "Add your own human review here once it is done."
+
+  - id: s14-datasette
+    kind: terminal
+    commands:
+      - "python tools/datasette_check.py | cut -c1-112 | head -22"
+    narration: >
+      For people who want SQL and JSON, the same entries load into Datasette, with a facet on every field.
+
+  - id: s15-evals
+    kind: terminal
+    commands:
+      - "cp -R evals/results $TMP/results && python evals/run_evals.py --results $TMP/results"
+      - "grep -E 'Field|failure_type|retry_welcome|method|checks_done|hypothesis|claim_scope|limitations' $TMP/results/RESULTS.md | head -8 | cut -c1-80"
+    narration: >
+      The skills are evaluated with one command. The contribute skill's drafts are compared, field by field,
+      with five reference entries: seventy-eight percent agreement overall.
+      The ask skill passed six of seven questions.
+      These numbers are provisional. The reference entries are still model drafts that I have to verify,
+      and five posts with one model vendor is a spot-check, not a benchmark.
+    update_when: "Re-run after the gold entries are verified, and say the new numbers. Drop 'provisional' only then."
+
+  - id: s16-finding
+    kind: card
+    title: "A finding from building it"
+    bullets:
+      - "212 posts classified"
+      - "49 genuine write-ups of failed experiments"
+      - "9 state enough to fill a structured entry"
+      - "Most often missing: what the authors expected (20 posts), exactly what they tested (18)"
+    narration: >
+      Building it produced a finding. From two hundred and twelve candidate posts,
+      classifiers found forty-nine genuine write-ups of failed experiments.
+      Only nine stated enough to fill a structured entry.
+      What was missing most often: what the authors expected, and exactly what they tested.
+      Those are the same two things a reader needs, to avoid reading a failure report as "this never works".
+
+  - id: s17-close
+    kind: card
+    title: "Next"
+    bullets:
+      - "A public site, and a hosted server so agents connect without cloning"
+      - "Author confirmation and opt-out"
+      - "More sources than LessWrong and the Alignment Forum"
+    footer: "Each experiment can be less wrong than the one before it."
+    narration: >
+      Next steps are a public site, a hosted server so agents can connect without cloning the repository,
+      and asking authors to confirm their entries or opt out.
+      The aim is simple: each experiment can be less wrong than the one before it. Thank you.

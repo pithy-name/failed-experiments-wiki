@@ -6,7 +6,7 @@ PY     := .venv/bin/python
 PORT   ?= 8001
 HANDLE ?=
 
-.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts set-handle evals sync-gold scout facets
+.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-video set-handle evals sync-gold scout facets
 
 help:
 	@echo "make setup          create .venv and install everything"
@@ -19,6 +19,8 @@ help:
 	@echo "make datasette-check  list and filter the wiki through Datasette without opening a port"
 	@echo "make mcp-smoke      start the MCP server as the plugin does and call it over stdio"
 	@echo "make check-facts    check that every number and model name in an entry occurs in its post"
+	@echo "make demo-script    write demo/script.md from demo/scenes.yaml"
+	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs Chrome, ffmpeg, macOS say; run outside the sandbox)"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
 	@echo "make sync-gold HANDLE=<github handle>   publish verified gold entries into entries/"
 	@echo "make set-handle HANDLE=<github handle>  replace the HANDLE-TBD placeholder in the seed entries"
@@ -54,6 +56,12 @@ mcp-smoke:
 
 check-facts:
 	$(PY) tools/check_facts.py
+
+demo-script:
+	$(PY) demo/build_demo.py --script-only
+
+demo-video:
+	$(PY) demo/build_demo.py
 
 evals:
 	$(PY) evals/run_evals.py
