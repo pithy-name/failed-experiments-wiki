@@ -29,7 +29,9 @@ mcp = FastMCP(
         "A wiki of failed AI-safety experiments. Use search_entries and get_entry to find what has been tried and "
         "where it went wrong; cite entry IDs. Never state a failure that is not in an entry. Entries with the badges "
         "'agent-written' or 'unreviewed' have not been checked by a person: say so when you rely on them. "
-        "Entries describe experiments, never judge people."
+        "'reviewed' is not the same as vetted: read `reviewed_by`, and say so when the review was by an agent only. "
+        "Entries describe experiments, never judge people. Writing (submit_entry, review_entry) commits to a new "
+        "branch under the user's GitHub login as the accountable person; tell the user which handle was recorded."
     ),
 )
 
@@ -68,6 +70,7 @@ def get_entry(id: str) -> dict:
         "entry": entry.data,
         "body": entry.body,
         "badges": wikilib.badges(entry.data),
+        "reviewed_by": wikilib.reviewed_by(entry.data),
         "file": f"entries/{entry.id}.md",
     }
 
