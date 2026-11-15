@@ -12,5 +12,8 @@ wiki.db
 # Demo build outputs: frames, audio, video (demo/script.md and demo/scenes.yaml are tracked)
 demo/out/
 
+# Session-log drafts that could not be written to the central log
+_session-log-update-*.md
+
 # Files set aside for the maintainer to review and delete (nothing is deleted automatically)
 _trash-review/
