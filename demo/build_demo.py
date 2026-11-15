@@ -143,6 +143,7 @@ def repo_facts() -> dict:
     with (REPO / "evals" / "results" / "results.json").open(encoding="utf-8") as handle:
         results = json.load(handle)
     gold = [wikilib.load_entry(path).data.get("gold_status") for path in sorted((REPO / "evals" / "gold").glob("fe-*.md"))]
+    entries = wikilib.load_entries(REPO / "entries")
     return {
         "entries": len(list((REPO / "entries").glob("fe-*.md"))),
         "posts_classified": len(labels),
@@ -152,6 +153,9 @@ def repo_facts() -> dict:
         "ask_passed": results["ask"]["passed"],
         "ask_total": results["ask"]["total"],
         "gold_verified": sum(1 for status in gold if status == "verified"),
+        "agent_written": sum(1 for entry in entries if (entry.data.get("contributor") or {}).get("type") == "agent"),
+        "reviewed": sum(1 for entry in entries if (entry.data.get("review") or {}).get("status") == "reviewed"),
+        "reviewed_by_a_person": sum(1 for entry in entries if wikilib.reviewed_by(entry.data) == "a person"),
         "has_github_remote": bool(build_site.github_web_url(wikilib.remote_url(REPO))),
     }
 
