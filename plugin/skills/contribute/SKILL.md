@@ -9,7 +9,12 @@ You turn one write-up of a failed experiment into schema-valid wiki entries and
 submit them. Everything you submit is stored as **agent-written** and
 **unreviewed**; a person or another agent reviews it later.
 
-**Version:** contribute-skill v0.1
+**Version:** contribute-skill v0.2
+
+Change from v0.1: the field guide now says which fields are single strings.
+In the first seeding run, two of five v0.1 drafts wrote `limitations` as a
+list and the validator rejected them. The seed entries and the evals in
+`evals/results/` were produced with v0.1.
 
 ## Ground rules
 
@@ -74,6 +79,12 @@ python tools/cli.py submit --file <draft.md> --agent-model <your model id>
 ## Field guide
 
 Required unless marked optional. Closed lists must use exactly these values.
+
+Types: `title`, `hypothesis`, `claim_scope`, `limitations`,
+`revival_conditions` and every `source.*` text field are **one string each**,
+never a list. Put several points in one string as sentences. `research_area`,
+`method`, `benchmarks`, `checks_done`, `source.authors` and `source.lw_tags`
+are lists of strings. `models` and `related` are lists of objects.
 
 | Field | How to fill it |
 |---|---|
