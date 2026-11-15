@@ -28,7 +28,36 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--draft", help="draft file name under evals/results/contribute/<gold id>/")
     parser.add_argument("--field", help="hypothesis, claim_scope or limitations")
     parser.add_argument("--answer", help="question id of an ask answer")
+    parser.add_argument(
+        "--attach", choices=["rubric", "judgements"],
+        help="add hashes to a file a grader or judge wrote without them (for agents that cannot run commands): "
+        "reads evals/results/rubric_scores.raw.json or ask_judgements.raw.json, writes the final file",
+    )
     args = parser.parse_args(argv)
+
+    if args.attach:
+        results = EVALS / "results"
+        name = "rubric_scores" if args.attach == "rubric" else "ask_judgements"
+        key = "grades" if args.attach == "rubric" else "judgements"
+        with (results / f"{name}.raw.json").open(encoding="utf-8") as handle:
+            payload = json.load(handle)
+        for row in payload[key]:
+            if args.attach == "rubric":
+                gold = wikilib.load_entry(EVALS / "gold" / f"{row['gold_id']}.md").data
+                draft, _ = wikilib.parse_entry_text(
+                    (results / "contribute" / row["gold_id"] / row["draft"]).read_text(encoding="utf-8")
+                )
+                row["gold_hash"] = run_evals.text_hash(run_evals.first(gold, row["field"]) or "")
+                row["skill_hash"] = run_evals.text_hash(run_evals.first(draft, row["field"]) or "")
+            else:
+                text = (results / "ask" / f"{row['qid']}.md").read_text(encoding="utf-8")
+                row["answer_hash"] = run_evals.text_hash(text)
+        payload["hashes_attached_by"] = "evals/hash_text.py --attach, from the texts on disk at that moment"
+        with (results / f"{name}.json").open("w", encoding="utf-8") as handle:
+            json.dump(payload, handle, indent=2, ensure_ascii=False)
+            handle.write("\n")
+        print(f"wrote evals/results/{name}.json with hashes for {len(payload[key])} rows")
+        return 0
 
     if args.answer:
         text = (EVALS / "results" / "ask" / f"{args.answer}.md").read_text(encoding="utf-8")

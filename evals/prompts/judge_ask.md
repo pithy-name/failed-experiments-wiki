@@ -30,6 +30,12 @@ Compute each hash with:
 .venv/bin/python evals/hash_text.py --answer <qid>
 ```
 
+If you cannot run commands, read each cited entry from
+`.cache/ask-tools/get/<id>.json` (the saved output of that same command),
+leave `answer_hash` out, and write the same structure to
+`evals/results/ask_judgements.raw.json`; the orchestrator then runs
+`.venv/bin/python evals/hash_text.py --attach judgements` to add the hashes.
+
 Write `evals/results/ask_judgements.json`:
 
 ```json

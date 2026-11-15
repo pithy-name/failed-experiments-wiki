@@ -35,6 +35,10 @@ exact texts you graded:
 .venv/bin/python evals/hash_text.py --gold <id> --draft <draft file name> --field <field>
 ```
 
+If you cannot run commands, leave the two hash fields out and write the same
+structure to `evals/results/rubric_scores.raw.json`; the orchestrator then
+runs `.venv/bin/python evals/hash_text.py --attach rubric` to add the hashes.
+
 Write `evals/results/rubric_scores.json`:
 
 ```json

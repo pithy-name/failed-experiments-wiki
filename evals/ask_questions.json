@@ -1,0 +1,40 @@
+{
+  "note": "One research-plan question per gold entry, plus two the wiki has nothing on. The expected failure type is not stored here: the scorer reads it from the gold entry, so correcting a gold entry re-scores the answer. Questions were written by the orchestrator and are worded as plans, not as restatements of the entry titles.",
+  "questions": [
+    {
+      "qid": "q1",
+      "question": "I plan to train sparse probes on a handful of sparse-autoencoder latents to flag harmful user requests. My hope is that they will hold up on jailbreaks they have never seen better than an ordinary linear probe on the residual stream. Has anyone tried this, and where did it go wrong?",
+      "expected_entry_id": "fe-2026-0001"
+    },
+    {
+      "qid": "q2",
+      "question": "I want to replace the logit lens with a Jacobian-based lens to read out what the middle layers of GPT-2 are predicting. What has been tried, and what should I avoid?",
+      "expected_entry_id": "fe-2026-0002"
+    },
+    {
+      "qid": "q3",
+      "question": "I am going to reproduce alignment faking in an open-weight Llama checkpoint, so that I can test whether deception probes pick it up. What do I need to know before I start?",
+      "expected_entry_id": "fe-2026-0003"
+    },
+    {
+      "qid": "q4",
+      "question": "My plan is to link sparse-autoencoder features across layers with gradient attributions and get a full circuit that explains a GPT-2 forward pass on ordinary text. Has this been tried, and where did it break down?",
+      "expected_entry_id": "fe-2026-0004"
+    },
+    {
+      "qid": "q5",
+      "question": "I want to find a direction for 'the model thinks it is being evaluated' and steer along it to stop a model from sandbagging on a benchmark. What should I avoid?",
+      "expected_entry_id": "fe-2026-0005"
+    },
+    {
+      "qid": "q6",
+      "question": "I plan to measure whether RLHF makes a model more sycophantic about users' political opinions, by comparing a base model with its RLHF-tuned version. What has been tried?",
+      "expected_entry_id": null
+    },
+    {
+      "qid": "q7",
+      "question": "I want to run AI debate with human judges on long reading-comprehension passages, to see whether watching a debate helps judges answer correctly under time pressure. Has anyone tried this, and where did it go wrong?",
+      "expected_entry_id": null
+    }
+  ]
+}
