@@ -4,6 +4,7 @@
   python demo/build_demo.py                   # script + demo/out/demo-draft.mp4 (+ .srt)
   python demo/build_demo.py --no-voice        # no text-to-speech; timed from word counts
   python demo/build_demo.py --no-captions     # no caption bar (for recording your own voice over it)
+  python demo/build_demo.py --short           # the short cut: leaves out scenes marked `short: false` -> demo-short.mp4
 
 What the video is, plainly: a headless browser (Playwright's Chromium) is
 driven through the real browse page with real clicks, typing and scrolling, and
@@ -193,6 +194,10 @@ def describe_action(action: dict) -> str:
         return f"scroll to `{action['entry']}`"
     if do == "scroll_top":
         return "scroll back to the top"
+    if do == "scroll_panel":
+        return "scroll the filter panel to show more fields"
+    if do == "panel_top":
+        return "scroll the filter panel back to the top"
     return f"scroll down {action.get('px', 300)} px"
 
 
@@ -207,6 +212,8 @@ def on_screen(scene: dict) -> str:
     if kind == "file":
         spans = ", then ".join(f"{first}–{last}" for first, last in file_ranges(scene))
         return f"File `{scene['path']}`, lines {spans}"
+    if kind == "datasette":
+        return "Datasette's own pages in the headless browser, served in process: " + "; ".join(f"`{beat['path']}`" for beat in scene["beats"] if beat.get("path"))
     return "Terminal, real output of: " + "; ".join(f"`{command}`" for command in scene["commands"])
 
 
@@ -223,7 +230,8 @@ def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: 
         "- **Narration** is written for you to read aloud, in your voice. Change any of it in `demo/scenes.yaml`.",
         "- **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.",
         "- **Update when** flags lines that are true today and will need changing as the project moves.",
-        f"- Timings are {'measured from the generated voice track' if voiced else f'estimated at {wpm} words a minute'}, plus {PAD_SECONDS} s of pause per scene.",
+        f"- Timings are {'measured from the generated voice track' if voiced else f'estimated at {wpm} words a minute'}, plus {PAD_SECONDS} s of pause per scene."
+        " A built video's measured timings are in `demo/out/timings.json`; the text-to-speech voice runs a little faster than the estimate.",
         f"- Narration length: {total_words} words.",
         "",
         "## What the draft video is, and is not",
@@ -232,7 +240,9 @@ def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: 
         "- A headless browser is driven through the real browse page with real clicks, typing and scrolling. A frame is captured after every step and the frames are joined into a video.",
         "- It is not a capture of a person's screen. The orange pointer ring and the outline around a field are drawn by the recorder, and motion is step by step, not continuous.",
         "- The caption bar shows the narration. A voice, when present, is macOS text-to-speech: a scratch track for pacing. Record your own over it (`--no-captions` gives a clean picture), or re-record live with `demo/live-demo-script.md`.",
-        "- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent, and the narration says so where it matters.",
+        "- It shows no GitHub screens, because the project has no GitHub repository yet. The narration says so in the scenes where a viewer would otherwise assume one (the file scene, the form scene and the close).",
+        "- The Claude Code session it shows is a saved transcript of a real headless session with the plugin loaded (`demo/answers/plugin-session.md`), not a live capture. The two `ask` answers on screen are saved files too; each scene's note says where its file came from.",
+        "- Scenes marked *(not in the short cut)* are left out by `--short`, which builds `demo/out/demo-short.mp4` for places that ask for a video of five minutes or less.",
         "",
         "## Scenes",
         "",
@@ -241,7 +251,8 @@ def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: 
     for number, scene in enumerate(spec["scenes"], start=1):
         seconds = (durations or {}).get(scene["id"]) or estimate_seconds(scene, wpm)
         lines += [
-            f"### {number}. `{scene['id']}` · {clock(start)}–{clock(start + seconds)} ({seconds:.0f} s)",
+            f"### {number}. `{scene['id']}` · {clock(start)}–{clock(start + seconds)} ({seconds:.0f} s)"
+            + ("" if scene.get("short", True) else " *(not in the short cut)*"),
             "",
             f"**On screen:** {on_screen(scene)}",
             "",
@@ -255,8 +266,9 @@ def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: 
         if scene.get("update_when"):
             lines += [f"**Update when:** {scene['update_when']}", ""]
         start += seconds
+    short_total = sum((durations or {}).get(scene["id"]) or estimate_seconds(scene, wpm) for scene in spec["scenes"] if scene.get("short", True))
     lines += [
-        f"**Total: {clock(start)}** ({start:.0f} s).",
+        f"**Total: {clock(start)}** ({start:.0f} s). **Short cut: {clock(short_total)}** ({short_total:.0f} s).",
         "",
         "## Numbers the narration states",
         "",
@@ -270,7 +282,7 @@ def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: 
         "",
         "## The live-recording variant",
         "",
-        "Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):",
+        "The plugin loads in Claude Code (checked headless; see `VERIFICATION.md`). Once the repository is also on GitHub, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):",
         "",
         "| Scene | Record instead |",
         "|---|---|",
@@ -333,7 +345,8 @@ def file_html(scene: dict, first: int, last: int) -> str:
     return page_html(bar + f'<pre class="file{wrap}">' + "\n".join(rows) + "</pre>")
 
 
-def terminal_html(scene: dict, tmp: Path) -> tuple[str, list[dict]]:
+def terminal_html(scene: dict, tmp: Path) -> tuple[list[str], list[dict]]:
+    """Pages for a terminal scene, in the order a viewer sees them: the first command typed, then each command's output added."""
     env = dict(os.environ)
     env["TMP"] = str(tmp)
     env["PATH"] = f"{REPO / '.venv' / 'bin'}:{env.get('PATH', '')}"
@@ -361,7 +374,9 @@ def terminal_html(scene: dict, tmp: Path) -> tuple[str, list[dict]]:
         blocks.append(block)
     bar = '<div class="bar"><b>terminal</b> &nbsp; failed-experiments-wiki</div>'
     wrap = ' class="wrap"' if scene.get("wrap") else ""
-    return page_html(bar + f"<pre{wrap}>" + "\n\n".join(blocks) + "</pre>"), record
+    typed = f'<span class="prompt">$</span> <span class="cmd">{html.escape(scene["commands"][0])}</span>'
+    steps = [typed] + ["\n\n".join(blocks[:count]) for count in range(1, len(blocks) + 1)]
+    return [page_html(bar + f"<pre{wrap}>" + step + "</pre>") for step in steps], record
 
 
 # --------------------------------------------------------------------------
@@ -494,6 +509,14 @@ class Recorder:
         elif do == "scroll_top":
             page.evaluate("() => window.scrollTo(0, 0)")
             frames.append(self.shot(scene_id, "settle"))
+        elif do in {"scroll_panel", "panel_top"}:
+            steps = 4 if do == "scroll_panel" else 1
+            for step in range(steps):
+                page.evaluate(
+                    "([px, top]) => { var panel = document.querySelector('aside'); if (top) { panel.scrollTop = 0; } else { panel.scrollTop += px; } }",
+                    [action.get("px", 600) / steps, do == "panel_top"],
+                )
+                frames.append(self.shot(scene_id, "quick" if step < steps - 1 else "settle"))
         elif do == "scroll":
             steps = 4
             for step in range(steps):
@@ -512,6 +535,41 @@ def launch_browser(playwright):
         return playwright.chromium.launch(headless=True, args=["--single-process", "--no-zygote", "--disable-gpu"])
 
 
+POINTER_ACTIONS = {"tick", "untick", "type", "clear", "open"}     # the pointer moves first, so the old picture is shown briefly
+DATASETTE_HOST = "http://datasette.demo"
+
+
+class InProcessDatasette:
+    """Datasette's own pages, answered from its app inside this process: no port is opened."""
+
+    def __init__(self, folder: Path):
+        import asyncio
+        import threading
+
+        import build_db
+        from datasette.app import Datasette
+
+        db_path, metadata_path = folder / "wiki.db", folder / "metadata.yml"
+        build_db.build(REPO / "entries", db_path)
+        build_db.write_metadata(metadata_path, "wiki")
+        self.asyncio = asyncio
+        self.app = Datasette([str(db_path)], metadata=yaml.safe_load(metadata_path.read_text(encoding="utf-8")))
+        self.loop = asyncio.new_event_loop()
+        threading.Thread(target=self.loop.run_forever, daemon=True).start()
+        asyncio.run_coroutine_threadsafe(self.app.invoke_startup(), self.loop).result(timeout=60)
+
+    def serve(self, route, request) -> None:
+        from urllib.parse import urlsplit
+
+        url = urlsplit(request.url)
+        target = url.path + ("?" + url.query if url.query else "")
+        response = self.asyncio.run_coroutine_threadsafe(self.app.client.get(target, follow_redirects=True), self.loop).result(timeout=60)
+        route.fulfill(status=response.status_code, headers=dict(response.headers), body=response.content)
+
+    def stop(self) -> None:
+        self.loop.call_soon_threadsafe(self.loop.stop)
+
+
 def record(spec: dict, urls: dict[str, list[str]], site_url: str, captions: bool) -> dict[str, list[list[tuple[Path, str]]]]:
     """Frames per scene, per beat."""
     from playwright.sync_api import sync_playwright
@@ -523,18 +581,31 @@ def record(spec: dict, urls: dict[str, list[str]], site_url: str, captions: bool
         context = browser.new_context(viewport={"width": WIDTH, "height": HEIGHT}, device_scale_factor=SCALE, color_scheme="light")
         page = context.new_page()
         recorder = Recorder(page, frames_dir, captions)
+        datasette = None
+        if any(scene["kind"] == "datasette" for scene in spec["scenes"]):
+            datasette = InProcessDatasette(OUT / "tmp")
+            page.route(DATASETTE_HOST + "/**", datasette.serve)
         for scene in spec["scenes"]:
             recorder.count = 0
             beats: list[list[tuple[Path, str]]] = []
-            if scene["kind"] == "page":
+            if scene["kind"] == "datasette":
+                for beat in scene["beats"]:
+                    if beat.get("path"):
+                        page.goto(DATASETTE_HOST + beat["path"])
+                        recorder.prepare()
+                    recorder.caption(beat["say"])
+                    beats.append([recorder.shot(scene["id"], "lead")])
+            elif scene["kind"] == "page":
                 page.goto("about:blank")
                 page.goto(site_url + ("#" + scene["start_link"] if scene.get("start_link") else ""))
                 page.wait_for_selector("article.card")
                 recorder.prepare()
                 for beat in scene["beats"]:
                     recorder.caption(beat["say"])
-                    frames = [recorder.shot(scene["id"], "lead")]
-                    for action in beat["actions"]:
+                    # A sentence about a field or a scroll must not sit over the previous picture: act first, then show.
+                    actions = beat["actions"]
+                    frames = [recorder.shot(scene["id"], "lead")] if not actions or actions[0]["do"] in POINTER_ACTIONS else []
+                    for action in actions:
                         frames += recorder.act(scene["id"], action)
                     beats.append(frames)
             else:
@@ -551,6 +622,8 @@ def record(spec: dict, urls: dict[str, list[str]], site_url: str, captions: bool
                     beats.append([recorder.shot(scene["id"], "lead")])
             result[scene["id"]] = beats
         browser.close()
+        if datasette:
+            datasette.stop()
     return result
 
 
@@ -571,12 +644,12 @@ def media_seconds(path: Path) -> float:
         return 0.0
 
 
-def speak(text: str, voice: str, wav: Path) -> bool:
+def speak(text: str, voice: str, wav: Path, rate: int | None = None) -> bool:
     """macOS text-to-speech into a WAV file. False if `say` is missing or produced nothing."""
     if not shutil.which("say"):
         return False
     aiff = wav.with_suffix(".aiff")
-    run(["say", "-v", voice, "-o", str(aiff), text], timeout=300)
+    run(["say", "-v", voice, *(["-r", str(rate)] if rate else []), "-o", str(aiff), text], timeout=300)
     if not aiff.exists() or media_seconds(aiff) < 0.5:
         return False
     run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(aiff), "-ar", "44100", "-ac", "1", str(wav)], check=True)
@@ -604,7 +677,7 @@ def frame_seconds(frames: list[tuple[Path, str]], seconds: float) -> list[float]
         fixed = [value * scale for value in fixed]
         budget = seconds - sum(fixed)
     out = list(fixed)
-    lead_share = min(0.9, 0.22 * budget)
+    lead_share = min(0.5, 0.15 * budget)                  # the old picture under a new sentence: keep it short
     last = flexible[-1]
     others = [index for index in flexible if index != last]
     for index in others:
@@ -657,6 +730,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-voice", action="store_true", help="no text-to-speech; scenes are timed from word counts")
     parser.add_argument("--no-captions", action="store_true", help="leave out the caption bar")
     parser.add_argument("--allow-stale", action="store_true", help="build even if a number in the narration is out of date")
+    parser.add_argument("--short", action="store_true", help="leave out scenes marked `short: false` and write demo-short.mp4")
     args = parser.parse_args(argv)
 
     spec = load_scenes()
@@ -666,9 +740,12 @@ def main(argv: list[str] | None = None) -> int:
         if not args.allow_stale:
             return 1
 
-    print(f"wrote {write_script(spec).relative_to(REPO)}")
+    if not args.short:                       # the short cut must not replace measured timings with estimates
+        print(f"wrote {write_script(spec).relative_to(REPO)}")
     if args.script_only:
         return 0
+    if args.short:
+        spec = dict(spec, scenes=[scene for scene in spec["scenes"] if scene.get("short", True)])
 
     for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
@@ -692,7 +769,7 @@ def main(argv: list[str] | None = None) -> int:
     transcript = {}
     for scene in spec["scenes"]:
         kind = scene["kind"]
-        if kind == "page":
+        if kind in {"page", "datasette"}:
             continue
         if kind == "file":
             urls[scene["id"]] = []
@@ -702,15 +779,19 @@ def main(argv: list[str] | None = None) -> int:
                 urls[scene["id"]].append(page.as_uri())
             continue
         if kind == "card":
-            text = card_html(scene)
+            texts = [card_html(scene)]
         else:
-            text, transcript[scene["id"]] = terminal_html(scene, tmp)
-        page = run_dir / "html" / f"{scene['id']}.html"
-        page.write_text(text, encoding="utf-8")
-        urls[scene["id"]] = [page.as_uri()]
+            texts, transcript[scene["id"]] = terminal_html(scene, tmp)
+        urls[scene["id"]] = []
+        for number, text in enumerate(texts, start=1):
+            page = run_dir / "html" / f"{scene['id']}-{number}.html"
+            page.write_text(text, encoding="utf-8")
+            urls[scene["id"]].append(page.as_uri())
     (run_dir / "terminal-transcript.json").write_text(json.dumps(transcript, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    failed = [f"{sid}: `{item['command']}` exited {item['exit_code']}" for sid, items in transcript.items() for item in items
-              if item["exit_code"] != 0 and "bad_luck" not in item["output"]]
+    # A scene that demonstrates a refusal lists the commands that must fail (`expect_fail`: 1-based positions).
+    must_fail = {scene["id"]: set(scene.get("expect_fail", [])) for scene in spec["scenes"]}
+    failed = [f"{sid}: `{item['command']}` exited {item['exit_code']}" for sid, items in transcript.items()
+              for position, item in enumerate(items, start=1) if (item["exit_code"] != 0) != (position in must_fail[sid])]
     if failed:
         print("Commands that failed unexpectedly:\n  " + "\n  ".join(failed), file=sys.stderr)
         return 1
@@ -725,7 +806,7 @@ def main(argv: list[str] | None = None) -> int:
     audio: dict[str, Path | None] = {}
     for scene in spec["scenes"]:
         wav = run_dir / "audio" / f"{scene['id']}.wav"
-        if not args.no_voice and speak(scene["narration"], spec.get("voice", "Samantha"), wav):
+        if not args.no_voice and speak(scene["narration"], spec.get("voice", "Samantha"), wav, spec.get("voice_rate")):
             audio[scene["id"]] = wav
             durations[scene["id"]] = media_seconds(wav) + PAD_SECONDS
         else:
@@ -747,7 +828,7 @@ def main(argv: list[str] | None = None) -> int:
         segments.append(segment)
     listing = run_dir / "video" / "all.txt"
     listing.write_text("".join(f"file '{segment}'\n" for segment in segments), encoding="utf-8")
-    final = run_dir / "demo-draft.mp4"
+    final = run_dir / ("demo-short.mp4" if args.short else "demo-draft.mp4")
     completed = run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing),
                      "-c", "copy", "-movflags", "+faststart", str(final)])
     if completed.returncode != 0:
@@ -755,8 +836,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     write_srt(spec, durations, final.with_suffix(".srt"))
     (run_dir / "timings.json").write_text(json.dumps(durations, indent=2) + "\n", encoding="utf-8")
-    if voiced == len(spec["scenes"]):
-        write_script(spec, durations, voiced=True)        # replace estimated timings with measured ones
+    # demo/script.md keeps its estimated timings whether or not a voice was made, so that it is a pure function of
+    # scenes.yaml and never differs between two machines. The measured timings are in demo/out/timings.json.
     total = media_seconds(final)
     print(f"wrote {final.relative_to(REPO)}: {clock(total)} ({total:.0f} s), {int(WIDTH * SCALE)}x{int(HEIGHT * SCALE)}, "
           f"{len(segments)} scenes, {'with' if voiced else 'no'} voice, captions {'off' if args.no_captions else 'on'}")
