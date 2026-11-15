@@ -108,6 +108,23 @@ def main() -> int:
             f"- Found in classification round {posts[item['post_id']]['round']} via: {', '.join(posts[item['post_id']]['routes'])}",
             "",
         ]
+    extra = selection.get("additional_entries")
+    if extra:
+        lines += [
+            "## Entries beyond the 10 seeds",
+            "",
+            extra["why"],
+            "",
+            "| Entry | Post | Experiment covered | Note |",
+            "|---|---|---|---|",
+        ]
+        for item in extra["added"]:
+            post = posts[item["post_id"]]
+            lines.append(f"| `{item['entry_id']}` | [{cell(post['title'])}]({post['url']}) | {cell(item['experiment'])} | {cell(item.get('note', ''))} |")
+        lines += ["", "Drafted by the skill but not added:", ""]
+        for item in extra.get("drafted_but_not_added", []):
+            lines.append(f"- {cell(posts[item['post_id']]['title'])}, \"{cell(item['experiment'])}\": {item['reason']}")
+        lines += ["", extra["skipped_by_the_skill"], ""]
     lines += [
         "## What the selection does not have",
         "",

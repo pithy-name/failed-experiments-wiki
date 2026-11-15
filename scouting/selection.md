@@ -132,6 +132,24 @@ EXCEPTION, the only one. Supports six of the seven required fields. The post ask
 - Info hazard: none. Auditor's note: Two experiments; second run by a collaborator; a later update points to positive results from other work.
 - Found in classification round 1 via: phrase:negative result
 
+## Entries beyond the 10 seeds
+
+After the 10 seeds were in, the maintainer said 10 was a minimum. No further post met the rule, so the extra entries come from further distinct failed experiments inside posts that had already qualified. The contribute skill (v0.2) was asked to draft an experiment only if the post states every required field for it, and to list what it skipped.
+
+| Entry | Post | Experiment covered | Note |
+|---|---|---|---|
+| `fe-2026-0011` | [Some negative steganography results](https://www.lesswrong.com/posts/EEvsL9cpgDAxAhTzt/some-negative-steganography-results) | Experiment 2: iterated fine-tuning of GPT-3.5-Turbo to hide a 1-bit age signal | Same post as fe-2026-0010, so the same exception applies: the post poses a question and states no prediction. |
+| `fe-2026-0012` | [Sanity Checks for Sanity Checks for Sparse Autoencoders](https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders) | Raising d_model to 800 to close the gap between SAE architectures |  |
+| `fe-2026-0013` | [Sanity Checks for Sanity Checks for Sparse Autoencoders](https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders) | Per-sample magnitude variance as the explanation for the BatchTopK failure |  |
+| `fe-2026-0014` | [Sanity Checks for Sanity Checks for Sparse Autoencoders](https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders) | More true features than latents |  |
+| `fe-2026-0015` | [Training Models to Predict and Explain Their In-the-Wild Behavior](https://www.lesswrong.com/posts/YyAMz52wDxnLhwvWL/training-models-to-predict-and-explain-their-in-the-wild) | Open-ended self-explanation training generalising to a held-out hint setting |  |
+
+Drafted by the skill but not added:
+
+- Do capabilities generalize across propensities?, "Reasoning versus no-reasoning capability transfer": The orchestrator read the post: it predicts the highest overlap with capability for this pair, so lower transfer is what the authors expected, not a failed expectation.
+
+The skill listed 12 further candidates across four posts that it did not draft: 9 because the post lacks a required field for them (most often the exact setup or a stated expectation), 2 because they were not failures, and 1 because of the three-draft cap set for one post. The gold posts were not mined for further experiments, to keep eval outputs and wiki entries separate.
+
 ## What the selection does not have
 
 - **Topic spread is narrow.** Six of the ten are about sparse autoencoders or closely related interpretability methods. That is what passed the rule, not a choice: the posts that reported failures with enough structure were mostly interpretability posts.

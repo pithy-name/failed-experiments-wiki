@@ -24,6 +24,20 @@
      "exception": "hypothesis",
      "why": "EXCEPTION, the only one. Supports six of the seven required fields. The post asks a question (can current RL methods teach hidden 1-bit communication?) and states no prediction, so `hypothesis` is recorded as the proposition tested and says the post poses it as a question. Chosen over the other near-misses because it is a dedicated negative-results post with controls, careful scoping by the author, a different topic from the other nine, and a later note that other work succeeded: the case the retry-welcome fields exist for."}
   ],
+  "additional_entries": {
+    "why": "After the 10 seeds were in, the maintainer said 10 was a minimum. No further post met the rule, so the extra entries come from further distinct failed experiments inside posts that had already qualified. The contribute skill (v0.2) was asked to draft an experiment only if the post states every required field for it, and to list what it skipped.",
+    "added": [
+      {"entry_id": "fe-2026-0011", "post_id": "EEvsL9cpgDAxAhTzt", "experiment": "Experiment 2: iterated fine-tuning of GPT-3.5-Turbo to hide a 1-bit age signal", "note": "Same post as fe-2026-0010, so the same exception applies: the post poses a question and states no prediction."},
+      {"entry_id": "fe-2026-0012", "post_id": "EC5H7xakTgxxNXm5g", "experiment": "Raising d_model to 800 to close the gap between SAE architectures"},
+      {"entry_id": "fe-2026-0013", "post_id": "EC5H7xakTgxxNXm5g", "experiment": "Per-sample magnitude variance as the explanation for the BatchTopK failure"},
+      {"entry_id": "fe-2026-0014", "post_id": "EC5H7xakTgxxNXm5g", "experiment": "More true features than latents"},
+      {"entry_id": "fe-2026-0015", "post_id": "YyAMz52wDxnLhwvWL", "experiment": "Open-ended self-explanation training generalising to a held-out hint setting"}
+    ],
+    "drafted_but_not_added": [
+      {"post_id": "uH5oo57r24xGXQGKM", "experiment": "Reasoning versus no-reasoning capability transfer", "reason": "The orchestrator read the post: it predicts the highest overlap with capability for this pair, so lower transfer is what the authors expected, not a failed expectation."}
+    ],
+    "skipped_by_the_skill": "The skill listed 12 further candidates across four posts that it did not draft: 9 because the post lacks a required field for them (most often the exact setup or a stated expectation), 2 because they were not failures, and 1 because of the three-draft cap set for one post. The gold posts were not mined for further experiments, to keep eval outputs and wiki entries separate."
+  },
   "prd_named_examples": [
     {"post_id": "4uXCAJNuPKtKBsi28", "outcome": "selected (fe-2026-0001)"},
     {"post_id": "kiCZzHDkRtupek2mc", "outcome": "not selected: the post is a roundup of three short projects whose detail is in linked write-ups; for the audited project it does not give the exact setup (claim_scope) or a named model (models)"}
