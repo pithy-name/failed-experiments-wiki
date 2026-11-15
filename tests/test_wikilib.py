@@ -92,6 +92,51 @@ def test_search_lists_an_entry_on_any_term_and_says_so(valid_entry):
     assert "ANY of the query terms" in found["note"] and "weak match" in found["note"]
 
 
+def test_search_results_say_who_reviewed_so_an_agent_review_is_not_read_as_vetting(valid_entry):
+    """A first-time user saw a same-model review surface as plain 'reviewed' in an answer."""
+    entries = make_entries(valid_entry)
+    by_id = {r["id"]: r for r in wikilib.search(entries)["results"]}
+    assert by_id["fe-2026-0001"]["reviewed_by"] is None                       # unreviewed
+
+    human = copy.deepcopy(entries[0].data)
+    human["review"] = {"status": "reviewed", "reviewers": [{"handle": "r", "type": "human", "date": "2026-11-15"}]}
+    assert wikilib.reviewed_by(human) == "a person"
+
+    agent = copy.deepcopy(entries[0].data)
+    agent["contributor"] = {"type": "agent", "handle": "h", "agent_model": "model-x"}
+    agent["review"] = {"status": "reviewed", "reviewers": [{"handle": "h", "type": "agent", "date": "2026-11-15", "agent_model": "model-y"}]}
+    assert wikilib.reviewed_by(agent) == "an agent only"
+    agent["review"]["reviewers"][0]["agent_model"] = "model-x"
+    assert wikilib.reviewed_by(agent) == "an agent only, the same model that wrote the entry"
+    assert wikilib.summarize(wikilib.Entry(agent, ""))["reviewed_by"].startswith("an agent only")
+
+
+def test_search_matches_across_spelling_and_word_form(valid_entry):
+    """A first-time user searched for 'generalization' and missed an entry that says 'generalised'."""
+    entries = make_entries(valid_entry)
+    entries[0].data["limitations"] = "The probe generalised poorly to held-out jailbreaks."
+    for query in ("generalization", "generalize", "generalizing", "generalises"):
+        found = wikilib.search(entries, query)
+        assert [r["id"] for r in found["results"]] == ["fe-2026-0001"], query
+    assert wikilib.search(entries, "jailbreak")["match_count"] == 1          # plural in the text, singular in the query
+
+
+def test_a_word_every_entry_uses_counts_for_less_than_a_rare_one(valid_entry):
+    """Common words used to pull unrelated entries level with the one real hit."""
+    entries = make_entries(valid_entry) + make_entries(valid_entry)[:1]
+    entries[2].data = dict(entries[2].data, id="fe-2026-0003", title="Probing for hidden steganography in model outputs")
+    for entry in entries:
+        entry.data["claim_scope"] = "One model and one probing setup."      # 'probing' is now in every entry
+    found = wikilib.search(entries, "probing steganography")
+    assert found["results"][0]["id"] == "fe-2026-0003"
+    assert found["results"][0]["matched_terms"] == ["probing", "steganography"]      # the words as typed, not their stems
+    assert found["results"][1]["matched_terms"] == ["probing"]                       # weak hits stay listed, and say why
+    # counting every word in full would have put an entry that never mentions steganography on top
+    tokens = wikilib.tokenize("probing steganography")
+    unweighted = {entry.id: wikilib.score_entry(entry, tokens)[0] for entry in entries}
+    assert unweighted["fe-2026-0002"] > unweighted["fe-2026-0003"]
+
+
 def test_empty_query_lists_everything_passing_the_filters(valid_entry):
     entries = make_entries(valid_entry)
     assert wikilib.search(entries)["match_count"] == 2
