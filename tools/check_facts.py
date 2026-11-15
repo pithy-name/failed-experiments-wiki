@@ -74,8 +74,12 @@ def check(path: Path) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = sys.argv[1:] if argv is None else argv
-    paths = [Path(arg) for arg in args] or sorted(wikilib.ENTRIES_DIR.glob("fe-*.md"))
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Check that the numbers and model names an entry states occur in its post (a review aid, not a gate).")
+    parser.add_argument("paths", nargs="*", help="entry files (default: every entry in entries/)")
+    args = parser.parse_args(argv)
+    paths = [Path(arg) for arg in args.paths] or sorted(wikilib.ENTRIES_DIR.glob("fe-*.md"))
     for path in paths:
         outcome = check(path)
         if "error" in outcome:
