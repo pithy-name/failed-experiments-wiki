@@ -1,6 +1,7 @@
 """Verification run: exercise every function of the proof of concept and record what happened.
 
-  python demo/verify.py            (or: make verify)
+  python demo/verify.py                  (or: make verify)
+  python demo/verify.py --with-plugin    (or: make verify PLUGIN=1) also loads the plugin in headless Claude Code sessions
 
 It uses the same method as the demo video (demo/build_demo.py): a headless
 browser shows each step and a frame is captured, so a person can look at the
@@ -628,13 +629,17 @@ def write_report(spec: dict, results: list[dict], unchanged: bool, leaks: list[s
         lines.append(f"| `{item['id']}` | {item['requirement']} | {item['proves']}{note} | **{item['status']}** | {frames} |")
     lines += ["", "## Coverage: every function, and how it was checked", "",
               "| Function | How it was checked | Evidence |", "|---|---|---|"]
-    known = {item["id"] for item in results}
+    status_of = {item["id"]: item["status"] for item in results}
     for row in spec["coverage"]:
-        evidence = row["evidence"]
-        for check_id in row.get("checks", []):
-            if check_id not in known:
-                evidence += f" **(check `{check_id}` did not run)**"
-        lines.append(f"| {row['function']} | {row['status']} | {evidence} |")
+        evidence, how = row["evidence"], row["status"]
+        states = [status_of.get(check_id, "NOT RUN") for check_id in row.get("checks", [])]
+        if states and all(state == "NOT RUN" for state in states):
+            how = "not run in this report"
+        elif "NOT RUN" in states:
+            evidence += " **(some of these checks did not run in this report)**"
+        if "FAIL" in states:
+            how = "**FAILED**"
+        lines.append(f"| {row['function']} | {how} | {evidence} |")
     failed = [item for item in results if item["status"] == "FAIL"]
     if failed:
         lines += ["", "## Failures", ""]
@@ -646,7 +651,14 @@ def write_report(spec: dict, results: list[dict], unchanged: bool, leaks: list[s
     REPORT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Exercise every function and record the evidence on frames.")
+    parser.add_argument("--with-plugin", action="store_true",
+                        help="also load the plugin in headless Claude Code sessions (needs the `claude` command; uses model credits)")
+    args = parser.parse_args(argv)
+    enabled = {"plugin"} if args.with_plugin else set()
     spec = yaml.safe_load(SPEC.read_text(encoding="utf-8"))
     for tool in ("ffmpeg", "git"):
         if not shutil.which(tool):
@@ -674,6 +686,12 @@ def main() -> int:
     results: list[dict] = []
     pages: list[tuple[dict, list[str]]] = []
     for check in spec["checks"]:
+        if check.get("optional") and check["optional"] not in enabled:
+            results.append({"id": check["id"], "requirement": check["requirement"], "title": check["title"], "proves": check["proves"],
+                            "status": "NOT RUN", "frames": [], "commands": [],
+                            "detail": f"optional; run with --with-{check['optional']} (it starts headless Claude Code sessions, which use model credits)"})
+            print(f"{'NOT RUN':8} {check['id']}")
+            continue
         outcome = run_check(check, env, clone, scrub)
         item = {"id": check["id"], "requirement": check["requirement"], "title": check["title"], "proves": check["proves"],
                 "status": "PASS" if outcome["passed"] else "FAIL", "commands": outcome["commands"], "frames": [],
@@ -715,7 +733,7 @@ def main() -> int:
             results += browse_checks(page, frames, site.as_uri())
             results += datasette_checks(page, frames, db_path, metadata, work)
         finally:
-            for item in results[len(pages) + 1:]:
+            for item in results[len(spec["checks"]) + 1:]:
                 print(f"{item['status']:8} {item['id']}")
             browser.close()
 
