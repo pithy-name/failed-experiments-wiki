@@ -73,7 +73,7 @@ FIRST_FIELDS = [
 
 def field_catalogue() -> list[dict]:
     """Every schema field with its control, plus the derived badges as a facet."""
-    catalogue = [{"path": "badges", "kind": "list", "control": "facet", "group": "badges", "label": "who wrote it · reviewed or not"}]
+    catalogue = [{"path": "badges", "kind": "list", "control": "facet", "group": "badges", "label": "who wrote it · reviewed or not · open to a retry"}]
     for path, kind in wikilib.FIELDS:
         catalogue.append({"path": path, "kind": kind, "control": control_of(kind), "group": group_of(path), "label": label_of(path)})
     position = {field["path"]: index for index, field in enumerate(catalogue)}
