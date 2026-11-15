@@ -9,10 +9,18 @@ Built for the Apart Research **AI x Epistemics Research Sprint** (Track 2,
 Trust Infrastructure), November 2026. The working name is
 `failed-experiments-wiki`.
 
-**Start with [`DONE.md`](DONE.md)**: what works, how to see it working, and what
-is provisional. What is left to do is in [`TODO.md`](TODO.md). The demo narration
-is in [`demo/script.md`](demo/script.md). Design choices and their reasons are in
-[`DECISION-LOG.md`](DECISION-LOG.md).
+**To try it,** go to [Quick start](#quick-start), then
+[Using the plugin with Claude Code](#using-the-plugin-with-claude-code).
+
+**To see where the project stands:**
+
+| Read | For |
+|---|---|
+| [`DONE.md`](DONE.md) | What was built, and the status of each requirement |
+| [`VERIFICATION.md`](VERIFICATION.md) | Every function exercised, with what passed and what cannot be checked yet |
+| [`TODO.md`](TODO.md) | What is left for the maintainer |
+| [`demo/script.md`](demo/script.md) | The demo narration |
+| [`DECISION-LOG.md`](DECISION-LOG.md) | Design choices and their reasons |
 
 ## The idea
 
@@ -52,13 +60,17 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 ## Quick start
 
 ```
-make setup        # creates .venv and installs everything (needs Python 3.10+)
+make setup        # creates .venv and installs everything (Python 3.10+; uses python3.11 unless you pass PYTHON=python3.12)
 make test         # run the tests
 make validate     # validate every entry, checking each quote against its post
 make site         # build site/index.html, then open it in a browser
 make datasette    # build wiki.db and serve it at http://localhost:8001
 make evals        # re-score the skill evals -> evals/results/RESULTS.md
+make verify       # exercise every function in a throwaway clone and a headless browser -> VERIFICATION.md
 ```
+
+`make setup` comes first for everything else here, the plugin included: its
+server runs from the `.venv` that `make setup` creates.
 
 ## Trust signals on every entry
 
@@ -79,14 +91,18 @@ Badges are derived, never stored: `agent-written`, `unreviewed`, `contested`,
 
 ## Contributing
 
-**As an agent** (Claude Code): install the plugin in `plugin/`, then ask it to
-contribute a post URL. The `contribute` skill reads the post, drafts one entry
-per failed experiment, and calls `submit_entry`, which validates the entry,
-commits it on a new branch and opens a pull request. The entry is stored as
-agent-written and unreviewed.
+**As an agent** (Claude Code): load the plugin
+([below](#using-the-plugin-with-claude-code)), then ask it to contribute a post
+URL. The `contribute` skill reads the post, drafts one entry per failed
+experiment, and calls `submit_entry`, which validates the entry and commits it
+on a new branch. With a GitHub remote it then opens a pull request; without
+one it says so and names the local branch. The entry is stored as agent-written
+and unreviewed.
 
 **As a person:** open a "New entry" issue. A workflow turns the form into an
-entry file and a pull request, marked `contributor.type: human`.
+entry file and a pull request, marked `contributor.type: human`. This needs the
+repository to be on GitHub, which it is not yet; the script the workflow runs
+(`tools/issue_to_entry.py`) is tested locally.
 
 **Reviewing:** the `review` skill, or a person, checks an entry against its
 post and records `reviewed` or `contested` with reviewer, date and notes:
@@ -98,7 +114,7 @@ post and records `reviewed` or `contested` with reviewer, date and notes:
 
 ## Asking "what's been tried?"
 
-With the plugin installed, describe your plan and the `ask` skill answers in
+With the plugin loaded, describe your plan and the `ask` skill answers in
 five parts: already tried, where it went wrong, what to avoid, worth retrying,
 not found. It cites entry IDs, never states a failure that is not in an entry,
 and says plainly when the wiki has nothing.
@@ -111,16 +127,74 @@ Without the plugin, the same tools are on the command line:
 .venv/bin/python tools/cli.py get fe-2026-0001
 ```
 
-## Installing the plugin
+## Using the plugin with Claude Code
 
-```
-claude --plugin-dir /path/to/failed-experiments-wiki/plugin
-```
+1. Run `make setup` once (see [Quick start](#quick-start)). The plugin's server
+   runs from the `.venv` it creates, and will not start without it.
+2. Start Claude Code with the plugin, from the repository root:
 
-The MCP server starts through `plugin/mcp/run.sh`, which uses the repository's
-`.venv`. Read tools need no credentials. Write tools use your `gh` login to
-open pull requests. Set `FEWIKI_HANDLE` to your GitHub handle if `gh` is not
-logged in.
+   ```
+   claude --plugin-dir plugin
+   ```
+
+   This loads the plugin for that session only. Nothing is installed
+   permanently, and there is no marketplace entry yet.
+
+**What you get**
+
+| Kind | Name | What it does |
+|---|---|---|
+| Skill | `/failed-experiments-wiki:ask` | Answers "what has been tried on this, where did it go wrong, what should I avoid?" |
+| Skill | `/failed-experiments-wiki:contribute` | Turns a LessWrong or Alignment Forum post into one entry per failed experiment and submits it |
+| Skill | `/failed-experiments-wiki:review` | Checks an entry against its post and records the outcome |
+| Tool | `search_entries` | Keyword search and filters on any field |
+| Tool | `get_entry` | One entry in full |
+| Tool | `list_facets` | Every filterable field and the values in use |
+| Tool | `fetch_source` | A post's metadata and text, cached |
+| Tool | `submit_entry` | Validates a draft and commits it on a new branch |
+| Tool | `review_entry` | Records a review on a new branch |
+
+You do not have to name a skill. Plain requests work:
+
+- "I plan to steer a model along an eval-awareness direction to stop sandbagging. What has been tried?"
+- "Add this post to the wiki: `<LessWrong URL>`"
+- "Review entry fe-2026-0008."
+
+**What writing does.** `submit_entry` and `review_entry` never change `main`.
+Each commits to its own branch (`entry/<id>` or `review/<id>-<date>`). With a
+GitHub remote they push that branch and open a pull request with your `gh`
+login. Without a remote, which is the case today, they stop at the local branch
+and print the command that merges it:
+`.venv/bin/python tools/cli.py merge-local <branch>`.
+
+**Your name goes on what you file.** An entry or review made through the
+plugin records your GitHub login (read from `gh`) as the accountable person,
+beside `type: agent` and the model's name, and the commit carries your git
+identity. Nothing asks first. Set `FEWIKI_HANDLE` to use another handle; with
+neither, the placeholder `HANDLE-TBD` is recorded.
+
+**Permissions.** Claude Code asks before it first uses each wiki tool. In a
+headless run (`claude -p`), allow them up front:
+`--allowedTools "mcp__plugin_failed-experiments-wiki_failed-experiments-wiki"`
+(add `__search_entries` and so on to allow single tools). Read tools need no
+credentials.
+
+**What a post needs before it can be filed.** The `contribute` skill declines
+an experiment unless the post itself states what was expected, exactly what
+was tested, the result, and a quotable sentence of 15 words or fewer. Most
+failure write-ups fall short of that (9 of 49 during seeding), so "this post
+does not support an entry" is a common and correct answer. A post that works:
+`https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders`
+(already in the wiki, so the skill will say so).
+
+**A review by an agent is a weak check.** The `review` skill can set an entry
+to `reviewed`, and tools then report `reviewed_by: an agent only` (and say when
+it was the same model that wrote the entry). Treat only a person's review as
+vetting.
+
+Checked on 2026-11-15 in headless sessions (see `VERIFICATION.md`): the plugin
+loads, the six tools and three skills register, and the `ask` skill answers
+through the tools.
 
 ## What is stored, and what is not
 
