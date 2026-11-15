@@ -26,6 +26,10 @@ list and the validator rejected them. The seed entries and the evals in
   words. The only verbatim text is `source.quote`.
 - **Experiments, not people.** Describe what was tried and what happened. Never
   judge the authors. No "the authors failed to", "sloppy", "should have".
+  This holds even when the authors say it of themselves: if a post says "I
+  don't have much expertise in X" or "this is below my usual standard", do not
+  carry that into the entry. Record what it means for the experiment instead
+  (what was not tuned, how long it ran, what was not tried).
 - **A failure is scoped.** One post showing that X did not work in one setup is
   not evidence that X never works. `claim_scope` exists to say so.
 - **Not every post belongs.** If the post is not a write-up of an experiment
@@ -56,6 +60,25 @@ python tools/cli.py submit --file <draft.md> --agent-model <your model id>
    experiment (or a replication) and report a negative outcome: null, opposite,
    smaller than expected, mixed with a clear negative, did not replicate, or
    abandoned because it did not work. If not, stop and tell the user why.
+   **Then check that the post says enough.** An entry is only as good as what
+   the post states. For each experiment you would file, the post itself must
+   state all of these:
+   - what the authors expected or set out to show (`hypothesis`);
+   - exactly what was tested (`claim_scope`): the setup, and the model or the
+     thing that was trained;
+   - the result and its direction;
+   - a sentence of 15 words or fewer that states the negative result (the quote).
+
+   If one is missing, **do not submit that experiment.** Tell the user which
+   field the post does not support. Most failure write-ups fall short here
+   (during seeding, 9 of 49 passed), so declining is the normal outcome, not a
+   failure of yours. `unknown` is for details the post leaves out (a model's
+   version, the cause of the failure). It is not a way to file an experiment
+   the post barely describes: an entry with `models: unknown`,
+   `failure_type: unknown` and a vague result tells a reader nothing, and its
+   passing the validator would make it look sounder than it is. A round-up
+   post that mentions many failed projects in a paragraph each usually
+   supports none of them.
 4. **Split into experiments.** One entry per distinct failed experiment
    (different hypothesis, method or setup). Several results of one experiment
    are one entry. A post listing three unrelated failed projects is three
@@ -74,7 +97,26 @@ python tools/cli.py submit --file <draft.md> --agent-model <your model id>
    is not verbatim: pick the fragment again from the fetched text.
 10. **Report** each entry's ID, its branch or pull-request link exactly as the
     tool returned it, and that it is agent-written and unreviewed. If the tool
-    says no pull request was opened, say that; do not make up a link.
+    says no pull request was opened, say that; do not make up a link. Also say:
+    - which GitHub handle the entry was recorded under (`contributor.handle` in
+      the tool's result). It is the user's own login, read from `gh`, named as
+      the accountable person beside `type: agent` and your model. The user may
+      not expect their name on it, so tell them;
+    - every field you set to `unknown`, and any judgment call between two
+      closed-list values, so a reviewer knows where to look;
+    - every experiment in the post you did **not** file, and which field it lacked.
+
+**When the repository has no remote.** `submit_entry` returns
+`status: branch_only_no_remote` and `pull_request: null`. That is not an error:
+the entry is committed on the local branch `entry/<id>` and is not in the wiki
+yet. Report the branch, and the command that merges it, which the tool prints
+in `detail`: `python tools/cli.py merge-local entry/<id>`. Do not run the merge
+unless the user asks.
+
+**If the post text looks cut off.** `fetch_source` returns the whole post as
+plain text; figures and their captions are not included. If the text seems to
+stop mid-sentence, say so in your report and do not fill a field from the
+missing part.
 
 ## Field guide
 
@@ -93,11 +135,11 @@ are lists of strings. `models` and `related` are lists of objects.
 | `hypothesis` | What the authors expected or hoped to find, as the post states it. |
 | `claim_scope` | Exactly what was tested: setup, models, data, scale, and what was not covered. Write it so nobody can read the entry as "X never works". |
 | `method` | Technique tags, lowercase with hyphens: e.g. `sae`, `activation-steering`, `linear-probing`, `fine-tuning`, `prompting`, `rl`, `debate`. |
-| `models` | Each model tested: `name`, `developer`, `version`, `size`, `access` (`open-weight`, `api` or `unknown`). Use `unknown` for anything the post does not state. If the post names no model at all, use one item with `name: unknown`. |
+| `models` | Each model tested: `name`, `developer`, `version`, `size`, `access` (`open-weight`, `api` or `unknown`). Use `unknown` for anything the post does not state. If the experiment has no language model (a toy model, synthetic activations, an SAE trained on synthetic data), name what was trained, as the post does, e.g. `name: toy model (synthetic activations)`, with the other parts `unknown`. Use one item with `name: unknown` only when the post gives nothing to name. |
 | `benchmarks` (optional) | Benchmarks or datasets named in the post. |
-| `result.direction` | `null` (no effect), `opposite`, `smaller_than_expected`, `mixed`, `did_not_replicate`. |
+| `result.direction` | `null` (no effect), `opposite`, `smaller_than_expected`, `mixed`, `did_not_replicate`. When a metric improved a little but the method gave nothing usable, that is `smaller_than_expected`. Use `mixed` only when some results were clearly positive and others clearly negative. |
 | `result.effect_size`, `ci_low`, `ci_high`, `n` (optional) | Only numbers the post reports for the main result. Leave out when in doubt. |
-| `failure_type` | Why it failed, as far as the post says: `hypothesis_false` (the idea, as scoped, seems wrong), `underpowered` (too little data or compute to tell), `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown`. Choose `hypothesis_false` only when the post argues the idea itself does not hold. |
+| `failure_type` | Why it failed, as far as the post says: `hypothesis_false` (the idea, as scoped, seems wrong), `underpowered` (too little data or compute to tell), `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown`. Choose `hypothesis_false` only when the post argues the idea itself does not hold. When the authors say only that the work "did not accomplish anything useful" and give no cause, that is `unknown`. |
 | `confidence_true_negative` | How sure a reader can be that the idea, as scoped, really does not work: `low`, `medium`, `high`. One quick attempt with caveats is `low`. Careful controls, baselines and several setups is `high`. |
 | `checks_done` (optional) | Checks the post reports, as tags: e.g. `positive-control`, `baseline-comparison`, `seed-sweep`, `noise-floor`, `bug-audit`, `hyperparameter-sweep`. |
 | `limitations` (optional) | What was not tried, as the post says. |
@@ -109,7 +151,7 @@ are lists of strings. `models` and `related` are lists of objects.
 | `source.crosspost_url` (optional) | `url_alignment_forum` from `fetch_source`, when present. |
 | `source.title`, `source.authors`, `source.published`, `source.lw_tags` | Copy from `fetch_source`. |
 | `source.section` (optional) | The heading the experiment sits under, if any. |
-| `source.quote` | **15 words or fewer, copied character for character** from the post, stating the negative result. Not stitched from two places. |
+| `source.quote` | **15 words or fewer, copied character for character** from the post, stating the negative result. Not stitched from two places. Curly quotes, apostrophes and dashes are safe: the check treats them the same as their plain forms. |
 | `dates.experiment` (optional) | Only if the post says when the experiment ran. |
 | `related` (optional) | Existing entries on the same idea: `id` and `relation` (`replicates`, `contradicts`, `extends`, `same_hypothesis`). |
 | `info_hazard` | `none`, or `review_needed` if the failed experiment is an attack or capability attempt whose details could help misuse. |
