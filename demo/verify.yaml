@@ -10,6 +10,17 @@
 # `expect` is text that must be in the output and on the frame. `expect_exit` defaults to 0.
 
 checks:
+  # ---- First, while the clone is still exactly the repository -----------------------------
+  - id: demo-script
+    requirement: D8
+    title: The demo script regenerates from its one source
+    proves: The narration script is a pure product of demo/scenes.yaml, and the numbers it speaks match the repository.
+    commands:
+      - run: python demo/build_demo.py --script-only
+        expect: ["wrote demo/script.md"]
+      - run: git status --short demo/script.md
+        expect_no_output: true
+
   # ---- D5: one validator on every path -------------------------------------------------
   - id: validate-all
     requirement: D5
@@ -327,15 +338,14 @@ checks:
       - run: python tools/validate.py --quotes cached
         expect: ["0 error(s)"]
 
-  - id: demo-script
+  - id: demo-numbers-guard
     requirement: D8
-    title: The demo script regenerates and its numbers are current
-    proves: The narration is generated from one file and the build stops if a number it speaks is out of date.
+    title: The demo refuses to state numbers that are out of date
+    proves: By now this clone holds more entries and a verified reference entry, so the numbers the narration speaks are wrong for it, and the build stops and says which.
     commands:
       - run: python demo/build_demo.py --script-only
-        expect: ["wrote demo/script.md"]
-      - run: git status --short demo/script.md
-        expect_no_output: true
+        expect_exit: 1
+        expect: ["out of date", "entries: the narration assumes"]
 
   - id: test-suite
     requirement: D5
@@ -452,8 +462,8 @@ coverage:
     evidence: "In a throwaway clone; the real gold entries stay unverified."
   - function: Demo script and video build
     status: recorded
-    checks: [demo-script]
-    evidence: "The script regenerates unchanged. The video build was run and its frames reviewed separately; it is not rebuilt in this run."
+    checks: [demo-script, demo-numbers-guard]
+    evidence: "The script regenerates unchanged, and the build refuses to run once the numbers it speaks are out of date. The two video cuts were built and their frames reviewed separately; they are not rebuilt in this run."
   - function: Test suite
     status: recorded
     checks: [test-suite]
