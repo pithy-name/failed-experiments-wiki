@@ -6,7 +6,7 @@ PY     := .venv/bin/python
 PORT   ?= 8001
 HANDLE ?=
 
-.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-setup demo-video set-handle evals sync-gold scout facets
+.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-setup demo-video verify set-handle evals sync-gold scout facets
 
 help:
 	@echo "make setup          create .venv and install everything"
@@ -22,6 +22,7 @@ help:
 	@echo "make demo-script    write demo/script.md from demo/scenes.yaml"
 	@echo "make demo-setup     install what the demo video needs (Playwright and its headless browser)"
 	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs ffmpeg; the voice needs macOS say, outside the sandbox)"
+	@echo "make verify         exercise every function in a throwaway clone and a headless browser -> VERIFICATION.md, demo/out/verify/"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
 	@echo "make sync-gold HANDLE=<github handle>   publish verified gold entries into entries/"
 	@echo "make set-handle HANDLE=<github handle>  replace the HANDLE-TBD placeholder in the seed entries"
@@ -67,6 +68,9 @@ demo-setup:
 
 demo-video:
 	$(PY) demo/build_demo.py
+
+verify:
+	$(PY) demo/verify.py
 
 evals:
 	$(PY) evals/run_evals.py
