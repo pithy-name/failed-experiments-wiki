@@ -56,10 +56,44 @@ needs something only the maintainer has.
 
 ## Demo: second viewing
 
-Run on the short cut after the rewrite, with the same questions and one more
-(why it starts where it starts). Its record, when it exists, is
-`raw/demo-viewer-2-short-cut-after-rewrite.md`. The decision log (DEC-80)
-records what it found and whether the three "No" rows above turned to "Yes".
+A fresh reader, told nothing, on the short cut after the rewrite, with the same
+questions and one more (why it starts where it starts). Record:
+`raw/demo-viewer-2-short-cut-after-rewrite.md`. It reviewed the cut as it was
+before the last narration pass, so the last column is what that pass did; no
+third reader has looked at the result.
+
+**Did the three "No" rows turn?**
+
+| Message | Second viewer | After the last pass |
+|---|---|---|
+| Why it matters | Mostly. It quoted the file drawer, repeated mistakes and, from the subtitles, scarce compute going to ideas already ruled out. Still: "no example of a repeated dead end is shown" | Unchanged. That needs a real case from you (finding 16 above). |
+| Why it starts with LessWrong | Yes. It gave both reasons: the community already posts candid write-ups, and its name states the goal | "LessWrong's own name", since "its own name" could be read as the wiki's |
+| "Less wrong" as the one thing | Partly. It found the sentence that names it, in the last eight seconds, and the slogan "in the smallest grey text on the last slide"; before reading the subtitles it had picked "a failure is scoped" instead | The slogan is the closing card's headline |
+
+**Its 20 findings (4 major after its own revision, one more listed as major in the record):**
+
+| ID | Sev | Finding, in short | Disposition | What was done |
+|---|---|---|---|---|
+| B1 | MAJOR | "Not one of the scored ones" refers to scoring this cut never shows; the disclosure comes after the answer | Fixed | The scene now opens "For this demo, an AI agent then wrote this answer" and ends "Nobody has scored this answer for accuracy." |
+| B2 | MAJOR | "People and agents both write to", yet no entry by a person exists | Fixed as | Title and narration say "can both write to"; the closing card and narration state that all fifteen entries were written by an agent and none by a person. |
+| B3 | MAJOR | "The agent cannot set its own trust fields" is asserted, not shown | Partly | Reworded to what the screen shows (the system writes those fields; a draft that claims otherwise is overwritten). The refusal itself is not in the video; it is in `VERIFICATION.md` (`submit-cannot-self-promote`). |
+| B4 | MAJOR (in the record) | Fifteen agent-written against fourteen unreviewed, never explained; "each card says so" read as every card | Fixed | Scene 3 says all fifteen were written by an agent and the only review was by an agent; "each of those five says so". |
+| B5 | MAJOR | "Agents read" is backed by a static file; the plugin is never shown | Fixed as | The real plugin session is back in the short cut, and the answer scene says an agent wrote it through the plugin for this demo. Still a saved transcript, not a live capture. |
+| B6 | MINOR | No example of a repeated dead end; "we" then "I" | Partly | "I found". The example is yours to supply. |
+| B7 | MINOR | "File drawer" promised, public posts delivered | Fixed | "It starts with what is already public but hard to find." |
+| B8 | MINOR | The one thing comes last and smallest | Fixed | Closing headline. |
+| B9 | MINOR | "Its own name" ambiguous | Fixed | "LessWrong's own name". |
+| B10 | MINOR | "Open to a retry" is not a trust signal | Fixed | "Two badges say how far to trust an entry, and one invites a retry." |
+| B11 | MINOR | Caption runs ahead of the click | Not fixed | The pointer moves to a control while its sentence starts; that frame is held briefly on purpose. |
+| B12 | MINOR | The filter sentence lists fields the frame does not show | Fixed | Shortened to what is shown. |
+| B13 | MINOR | The answer is small raw text on screen | Not fixed | It is the real file. A rendered view is a fair improvement. |
+| B14 | MINOR | "Every claim cites an entry", but all cite the same one | Fixed | "…and here they all rest on one." |
+| B15 | MINOR | One easy query on a small wiki | Not fixed | True, and the closing card gives the size. |
+| B16 | MINOR | The validator's limit is never stated | Fixed | "It checks form and quotes, not whether a summary is right." |
+| B17 | MINOR | The finding's sample is undescribed | Partly | The card says the posts came from keyword and tag searches and that a small model labelled them. |
+| B18 | MINOR | Authors named, not yet asked | Fixed as | The close says no author has been contacted. Names are still shown, as source credit. |
+| B19 | MINOR | Jargon on the first card; terms unexplained | Not fixed | The first entry is a real one; its title is the authors' subject. |
+| B20 | MINOR | No branch visible; merge against review unclear | Partly | "Merging is not review." The log still shows a merge commit, not a branch diagram. |
 
 ## Plugin first use: the findings
 
