@@ -8,7 +8,8 @@
   var fields = payload.fields;
   var entries = payload.entries;
   var state = {text: "", facets: {}, ranges: {}};
-  var openId = null;   // entry whose "All fields" view is open when the page loads from a link
+  var openId = null;   // the entry whose "All fields" view was opened last; it is the one a link carries
+  var openSet = {};    // every entry whose "All fields" view is open now, so a filter change does not close them
 
   /* ---------- link state ----------
      The current filters live in the URL fragment, so a filtered view can be shared:
@@ -32,7 +33,7 @@
       if (key === "q") {
         state.text = value;
       } else if (key === "open") {
-        if (/^fe-\d{4}-\d{4}$/.test(value)) { openId = value; }
+        if (/^fe-\d{4}-\d{4}$/.test(value)) { openId = value; openSet[value] = true; }
       } else if (key.indexOf("f.") === 0) {
         path = key.slice(2); field = fieldByPath[path];
         if (field && field.control === "facet") { state.facets[path] = value.split("|").filter(Boolean); }
@@ -258,7 +259,18 @@
     article.appendChild(cite);
 
     var details = el("details", "all-fields");
-    details.open = (entry.id === openId);
+    details.open = !!openSet[entry.id];
+    details.addEventListener("toggle", function () {
+      if (details.open === !!openSet[entry.id]) { return; }     // the event for the state it was drawn in
+      if (details.open) {
+        openSet[entry.id] = true;
+        openId = entry.id;
+      } else {
+        delete openSet[entry.id];
+        if (openId === entry.id) { openId = Object.keys(openSet).sort().pop() || null; }
+      }
+      writeLink();
+    });
     details.appendChild(el("summary", null, "All fields"));
     details.appendChild(renderValue(data));
     if (entry.body) {
@@ -292,6 +304,7 @@
   document.getElementById("clear").addEventListener("click", function () {
     state = {text: "", facets: {}, ranges: {}};
     openId = null;
+    openSet = {};
     search.value = "";
     renderFilters();
     renderResults();
