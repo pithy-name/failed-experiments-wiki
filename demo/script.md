@@ -8,7 +8,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 - **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.
 - **Update when** flags lines that are true today and will need changing as the project moves.
 - Timings are estimated at 175 words a minute, plus 0.9 s of pause per scene. A built video's measured timings are in `demo/out/timings.json`; the text-to-speech voice runs a little faster than the estimate.
-- Narration length: 1149 words.
+- Narration length: 1156 words.
 
 ## What the draft video is, and is not
 
@@ -22,33 +22,33 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ## Scenes
 
-### 1. `s01-title` · 0:00–0:29 (29 s)
+### 1. `s01-title` · 0:00–0:29 (30 s)
 
 **On screen:** Title card: A wiki of failed AI-safety experiments
 
 **Narration:**
 
-> When an AI-safety experiment does not work, the result usually stays in a file drawer, or in a post nobody can find. For AI safety, we found no shared record of what was tried and where it failed. So the next team repeats the dead end, and scarce safety compute goes to ideas that were already ruled out. This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents both write to, and both read.
+> When an AI-safety experiment does not work, the result usually stays in a file drawer, or in a post nobody can find. For AI safety, I found no shared record of what was tried and where it failed. So the next team repeats the dead end, and scarce safety compute goes to ideas that were already ruled out. This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents can both write to, and both read.
 
-### 2. `s02-idea` · 0:29–1:03 (34 s)
+### 2. `s02-idea` · 0:29–1:00 (31 s)
 
 **On screen:** Title card: Less wrong, one experiment at a time
 
 **Narration:**
 
-> It starts with what is already public but hard to find: LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work. Its own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at. The habit, never the person: entries describe experiments, and do not judge whoever ran them. Every entry shows who wrote it and whether anyone checked it, and every failure is scoped, so one thin report is not read as: this never works.
+> It starts with what is already public but hard to find: LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work. LessWrong's own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at. The habit, never the person: entries describe experiments, and do not judge whoever ran them. And every failure is scoped, so one thin report is not read as: this never works.
 
-### 3. `s03-browse` · 1:03–1:32 (28 s)
+### 3. `s03-browse` · 1:00–1:27 (27 s)
 
 **On screen:** The browse page in a headless browser: scroll down 420 px; scroll to `fe-2026-0006`; scroll back to the top.
 
 **Narration:**
 
-> This is the wiki: one web page built from plain text files, with no server. Fifteen entries so far, each taken from a real LessWrong or Alignment Forum post. Badges say how far to trust each one: written by an agent, not yet reviewed, open to a retry. The first five are meant to become my own reference entries. For now they are model drafts, labelled as written by an agent until I verify them, and each card says so.
+> This is the wiki: one web page, built from plain text files. Fifteen entries so far, each from a real post. Two badges say how far to trust an entry, and one invites a retry. So far all fifteen were written by an agent, and the only review was done by an agent too. The first five are model drafts of my own reference entries, and each of those five says so until I verify it.
 
 **Update when:** The last sentence goes once the gold entries are verified. The count changes if entries are added.
 
-### 4. `s04-filter` · 1:32–1:47 (16 s)
+### 4. `s04-filter` · 1:27–1:43 (16 s)
 
 **On screen:** The browse page in a headless browser: scroll the filter panel to show more fields; scroll the filter panel back to the top; tick **failure type → hyperparams_unexplored**; untick **failure type → hyperparams_unexplored**; tick **badges → retry-welcome**; tick **failure type → hypothesis_false**; click **Clear all filters**; type `steganography` in the search box.
 
@@ -56,7 +56,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Every field is a filter, from the result to the source. Here are the failures where the settings were never properly explored. Here, the ones where the hypothesis itself looks false, yet a retry is still welcome. And a search across every field.
 
-### 5. `s05-entry` · 1:47–2:19 (32 s)
+### 5. `s05-entry` · 1:43–2:14 (32 s)
 
 **On screen:** The browse page in a headless browser, starting from the link `#q=steganography`: open **All fields** on `fe-2026-0010`; scroll to **quote** and outline it; scroll to **claim scope** and outline it; scroll to **confidence true negative** and outline it; scroll to **retry welcome** and outline it; scroll to **limitations** and outline it.
 
@@ -64,7 +64,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Open one. It links the original post, and carries a short quote that a program found, word for word, in that post. Claim scope says exactly what was tested: one setup, one small model, two hundred training steps. Confidence that this is a true negative, meaning the idea really fails and the test was not just weak: low. Retry welcome: yes. The entry records the post's own view that a stronger setup would very likely succeed. So it warns you about a pitfall, without telling you the idea is dead.
 
-### 6. `s06-file` · 2:19–2:35 (16 s) *(not in the short cut)*
+### 6. `s06-file` · 2:14–2:30 (16 s) *(not in the short cut)*
 
 **On screen:** File `entries/fe-2026-0005.md`, lines 1–18, then 34–51
 
@@ -72,15 +72,15 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Underneath, an entry is one text file with structured fields: the hypothesis, exactly what was tested, the result, the kind of failure, and its limits. Every change to it goes through git, so the history of what was agreed, and why, is kept.
 
-### 7. `s07-ask` · 2:35–2:53 (18 s)
+### 7. `s07-ask` · 2:30–2:48 (18 s)
 
 **On screen:** Terminal, real output of: `python tools/cli.py search "steer evaluation awareness direction to stop sandbagging" --brief --limit 3`
 
 **Narration:**
 
-> Now the question this is for. Say a researcher plans to steer a model along a direction for "it thinks it is being evaluated", to stop it sandbagging, that is, underperforming on purpose. Has that been tried? A plain keyword search already ranks first the one entry that tested exactly this.
+> Now the question this is for. Say a researcher plans to steer a model along a direction for "it thinks it is being evaluated", to stop it sandbagging, that is, underperforming on purpose. Has that been tried? A keyword search ranks first the one entry that tested exactly this.
 
-### 8. `s07b-plugin` · 2:53–3:07 (14 s)
+### 8. `s07b-plugin` · 2:48–3:01 (14 s)
 
 **On screen:** File `demo/answers/plugin-session.md`, lines 1–18
 
@@ -90,17 +90,17 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 **Note:** A saved transcript of a real headless Claude Code session with the plugin loaded, run on 2026-11-15 with only the wiki's own tools available. `make verify PLUGIN=1` repeats it.
 
-### 9. `s08-answer` · 3:07–3:43 (36 s)
+### 9. `s08-answer` · 3:01–3:37 (36 s)
 
 **On screen:** File `demo/answers/steering.md`, lines 1–7, then 9–19, then 29–38
 
 **Narration:**
 
-> And this is what an AI agent wrote for that plan, following the ask skill, a set of instructions, and reading the wiki through its plugin. Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found. Every claim cites an entry. It does not turn a weak result into a verdict: the dose was gentle, so it says this is not evidence that the idea fails. It ends by saying that all of it rests on one unreviewed entry. This answer was written for the demo, and is not one of the scored ones.
+> For this demo, an AI agent then wrote this answer, following the ask skill, a set of instructions, and reading the wiki through its plugin. Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found. Every claim cites its entry, and here they all rest on one. It does not turn a weak result into a verdict: the dose was gentle, so it says this is not evidence that the idea fails. It ends by saying that all of it rests on one unreviewed entry. Nobody has scored this answer for accuracy.
 
 **Note:** Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. It is not one of the scored answers (those were written when the wiki held 10 entries) and no judge has scored it; every statement in it was read against the two entries it cites.
 
-### 10. `s09-notfound` · 3:43–3:59 (16 s) *(not in the short cut)*
+### 10. `s09-notfound` · 3:37–3:53 (16 s) *(not in the short cut)*
 
 **On screen:** File `demo/answers/debate.md`, lines 1–17
 
@@ -110,23 +110,23 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 **Note:** Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. Not one of the scored answers.
 
-### 11. `s10-contribute` · 3:59–4:18 (19 s)
+### 11. `s10-contribute` · 3:53–4:14 (21 s)
 
 **On screen:** Terminal, real output of: `git log --graph --format='%h %s' --grep='fe-2026-0012'`; `grep -A5 -E '^(contributor|review):' entries/fe-2026-0012.md`
 
 **Narration:**
 
-> Agents also write. The contribute skill reads a post, drafts one entry for each failed experiment, and submits it. Each submission lands on its own branch, and merges only if validation passes. The agent cannot set its own trust fields. The system stamps the entry: written by an agent, which model, and unreviewed.
+> Agents also write: the contribute skill reads a post, drafts an entry for each failed experiment, and submits it. Each submission lands on its own branch, and merges only if validation passes. The system, not the agent, writes the trust fields: written by an agent, which model, unreviewed. A draft that claims otherwise is overwritten, and merging is not review.
 
 **Update when:** With a GitHub remote, show the pull request instead of the local branch graph.
 
-### 12. `s11-validate` · 4:18–4:36 (18 s)
+### 12. `s11-validate` · 4:14–4:36 (21 s)
 
 **On screen:** Terminal, real output of: `sed 's/^failure_type: .*/failure_type: bad_luck/' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md; python tools/validate.py $TMP/fe-2026-0008.md --quotes cached`; `sed 's/^  quote: .*/  quote: This sentence is not in the post./' entries/fe-2026-0008.md > $TMP/fe-2026-0008.md; python tools/validate.py $TMP/fe-2026-0008.md --quotes cached`; `python tools/validate.py --quotes cached`
 
 **Narration:**
 
-> One validator guards every path. Change a failure type to a value that is not on the list, and it refuses. Change the quote to a sentence the post never said, and it refuses that too, checking against a saved copy of the post. All fifteen real entries pass.
+> One validator guards every path. Change a failure type to a value that is not on the list, and it refuses. Change the quote to a sentence the post never said, and it refuses that too, checking against a saved copy of the post. All fifteen real entries pass. It checks form and quotes, not whether a summary is right.
 
 ### 13. `s12-human` · 4:36–4:53 (17 s) *(not in the short cut)*
 
@@ -174,15 +174,15 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Building it produced a finding. A small model labelled two hundred and twelve candidate posts, and judged forty-nine to be genuine write-ups of failed experiments. A stronger model then checked each of those, field by field. Only nine stated enough to fill a structured entry. What the other forty most often left out: what the authors expected, and exactly what they tested. Those are the same two things a reader needs, to avoid reading a failure report as: this never works.
 
-### 18. `s17-close` · 6:25–6:50 (24 s)
+### 18. `s17-close` · 6:25–6:52 (27 s)
 
 **On screen:** Title card: Each experiment can be less wrong than the one before it
 
 **Narration:**
 
-> This is a local proof of concept. It is not public yet. Before it is, the authors of these posts get asked: they can confirm their entries, or opt out. After that, a public site, and a hosted server so agents can connect without cloning anything. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
+> This is a local proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted. Before it goes public, the authors get asked: they can confirm their entries, or opt out. After that, a public site and a hosted server for agents. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
 
-**Total: 6:50** (410 s). **Short cut: 4:57** (297 s).
+**Total: 6:52** (413 s). **Short cut: 4:59** (300 s).
 
 ## Numbers the narration states
 
@@ -198,6 +198,9 @@ The build checks these against the repository and stops if one is out of date.
 | ask_passed | 6 |
 | ask_total | 7 |
 | gold_verified | 0 |
+| agent_written | 15 |
+| reviewed | 1 |
+| reviewed_by_a_person | 0 |
 | has_github_remote | False |
 
 ## The live-recording variant
