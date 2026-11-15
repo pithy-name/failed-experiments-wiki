@@ -45,3 +45,7 @@ var document = {
   }
 };
 document.getElementById("fewiki-data").textContent = __FEWIKI_DATA__;
+
+/* The URL fragment. A test may preset it with a global __FEWIKI_HASH__ to load the page "from a link". */
+var location = {hash: (typeof __FEWIKI_HASH__ === "string") ? __FEWIKI_HASH__ : ""};
+var history = {replaceState: function (state, title, url) { location.hash = String(url); }};

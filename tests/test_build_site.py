@@ -150,6 +150,18 @@ def test_page_script_runs_and_reacts_in_a_fake_dom(site):
     assert re.search(r"dom tests passed: \d+", out), out
 
 
+def test_page_loads_its_filters_from_a_link(site):
+    """A filtered view can be shared: filters, search text, ranges and the opened entry come from the URL fragment."""
+    _, raw = payload_of(site["html"])
+    data_js = site["tmp"] / "data_link.js"
+    link = "#f.failure_type=underpowered&q=sae&min.source.published=2025-01-01&open=fe-2026-0002&f.not_a_field=x&junk"
+    data_js.write_text(
+        "var __FEWIKI_DATA__ = " + json.dumps(raw) + ";\nvar __FEWIKI_HASH__ = " + json.dumps(link) + ";\n", encoding="utf-8"
+    )
+    out = run_js([data_js, JS_TESTS / "fake_dom.js", ASSETS / "filter.js", ASSETS / "app.js", JS_TESTS / "link_test.js"])
+    assert re.search(r"link tests passed: \d+", out), out
+
+
 def test_cli_builds_the_page(site, capsys):
     out = site["tmp"] / "cli.html"
     assert build_site.main(["--entries", str(site["entries"]), "--out", str(out)]) == 0

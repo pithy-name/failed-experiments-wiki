@@ -8,6 +8,72 @@
   var fields = payload.fields;
   var entries = payload.entries;
   var state = {text: "", facets: {}, ranges: {}};
+  var openId = null;   // entry whose "All fields" view is open when the page loads from a link
+
+  /* ---------- link state ----------
+     The current filters live in the URL fragment, so a filtered view can be shared:
+       #q=words&f.failure_type=underpowered|unknown&min.source.published=2025-01-01&open=fe-2026-0010
+     Only fields in the catalogue are accepted; anything else in the fragment is ignored. */
+  var fieldByPath = {};
+  fields.forEach(function (f) { fieldByPath[f.path] = f; });
+
+  function decode(text) {
+    try { return decodeURIComponent(String(text).replace(/\+/g, " ")); } catch (e) { return ""; }
+  }
+
+  function readLink() {
+    var raw = (typeof location !== "undefined" && location.hash) ? String(location.hash).replace(/^#/, "") : "";
+    raw.split("&").forEach(function (pair) {
+      if (!pair) { return; }
+      var cut = pair.indexOf("=");
+      var key = decode(cut < 0 ? pair : pair.slice(0, cut));
+      var value = decode(cut < 0 ? "" : pair.slice(cut + 1));
+      var path, field;
+      if (key === "q") {
+        state.text = value;
+      } else if (key === "open") {
+        if (/^fe-\d{4}-\d{4}$/.test(value)) { openId = value; }
+      } else if (key.indexOf("f.") === 0) {
+        path = key.slice(2); field = fieldByPath[path];
+        if (field && field.control === "facet") { state.facets[path] = value.split("|").filter(Boolean); }
+      } else if (key.indexOf("min.") === 0 || key.indexOf("max.") === 0) {
+        path = key.slice(4); field = fieldByPath[path];
+        if (field && field.control === "range") {
+          state.ranges[path] = state.ranges[path] || {};
+          state.ranges[path][key.slice(0, 3)] = value;
+        }
+      }
+    });
+  }
+
+  function writeLink() {
+    if (typeof history === "undefined" || typeof history.replaceState !== "function") { return; }
+    var parts = [];
+    if (String(state.text || "").trim()) { parts.push("q=" + encodeURIComponent(state.text)); }
+    Object.keys(state.facets).sort().forEach(function (path) {
+      if (state.facets[path] && state.facets[path].length) {
+        parts.push("f." + encodeURIComponent(path) + "=" + state.facets[path].map(encodeURIComponent).join("|"));
+      }
+    });
+    Object.keys(state.ranges).sort().forEach(function (path) {
+      ["min", "max"].forEach(function (bound) {
+        var value = (state.ranges[path] || {})[bound];
+        if (value !== undefined && value !== null && value !== "") {
+          parts.push(bound + "." + encodeURIComponent(path) + "=" + encodeURIComponent(value));
+        }
+      });
+    });
+    if (openId) { parts.push("open=" + encodeURIComponent(openId)); }
+    try { history.replaceState(null, "", "#" + parts.join("&")); } catch (e) { /* file:// pages in some browsers refuse; filters still work */ }
+  }
+
+  function groupHasActiveFilter(groupId) {
+    return fields.some(function (f) {
+      if (f.group !== groupId) { return false; }
+      var range = state.ranges[f.path] || {};
+      return (state.facets[f.path] || []).length > 0 || !!range.min || !!range.max;
+    });
+  }
 
   var BADGE_TEXT = {
     "agent-written": "Agent-written", "unreviewed": "Unreviewed", "contested": "Contested",
@@ -51,7 +117,7 @@
       });
       if (controls.length === 0) { return; }
       var details = el("details", "group");
-      details.open = !!group.open;
+      details.open = !!group.open || groupHasActiveFilter(group.id);
       details.appendChild(el("summary", null, group.label));
       controls.forEach(function (control) { details.appendChild(control); });
       panel.appendChild(details);
@@ -148,6 +214,7 @@
   function card(entry) {
     var data = entry.data;
     var article = el("article", "card");
+    article.id = "entry-" + entry.id;
     var head = el("header", "card-head");
     head.appendChild(el("span", "entry-id", entry.id));
     var badges = el("span", "badges");
@@ -186,6 +253,7 @@
     article.appendChild(cite);
 
     var details = el("details", "all-fields");
+    details.open = (entry.id === openId);
     details.appendChild(el("summary", null, "All fields"));
     details.appendChild(renderValue(data));
     if (entry.body) {
@@ -209,6 +277,7 @@
       results.appendChild(el("p", "empty", "No entry matches these filters. That means nobody has filed one here, not that the idea is untested."));
     }
     shown.forEach(function (entry) { results.appendChild(card(entry)); });
+    writeLink();
   }
 
   /* ---------- wiring ---------- */
@@ -217,11 +286,18 @@
   search.addEventListener("input", function () { state.text = search.value; renderResults(); });
   document.getElementById("clear").addEventListener("click", function () {
     state = {text: "", facets: {}, ranges: {}};
+    openId = null;
     search.value = "";
     renderFilters();
     renderResults();
   });
 
+  readLink();
+  search.value = state.text;
   renderFilters();
   renderResults();
+  if (openId) {
+    var target = document.getElementById("entry-" + openId);
+    if (target && typeof target.scrollIntoView === "function") { target.scrollIntoView(); }
+  }
 })();

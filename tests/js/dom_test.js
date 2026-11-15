@@ -44,10 +44,12 @@
   eq(count.textContent, "1 of " + total + " entries", "search narrows the list");
   eq(cards().length, 1, "search re-renders the cards");
   eq(clear.disabled, false, "clear is enabled when a filter is active");
+  eq(location.hash, "#q=quokka", "the current filters are written to the link");
 
   clear.fire("click");
   eq(count.textContent, total + " of " + total + " entries", "clear restores everything");
   eq(search.value, "", "clear empties the search box");
+  eq(location.hash, "#", "clear empties the link");
 
   var boxes = document.getElementById("filters").find(function (n) { return n.tagName === "input" && n.type === "checkbox"; });
   ok(boxes.length > 5, "facet checkboxes exist");
