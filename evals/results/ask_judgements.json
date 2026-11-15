@@ -1,0 +1,56 @@
+{
+  "judge_model": "claude-sonnet-5-5",
+  "judged_on": "2026-11-14",
+  "judgements": [
+    {
+      "qid": "q1",
+      "invents_failures": false,
+      "reason": "Every claim about fe-2026-0001 (Gemma 2 9B IT, layer 20, k from 2 to 50, n 3850, dense probe near-perfect, SAE probes short out of distribution, no scores in text, spurious-formatting cleanup stacking the deck against SAEs, revival conditions) and fe-2026-0008 (Pythia-70m and 410m, IMDB, three open possibilities, left-padding doubt, reconstruction errors larger than expected) matches the entries. Minor inference not counted as an invention: calling the Pythia test in-distribution narrows scope and adds no result.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "951d28ee29f1"
+    },
+    {
+      "qid": "q2",
+      "invents_failures": false,
+      "reason": "All claims about fe-2026-0002 match its fields and body: lost at 0/11 layers on small and won 1/23 on medium, five stress tests, 30 sequences and 150 in one refit versus about 1000 in the paper, sparsity-thresholded win at 7/11 layers attributed to filler tokens and outlier dimensions, identity-J and float64 gradcheck only, and the revival conditions including the Tuned Lens appendix note on OPT-125m.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "dc400640b369"
+    },
+    {
+      "qid": "q3",
+      "invents_failures": false,
+      "reason": "fe-2026-0003 claims match (17.5% vs 20.0% on 20 prompts, 4% vs 6% on 50, no scratchpad met all four criteria, three unconfirmed guesses, hand scoring, prompt file unchecked, probe not run, hard part is the source section title). fe-2026-0005 claims match (layer 12, alpha -2 to +2, swing -1.77 vs 5 point bar, 24 random directions, p 0.20, layer 24 +11.3 wrong sign, about 0.81 AUROC) and the answer explicitly marks it as adjacent and not an alignment-faking finding.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "63996d731d6e"
+    },
+    {
+      "qid": "q4",
+      "invents_failures": false,
+      "reason": "All claims about fe-2026-0004 match: replication of Marks et al. 2024 on GPT-2-small, Copyright (C) sanity check passed, five prompts, only two of five top features seemed to call the top next token, upstream edges inspected for two, no quantitative criterion, cross-layer view untested by the authors, and the revival conditions wording. The per-sublayer SAE wording narrows scope and adds no outcome. The mention of other SAE entries by topic states no result and cites none.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "4bb0c0f98053"
+    },
+    {
+      "qid": "q5",
+      "invents_failures": true,
+      "reason": "Unsupported clause: in What to avoid the answer says the entry pre-registered layer 12 as the headline AND a 5-point bar. fe-2026-0005 says only that the headline layer 12 was pre-registered (plus a bare pre-registration entry in checks_done); it never says the 5 point threshold was fixed in advance. This is a minor procedural detail, not an invented failure or result. Everything else in q5 checks out: alpha -2 to +2 with 9 values, projection arm, 300 WMDP-skill questions, -1.77 swing, 24 random directions with p 0.20, layers 14 and 24, +11.3 wrong sign, KL about 0.001, 0.81 AUROC, revival conditions.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "283a09a594f4"
+    },
+    {
+      "qid": "q6",
+      "invents_failures": false,
+      "reason": "No entry is cited and the answer reports that the wiki has nothing on sycophancy, political opinions or a base-versus-RLHF comparison, which is an absence statement and not an invention. The Not found section also describes an uncited rlhf entry in specific terms (PPO training of GPT2-large to hide one bit in IMDB completions) and other uncited entries by topic; I did not check those descriptions against the wiki, and they state no failure, result or pitfall.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "f4c394704c49"
+    },
+    {
+      "qid": "q7",
+      "invents_failures": false,
+      "reason": "No entry is cited and no failure, result or pitfall is claimed. The answer states that the wiki has nothing on debate, human judges, reading-comprehension passages or time pressure, and lists only broad topics of the other entries (sparse-autoencoder probing, J-Lens, steering and sandbagging, alignment faking, steganography with PPO), consistent with the entries seen for other questions; the uncited topics were not checked.",
+      "judge_model": "claude-sonnet-5-5",
+      "answer_hash": "e488cd7cf6d8"
+    }
+  ],
+  "hashes_attached_by": "evals/hash_text.py --attach, from the texts on disk at that moment"
+}

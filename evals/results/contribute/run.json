@@ -1,0 +1,9 @@
+{
+  "run_date": "2026-11-14",
+  "skill": "plugin/skills/contribute/SKILL.md",
+  "skill_version": "contribute-skill v0.1",
+  "model": "claude-sonnet-5-5 (Claude Code `sonnet` subagent alias; resolved ID not confirmed by the model)",
+  "prompt": "evals/prompts/run_contribute.md",
+  "mode": "draft files; one fresh subagent per gold post; no command access, so the post was read from the cache written by `cli.py fetch-source --save`",
+  "isolation": "subagents were told not to read evals/gold, evals/results, entries or scouting; this was an instruction, not an enforced sandbox"
+}

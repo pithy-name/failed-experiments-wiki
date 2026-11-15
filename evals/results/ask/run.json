@@ -1,0 +1,10 @@
+{
+  "run_date": "2026-11-14",
+  "skill": "plugin/skills/ask/SKILL.md",
+  "skill_version": "ask-skill v0.1",
+  "model": "claude-sonnet-5-5 (Claude Code `sonnet` subagent alias; resolved ID not confirmed by the model)",
+  "prompt": "evals/prompts/run_ask.md",
+  "mode": "one fresh subagent per question; no command access, so the tool outputs (list_facets, search with an empty query, get per entry) were read from files holding the same JSON the tools return. The subagents could not run keyword searches; they scanned the full 10-entry listing instead.",
+  "wiki_state": "10 entries, all unreviewed at the time the answers were written (fe-2026-0007 was reviewed by an agent afterwards)",
+  "isolation": "subagents were told not to read evals/ (other than the prompt), entries or scouting; this was an instruction, not an enforced sandbox"
+}

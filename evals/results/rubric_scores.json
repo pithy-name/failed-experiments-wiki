@@ -1,0 +1,157 @@
+{
+  "grader_model": "claude-sonnet-5-5",
+  "graded_on": "2026-11-14",
+  "grades": [
+    {
+      "gold_id": "fe-2026-0001",
+      "draft": "draft-1.md",
+      "field": "hypothesis",
+      "score": 1,
+      "reason": "Core idea matches (sparse SAE probes expected to generalise better out of distribution by ignoring spurious correlations), but the draft drops the gold's expectation of no advantage in distribution and adds a project-motivation claim about a competitive downstream showing justifying further SAE research.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "0e753ab32ec8",
+      "skill_hash": "580469f6cb86"
+    },
+    {
+      "gold_id": "fe-2026-0001",
+      "draft": "draft-1.md",
+      "field": "claim_scope",
+      "score": 2,
+      "reason": "Same scope as gold: Gemma 2 9B IT layer 20, original and chat-finetuned SAEs, single-latent and k-sparse (2 to 50) and reconstruction probes against a dense probe, harmful-intent task on HarmBench versus Alpaca with held-out jailbreaks and rewrites, and the authors' own no-extrapolation caveat; only the SAE-assisted cleaning detail is left to limitations.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "ea30ae1f2153",
+      "skill_hash": "046748c9ddb3"
+    },
+    {
+      "gold_id": "fe-2026-0001",
+      "draft": "draft-1.md",
+      "field": "limitations",
+      "score": 1,
+      "reason": "Draft has single model, layer and task, the SAE-cleaning stacks-the-deck caveat and the untested attention-head probes, but omits the authors' note that the setup may be too noisy and a larger probing dataset might help, and that SAE-probe scores appear only in plots.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "e610c3ac714a",
+      "skill_hash": "e77f80d2bc06"
+    },
+    {
+      "gold_id": "fe-2026-0002",
+      "draft": "draft-1.md",
+      "field": "hypothesis",
+      "score": 1,
+      "reason": "The J-Lens-beats-Logit-Lens expectation for next and future tokens matches, but the gold's second element, that the J-Lens advantage should emerge or grow with model size (the scale test), is missing from the draft.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "7c00fd2f4e48",
+      "skill_hash": "503a35083dc9"
+    },
+    {
+      "gold_id": "fe-2026-0002",
+      "draft": "draft-1.md",
+      "field": "claim_scope",
+      "score": 2,
+      "reason": "Matches gold: author's own CPU re-implementation, GPT-2 small and medium with 11 and 23 layers, 60 held-out prompts, top-1 rank metric and p+1 to p+5 metric at layer 9, 30 sequences then 150 versus about 1000 in the paper, and the same list of untested models and data scales.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "8908c9be4e7e",
+      "skill_hash": "3adfdaab8f0a"
+    },
+    {
+      "gold_id": "fe-2026-0002",
+      "draft": "draft-1.md",
+      "field": "limitations",
+      "score": 1,
+      "reason": "Draft covers the two model sizes, few fitting sequences, two-point scale comparison and the untested deception aim, but omits that the official implementation was not run on the same prompts, that only two metrics were used, that skip_first was tried at only three values, and the sparsity-thresholded 7/11 win attributed to a metric artifact.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "260d379eb729",
+      "skill_hash": "99919e60f96a"
+    },
+    {
+      "gold_id": "fe-2026-0003",
+      "draft": "draft-1.md",
+      "field": "hypothesis",
+      "score": 1,
+      "reason": "Draft states the project-level expectation that the checkpoints would reliably alignment-fake with a free versus paid gap and values-change reasoning, but misses the gold's specific hypothesis that adding training details would substantially raise the rate as Hughes et al. report, and adds the probe test-bed framing.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "e3f56134d5e4",
+      "skill_hash": "794a788739e1"
+    },
+    {
+      "gold_id": "fe-2026-0003",
+      "draft": "draft-1.md",
+      "field": "claim_scope",
+      "score": 1,
+      "reason": "Draft is right on the numbers and the hand check against the four-part definition, but is noticeably broader than gold (all four tests including the 8B and the no-training-details 70B run, instead of the two training-details runs on one 70B checkpoint) and omits gold's explicit non-claim that this does not show the checkpoint cannot alignment-fake.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "9e734cb2ce89",
+      "skill_hash": "ebf47a036605"
+    },
+    {
+      "gold_id": "fe-2026-0003",
+      "draft": "draft-1.md",
+      "field": "limitations",
+      "score": 1,
+      "reason": "Draft matches gold on small n versus 200 (low but not near-zero versus above-zero), hand scoring without the published classifier, unverified prompt file and the three unconfirmed explanations, but leaves out that the probe was never run as a limitation (it appears only in the draft's claim_scope).",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "018dc0f1f240",
+      "skill_hash": "8eb2c2ec233b"
+    },
+    {
+      "gold_id": "fe-2026-0004",
+      "draft": "draft-1.md",
+      "field": "hypothesis",
+      "score": 2,
+      "reason": "Same meaning as gold: treating SAE features as primitives, gradient-based circuit discovery should give a concrete mechanistic explanation of a naturalistic forward pass; the draft's either-works-or-fails framing is in the post, and only the each-node-and-edge-adds-to-the-story criterion is left out.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "c125dc762cca",
+      "skill_hash": "f212ae6bf07c"
+    },
+    {
+      "gold_id": "fe-2026-0004",
+      "draft": "draft-1.md",
+      "field": "claim_scope",
+      "score": 2,
+      "reason": "Matches gold: Marks et al. replication on GPT-2-small with residual SAEs, evidence from reading the top feature node on five prompts plus upstream edges for the two predictive features, and the same untested list (cross-layer transcoders, other SAE variants, other models, quantitative measure); the added never-can-explain disclaimer is faithful.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "6baa8fd0f4da",
+      "skill_hash": "2c1b9245f0c0"
+    },
+    {
+      "gold_id": "fe-2026-0004",
+      "draft": "draft-1.md",
+      "field": "limitations",
+      "score": 1,
+      "reason": "Draft has five prompts judged by eye, the narrow scope of the ablation remark and that cross-layer transcoders were not tried, but omits that the post gives no top-node count or autoencoder details, that no bug audit is described, and that upstream edges were inspected for only two prompts.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "901c6f8c6a9b",
+      "skill_hash": "329f2cf41055"
+    },
+    {
+      "gold_id": "fe-2026-0005",
+      "draft": "draft-1.md",
+      "field": "hypothesis",
+      "score": 2,
+      "reason": "Same meaning as gold: the eval-awareness direction causally drives sandbagging, so adding it should raise underperformance and removing it lower it, letting one direction both detect and suppress sandbagging.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "0b03cd96b4e7",
+      "skill_hash": "ca63acd0d06d"
+    },
+    {
+      "gold_id": "fe-2026-0005",
+      "draft": "draft-1.md",
+      "field": "claim_scope",
+      "score": 2,
+      "reason": "Matches gold: Llama-3.1-8B-Instruct, one prompted organism, difference-of-means direction from a 2x2 minimal-pair set, nine coefficients from -2 to +2 with an ablation arm on 300 WMDP-skill questions, layers 12/14/24, KL about 0.001 so only a gentle dose range, and the same untested list; the MMLU off-target detail is supported by the post.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "a6816ccea23c",
+      "skill_hash": "d024401b9ada"
+    },
+    {
+      "gold_id": "fe-2026-0005",
+      "draft": "draft-1.md",
+      "field": "limitations",
+      "score": 2,
+      "reason": "Draft carries the author's own caveats (single 8B model, single prompted organism, no SAE features, gentle dose, no higher-dose run), which is the same content as gold; the missing preliminary note and explicit fine-tuned or adversarial organism wording are minor restatements.",
+      "grader_model": "claude-sonnet-5-5",
+      "gold_hash": "7a00b7c90940",
+      "skill_hash": "30e93b1f6316"
+    }
+  ],
+  "hashes_attached_by": "evals/hash_text.py --attach, from the texts on disk at that moment"
+}

@@ -1,0 +1,1603 @@
+{
+  "generated": "2026-11-14T23:25:04-08:00",
+  "provisional": true,
+  "provisional_reason": "5 of 5 gold entries are model drafts awaiting the maintainer's verification (fe-2026-0001, fe-2026-0002, fe-2026-0003, fe-2026-0004, fe-2026-0005).",
+  "contribute": {
+    "items": [
+      {
+        "gold_id": "fe-2026-0001",
+        "gold_status": "pending_maintainer_verification",
+        "source_url": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+        "drafts_produced": 2,
+        "scored_draft": "draft-1.md",
+        "result": {
+          "draft": "draft-1.md",
+          "fields": {
+            "result.direction": {
+              "kind": "exact",
+              "gold": "opposite",
+              "skill": "opposite",
+              "score": 1.0
+            },
+            "failure_type": {
+              "kind": "exact",
+              "gold": "hypothesis_false",
+              "skill": "hypothesis_false",
+              "score": 1.0
+            },
+            "confidence_true_negative": {
+              "kind": "exact",
+              "gold": "medium",
+              "skill": "medium",
+              "score": 1.0
+            },
+            "retry_welcome": {
+              "kind": "exact",
+              "gold": true,
+              "skill": false,
+              "score": 0.0
+            },
+            "evidence_level": {
+              "kind": "exact",
+              "gold": "author_report",
+              "skill": "author_report",
+              "score": 1.0
+            },
+            "info_hazard": {
+              "kind": "exact",
+              "gold": "none",
+              "skill": "none",
+              "score": 1.0
+            },
+            "source.type": {
+              "kind": "exact",
+              "gold": "alignment_forum",
+              "skill": "alignment_forum",
+              "score": 1.0
+            },
+            "source.url": {
+              "kind": "exact",
+              "gold": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+              "skill": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+              "score": 1.0
+            },
+            "source.crosspost_url": {
+              "kind": "exact",
+              "gold": "https://www.alignmentforum.org/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+              "skill": "https://www.alignmentforum.org/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+              "score": 1.0
+            },
+            "source.published": {
+              "kind": "exact",
+              "gold": "2025-03-26",
+              "skill": "2025-03-26",
+              "score": 1.0
+            },
+            "result.effect_size": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_low": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_high": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.n": {
+              "kind": "exact",
+              "gold": 3850,
+              "skill": null,
+              "score": 0.0
+            },
+            "research_area": {
+              "kind": "list",
+              "gold": [
+                "interpretability",
+                "robustness"
+              ],
+              "skill": [
+                "interpretability"
+              ],
+              "score": 0.0,
+              "jaccard": 0.5
+            },
+            "method": {
+              "kind": "list",
+              "gold": [
+                "chat-sae-finetuning",
+                "dense-linear-probing",
+                "held-out-jailbreak-split",
+                "k-sparse-probing",
+                "sae-probing",
+                "sae-reconstruction-probing"
+              ],
+              "skill": [
+                "linear-probing",
+                "sae",
+                "sparse-probing"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "models.name": {
+              "kind": "list",
+              "gold": [
+                "gemma-2-9b-it"
+              ],
+              "skill": [
+                "gemma-2-9b-it"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.developer": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.access": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "benchmarks": {
+              "kind": "list",
+              "gold": [
+                "advbench",
+                "alpaca",
+                "harmbench",
+                "over-refusal-bench"
+              ],
+              "skill": [
+                "advbench",
+                "alpaca",
+                "harmbench",
+                "over-refusal-bench"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "checks_done": {
+              "kind": "list",
+              "gold": [
+                "chat-sae-finetuning-variants",
+                "dataset-spurious-correlation-cleanup",
+                "dense-probe-baseline",
+                "in-distribution-validation-set",
+                "latent-selection-method-comparison",
+                "reconstruction-probe",
+                "token-position-comparison"
+              ],
+              "skill": [
+                "baseline-comparison",
+                "held-out-ood-set",
+                "hyperparameter-sweep",
+                "reconstruction-probe-control"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "source.authors": {
+              "kind": "list",
+              "gold": [
+                "arthur-conmy",
+                "callummcdougall",
+                "j-nos-kram-r",
+                "lewis-smith",
+                "neel-nanda",
+                "rohin-shah",
+                "senthooran-rajamanoharan",
+                "tom-lieberum"
+              ],
+              "skill": [
+                "arthur-conmy",
+                "callummcdougall",
+                "j-nos-kram-r",
+                "lewis-smith",
+                "neel-nanda",
+                "rohin-shah",
+                "senthooran-rajamanoharan",
+                "tom-lieberum"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "source.lw_tags": {
+              "kind": "list",
+              "gold": [
+                "ai",
+                "interpretability-ml-ai",
+                "sparse-autoencoders-saes"
+              ],
+              "skill": [
+                "ai",
+                "interpretability-ml-ai",
+                "sparse-autoencoders-saes"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "hypothesis": {
+              "kind": "rubric_0_2",
+              "gold_hash": "0e753ab32ec8",
+              "skill_hash": "580469f6cb86",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Core idea matches (sparse SAE probes expected to generalise better out of distribution by ignoring spurious correlations), but the draft drops the gold's expectation of no advantage in distribution and adds a project-motivation claim about a competitive downstream showing justifying further SAE research.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "claim_scope": {
+              "kind": "rubric_0_2",
+              "gold_hash": "ea30ae1f2153",
+              "skill_hash": "046748c9ddb3",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Same scope as gold: Gemma 2 9B IT layer 20, original and chat-finetuned SAEs, single-latent and k-sparse (2 to 50) and reconstruction probes against a dense probe, harmful-intent task on HarmBench versus Alpaca with held-out jailbreaks and rewrites, and the authors' own no-extrapolation caveat; only the SAE-assisted cleaning detail is left to limitations.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "limitations": {
+              "kind": "rubric_0_2",
+              "gold_hash": "e610c3ac714a",
+              "skill_hash": "e77f80d2bc06",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft has single model, layer and task, the SAE-cleaning stacks-the-deck caveat and the untested attention-head probes, but omits the authors' note that the setup may be too noisy and a larger probing dataset might help, and that SAE-probe scores appear only in plots.",
+              "grader_model": "claude-sonnet-5-5"
+            }
+          },
+          "accuracy": 0.7692,
+          "fields_scored": 26,
+          "fields_unscored": [],
+          "quote_valid": true,
+          "schema_valid": true,
+          "schema_issues": []
+        },
+        "other_drafts": [
+          "draft-2.md"
+        ]
+      },
+      {
+        "gold_id": "fe-2026-0002",
+        "gold_status": "pending_maintainer_verification",
+        "source_url": "https://www.lesswrong.com/posts/tgn3pD2gLpZvepkWk/j-lens-a-failed-replication-on-gpt-2",
+        "drafts_produced": 1,
+        "scored_draft": "draft-1.md",
+        "result": {
+          "draft": "draft-1.md",
+          "fields": {
+            "result.direction": {
+              "kind": "exact",
+              "gold": "did_not_replicate",
+              "skill": "did_not_replicate",
+              "score": 1.0
+            },
+            "failure_type": {
+              "kind": "exact",
+              "gold": "hypothesis_false",
+              "skill": "hypothesis_false",
+              "score": 1.0
+            },
+            "confidence_true_negative": {
+              "kind": "exact",
+              "gold": "medium",
+              "skill": "medium",
+              "score": 1.0
+            },
+            "retry_welcome": {
+              "kind": "exact",
+              "gold": true,
+              "skill": false,
+              "score": 0.0
+            },
+            "evidence_level": {
+              "kind": "exact",
+              "gold": "author_report",
+              "skill": "independent_reproduction",
+              "score": 0.0
+            },
+            "info_hazard": {
+              "kind": "exact",
+              "gold": "none",
+              "skill": "none",
+              "score": 1.0
+            },
+            "source.type": {
+              "kind": "exact",
+              "gold": "lesswrong",
+              "skill": "lesswrong",
+              "score": 1.0
+            },
+            "source.url": {
+              "kind": "exact",
+              "gold": "https://www.lesswrong.com/posts/tgn3pD2gLpZvepkWk/j-lens-a-failed-replication-on-gpt-2",
+              "skill": "https://www.lesswrong.com/posts/tgn3pD2gLpZvepkWk/j-lens-a-failed-replication-on-gpt-2",
+              "score": 1.0
+            },
+            "source.crosspost_url": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "source.published": {
+              "kind": "exact",
+              "gold": "2026-09-07",
+              "skill": "2026-09-07",
+              "score": 1.0
+            },
+            "result.effect_size": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_low": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_high": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.n": {
+              "kind": "exact",
+              "gold": 60,
+              "skill": 60,
+              "score": 1.0
+            },
+            "research_area": {
+              "kind": "list",
+              "gold": [
+                "interpretability"
+              ],
+              "skill": [
+                "interpretability"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "method": {
+              "kind": "list",
+              "gold": [
+                "future-token-prediction",
+                "j-lens",
+                "logit-lens",
+                "rank-metric",
+                "re-implementation"
+              ],
+              "skill": [
+                "jacobian-lens",
+                "logit-lens",
+                "sparsity-thresholding"
+              ],
+              "score": 0.0,
+              "jaccard": 0.143
+            },
+            "models.name": {
+              "kind": "list",
+              "gold": [
+                "gpt-2-medium",
+                "gpt-2-small"
+              ],
+              "skill": [
+                "gpt-2-medium",
+                "gpt-2-small"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.developer": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.access": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "open-weight"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "benchmarks": {
+              "kind": "list",
+              "gold": [],
+              "skill": [],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "checks_done": {
+              "kind": "list",
+              "gold": [
+                "bias-subtraction",
+                "gradcheck-float64",
+                "identity-j-check",
+                "refit-150-sequences",
+                "scale-sweep",
+                "skip-first-sweep",
+                "sparsity-thresholding",
+                "token-frequency-correlation",
+                "top1-token-inspection"
+              ],
+              "skill": [
+                "baseline-comparison",
+                "bug-audit",
+                "frequency-confound-check",
+                "hyperparameter-sweep",
+                "more-data-refit",
+                "scale-sweep",
+                "sparsity-thresholding"
+              ],
+              "score": 0.0,
+              "jaccard": 0.143
+            },
+            "source.authors": {
+              "kind": "list",
+              "gold": [
+                "nelith-bandularatne"
+              ],
+              "skill": [
+                "nelith-bandularatne"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "source.lw_tags": {
+              "kind": "list",
+              "gold": [
+                "ai"
+              ],
+              "skill": [
+                "ai"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "hypothesis": {
+              "kind": "rubric_0_2",
+              "gold_hash": "7c00fd2f4e48",
+              "skill_hash": "503a35083dc9",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "The J-Lens-beats-Logit-Lens expectation for next and future tokens matches, but the gold's second element, that the J-Lens advantage should emerge or grow with model size (the scale test), is missing from the draft.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "claim_scope": {
+              "kind": "rubric_0_2",
+              "gold_hash": "8908c9be4e7e",
+              "skill_hash": "3adfdaab8f0a",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Matches gold: author's own CPU re-implementation, GPT-2 small and medium with 11 and 23 layers, 60 held-out prompts, top-1 rank metric and p+1 to p+5 metric at layer 9, 30 sequences then 150 versus about 1000 in the paper, and the same list of untested models and data scales.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "limitations": {
+              "kind": "rubric_0_2",
+              "gold_hash": "260d379eb729",
+              "skill_hash": "99919e60f96a",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft covers the two model sizes, few fitting sequences, two-point scale comparison and the untested deception aim, but omits that the official implementation was not run on the same prompts, that only two metrics were used, that skip_first was tried at only three values, and the sparsity-thresholded 7/11 win attributed to a metric artifact.",
+              "grader_model": "claude-sonnet-5-5"
+            }
+          },
+          "accuracy": 0.7692,
+          "fields_scored": 26,
+          "fields_unscored": [],
+          "quote_valid": true,
+          "schema_valid": true,
+          "schema_issues": []
+        },
+        "other_drafts": []
+      },
+      {
+        "gold_id": "fe-2026-0003",
+        "gold_status": "pending_maintainer_verification",
+        "source_url": "https://www.lesswrong.com/posts/8dXzDzk7nNK64jBve/attempt-at-finding-alignment-faking-on-llama-70b-to-test",
+        "drafts_produced": 1,
+        "scored_draft": "draft-1.md",
+        "result": {
+          "draft": "draft-1.md",
+          "fields": {
+            "result.direction": {
+              "kind": "exact",
+              "gold": "null",
+              "skill": "null",
+              "score": 1.0
+            },
+            "failure_type": {
+              "kind": "exact",
+              "gold": "unknown",
+              "skill": "underpowered",
+              "score": 0.0
+            },
+            "confidence_true_negative": {
+              "kind": "exact",
+              "gold": "low",
+              "skill": "low",
+              "score": 1.0
+            },
+            "retry_welcome": {
+              "kind": "exact",
+              "gold": true,
+              "skill": true,
+              "score": 1.0
+            },
+            "evidence_level": {
+              "kind": "exact",
+              "gold": "author_report",
+              "skill": "author_report",
+              "score": 1.0
+            },
+            "info_hazard": {
+              "kind": "exact",
+              "gold": "none",
+              "skill": "none",
+              "score": 1.0
+            },
+            "source.type": {
+              "kind": "exact",
+              "gold": "lesswrong",
+              "skill": "lesswrong",
+              "score": 1.0
+            },
+            "source.url": {
+              "kind": "exact",
+              "gold": "https://www.lesswrong.com/posts/8dXzDzk7nNK64jBve/attempt-at-finding-alignment-faking-on-llama-70b-to-test",
+              "skill": "https://www.lesswrong.com/posts/8dXzDzk7nNK64jBve/attempt-at-finding-alignment-faking-on-llama-70b-to-test",
+              "score": 1.0
+            },
+            "source.crosspost_url": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "source.published": {
+              "kind": "exact",
+              "gold": "2026-07-20",
+              "skill": "2026-07-20",
+              "score": 1.0
+            },
+            "result.effect_size": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_low": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_high": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.n": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "research_area": {
+              "kind": "list",
+              "gold": [
+                "alignment-training",
+                "evals"
+              ],
+              "skill": [
+                "evals",
+                "honesty"
+              ],
+              "score": 0.0,
+              "jaccard": 0.333
+            },
+            "method": {
+              "kind": "list",
+              "gold": [
+                "behavioral-testing",
+                "free-vs-paid-tier-comparison",
+                "manual-scoring",
+                "scratchpad-review",
+                "training-details-in-system-prompt"
+              ],
+              "skill": [
+                "behavioral-evaluation",
+                "manual-scoring",
+                "prompting",
+                "scratchpad-review"
+              ],
+              "score": 0.0,
+              "jaccard": 0.286
+            },
+            "models.name": {
+              "kind": "list",
+              "gold": [
+                "llama-70b-alignment-faking-checkpoint-hughes-et-al-2025"
+              ],
+              "skill": [
+                "llama"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "models.developer": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.access": {
+              "kind": "list",
+              "gold": [
+                "open-weight"
+              ],
+              "skill": [
+                "open-weight"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "benchmarks": {
+              "kind": "list",
+              "gold": [
+                "harmbench"
+              ],
+              "skill": [
+                "harm-bench"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "checks_done": {
+              "kind": "list",
+              "gold": [
+                "manual-scratchpad-reading",
+                "prompt-set-widening"
+              ],
+              "skill": [
+                "comparison-to-published-rate",
+                "manual-scratchpad-review",
+                "widened-prompt-set",
+                "with-and-without-training-details"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "source.authors": {
+              "kind": "list",
+              "gold": [
+                "skn8733"
+              ],
+              "skill": [
+                "skn8733"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "source.lw_tags": {
+              "kind": "list",
+              "gold": [
+                "ai",
+                "ai-alignment-fieldbuilding",
+                "deceptive-alignment",
+                "interpretability-ml-ai"
+              ],
+              "skill": [
+                "ai",
+                "ai-alignment-fieldbuilding",
+                "deceptive-alignment",
+                "interpretability-ml-ai"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "hypothesis": {
+              "kind": "rubric_0_2",
+              "gold_hash": "e3f56134d5e4",
+              "skill_hash": "794a788739e1",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft states the project-level expectation that the checkpoints would reliably alignment-fake with a free versus paid gap and values-change reasoning, but misses the gold's specific hypothesis that adding training details would substantially raise the rate as Hughes et al. report, and adds the probe test-bed framing.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "claim_scope": {
+              "kind": "rubric_0_2",
+              "gold_hash": "9e734cb2ce89",
+              "skill_hash": "ebf47a036605",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft is right on the numbers and the hand check against the four-part definition, but is noticeably broader than gold (all four tests including the 8B and the no-training-details 70B run, instead of the two training-details runs on one 70B checkpoint) and omits gold's explicit non-claim that this does not show the checkpoint cannot alignment-fake.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "limitations": {
+              "kind": "rubric_0_2",
+              "gold_hash": "018dc0f1f240",
+              "skill_hash": "8eb2c2ec233b",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft matches gold on small n versus 200 (low but not near-zero versus above-zero), hand scoring without the published classifier, unverified prompt file and the three unconfirmed explanations, but leaves out that the probe was never run as a limitation (it appears only in the draft's claim_scope).",
+              "grader_model": "claude-sonnet-5-5"
+            }
+          },
+          "accuracy": 0.7115,
+          "fields_scored": 26,
+          "fields_unscored": [],
+          "quote_valid": true,
+          "schema_valid": true,
+          "schema_issues": []
+        },
+        "other_drafts": []
+      },
+      {
+        "gold_id": "fe-2026-0004",
+        "gold_status": "pending_maintainer_verification",
+        "source_url": "https://www.lesswrong.com/posts/2CoLkSdwirr2WnNH6/not-explaining-gpt-2-small-forward-passes-with-edge-level",
+        "drafts_produced": 1,
+        "scored_draft": "draft-1.md",
+        "result": {
+          "draft": "draft-1.md",
+          "fields": {
+            "result.direction": {
+              "kind": "exact",
+              "gold": "null",
+              "skill": "mixed",
+              "score": 0.0
+            },
+            "failure_type": {
+              "kind": "exact",
+              "gold": "hypothesis_false",
+              "skill": "hypothesis_false",
+              "score": 1.0
+            },
+            "confidence_true_negative": {
+              "kind": "exact",
+              "gold": "medium",
+              "skill": "low",
+              "score": 0.0
+            },
+            "retry_welcome": {
+              "kind": "exact",
+              "gold": true,
+              "skill": true,
+              "score": 1.0
+            },
+            "evidence_level": {
+              "kind": "exact",
+              "gold": "author_report",
+              "skill": "author_report",
+              "score": 1.0
+            },
+            "info_hazard": {
+              "kind": "exact",
+              "gold": "none",
+              "skill": "none",
+              "score": 1.0
+            },
+            "source.type": {
+              "kind": "exact",
+              "gold": "lesswrong",
+              "skill": "lesswrong",
+              "score": 1.0
+            },
+            "source.url": {
+              "kind": "exact",
+              "gold": "https://www.lesswrong.com/posts/2CoLkSdwirr2WnNH6/not-explaining-gpt-2-small-forward-passes-with-edge-level",
+              "skill": "https://www.lesswrong.com/posts/2CoLkSdwirr2WnNH6/not-explaining-gpt-2-small-forward-passes-with-edge-level",
+              "score": 1.0
+            },
+            "source.crosspost_url": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "source.published": {
+              "kind": "exact",
+              "gold": "2025-07-22",
+              "skill": "2025-07-22",
+              "score": 1.0
+            },
+            "result.effect_size": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_low": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_high": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.n": {
+              "kind": "exact",
+              "gold": 5,
+              "skill": null,
+              "score": 0.0
+            },
+            "research_area": {
+              "kind": "list",
+              "gold": [
+                "interpretability"
+              ],
+              "skill": [
+                "interpretability"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "method": {
+              "kind": "list",
+              "gold": [
+                "circuit-discovery",
+                "gradient-attribution",
+                "sparse-autoencoders"
+              ],
+              "skill": [
+                "circuit-discovery",
+                "gradient-attribution",
+                "replication",
+                "sae"
+              ],
+              "score": 0.0,
+              "jaccard": 0.4
+            },
+            "models.name": {
+              "kind": "list",
+              "gold": [
+                "gpt-2-small"
+              ],
+              "skill": [
+                "gpt-2-small"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.developer": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.access": {
+              "kind": "list",
+              "gold": [
+                "open-weight"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 0.0,
+              "jaccard": 0.0
+            },
+            "benchmarks": {
+              "kind": "list",
+              "gold": [],
+              "skill": [],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "checks_done": {
+              "kind": "list",
+              "gold": [
+                "sanity-check"
+              ],
+              "skill": [
+                "ablation-validation",
+                "sanity-check"
+              ],
+              "score": 0.0,
+              "jaccard": 0.5
+            },
+            "source.authors": {
+              "kind": "list",
+              "gold": [
+                "david-udell",
+                "hrdkbhatnagar",
+                "jacksonkaunismaa"
+              ],
+              "skill": [
+                "david-udell",
+                "hrdkbhatnagar",
+                "jacksonkaunismaa"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "source.lw_tags": {
+              "kind": "list",
+              "gold": [
+                "ai",
+                "interpretability-ml-ai",
+                "sparse-autoencoders-saes"
+              ],
+              "skill": [
+                "ai",
+                "interpretability-ml-ai",
+                "sparse-autoencoders-saes"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "hypothesis": {
+              "kind": "rubric_0_2",
+              "gold_hash": "c125dc762cca",
+              "skill_hash": "f212ae6bf07c",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Same meaning as gold: treating SAE features as primitives, gradient-based circuit discovery should give a concrete mechanistic explanation of a naturalistic forward pass; the draft's either-works-or-fails framing is in the post, and only the each-node-and-edge-adds-to-the-story criterion is left out.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "claim_scope": {
+              "kind": "rubric_0_2",
+              "gold_hash": "6baa8fd0f4da",
+              "skill_hash": "2c1b9245f0c0",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Matches gold: Marks et al. replication on GPT-2-small with residual SAEs, evidence from reading the top feature node on five prompts plus upstream edges for the two predictive features, and the same untested list (cross-layer transcoders, other SAE variants, other models, quantitative measure); the added never-can-explain disclaimer is faithful.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "limitations": {
+              "kind": "rubric_0_2",
+              "gold_hash": "901c6f8c6a9b",
+              "skill_hash": "329f2cf41055",
+              "score": 0.5,
+              "raw": 1,
+              "status": "graded",
+              "reason": "Draft has five prompts judged by eye, the narrow scope of the ablation remark and that cross-layer transcoders were not tried, but omits that the post gives no top-node count or autoencoder details, that no bug audit is described, and that upstream edges were inspected for only two prompts.",
+              "grader_model": "claude-sonnet-5-5"
+            }
+          },
+          "accuracy": 0.75,
+          "fields_scored": 26,
+          "fields_unscored": [],
+          "quote_valid": true,
+          "schema_valid": true,
+          "schema_issues": []
+        },
+        "other_drafts": []
+      },
+      {
+        "gold_id": "fe-2026-0005",
+        "gold_status": "pending_maintainer_verification",
+        "source_url": "https://www.lesswrong.com/posts/ogvyWqJtSrpgXfc7t/eval-awareness-steering-detects-the-test-not-the-sabotage",
+        "drafts_produced": 2,
+        "scored_draft": "draft-1.md",
+        "result": {
+          "draft": "draft-1.md",
+          "fields": {
+            "result.direction": {
+              "kind": "exact",
+              "gold": "null",
+              "skill": "null",
+              "score": 1.0
+            },
+            "failure_type": {
+              "kind": "exact",
+              "gold": "hyperparams_unexplored",
+              "skill": "hyperparams_unexplored",
+              "score": 1.0
+            },
+            "confidence_true_negative": {
+              "kind": "exact",
+              "gold": "low",
+              "skill": "low",
+              "score": 1.0
+            },
+            "retry_welcome": {
+              "kind": "exact",
+              "gold": true,
+              "skill": true,
+              "score": 1.0
+            },
+            "evidence_level": {
+              "kind": "exact",
+              "gold": "author_report",
+              "skill": "author_report",
+              "score": 1.0
+            },
+            "info_hazard": {
+              "kind": "exact",
+              "gold": "none",
+              "skill": "none",
+              "score": 1.0
+            },
+            "source.type": {
+              "kind": "exact",
+              "gold": "lesswrong",
+              "skill": "lesswrong",
+              "score": 1.0
+            },
+            "source.url": {
+              "kind": "exact",
+              "gold": "https://www.lesswrong.com/posts/ogvyWqJtSrpgXfc7t/eval-awareness-steering-detects-the-test-not-the-sabotage",
+              "skill": "https://www.lesswrong.com/posts/ogvyWqJtSrpgXfc7t/eval-awareness-steering-detects-the-test-not-the-sabotage",
+              "score": 1.0
+            },
+            "source.crosspost_url": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "source.published": {
+              "kind": "exact",
+              "gold": "2026-06-25",
+              "skill": "2026-06-25",
+              "score": 1.0
+            },
+            "result.effect_size": {
+              "kind": "exact",
+              "gold": -1.77,
+              "skill": -1.77,
+              "score": 1.0
+            },
+            "result.ci_low": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.ci_high": {
+              "kind": "exact",
+              "gold": null,
+              "skill": null,
+              "score": 1.0
+            },
+            "result.n": {
+              "kind": "exact",
+              "gold": 300,
+              "skill": 300,
+              "score": 1.0
+            },
+            "research_area": {
+              "kind": "list",
+              "gold": [
+                "evals",
+                "interpretability",
+                "steering"
+              ],
+              "skill": [
+                "evals",
+                "interpretability",
+                "steering"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "method": {
+              "kind": "list",
+              "gold": [
+                "activation-steering",
+                "difference-of-means",
+                "direction-ablation",
+                "prompted-sandbagging-model",
+                "random-direction-null"
+              ],
+              "skill": [
+                "activation-steering",
+                "difference-of-means-direction",
+                "directional-ablation",
+                "prompting"
+              ],
+              "score": 0.0,
+              "jaccard": 0.125
+            },
+            "models.name": {
+              "kind": "list",
+              "gold": [
+                "llama-3-1-8b-instruct"
+              ],
+              "skill": [
+                "llama-3-1-8b-instruct"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.developer": {
+              "kind": "list",
+              "gold": [
+                "unknown"
+              ],
+              "skill": [
+                "unknown"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "models.access": {
+              "kind": "list",
+              "gold": [
+                "open-weight"
+              ],
+              "skill": [
+                "open-weight"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "benchmarks": {
+              "kind": "list",
+              "gold": [
+                "mmlu",
+                "wmdp-skill-mcqs"
+              ],
+              "skill": [
+                "mmlu",
+                "wmdp"
+              ],
+              "score": 0.0,
+              "jaccard": 0.333
+            },
+            "checks_done": {
+              "kind": "list",
+              "gold": [
+                "coherence-check",
+                "off-target-control",
+                "positive-control",
+                "pre-registration",
+                "random-direction-null"
+              ],
+              "skill": [
+                "bug-audit",
+                "off-target-control",
+                "positive-control",
+                "pre-registration",
+                "random-direction-null"
+              ],
+              "score": 0.0,
+              "jaccard": 0.667
+            },
+            "source.authors": {
+              "kind": "list",
+              "gold": [
+                "sahilraut"
+              ],
+              "skill": [
+                "sahilraut"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "source.lw_tags": {
+              "kind": "list",
+              "gold": [
+                "activation-engineering",
+                "ai",
+                "ai-evaluations",
+                "deceptive-alignment",
+                "interpretability-ml-ai",
+                "sandbagging-ai"
+              ],
+              "skill": [
+                "activation-engineering",
+                "ai",
+                "ai-evaluations",
+                "deceptive-alignment",
+                "interpretability-ml-ai",
+                "sandbagging-ai"
+              ],
+              "score": 1.0,
+              "jaccard": 1.0
+            },
+            "hypothesis": {
+              "kind": "rubric_0_2",
+              "gold_hash": "0b03cd96b4e7",
+              "skill_hash": "ca63acd0d06d",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Same meaning as gold: the eval-awareness direction causally drives sandbagging, so adding it should raise underperformance and removing it lower it, letting one direction both detect and suppress sandbagging.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "claim_scope": {
+              "kind": "rubric_0_2",
+              "gold_hash": "a6816ccea23c",
+              "skill_hash": "d024401b9ada",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Matches gold: Llama-3.1-8B-Instruct, one prompted organism, difference-of-means direction from a 2x2 minimal-pair set, nine coefficients from -2 to +2 with an ablation arm on 300 WMDP-skill questions, layers 12/14/24, KL about 0.001 so only a gentle dose range, and the same untested list; the MMLU off-target detail is supported by the post.",
+              "grader_model": "claude-sonnet-5-5"
+            },
+            "limitations": {
+              "kind": "rubric_0_2",
+              "gold_hash": "7a00b7c90940",
+              "skill_hash": "30e93b1f6316",
+              "score": 1.0,
+              "raw": 2,
+              "status": "graded",
+              "reason": "Draft carries the author's own caveats (single 8B model, single prompted organism, no SAE features, gentle dose, no higher-dose run), which is the same content as gold; the missing preliminary note and explicit fine-tuned or adversarial organism wording are minor restatements.",
+              "grader_model": "claude-sonnet-5-5"
+            }
+          },
+          "accuracy": 0.8846,
+          "fields_scored": 26,
+          "fields_unscored": [],
+          "quote_valid": true,
+          "schema_valid": true,
+          "schema_issues": []
+        },
+        "other_drafts": [
+          "draft-2.md"
+        ]
+      }
+    ],
+    "per_field": {
+      "result.direction": {
+        "accuracy": 0.8,
+        "n": 5,
+        "unscored": 0
+      },
+      "failure_type": {
+        "accuracy": 0.8,
+        "n": 5,
+        "unscored": 0
+      },
+      "confidence_true_negative": {
+        "accuracy": 0.8,
+        "n": 5,
+        "unscored": 0
+      },
+      "retry_welcome": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      },
+      "evidence_level": {
+        "accuracy": 0.8,
+        "n": 5,
+        "unscored": 0
+      },
+      "info_hazard": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.type": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.url": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.crosspost_url": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.published": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "result.effect_size": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "result.ci_low": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "result.ci_high": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "result.n": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      },
+      "research_area": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      },
+      "method": {
+        "accuracy": 0.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "models.name": {
+        "accuracy": 0.8,
+        "n": 5,
+        "unscored": 0
+      },
+      "models.developer": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "models.access": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      },
+      "benchmarks": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      },
+      "checks_done": {
+        "accuracy": 0.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.authors": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "source.lw_tags": {
+        "accuracy": 1.0,
+        "n": 5,
+        "unscored": 0
+      },
+      "hypothesis": {
+        "accuracy": 0.7,
+        "n": 5,
+        "unscored": 0
+      },
+      "claim_scope": {
+        "accuracy": 0.9,
+        "n": 5,
+        "unscored": 0
+      },
+      "limitations": {
+        "accuracy": 0.6,
+        "n": 5,
+        "unscored": 0
+      }
+    },
+    "overall_accuracy": 0.7769,
+    "overall_definition": "mean of per-field accuracies; exact and list fields score 0 or 1 per item, rubric fields score grade/2",
+    "gold_items": 5,
+    "items_with_output": 5,
+    "not_scored": {
+      "id, contributor.*, review.*, dates.*": "trust and provenance fields are assigned by the system, not the skill (PRD section 9)",
+      "title, revival_conditions, source.title, source.section, related, body": "free wording with no single right answer; not in the PRD's scored list",
+      "source.quote": "any verbatim fragment is acceptable, so it is checked for validity (quote_valid) instead of compared with gold"
+    },
+    "run": {
+      "run_date": "2026-11-14",
+      "skill": "plugin/skills/contribute/SKILL.md",
+      "skill_version": "contribute-skill v0.1",
+      "model": "claude-sonnet-5-5 (Claude Code `sonnet` subagent alias; resolved ID not confirmed by the model)",
+      "prompt": "evals/prompts/run_contribute.md",
+      "mode": "draft files; one fresh subagent per gold post; no command access, so the post was read from the cache written by `cli.py fetch-source --save`",
+      "isolation": "subagents were told not to read evals/gold, evals/results, entries or scouting; this was an instruction, not an enforced sandbox"
+    }
+  },
+  "ask": {
+    "items": [
+      {
+        "qid": "q1",
+        "question": "I plan to train sparse probes on a handful of sparse-autoencoder latents to flag harmful user requests. My hope is that they will hold up on jailbreaks they have never seen better than an ordinary linear probe on the residual stream. Has anyone tried this, and where did it go wrong?",
+        "expected_entry_id": "fe-2026-0001",
+        "expected_failure_type_from_gold": "hypothesis_false",
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "cites_expected_entry_under_already_tried": true,
+          "failure_type_matches_gold": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "Every claim about fe-2026-0001 (Gemma 2 9B IT, layer 20, k from 2 to 50, n 3850, dense probe near-perfect, SAE probes short out of distribution, no scores in text, spurious-formatting cleanup stacking the deck against SAEs, revival conditions) and fe-2026-0008 (Pythia-70m and 410m, IMDB, three open possibilities, left-padding doubt, reconstruction errors larger than expected) matches the entries. Minor inference not counted as an invention: calling the Pythia test in-distribution narrows scope and adds no result.",
+        "entries_cited": [
+          "fe-2026-0001",
+          "fe-2026-0008"
+        ],
+        "passed": true,
+        "status": "scored"
+      },
+      {
+        "qid": "q2",
+        "question": "I want to replace the logit lens with a Jacobian-based lens to read out what the middle layers of GPT-2 are predicting. What has been tried, and what should I avoid?",
+        "expected_entry_id": "fe-2026-0002",
+        "expected_failure_type_from_gold": "hypothesis_false",
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "cites_expected_entry_under_already_tried": true,
+          "failure_type_matches_gold": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "All claims about fe-2026-0002 match its fields and body: lost at 0/11 layers on small and won 1/23 on medium, five stress tests, 30 sequences and 150 in one refit versus about 1000 in the paper, sparsity-thresholded win at 7/11 layers attributed to filler tokens and outlier dimensions, identity-J and float64 gradcheck only, and the revival conditions including the Tuned Lens appendix note on OPT-125m.",
+        "entries_cited": [
+          "fe-2026-0002"
+        ],
+        "passed": true,
+        "status": "scored"
+      },
+      {
+        "qid": "q3",
+        "question": "I am going to reproduce alignment faking in an open-weight Llama checkpoint, so that I can test whether deception probes pick it up. What do I need to know before I start?",
+        "expected_entry_id": "fe-2026-0003",
+        "expected_failure_type_from_gold": "unknown",
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "cites_expected_entry_under_already_tried": true,
+          "failure_type_matches_gold": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "fe-2026-0003 claims match (17.5% vs 20.0% on 20 prompts, 4% vs 6% on 50, no scratchpad met all four criteria, three unconfirmed guesses, hand scoring, prompt file unchecked, probe not run, hard part is the source section title). fe-2026-0005 claims match (layer 12, alpha -2 to +2, swing -1.77 vs 5 point bar, 24 random directions, p 0.20, layer 24 +11.3 wrong sign, about 0.81 AUROC) and the answer explicitly marks it as adjacent and not an alignment-faking finding.",
+        "entries_cited": [
+          "fe-2026-0003",
+          "fe-2026-0005"
+        ],
+        "passed": true,
+        "status": "scored"
+      },
+      {
+        "qid": "q4",
+        "question": "My plan is to link sparse-autoencoder features across layers with gradient attributions and get a full circuit that explains a GPT-2 forward pass on ordinary text. Has this been tried, and where did it break down?",
+        "expected_entry_id": "fe-2026-0004",
+        "expected_failure_type_from_gold": "hypothesis_false",
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "cites_expected_entry_under_already_tried": true,
+          "failure_type_matches_gold": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "All claims about fe-2026-0004 match: replication of Marks et al. 2024 on GPT-2-small, Copyright (C) sanity check passed, five prompts, only two of five top features seemed to call the top next token, upstream edges inspected for two, no quantitative criterion, cross-layer view untested by the authors, and the revival conditions wording. The per-sublayer SAE wording narrows scope and adds no outcome. The mention of other SAE entries by topic states no result and cites none.",
+        "entries_cited": [
+          "fe-2026-0004"
+        ],
+        "passed": true,
+        "status": "scored"
+      },
+      {
+        "qid": "q5",
+        "question": "I want to find a direction for 'the model thinks it is being evaluated' and steer along it to stop a model from sandbagging on a benchmark. What should I avoid?",
+        "expected_entry_id": "fe-2026-0005",
+        "expected_failure_type_from_gold": "hyperparams_unexplored",
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": false,
+          "cites_expected_entry_under_already_tried": true,
+          "failure_type_matches_gold": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "Unsupported clause: in What to avoid the answer says the entry pre-registered layer 12 as the headline AND a 5-point bar. fe-2026-0005 says only that the headline layer 12 was pre-registered (plus a bare pre-registration entry in checks_done); it never says the 5 point threshold was fixed in advance. This is a minor procedural detail, not an invented failure or result. Everything else in q5 checks out: alpha -2 to +2 with 9 values, projection arm, 300 WMDP-skill questions, -1.77 swing, 24 random directions with p 0.20, layers 14 and 24, +11.3 wrong sign, KL about 0.001, 0.81 AUROC, revival conditions.",
+        "entries_cited": [
+          "fe-2026-0005"
+        ],
+        "passed": false,
+        "status": "scored"
+      },
+      {
+        "qid": "q6",
+        "question": "I plan to measure whether RLHF makes a model more sycophantic about users' political opinions, by comparing a base model with its RLHF-tuned version. What has been tried?",
+        "expected_entry_id": null,
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "already_tried_cites_nothing": true,
+          "not_found_section_says_so": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "No entry is cited and the answer reports that the wiki has nothing on sycophancy, political opinions or a base-versus-RLHF comparison, which is an absence statement and not an invention. The Not found section also describes an uncited rlhf entry in specific terms (PPO training of GPT2-large to hide one bit in IMDB completions) and other uncited entries by topic; I did not check those descriptions against the wiki, and they state no failure, result or pitfall.",
+        "entries_cited": [],
+        "passed": true,
+        "status": "scored"
+      },
+      {
+        "qid": "q7",
+        "question": "I want to run AI debate with human judges on long reading-comprehension passages, to see whether watching a debate helps judges answer correctly under time pressure. Has anyone tried this, and where did it go wrong?",
+        "expected_entry_id": null,
+        "checks": {
+          "has_all_five_sections": true,
+          "cites_only_existing_entries": true,
+          "judge_no_invented_failures": true,
+          "already_tried_cites_nothing": true,
+          "not_found_section_says_so": true
+        },
+        "judge_status": "judged",
+        "judge_reason": "No entry is cited and no failure, result or pitfall is claimed. The answer states that the wiki has nothing on debate, human judges, reading-comprehension passages or time pressure, and lists only broad topics of the other entries (sparse-autoencoder probing, J-Lens, steering and sandbagging, alignment faking, steganography with PPO), consistent with the entries seen for other questions; the uncited topics were not checked.",
+        "entries_cited": [],
+        "passed": true,
+        "status": "scored"
+      }
+    ],
+    "passed": 6,
+    "total": 7,
+    "match_questions": {
+      "passed": 4,
+      "total": 5
+    },
+    "no_match_questions": {
+      "passed": 2,
+      "total": 2
+    },
+    "pass_rule": "match question: cites the expected entry under 'Already tried', names the gold failure_type under 'Where it went wrong', cites only existing entries, and a separate judge finds no invented failure. No-match question: 'Already tried' cites nothing, 'Not found' says so, and the judge finds no invented failure.",
+    "run": {
+      "run_date": "2026-11-14",
+      "skill": "plugin/skills/ask/SKILL.md",
+      "skill_version": "ask-skill v0.1",
+      "model": "claude-sonnet-5-5 (Claude Code `sonnet` subagent alias; resolved ID not confirmed by the model)",
+      "prompt": "evals/prompts/run_ask.md",
+      "mode": "one fresh subagent per question; no command access, so the tool outputs (list_facets, search with an empty query, get per entry) were read from files holding the same JSON the tools return. The subagents could not run keyword searches; they scanned the full 10-entry listing instead.",
+      "wiki_state": "10 entries, all unreviewed at the time the answers were written (fe-2026-0007 was reviewed by an agent afterwards)",
+      "isolation": "subagents were told not to read evals/ (other than the prompt), entries or scouting; this was an instruction, not an enforced sandbox"
+    }
+  }
+}
