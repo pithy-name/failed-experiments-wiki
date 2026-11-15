@@ -79,7 +79,8 @@ python tools/cli.py review fe-2026-0006 reviewed --notes "…" --agent-model <yo
    `contested` and say which field.
 6. **Report** the new status and the branch or pull-request link exactly as the
    tool returned it. If no pull request was opened, say so. Say which GitHub
-   handle the review was recorded under (the user's own login, as the
+   handle the review was recorded under (`recorded_as.handle` in the tool's
+   result: the user's own login, as the
    accountable person beside `type: agent` and your model), and say plainly
    that this is an agent's review: weaker than a person's, and weakest when
    your model is the one that wrote the entry.
