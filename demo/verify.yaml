@@ -312,12 +312,18 @@ checks:
   - id: set-handle
     requirement: D6
     title: The handle placeholder is replaced in one step
-    proves: One command replaces the HANDLE-TBD placeholder in every seed entry, and the entries still validate.
+    proves: One command replaces the HANDLE-TBD placeholder wherever it occurs, and the entries still validate.
     commands:
-      - run: grep -l HANDLE-TBD entries/*.md | wc -l
+      - run: >-
+          sed 's/^  handle: .*/  handle: HANDLE-TBD/' entries/fe-2026-0006.md > $WORK/handle.md
+          && cp $WORK/handle.md entries/fe-2026-0006.md && grep -c 'handle: HANDLE-TBD' entries/fe-2026-0006.md
+        expect: ["1"]
       - run: python tools/set_handle.py verification-run
-      - run: grep -l HANDLE-TBD entries/*.md | wc -l
-        expect: ["0"]
+        expect: ["replaced HANDLE-TBD with verification-run"]
+      - run: echo "entry files that still carry the placeholder - $(grep -l HANDLE-TBD entries/*.md | wc -l | tr -d ' ')"
+        expect: ["the placeholder - 0"]
+      - run: "grep -c 'handle: verification-run' entries/fe-2026-0006.md"
+        expect: ["1"]
       - run: python tools/validate.py --quotes cached
         expect: ["0 error(s)"]
 
@@ -325,7 +331,6 @@ checks:
     requirement: D8
     title: The demo script regenerates and its numbers are current
     proves: The narration is generated from one file and the build stops if a number it speaks is out of date.
-    cwd: repo
     commands:
       - run: python demo/build_demo.py --script-only
         expect: ["wrote demo/script.md"]
