@@ -105,6 +105,8 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-52 | The source cache is `.cache/` inside the repository folder, git-ignored. | The PRD says post texts are cached outside the repo. The sandbox could write only inside this folder. Nothing in `.cache/` is tracked, and no post text is in any commit. |
 | DEC-53 | The review notes recorded for `fe-2026-0007` are the reviewer's first written decision. | The orchestrator applied the decision file while the reviewing subagent was still running; the subagent then rewrote its notes with slightly different wording and the same verdict. The recorded review is the earlier wording. |
 
+| DEC-54 | The hand-over command in `DONE.md` (T1) was tested on a scratch copy, not in this folder. | The copy held the tracked files plus a partial `.git/` like the one here (`description`, `hooks/`, `info/` only). Running `git init -b main`, the `git fetch --update-head-ok history.bundle …` line and `git reset` there gave a clean `git status`, the full history, all entry and review branches and the `pre-seed` tag. The test was run once with the bundle as it stood before this row was written, and repeated on the final bundle after this row was committed. It could not be run in this folder: the sandbox refuses `git init` here. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.
