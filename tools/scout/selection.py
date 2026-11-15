@@ -30,6 +30,7 @@ def cell(text: object) -> str:
 def main() -> int:
     with (SCOUTING / "selection.json").open(encoding="utf-8") as handle:
         selection = json.load(handle)
+    selection["selected"].sort(key=lambda item: item["entry_id"])
     with (SCOUTING / "field_audit" / "summary.json").open(encoding="utf-8") as handle:
         audits = {audit["post_id"]: audit for audit in json.load(handle)}
     posts: dict[str, dict] = {}

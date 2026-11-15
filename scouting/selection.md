@@ -24,9 +24,9 @@ How it was applied:
 | `fe-2026-0003` | [Attempt at Finding Alignment Faking on Llama 70B to test sleeper-agent detection generalizes](https://www.lesswrong.com/posts/8dXzDzk7nNK64jBve/attempt-at-finding-alignment-faking-on-llama-70b-to-test) | skn8733 | 2026-07-20 | Alignment faking, model organisms | gold draft (separate careful pass) | Eliciting alignment faking in the 70B checkpoint with training details in the prompt (20, then 50 prompts) | all 7 |
 | `fe-2026-0004` | [(Not) Explaining GPT-2-Small Forward Passes with Edge-Level Autoencoder Circuits](https://www.lesswrong.com/posts/2CoLkSdwirr2WnNH6/not-explaining-gpt-2-small-forward-passes-with-edge-level) | David Udell | 2025-07-22 | SAE circuits | gold draft (separate careful pass) | Gradient-based SAE circuit discovery to explain GPT-2-small forward passes | all 7 |
 | `fe-2026-0005` | [Eval-Awareness Steering detects the Test, Not the Sabotage](https://www.lesswrong.com/posts/ogvyWqJtSrpgXfc7t/eval-awareness-steering-detects-the-test-not-the-sabotage) | sahilraut | 2026-06-25 | Activation steering, sandbagging | gold draft (separate careful pass) | Steering the eval-awareness direction to change sandbagging | all 7 |
-| `fe-2026-0006` | [Classifying representations of sparse autoencoders (SAEs)](https://www.lesswrong.com/posts/pn5nBBcLYrnmWXfnY/classifying-representations-of-sparse-autoencoders-saes) | Annah | 2023-11-17 | SAE encodings for classification | `contribute` skill | Sentiment classification on SAE encodings vs raw hidden states | all 7 |
-| `fe-2026-0007` | [Do capabilities generalize across propensities?](https://www.lesswrong.com/posts/uH5oo57r24xGXQGKM/do-capabilities-generalize-across-propensities) | Emil Ryd | 2026-05-09 | Fine-tuning, capability transfer across propensities | `contribute` skill | Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap | all 7 |
-| `fe-2026-0008` | [Sanity Checks for Sanity Checks for Sparse Autoencoders](https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders) | Celene Nightingale | 2026-10-31 | SAE training on synthetic data | `contribute` skill | Per-feature loudness added to synthetic activations to explain BatchTopK failure | all 7 |
+| `fe-2026-0006` | [Do capabilities generalize across propensities?](https://www.lesswrong.com/posts/uH5oo57r24xGXQGKM/do-capabilities-generalize-across-propensities) | Emil Ryd | 2026-05-09 | Fine-tuning, capability transfer across propensities | `contribute` skill | Chess puzzles with bold/plain and hedging/confident propensity swaps (gpt-oss-120b): large performance gap | all 7 |
+| `fe-2026-0007` | [Sanity Checks for Sanity Checks for Sparse Autoencoders](https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders) | Celene Nightingale | 2026-10-31 | SAE training on synthetic data | `contribute` skill | Per-feature loudness added to synthetic activations to explain BatchTopK failure | all 7 |
+| `fe-2026-0008` | [Classifying representations of sparse autoencoders (SAEs)](https://www.lesswrong.com/posts/pn5nBBcLYrnmWXfnY/classifying-representations-of-sparse-autoencoders-saes) | Annah | 2023-11-17 | SAE encodings for classification | `contribute` skill | Sentiment classification on SAE encodings vs raw hidden states | all 7 |
 | `fe-2026-0009` | [Training Models to Predict and Explain Their In-the-Wild Behavior](https://www.lesswrong.com/posts/YyAMz52wDxnLhwvWL/training-models-to-predict-and-explain-their-in-the-wild) | Adam Karvonen | 2026-09-04 | Introspection, self-explanation | `contribute` skill | Privileged-access test: training a subject model versus a different 8B model on the same behavior data | all 7 |
 | `fe-2026-0010` | [Some negative steganography results](https://www.lesswrong.com/posts/EEvsL9cpgDAxAhTzt/some-negative-steganography-results) | Fabien Roger | 2023-12-09 | Steganography, reinforcement learning | `contribute` skill | PPO on GPT2-large with a BERT classifier reward to learn red/blue 1-bit steganography | 6 of 7 (not `hypothesis`) |
 
@@ -82,17 +82,7 @@ A pre-registered null with random-direction controls, where the author says the 
 - Info hazard: none. Auditor's note: Single 8B model, one prompted organism; author calls it preliminary. Some results appear only in figures.
 - Found in classification round 2 via: tag:activation-engineering
 
-### `fe-2026-0006`: Classifying representations of sparse autoencoders (SAEs)
-
-Short, self-contained negative result on small open models, with the author unsure whether a pipeline mistake is the cause.
-
-- Auditor's verdict: genuine = yes; result direction `opposite`; failure type `unknown`.
-- Models named in the post: Pythia-70m-deduped and Pythia-410m-deduped, with pretrained sparse autoencoders taken from a cited prior release.
-- Quote found verbatim in the post (12 words): "So the sparse encodings consistently under-perform compared to the original hidden states."
-- Info hazard: none. Auditor's note: Test accuracy numbers are in an image, not text; author unsure if own pipeline caused the result.
-- Found in classification round 1 via: tag:activation-engineering
-
-### `fe-2026-0007`: Do capabilities generalize across propensities?
+### `fe-2026-0006`: Do capabilities generalize across propensities?
 
 Mostly positive post with one clearly reported shortfall. Tests whether the skill scopes a failure inside a positive write-up. Only non-interpretability training topic among the posts that passed.
 
@@ -102,7 +92,7 @@ Mostly positive post with one clearly reported shortfall. Tests whether the skil
 - Info hazard: none. Auditor's note: Results are in figures; no numeric gaps in text; the performance-gap formula is missing from the extracted text.
 - Found in classification round 2 via: phrase:did not improve
 
-### `fe-2026-0008`: Sanity Checks for Sanity Checks for Sparse Autoencoders
+### `fe-2026-0007`: Sanity Checks for Sanity Checks for Sparse Autoencoders
 
 A failed explanatory hypothesis reported with numbers, inside a post whose final diagnosis is positive.
 
@@ -111,6 +101,16 @@ A failed explanatory hypothesis reported with numbers, inside a post whose final
 - Quote found verbatim in the post (8 words): "Instead of improving performance, it actively degrades it"
 - Info hazard: none. Auditor's note: Footnote calls the loudness motivation poor; no seeds or error bars reported; the post mainly rebuts a published sanity-check paper.
 - Found in classification round 2 via: phrase:did not improve
+
+### `fe-2026-0008`: Classifying representations of sparse autoencoders (SAEs)
+
+Short, self-contained negative result on small open models, with the author unsure whether a pipeline mistake is the cause.
+
+- Auditor's verdict: genuine = yes; result direction `opposite`; failure type `unknown`.
+- Models named in the post: Pythia-70m-deduped and Pythia-410m-deduped, with pretrained sparse autoencoders taken from a cited prior release.
+- Quote found verbatim in the post (12 words): "So the sparse encodings consistently under-perform compared to the original hidden states."
+- Info hazard: none. Auditor's note: Test accuracy numbers are in an image, not text; author unsure if own pipeline caused the result.
+- Found in classification round 1 via: tag:activation-engineering
 
 ### `fe-2026-0009`: Training Models to Predict and Explain Their In-the-Wild Behavior
 
