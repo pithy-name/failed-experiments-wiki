@@ -6,7 +6,7 @@ PY     := .venv/bin/python
 PORT   ?= 8001
 HANDLE ?=
 
-.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-setup demo-video verify set-handle evals sync-gold scout facets
+.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-setup demo-video demo-short verify report-figures set-handle evals sync-gold scout facets
 
 help:
 	@echo "make setup          create .venv and install everything"
@@ -22,7 +22,9 @@ help:
 	@echo "make demo-script    write demo/script.md from demo/scenes.yaml"
 	@echo "make demo-setup     install what the demo video needs (Playwright and its headless browser)"
 	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs ffmpeg; the voice needs macOS say, outside the sandbox)"
+	@echo "make demo-short     the same without the scenes marked short: false -> demo/out/demo-short.mp4"
 	@echo "make verify         exercise every function in a throwaway clone and a headless browser -> VERIFICATION.md, demo/out/verify/"
+	@echo "make report-figures regenerate report/figures/ (architecture diagram, page screenshots, schema table)"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
 	@echo "make sync-gold HANDLE=<github handle>   publish verified gold entries into entries/"
 	@echo "make set-handle HANDLE=<github handle>  replace the HANDLE-TBD placeholder in the seed entries"
@@ -69,8 +71,14 @@ demo-setup:
 demo-video:
 	$(PY) demo/build_demo.py
 
+demo-short:
+	$(PY) demo/build_demo.py --short
+
 verify:
 	$(PY) demo/verify.py $(if $(PLUGIN),--with-plugin,)
+
+report-figures:
+	$(PY) report/make_figures.py
 
 evals:
 	$(PY) evals/run_evals.py
