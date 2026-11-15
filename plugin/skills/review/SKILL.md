@@ -58,7 +58,9 @@ python tools/cli.py review fe-2026-0006 reviewed --notes "…" --agent-model <yo
    - **Checks, limitations, revival conditions, retry_welcome:** consistent
      with the post.
    - **Info hazard:** `review_needed` if the details could help misuse.
-   - **Tone:** describes the experiment and does not judge the authors.
+   - **Tone:** describes the experiment and does not judge the authors, and
+     does not repeat remarks about an author's skill, effort or standing even
+     when the author made them about themselves.
    - **Body:** in the contributor's own words, with no copied post text.
 4. **Decide the status:**
    - `reviewed`: every item passes.
@@ -66,9 +68,28 @@ python tools/cli.py review fe-2026-0006 reviewed --notes "…" --agent-model <yo
      the post says.
    - `superseded`: only when a newer entry replaces this one; name its ID.
 5. **Record it:** `review_entry(id, status, notes, agent_model)`. Notes: one or
-   two sentences on what you checked and what you found.
+   two sentences on what you checked and what you found. `reviewed` means every
+   item passed, so anything you could **not** check goes in the notes in plain
+   words, for example:
+   - a claim that rests on a figure (the fetched text has no figures);
+   - a field the post does not state and the contributor inferred, such as
+     revival conditions drawn from the author's open questions. Say it is an
+     inference and whether it is consistent with the post.
+   If what you could not check decides whether the entry is right, use
+   `contested` and say which field.
 6. **Report** the new status and the branch or pull-request link exactly as the
-   tool returned it. If no pull request was opened, say so.
+   tool returned it. If no pull request was opened, say so. Say which GitHub
+   handle the review was recorded under (the user's own login, as the
+   accountable person beside `type: agent` and your model), and say plainly
+   that this is an agent's review: weaker than a person's, and weakest when
+   your model is the one that wrote the entry.
+
+**When the repository has no remote.** `review_entry` returns
+`status: branch_only_no_remote` and `pull_request: null`. That is not an error:
+the review is committed on the local branch `review/<id>-<date>` and the entry
+in the wiki is unchanged until that branch is merged. Report the branch and
+the merge command from the tool's `detail`
+(`python tools/cli.py merge-local <branch>`). Do not run it unless asked.
 
 ## Reviewing by hand (people)
 
