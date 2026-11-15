@@ -84,6 +84,14 @@ def test_search_with_no_match_returns_nothing_and_says_how_many_entries_exist(va
     assert found["match_count"] == 0 and found["total_entries_in_wiki"] == 2
 
 
+def test_search_lists_an_entry_on_any_term_and_says_so(valid_entry):
+    """Ranked any-term matching: one real word among nonsense still lists the entry, and the result says which word hit."""
+    found = wikilib.search(make_entries(valid_entry), "zzzqqq steering xxxyyy")
+    assert [r["id"] for r in found["results"]] == ["fe-2026-0001"]
+    assert found["results"][0]["matched_terms"] == ["steering"]
+    assert "ANY of the query terms" in found["note"] and "weak match" in found["note"]
+
+
 def test_empty_query_lists_everything_passing_the_filters(valid_entry):
     entries = make_entries(valid_entry)
     assert wikilib.search(entries)["match_count"] == 2
