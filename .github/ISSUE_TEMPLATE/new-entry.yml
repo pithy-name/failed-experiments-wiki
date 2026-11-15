@@ -1,0 +1,217 @@
+name: New entry (failed experiment)
+description: File a failed AI-safety experiment written up on LessWrong or the Alignment Forum. A bot turns this form into a pull request.
+title: "[entry] "
+labels: ["new-entry"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for filing this. Entries describe **experiments, never people**: say what was tried and what happened, without judging anyone.
+        A bot converts this form into an entry file and opens a pull request. Your entry is published as **unreviewed** until someone reviews it.
+        Field labels below are read by the bot: please do not edit them.
+  - type: input
+    id: title
+    attributes:
+      label: Entry title
+      description: "One line, scoped: what was tried, on what, what happened."
+      placeholder: "SAE probes did not beat linear probes for harmful-intent detection on Gemma 2"
+    validations:
+      required: true
+  - type: dropdown
+    id: research_area
+    attributes:
+      label: Research area
+      multiple: true
+      options: [interpretability, steering, evals, honesty, sycophancy, control, oversight, robustness, rlhf, alignment-training, agents, governance, other]
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: What was expected.
+    validations:
+      required: true
+  - type: textarea
+    id: claim_scope
+    attributes:
+      label: Claim scope
+      description: Exactly what was tested (setup, models, data, scale), so the entry cannot be read as "X never works".
+    validations:
+      required: true
+  - type: input
+    id: method
+    attributes:
+      label: Method
+      description: "Technique tags, comma-separated."
+      placeholder: "sae, linear-probing"
+    validations:
+      required: true
+  - type: textarea
+    id: models
+    attributes:
+      label: Models
+      description: "One model per line: name | developer | version | size | access. Access is open-weight, api or unknown. Write unknown for anything not stated."
+      placeholder: "Gemma 2 9B | Google DeepMind | unknown | 9B | open-weight"
+    validations:
+      required: true
+  - type: input
+    id: benchmarks
+    attributes:
+      label: Benchmarks
+      description: "Benchmarks or datasets, comma-separated. Optional."
+  - type: dropdown
+    id: result_direction
+    attributes:
+      label: Result direction
+      options: ["null", opposite, smaller_than_expected, mixed, did_not_replicate]
+    validations:
+      required: true
+  - type: input
+    id: effect_size
+    attributes:
+      label: Effect size
+      description: "A number, as reported. Optional."
+  - type: input
+    id: ci_low
+    attributes:
+      label: Confidence interval low
+      description: "A number. Optional."
+  - type: input
+    id: ci_high
+    attributes:
+      label: Confidence interval high
+      description: "A number. Optional."
+  - type: input
+    id: n
+    attributes:
+      label: Sample size
+      description: "A whole number. Optional."
+  - type: dropdown
+    id: failure_type
+    attributes:
+      label: Failure type
+      options: [hypothesis_false, underpowered, implementation_bug_ruled_out, implementation_bug_suspected, measurement_noise, hyperparams_unexplored, infrastructure, worked_but_abandoned, unknown]
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence_true_negative
+    attributes:
+      label: Confidence this is a true negative
+      description: How sure are you that the idea, as scoped, really does not work?
+      options: [low, medium, high]
+    validations:
+      required: true
+  - type: input
+    id: checks_done
+    attributes:
+      label: Checks done
+      description: "Comma-separated tags, e.g. positive-control, noise-floor, bug-audit, seed-sweep. Optional."
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Limitations
+      description: What was not tried. Optional.
+  - type: textarea
+    id: revival_conditions
+    attributes:
+      label: Revival conditions
+      description: When it would be worth retrying. Optional.
+  - type: dropdown
+    id: retry_welcome
+    attributes:
+      label: Retry welcome
+      description: Yes when the evidence is weak enough that a better attempt is worthwhile.
+      options: ["yes", "no"]
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence_level
+    attributes:
+      label: Evidence level
+      description: author_report = you (or the post's authors) ran it; third_party_report = reporting someone else's; independent_reproduction = a replication of another team's result.
+      options: [author_report, third_party_report, independent_reproduction]
+    validations:
+      required: true
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: The LessWrong or Alignment Forum post.
+      placeholder: "https://www.lesswrong.com/posts/…"
+    validations:
+      required: true
+  - type: input
+    id: crosspost_url
+    attributes:
+      label: Crosspost URL
+      description: The other site's URL when the post is on both. Optional.
+  - type: input
+    id: source_title
+    attributes:
+      label: Source title
+    validations:
+      required: true
+  - type: input
+    id: source_authors
+    attributes:
+      label: Source authors
+      description: Comma-separated.
+    validations:
+      required: true
+  - type: input
+    id: source_published
+    attributes:
+      label: Source published date
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: true
+  - type: input
+    id: source_section
+    attributes:
+      label: Source section
+      description: Where in the post. Optional.
+  - type: input
+    id: source_quote
+    attributes:
+      label: Source quote
+      description: 15 words or fewer, copied exactly from the post. The validator checks it against the post.
+    validations:
+      required: true
+  - type: input
+    id: lw_tags
+    attributes:
+      label: LessWrong tags
+      description: The post's tags, comma-separated. Optional.
+  - type: input
+    id: experiment_date
+    attributes:
+      label: Experiment date
+      description: "When the experiment ran, YYYY-MM-DD. Optional."
+  - type: input
+    id: related
+    attributes:
+      label: Related entries
+      description: "Optional. Comma-separated id:relation pairs, e.g. fe-2026-0001:same_hypothesis. Relations: replicates, contradicts, extends, same_hypothesis."
+  - type: dropdown
+    id: info_hazard
+    attributes:
+      label: Info hazard
+      description: Choose review_needed if the details could help misuse (for example a failed attack attempt that reveals a path).
+      options: [none, review_needed]
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional free text shown under the entry. Your own words, not text copied from the post.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you submit
+      options:
+        - label: The entry describes the experiment and does not judge the people who ran it.
+          required: true
+        - label: The quote is copied exactly from the post and everything else is in my own words.
+          required: true

@@ -1,0 +1,77 @@
+name: Issue form to entry pull request
+
+# Human contribution path (D2). When someone submits the "New entry" issue form,
+# build an entry file from it, validate it, and open a pull request.
+# Close and reopen the issue to run the conversion again after fixing the form.
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: issue-to-pr-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  build-entry:
+    if: contains(github.event.issue.labels.*.name, 'new-entry')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validator dependencies
+        run: pip install -r requirements.txt
+
+      # The issue text reaches the script through the environment only.
+      # It is never interpolated into a shell command.
+      - name: Convert the form into an entry file
+        id: convert
+        continue-on-error: true
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: python tools/issue_to_entry.py --report "$RUNNER_TEMP/report.md"
+
+      - name: Tell the author what to fix
+        if: steps.convert.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body-file "$RUNNER_TEMP/report.md"
+          exit 1
+
+      - name: Commit the entry and open a pull request
+        if: steps.convert.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENTRY_ID: ${{ steps.convert.outputs.entry_id }}
+          ENTRY_FILE: ${{ steps.convert.outputs.entry_file }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: |
+          branch="entry/${ENTRY_ID}-issue-${ISSUE_NUMBER}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add "$ENTRY_FILE"
+          git commit -m "Add entry ${ENTRY_ID} from issue #${ISSUE_NUMBER}" \
+                     -m "Human contributor: @${ISSUE_AUTHOR} (issue form). Review status: unreviewed. Validation passed before this commit."
+          git push --set-upstream origin "$branch"
+          printf '\nCloses #%s\n' "$ISSUE_NUMBER" >> "$RUNNER_TEMP/report.md"
+          gh pr create --base main --head "$branch" \
+            --title "Add entry ${ENTRY_ID} (issue #${ISSUE_NUMBER})" \
+            --body-file "$RUNNER_TEMP/report.md"
+          gh issue comment "$ISSUE_NUMBER" --body "Thank you. A pull request with entry \`${ENTRY_ID}\` has been opened."
