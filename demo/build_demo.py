@@ -2,19 +2,23 @@
 
   python demo/build_demo.py --script-only     # demo/script.md only (needs nothing extra)
   python demo/build_demo.py                   # script + demo/out/demo-draft.mp4 (+ .srt)
-  python demo/build_demo.py --no-voice        # silent video, timed from word counts
-  python demo/build_demo.py --placeholder     # no Chrome: flat frames, to test the assembly
+  python demo/build_demo.py --no-voice        # no text-to-speech; timed from word counts
+  python demo/build_demo.py --no-captions     # no caption bar (for recording your own voice over it)
 
-What the video is, plainly: a sequence of real screens assembled into a video.
-Every frame is a screenshot taken by headless Chrome of (a) the real browse
-page loaded from a filter link, (b) a real file from the repository, (c) the
-real output of commands run at build time, or (d) a title card. It is not a
-live capture of someone clicking: there is no mouse pointer and no typing.
-The voice is a text-to-speech scratch track for timing, meant to be replaced.
+What the video is, plainly: a headless browser (Playwright's Chromium) is
+driven through the real browse page with real clicks, typing and scrolling, and
+shown real files and the real output of commands run at build time. A frame is
+captured after every step and the frames are joined into a video. It is not a
+capture of a person's screen:
 
-Needs: Google Chrome (or CHROME=/path/to/binary), ffmpeg, and macOS `say` for
-the voice. Chrome and `say` cannot run inside the Claude Code sandbox (Chrome
-must bind a local socket), so run this from a normal terminal.
+- the pointer ring and the outline around a field are drawn by this script;
+- motion is step by step (a frame per action), not continuous;
+- the caption bar shows the narration; the voice, when present, is macOS
+  text-to-speech, a scratch track meant to be replaced by a person's.
+
+Needs: `pip install -r requirements-demo.txt`, `playwright install
+chromium-headless-shell`, and ffmpeg. The voice needs macOS `say`, which does
+not work inside the Claude Code sandbox; the rest does.
 
 Everything is driven by demo/scenes.yaml. Outputs go to demo/out/ (git-ignored).
 """
@@ -36,40 +40,62 @@ DEMO = Path(__file__).resolve().parent
 REPO = DEMO.parent
 OUT = DEMO / "out"
 sys.path.insert(0, str(REPO / "tools"))
+if (REPO / ".cache" / "ms-playwright").exists():
+    os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(REPO / ".cache" / "ms-playwright"))
 
 import build_site  # noqa: E402
 import wikilib  # noqa: E402
 
-WIDTH, HEIGHT, SCALE = 1280, 720, 1.5       # CSS pixels and device scale: frames are 1920x1080
+WIDTH, HEIGHT, SCALE = 1280, 720, 1.5        # CSS pixels and device scale: frames are 1920x1080
 FPS = 30
-PAD_SECONDS = 0.9                             # silence after each scene's narration
-CHROME_CANDIDATES = [
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-]
+PAD_SECONDS = 0.9                              # pause after each scene's narration
+CAPTION_HEIGHT = 86
+QUICK_SECONDS = 0.11                           # a frame inside typing or a scroll
+POINT_SECONDS = 0.55                           # the pointer resting on a control before the click
 
-CSS = """
-* { box-sizing: border-box; }
-html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; }
-body { font: 20px/1.45 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #e9ecef; background: #14171a; }
-.card { display: flex; flex-direction: column; justify-content: center; height: 720px; padding: 0 110px; }
-.card h1 { font-size: 54px; line-height: 1.15; margin: 0 0 18px; color: #ffffff; }
-.card .subtitle { font-size: 30px; color: #a9c7e8; margin: 0 0 28px; }
-.card ul { list-style: none; margin: 10px 0 0; padding: 0; }
-.card li { font-size: 30px; line-height: 1.35; margin: 0 0 22px; padding-left: 34px; position: relative; }
-.card li:before { content: ""; position: absolute; left: 0; top: 16px; width: 14px; height: 14px; border-radius: 3px; background: #6fb1f2; }
-.card .footer { position: absolute; left: 110px; right: 110px; bottom: 48px; font-size: 19px; color: #8a96a3; }
-.bar { height: 46px; line-height: 46px; padding: 0 22px; background: #23282e; color: #aeb8c2; font: 17px/46px ui-monospace, Menlo, monospace; border-bottom: 1px solid #343b43; white-space: nowrap; overflow: hidden; }
-.bar b { color: #ffffff; font-weight: 600; }
-pre { margin: 0; padding: 16px 22px; font: 16px/1.42 ui-monospace, Menlo, monospace; white-space: pre; overflow: hidden; height: 674px; }
-pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
-.ln { color: #5d6875; user-select: none; }
-.prompt { color: #7fd491; }
-.cmd { color: #ffffff; font-weight: 600; }
-.exit-bad { color: #ff9b8f; }
-.more { color: #8a96a3; }
+CSS = f"""
+* {{ box-sizing: border-box; }}
+html, body {{ margin: 0; width: {WIDTH}px; height: {HEIGHT}px; overflow: hidden; }}
+body {{ font: 20px/1.45 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #e9ecef; background: #14171a; }}
+.card {{ display: flex; flex-direction: column; justify-content: center; height: {HEIGHT - CAPTION_HEIGHT}px; padding: 0 110px; }}
+.card h1 {{ font-size: 52px; line-height: 1.15; margin: 0 0 18px; color: #ffffff; }}
+.card .subtitle {{ font-size: 30px; color: #a9c7e8; margin: 0 0 28px; }}
+.card ul {{ list-style: none; margin: 10px 0 0; padding: 0; }}
+.card li {{ font-size: 29px; line-height: 1.35; margin: 0 0 20px; padding-left: 34px; position: relative; }}
+.card li:before {{ content: ""; position: absolute; left: 0; top: 15px; width: 14px; height: 14px; border-radius: 3px; background: #6fb1f2; }}
+.card .footer {{ margin-top: 34px; font-size: 19px; color: #8a96a3; }}
+.bar {{ height: 46px; line-height: 46px; padding: 0 22px; background: #23282e; color: #aeb8c2; font: 17px/46px ui-monospace, Menlo, monospace; border-bottom: 1px solid #343b43; white-space: nowrap; overflow: hidden; }}
+.bar b {{ color: #ffffff; font-weight: 600; }}
+pre {{ margin: 0; padding: 14px 22px; font: 16px/1.42 ui-monospace, Menlo, monospace; white-space: pre; overflow: hidden; height: {HEIGHT - 46 - CAPTION_HEIGHT}px; }}
+pre.wrap {{ white-space: pre-wrap; overflow-wrap: anywhere; }}
+.ln {{ color: #5d6875; }}
+.prompt {{ color: #7fd491; }}
+.cmd {{ color: #ffffff; font-weight: 600; }}
+.exit-bad {{ color: #ff9b8f; }}
+.more {{ color: #8a96a3; }}
+"""
+
+# Added to every page the recorder shows: the caption bar, the pointer ring, the field outline.
+OVERLAY_CSS = f"""
+#demo-caption {{ position: fixed; left: 0; right: 0; bottom: 0; height: {CAPTION_HEIGHT}px; z-index: 99999;
+  display: flex; align-items: center; justify-content: center; padding: 0 70px; text-align: center;
+  background: #0c0e11; color: #ffffff; border-top: 1px solid #3a424b;
+  font: 500 21px/1.3 -apple-system, "Helvetica Neue", Arial, sans-serif; }}
+#demo-caption.off {{ display: none; }}
+body.demo-captions aside {{ max-height: calc(100vh - 24px - {CAPTION_HEIGHT}px) !important; }}
+#demo-pointer {{ position: fixed; z-index: 99998; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%;
+  border: 4px solid #ff6a3d; background: rgba(255, 106, 61, 0.22); left: -100px; top: -100px; pointer-events: none; }}
+.demo-outline {{ outline: 3px solid #ff6a3d; outline-offset: 3px; border-radius: 3px; background: rgba(255, 106, 61, 0.10); }}
+"""
+
+FIT_SCRIPT = """
+(function () {
+  var pre = document.querySelector("pre");
+  if (!pre) { return; }
+  var size = 16;
+  while (pre.scrollHeight > pre.clientHeight && size > 9) { size -= 0.5; pre.style.fontSize = size + "px"; }
+  if (pre.scrollHeight > pre.clientHeight) { document.documentElement.setAttribute("data-overflow", "1"); }
+})();
 """
 
 
@@ -78,9 +104,27 @@ pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
 # --------------------------------------------------------------------------
 
 
+def words(text: str) -> int:
+    return len(text.split())
+
+
+def sentences(text: str) -> list[str]:
+    return [part.strip() for part in re.split(r"(?<=[.!?])\s+", " ".join(text.split())) if part.strip()]
+
+
 def load_scenes() -> dict:
+    """The demo definition, with every scene given `beats` (a sentence plus optional actions) and `narration`."""
     with (DEMO / "scenes.yaml").open(encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
+        spec = yaml.safe_load(handle)
+    for scene in spec["scenes"]:
+        if scene.get("beats"):
+            for beat in scene["beats"]:
+                beat.setdefault("actions", [])
+            scene["narration"] = " ".join(beat["say"] for beat in scene["beats"])
+        else:
+            scene["narration"] = " ".join(scene["narration"].split())
+            scene["beats"] = [{"say": sentence, "actions": []} for sentence in sentences(scene["narration"])]
+    return spec
 
 
 def repo_facts() -> dict:
@@ -120,10 +164,6 @@ def stale_facts(spec: dict) -> list[str]:
     ]
 
 
-def words(text: str) -> int:
-    return len(text.split())
-
-
 def estimate_seconds(scene: dict, wpm: int) -> float:
     return words(scene["narration"]) * 60 / wpm + PAD_SECONDS
 
@@ -137,20 +177,40 @@ def clock(seconds: float) -> str:
 # --------------------------------------------------------------------------
 
 
+def describe_action(action: dict) -> str:
+    do = action["do"]
+    if do in {"tick", "untick"}:
+        return f"{do} **{action['field'].replace('_', ' ')} → {action['value']}**"
+    if do == "type":
+        return f"type `{action['text']}` in the search box"
+    if do == "clear":
+        return "click **Clear all filters**"
+    if do == "open":
+        return f"open **All fields** on `{action['entry']}`"
+    if do == "show_field":
+        return f"scroll to **{action['field'].replace('_', ' ')}** and outline it"
+    if do == "scroll_to":
+        return f"scroll to `{action['entry']}`"
+    if do == "scroll_top":
+        return "scroll back to the top"
+    return f"scroll down {action.get('px', 300)} px"
+
+
 def on_screen(scene: dict) -> str:
     kind = scene["kind"]
     if kind == "card":
         return "Title card: " + scene["title"]
     if kind == "page":
-        links = [("#" + state["link"]) if state["link"] else "no filters" for state in scene["states"]]
-        return "The browse page (`site/index.html`): " + ", then ".join(f"`{link}`" for link in links)
+        steps = [describe_action(action) for beat in scene["beats"] for action in beat["actions"]]
+        start = f", starting from the link `#{scene['start_link']}`" if scene.get("start_link") else ""
+        return "The browse page in a headless browser" + start + (": " + "; ".join(steps) if steps else "") + "."
     if kind == "file":
         spans = ", then ".join(f"{first}–{last}" for first, last in file_ranges(scene))
         return f"File `{scene['path']}`, lines {spans}"
     return "Terminal, real output of: " + "; ".join(f"`{command}`" for command in scene["commands"])
 
 
-def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
+def write_script(spec: dict, durations: dict[str, float] | None = None, voiced: bool = False) -> Path:
     wpm = spec.get("words_per_minute", 150)
     total_words = sum(words(scene["narration"]) for scene in spec["scenes"])
     lines = [
@@ -161,17 +221,18 @@ def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
         "## How to read this",
         "",
         "- **Narration** is written for you to read aloud, in your voice. Change any of it in `demo/scenes.yaml`.",
-        "- **On screen** is what the draft video shows for that scene. Every frame is a real page state, a real file or real command output.",
+        "- **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.",
         "- **Update when** flags lines that are true today and will need changing as the project moves.",
-        f"- Timings are {'measured from the generated voice track' if durations else f'estimated at {wpm} words a minute'}, plus {PAD_SECONDS} s of pause per scene.",
+        f"- Timings are {'measured from the generated voice track' if voiced else f'estimated at {wpm} words a minute'}, plus {PAD_SECONDS} s of pause per scene.",
         f"- Narration length: {total_words} words.",
         "",
         "## What the draft video is, and is not",
         "",
-        "- It is a sequence of real screens assembled into a video: `demo/out/demo-draft.mp4`, with subtitles in `demo/out/demo-draft.srt`.",
-        "- It is not a live capture. There is no mouse pointer and nothing is typed on screen. Filter changes appear as cuts between page states.",
-        "- The voice is macOS text-to-speech, there only so you can judge pacing. Record your own over it, or re-record the screens live using this script.",
-        "- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent and the narration says so where it matters.",
+        "- `demo/out/demo-draft.mp4` (1920×1080), with subtitles in `demo/out/demo-draft.srt`. Build it with `make demo-video`.",
+        "- A headless browser is driven through the real browse page with real clicks, typing and scrolling. A frame is captured after every step and the frames are joined into a video.",
+        "- It is not a capture of a person's screen. The orange pointer ring and the outline around a field are drawn by the recorder, and motion is step by step, not continuous.",
+        "- The caption bar shows the narration. A voice, when present, is macOS text-to-speech: a scratch track for pacing. Record your own over it (`--no-captions` gives a clean picture), or re-record live with `demo/live-demo-script.md`.",
+        "- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent, and the narration says so where it matters.",
         "",
         "## Scenes",
         "",
@@ -186,9 +247,11 @@ def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
             "",
             "**Narration:**",
             "",
-            "> " + " ".join(scene["narration"].split()),
+            "> " + scene["narration"],
             "",
         ]
+        if scene.get("note"):
+            lines += [f"**Note:** {scene['note']}", ""]
         if scene.get("update_when"):
             lines += [f"**Update when:** {scene['update_when']}", ""]
         start += seconds
@@ -207,7 +270,7 @@ def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
         "",
         "## The live-recording variant",
         "",
-        "Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live:",
+        "Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):",
         "",
         "| Scene | Record instead |",
         "|---|---|",
@@ -215,7 +278,7 @@ def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
         "| 10 (contribute) | Same session: \"Contribute this post: <a LessWrong URL not yet in the wiki>\". Show the pull request it opens, with the badges. |",
         "| 11 (validate) | The failed check on that pull request, or the same terminal commands. |",
         "| 12 (human path) | GitHub → Issues → New entry: submit the form, show the pull request the workflow opens. |",
-        "| 13 (review) | Run the human review command live (see `TODO.md`), then `git log --oneline --grep Review`. |",
+        "| 13 (review) | Run the human review command live (see `TODO.md`, T4), then `git log --oneline --grep Review`. |",
         "| 14 (Datasette) | `make datasette`, then the entries table with its facets in a browser. |",
         "",
     ]
@@ -225,27 +288,14 @@ def write_script(spec: dict, durations: dict[str, float] | None = None) -> Path:
 
 
 # --------------------------------------------------------------------------
-# Scene HTML
+# Scene pages (cards, files, terminals)
 # --------------------------------------------------------------------------
 
 
 def scrub(text: str, tmp: Path) -> str:
     """Keep machine-specific paths, and the user's name with them, off the screen."""
     text = text.replace(str(tmp), "$TMP").replace(str(REPO), ".")
-    home = str(Path.home())
-    return text.replace(home, "~")
-
-
-# Shrinks the text of a file or terminal scene until it fits the frame, so nothing is cut off silently.
-FIT_SCRIPT = """
-(function () {
-  var pre = document.querySelector("pre");
-  if (!pre) { return; }
-  var size = 16;
-  while (pre.scrollHeight > pre.clientHeight && size > 9) { size -= 0.5; pre.style.fontSize = size + "px"; }
-  if (pre.scrollHeight > pre.clientHeight) { document.title = "OVERFLOW"; }
-})();
-"""
+    return text.replace(str(Path.home()), "~")
 
 
 def page_html(body: str) -> str:
@@ -277,9 +327,7 @@ def file_html(scene: dict, first: int, last: int) -> str:
     path = REPO / scene["path"]
     all_lines = path.read_text(encoding="utf-8").split("\n")
     last = min(last, len(all_lines))
-    rows = []
-    for number in range(first, last + 1):
-        rows.append(f'<span class="ln">{number:>3}  </span>{html.escape(all_lines[number - 1])}')
+    rows = [f'<span class="ln">{number:>3}  </span>{html.escape(all_lines[number - 1])}' for number in range(first, last + 1)]
     wrap = " wrap" if scene.get("wrap") else ""
     bar = f'<div class="bar"><b>{html.escape(scene["path"])}</b> &nbsp; lines {first}–{last} of {len(all_lines)}</div>'
     return page_html(bar + f'<pre class="file{wrap}">' + "\n".join(rows) + "</pre>")
@@ -317,42 +365,202 @@ def terminal_html(scene: dict, tmp: Path) -> tuple[str, list[dict]]:
 
 
 # --------------------------------------------------------------------------
-# Frames, audio, video
+# The recorder: a headless browser, one frame per step
 # --------------------------------------------------------------------------
 
 
-def find_chrome() -> str | None:
-    override = os.environ.get("CHROME")
-    if override:
-        return override
-    return next((path for path in CHROME_CANDIDATES if Path(path).exists()), None)
+class Recorder:
+    """Drives the browser and collects frames as (png path, kind), kind being lead, quick, point or settle."""
+
+    def __init__(self, page, frames_dir: Path, captions: bool):
+        self.page = page
+        self.frames_dir = frames_dir
+        self.captions = captions
+        self.count = 0
+
+    def prepare(self) -> None:
+        self.page.add_style_tag(content=OVERLAY_CSS)
+        self.page.evaluate(
+            """(captions) => {
+                 var cap = document.createElement("div"); cap.id = "demo-caption"; if (!captions) { cap.className = "off"; }
+                 var ptr = document.createElement("div"); ptr.id = "demo-pointer";
+                 document.body.appendChild(cap); document.body.appendChild(ptr);
+                 if (captions) { document.body.style.paddingBottom = "%dpx"; document.body.classList.add("demo-captions"); }
+               }""" % CAPTION_HEIGHT,
+            self.captions,
+        )
+
+    def caption(self, text: str) -> None:
+        self.page.evaluate("(text) => { document.getElementById('demo-caption').textContent = text; }", text)
+
+    def shot(self, scene_id: str, kind: str) -> tuple[Path, str]:
+        self.count += 1
+        png = self.frames_dir / f"{scene_id}-{self.count:03d}.png"
+        self.page.screenshot(path=str(png))
+        return png, kind
+
+    def point_at(self, locator, anchor: str = "center") -> None:
+        """Bring a control into view and put the pointer ring on it.
+
+        A control in the filter panel scrolls only that panel, to its middle, so the results do not move.
+        `anchor="left"` is for wide elements whose label sits at their left edge.
+        """
+        locator.evaluate(
+            """el => {
+                 var panel = el.closest('aside');
+                 if (panel && getComputedStyle(panel).overflowY !== 'visible') {
+                   var r = el.getBoundingClientRect(), p = panel.getBoundingClientRect();
+                   panel.scrollTop += (r.top - p.top) - panel.clientHeight / 2;
+                 } else {
+                   el.scrollIntoView({block: 'center'});
+                 }
+               }"""
+        )
+        box = locator.bounding_box()
+        if box:
+            x = box["x"] + (min(box["width"] / 2, 44) if anchor == "left" else box["width"] / 2)
+            self.page.evaluate(
+                "([x, y]) => { var p = document.getElementById('demo-pointer'); p.style.left = x + 'px'; p.style.top = y + 'px'; }",
+                [x, box["y"] + box["height"] / 2],
+            )
+
+    def hide_pointer(self) -> None:
+        self.page.evaluate("() => { var p = document.getElementById('demo-pointer'); p.style.left = '-100px'; p.style.top = '-100px'; }")
+
+    def act(self, scene_id: str, action: dict) -> list[tuple[Path, str]]:
+        page, frames, do = self.page, [], action["do"]
+        if do in {"tick", "untick"}:
+            box = page.locator(f'input[data-facet="{action["field"]}"][data-value="{action["value"]}"]')
+            group = box.locator("xpath=ancestor::details[1]")
+            if not group.evaluate("el => el.open"):
+                group.locator("summary").first.click()
+            self.point_at(box)
+            frames.append(self.shot(scene_id, "point"))
+            box.check() if do == "tick" else box.uncheck()
+            page.evaluate("() => window.scrollTo(0, 0)")          # show the filtered results from the top
+            frames.append(self.shot(scene_id, "quick"))           # the click lands, pointer still on the box
+            self.hide_pointer()
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "type":
+            search = page.locator("#search")
+            self.point_at(search)
+            frames.append(self.shot(scene_id, "point"))
+            search.click()
+            self.hide_pointer()
+            for index, letter in enumerate(action["text"], start=1):
+                page.keyboard.type(letter)
+                if index % 2 == 0 or index == len(action["text"]):
+                    frames.append(self.shot(scene_id, "quick"))
+            frames[-1] = (frames[-1][0], "settle")
+        elif do == "clear":
+            button = page.locator("#clear")
+            self.point_at(button)
+            frames.append(self.shot(scene_id, "point"))
+            button.click()
+            page.evaluate("() => window.scrollTo(0, 0)")
+            self.hide_pointer()
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "open":
+            summary = page.locator(f'#entry-{action["entry"]} details.all-fields > summary')
+            self.point_at(summary, anchor="left")
+            frames.append(self.shot(scene_id, "point"))
+            summary.click()
+            self.hide_pointer()
+            page.evaluate("(id) => document.getElementById(id).scrollIntoView({block: 'start'})", f"entry-{action['entry']}")
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "show_field":
+            page.evaluate("() => document.querySelectorAll('.demo-outline').forEach(el => el.classList.remove('demo-outline'))")
+            found = page.evaluate(
+                """([id, field]) => {
+                     var terms = document.querySelectorAll('#' + id + ' details.all-fields dt');
+                     for (var i = 0; i < terms.length; i++) {
+                       if (terms[i].textContent === field) {
+                         var value = terms[i].nextElementSibling;
+                         terms[i].classList.add('demo-outline'); if (value) { value.classList.add('demo-outline'); }
+                         (value || terms[i]).scrollIntoView({block: 'center'});
+                         return true;
+                       }
+                     }
+                     return false;
+                   }""",
+                [f"entry-{action['entry']}", action["field"]],
+            )
+            if not found:
+                raise SystemExit(f"{scene_id}: field '{action['field']}' is not shown in {action['entry']}")
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "scroll_to":
+            page.evaluate("(id) => document.getElementById(id).scrollIntoView({block: 'start'})", f"entry-{action['entry']}")
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "scroll_top":
+            page.evaluate("() => window.scrollTo(0, 0)")
+            frames.append(self.shot(scene_id, "settle"))
+        elif do == "scroll":
+            steps = 4
+            for step in range(steps):
+                page.evaluate("(px) => window.scrollBy(0, px)", action.get("px", 300) / steps)
+                frames.append(self.shot(scene_id, "quick" if step < steps - 1 else "settle"))
+        else:
+            raise SystemExit(f"{scene_id}: unknown action {do!r}")
+        return frames
+
+
+def launch_browser(playwright):
+    """Normal headless launch; inside a sandbox that refuses Chromium's helper processes, single-process mode."""
+    try:
+        return playwright.chromium.launch(headless=True)
+    except Exception:  # noqa: BLE001  the failure is a crashed browser process, reported as a generic error
+        return playwright.chromium.launch(headless=True, args=["--single-process", "--no-zygote", "--disable-gpu"])
+
+
+def record(spec: dict, urls: dict[str, list[str]], site_url: str, captions: bool) -> dict[str, list[list[tuple[Path, str]]]]:
+    """Frames per scene, per beat."""
+    from playwright.sync_api import sync_playwright
+
+    frames_dir = OUT / "frames"
+    result: dict[str, list[list[tuple[Path, str]]]] = {}
+    with sync_playwright() as playwright:
+        browser = launch_browser(playwright)
+        context = browser.new_context(viewport={"width": WIDTH, "height": HEIGHT}, device_scale_factor=SCALE, color_scheme="light")
+        page = context.new_page()
+        recorder = Recorder(page, frames_dir, captions)
+        for scene in spec["scenes"]:
+            recorder.count = 0
+            beats: list[list[tuple[Path, str]]] = []
+            if scene["kind"] == "page":
+                page.goto("about:blank")
+                page.goto(site_url + ("#" + scene["start_link"] if scene.get("start_link") else ""))
+                page.wait_for_selector("article.card")
+                recorder.prepare()
+                for beat in scene["beats"]:
+                    recorder.caption(beat["say"])
+                    frames = [recorder.shot(scene["id"], "lead")]
+                    for action in beat["actions"]:
+                        frames += recorder.act(scene["id"], action)
+                    beats.append(frames)
+            else:
+                pages = urls[scene["id"]]
+                for index, beat in enumerate(scene["beats"]):
+                    # several excerpts of one file are spread evenly over the scene's sentences
+                    wanted = pages[min(len(pages) - 1, index * len(pages) // len(scene["beats"]))]
+                    if page.url != wanted:
+                        page.goto(wanted)
+                        recorder.prepare()
+                        if page.evaluate("() => document.documentElement.hasAttribute('data-overflow')"):
+                            print(f"warning: {scene['id']} does not fit the frame even at the smallest text size", file=sys.stderr)
+                    recorder.caption(beat["say"])
+                    beats.append([recorder.shot(scene["id"], "lead")])
+            result[scene["id"]] = beats
+        browser.close()
+    return result
+
+
+# --------------------------------------------------------------------------
+# Timing, audio, video
+# --------------------------------------------------------------------------
 
 
 def run(args: list[str], **kwargs) -> subprocess.CompletedProcess:
     return subprocess.run(args, capture_output=True, text=True, **kwargs)
-
-
-def screenshot(chrome: str, url: str, png: Path, profile: Path) -> None:
-    completed = run(
-        [
-            chrome, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--disable-extensions",
-            f"--user-data-dir={profile}", f"--window-size={WIDTH},{HEIGHT}", f"--force-device-scale-factor={SCALE}",
-            "--hide-scrollbars", "--virtual-time-budget=4000", f"--screenshot={png}", url,
-        ],
-        timeout=180,
-    )
-    if not png.exists() or png.stat().st_size == 0:
-        tail = "\n".join(line for line in completed.stderr.splitlines() if "crashpad" not in line)[-600:]
-        raise SystemExit(
-            f"Chrome did not produce {png.name}.\n{tail}\n"
-            "If this ran inside the Claude Code sandbox: Chrome cannot bind its local socket there. Run it from a normal terminal."
-        )
-
-
-def placeholder_frame(png: Path, index: int) -> None:
-    colour = ["0x1e2a38", "0x2a1e38", "0x1e3828", "0x38301e"][index % 4]
-    run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i",
-         f"color=c={colour}:s={int(WIDTH * SCALE)}x{int(HEIGHT * SCALE)}", "-frames:v", "1", str(png)], check=True)
 
 
 def media_seconds(path: Path) -> float:
@@ -368,27 +576,52 @@ def speak(text: str, voice: str, wav: Path) -> bool:
     if not shutil.which("say"):
         return False
     aiff = wav.with_suffix(".aiff")
-    run(["say", "-v", voice, "-o", str(aiff), " ".join(text.split())], timeout=300)
+    run(["say", "-v", voice, "-o", str(aiff), text], timeout=300)
     if not aiff.exists() or media_seconds(aiff) < 0.5:
         return False
     run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(aiff), "-ar", "44100", "-ac", "1", str(wav)], check=True)
     return wav.exists()
 
 
-def scene_video(frames: list[Path], audio: Path | None, seconds: float, out: Path, work: Path) -> None:
-    """One scene: its frames shown for equal shares of `seconds`, with its narration (or silence)."""
-    share = seconds / len(frames)
-    listing = work / f"{out.stem}.txt"
+def beat_seconds(scene: dict, scene_seconds: float) -> list[float]:
+    """Share the scene's speaking time between its sentences by word count; the pause goes to the last one."""
+    speaking = max(scene_seconds - PAD_SECONDS, 0.5)
+    total = sum(words(beat["say"]) for beat in scene["beats"]) or 1
+    shares = [speaking * words(beat["say"]) / total for beat in scene["beats"]]
+    shares[-1] += scene_seconds - speaking
+    return shares
+
+
+def frame_seconds(frames: list[tuple[Path, str]], seconds: float) -> list[float]:
+    """How long each frame of one beat is held. The first frame sets the scene, the last one is read."""
+    if len(frames) == 1:
+        return [seconds]
+    fixed = [QUICK_SECONDS if kind == "quick" else POINT_SECONDS if kind == "point" else 0.0 for _, kind in frames]
+    flexible = [index for index, (_, kind) in enumerate(frames) if kind in {"lead", "settle"}]
+    budget = seconds - sum(fixed)
+    if budget < 0.3 * len(flexible):                      # too much action for the sentence: squeeze the fixed frames
+        scale = max(0.2, (seconds - 0.3 * len(flexible)) / (sum(fixed) or 1))
+        fixed = [value * scale for value in fixed]
+        budget = seconds - sum(fixed)
+    out = list(fixed)
+    lead_share = min(0.9, 0.22 * budget)
+    last = flexible[-1]
+    others = [index for index in flexible if index != last]
+    for index in others:
+        out[index] = lead_share if index == flexible[0] else max(0.4, 0.15 * budget)
+    out[last] = max(0.3, budget - sum(out[index] for index in others))
+    return out
+
+
+def scene_video(frames: list[tuple[Path, float]], audio: Path | None, seconds: float, out: Path) -> None:
+    listing = out.with_suffix(".txt")
     rows = []
-    for frame in frames:
-        rows += [f"file '{frame}'", f"duration {share:.3f}"]
-    rows.append(f"file '{frames[-1]}'")          # the concat demuxer needs the last file repeated
+    for png, held in frames:
+        rows += [f"file '{png}'", f"duration {held:.3f}"]
+    rows.append(f"file '{frames[-1][0]}'")              # the concat demuxer needs the last file repeated
     listing.write_text("\n".join(rows) + "\n", encoding="utf-8")
     command = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing)]
-    if audio:
-        command += ["-i", str(audio), "-af", "apad"]
-    else:
-        command += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono"]
+    command += ["-i", str(audio), "-af", "apad"] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono"]
     command += [
         "-t", f"{seconds:.3f}", "-r", str(FPS), "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "1", str(out),
@@ -404,20 +637,12 @@ def srt_time(seconds: float) -> str:
 
 
 def write_srt(spec: dict, durations: dict[str, float], path: Path) -> None:
-    """Subtitles: each scene's narration split into sentences, timed by word count within the scene."""
     blocks, start, index = [], 0.0, 1
     for scene in spec["scenes"]:
-        seconds = durations[scene["id"]]
-        sentences = [s.strip() for s in re.split(r"(?<=[.!?:])\s+", " ".join(scene["narration"].split())) if s.strip()]
-        total = sum(words(s) for s in sentences) or 1
-        speaking = max(seconds - PAD_SECONDS, 0.5)
-        cursor = start
-        for sentence in sentences:
-            length = speaking * words(sentence) / total
-            blocks.append(f"{index}\n{srt_time(cursor)} --> {srt_time(cursor + length)}\n{sentence}\n")
-            cursor += length
+        for beat, seconds in zip(scene["beats"], beat_seconds(scene, durations[scene["id"]])):
+            blocks.append(f"{index}\n{srt_time(start)} --> {srt_time(start + seconds)}\n{beat['say']}\n")
+            start += seconds
             index += 1
-        start += seconds
     path.write_text("\n".join(blocks), encoding="utf-8")
 
 
@@ -429,9 +654,8 @@ def write_srt(spec: dict, durations: dict[str, float], path: Path) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build the demo script and the draft video.")
     parser.add_argument("--script-only", action="store_true", help="write demo/script.md and stop")
-    parser.add_argument("--html-only", action="store_true", help="also render the scene pages and run the commands, but take no screenshots")
-    parser.add_argument("--no-voice", action="store_true", help="silent video, timed from word counts")
-    parser.add_argument("--placeholder", action="store_true", help="flat colour frames instead of Chrome screenshots (tests the assembly)")
+    parser.add_argument("--no-voice", action="store_true", help="no text-to-speech; scenes are timed from word counts")
+    parser.add_argument("--no-captions", action="store_true", help="leave out the caption bar")
     parser.add_argument("--allow-stale", action="store_true", help="build even if a number in the narration is out of date")
     args = parser.parse_args(argv)
 
@@ -442,110 +666,100 @@ def main(argv: list[str] | None = None) -> int:
         if not args.allow_stale:
             return 1
 
-    script = write_script(spec)
-    print(f"wrote {script.relative_to(REPO)}")
+    print(f"wrote {write_script(spec).relative_to(REPO)}")
     if args.script_only:
         return 0
 
+    for tool in ("ffmpeg", "ffprobe"):
+        if not shutil.which(tool):
+            print(f"{tool} is not installed.", file=sys.stderr)
+            return 1
+    try:
+        import playwright  # noqa: F401
+    except ImportError:
+        print("Playwright is not installed: pip install -r requirements-demo.txt && playwright install chromium-headless-shell", file=sys.stderr)
+        return 1
+
+    run_dir = OUT
     for folder in ("html", "frames", "audio", "video", "tmp", "site"):
-        (OUT / folder).mkdir(parents=True, exist_ok=True)
-    tmp = OUT / "tmp"
-    site = OUT / "site" / "index.html"
+        (run_dir / folder).mkdir(parents=True, exist_ok=True)
+    tmp = run_dir / "tmp"
+    site = run_dir / "site" / "index.html"
     build_site.build(REPO / "entries", site, build_site.github_web_url(wikilib.remote_url(REPO)))
 
-    chrome = None
-    if not (args.html_only or args.placeholder):
-        chrome = find_chrome()
-        if not chrome:
-            print("Google Chrome was not found. Set CHROME=/path/to/browser or use --placeholder.", file=sys.stderr)
-            return 1
-        for tool in ("ffmpeg", "ffprobe"):
-            if not shutil.which(tool):
-                print(f"{tool} is not installed.", file=sys.stderr)
-                return 1
-
-    # 1. Scene pages (and the real command output for terminal scenes)
-    targets: dict[str, list[str]] = {}
+    # 1. Scene pages, and the real command output for terminal scenes
+    urls: dict[str, list[str]] = {}
     transcript = {}
     for scene in spec["scenes"]:
         kind = scene["kind"]
         if kind == "page":
-            targets[scene["id"]] = [site.as_uri() + ("#" + state["link"] if state["link"] else "") for state in scene["states"]]
             continue
         if kind == "file":
-            targets[scene["id"]] = []
+            urls[scene["id"]] = []
             for number, (first, last) in enumerate(file_ranges(scene), start=1):
-                page = OUT / "html" / f"{scene['id']}-{number}.html"
+                page = run_dir / "html" / f"{scene['id']}-{number}.html"
                 page.write_text(file_html(scene, first, last), encoding="utf-8")
-                targets[scene["id"]].append(page.as_uri())
+                urls[scene["id"]].append(page.as_uri())
             continue
         if kind == "card":
             text = card_html(scene)
         else:
             text, transcript[scene["id"]] = terminal_html(scene, tmp)
-        page = OUT / "html" / f"{scene['id']}.html"
+        page = run_dir / "html" / f"{scene['id']}.html"
         page.write_text(text, encoding="utf-8")
-        targets[scene["id"]] = [page.as_uri()]
-    (OUT / "terminal-transcript.json").write_text(json.dumps(transcript, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        urls[scene["id"]] = [page.as_uri()]
+    (run_dir / "terminal-transcript.json").write_text(json.dumps(transcript, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     failed = [f"{sid}: `{item['command']}` exited {item['exit_code']}" for sid, items in transcript.items() for item in items
-              if item["exit_code"] != 0 and "bad_luck" not in item["output"] and "fe-2026-0008.md --quotes" not in item["command"]]
-    print(f"rendered {len(targets)} scenes; terminal commands run: {sum(len(v) for v in transcript.values())}")
+              if item["exit_code"] != 0 and "bad_luck" not in item["output"]]
     if failed:
         print("Commands that failed unexpectedly:\n  " + "\n  ".join(failed), file=sys.stderr)
         return 1
-    if args.html_only:
-        print(f"scene pages are in {(OUT / 'html').relative_to(REPO)}/ (no screenshots taken)")
-        return 0
+    print(f"ran {sum(len(v) for v in transcript.values())} terminal commands")
 
     # 2. Frames
-    frames: dict[str, list[Path]] = {}
-    index = 0
-    for scene in spec["scenes"]:
-        frames[scene["id"]] = []
-        for state_number, url in enumerate(targets[scene["id"]], start=1):
-            png = OUT / "frames" / f"{scene['id']}-{state_number}.png"
-            if args.placeholder:
-                placeholder_frame(png, index)
-            else:
-                screenshot(chrome, url, png, OUT / "chrome-profile")
-            frames[scene["id"]].append(png)
-            index += 1
-    print(f"captured {index} frames")
+    frames = record(spec, urls, site.as_uri(), captions=not args.no_captions)
+    print(f"captured {sum(len(beat) for beats in frames.values() for beat in beats)} frames")
 
     # 3. Narration audio and scene durations
     durations: dict[str, float] = {}
     audio: dict[str, Path | None] = {}
-    voiced = 0
     for scene in spec["scenes"]:
-        wav = OUT / "audio" / f"{scene['id']}.wav"
-        if not (args.no_voice or args.placeholder) and speak(scene["narration"], spec.get("voice", "Samantha"), wav):
+        wav = run_dir / "audio" / f"{scene['id']}.wav"
+        if not args.no_voice and speak(scene["narration"], spec.get("voice", "Samantha"), wav):
             audio[scene["id"]] = wav
             durations[scene["id"]] = media_seconds(wav) + PAD_SECONDS
-            voiced += 1
         else:
             audio[scene["id"]] = None
             durations[scene["id"]] = estimate_seconds(scene, spec.get("words_per_minute", 150))
-    print(f"narration: {voiced} of {len(spec['scenes'])} scenes voiced" + ("" if voiced else " (silent video, timed from word counts)"))
+    voiced = sum(1 for value in audio.values() if value)
+    if 0 < voiced < len(spec["scenes"]):
+        print(f"warning: only {voiced} of {len(spec['scenes'])} scenes got a voice", file=sys.stderr)
+    print(f"narration: {'text-to-speech voice' if voiced else 'no voice (captions only), timed from word counts'}")
 
     # 4. Scene videos, then one file
     segments = []
     for scene in spec["scenes"]:
-        segment = OUT / "video" / f"{scene['id']}.mp4"
-        scene_video(frames[scene["id"]], audio[scene["id"]], durations[scene["id"]], segment, OUT / "video")
+        timed: list[tuple[Path, float]] = []
+        for beat_frames, seconds in zip(frames[scene["id"]], beat_seconds(scene, durations[scene["id"]])):
+            timed += [(png, held) for (png, _), held in zip(beat_frames, frame_seconds(beat_frames, seconds))]
+        segment = run_dir / "video" / f"{scene['id']}.mp4"
+        scene_video(timed, audio[scene["id"]], durations[scene["id"]], segment)
         segments.append(segment)
-    listing = OUT / "video" / "all.txt"
+    listing = run_dir / "video" / "all.txt"
     listing.write_text("".join(f"file '{segment}'\n" for segment in segments), encoding="utf-8")
-    final = OUT / ("demo-placeholder.mp4" if args.placeholder else "demo-draft.mp4")
+    final = run_dir / "demo-draft.mp4"
     completed = run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing),
                      "-c", "copy", "-movflags", "+faststart", str(final)])
     if completed.returncode != 0:
         print(f"ffmpeg could not join the scenes:\n{completed.stderr[-800:]}", file=sys.stderr)
         return 1
     write_srt(spec, durations, final.with_suffix(".srt"))
+    (run_dir / "timings.json").write_text(json.dumps(durations, indent=2) + "\n", encoding="utf-8")
     if voiced == len(spec["scenes"]):
-        write_script(spec, durations)       # replace estimated timings with measured ones
+        write_script(spec, durations, voiced=True)        # replace estimated timings with measured ones
     total = media_seconds(final)
-    print(f"wrote {final.relative_to(REPO)}: {clock(total)} ({total:.0f} s), {int(WIDTH * SCALE)}x{int(HEIGHT * SCALE)}, {len(segments)} scenes")
+    print(f"wrote {final.relative_to(REPO)}: {clock(total)} ({total:.0f} s), {int(WIDTH * SCALE)}x{int(HEIGHT * SCALE)}, "
+          f"{len(segments)} scenes, {'with' if voiced else 'no'} voice, captions {'off' if args.no_captions else 'on'}")
     print(f"wrote {final.with_suffix('.srt').relative_to(REPO)}")
     return 0
 

@@ -26,26 +26,38 @@ def test_every_scene_is_well_formed_and_points_at_real_things():
             for first, last in build_demo.file_ranges(scene):
                 assert 1 <= first <= last <= line_count, (scene["id"], first, last, line_count)
         if scene["kind"] == "page":
-            assert scene["states"], scene["id"]
+            assert scene["beats"] and all(beat["say"].strip() for beat in scene["beats"]), scene["id"]
         if scene["kind"] == "terminal":
             assert scene["commands"], scene["id"]
+        assert scene["narration"] == " ".join(beat["say"] for beat in scene["beats"]), scene["id"]
 
 
-def test_page_links_only_use_fields_and_entries_that_exist():
-    catalogue = {field["path"] for field in build_demo.build_site.field_catalogue()}
-    entry_ids = {path.stem for path in (REPO_ROOT / "entries").glob("fe-*.md")}
+def test_page_actions_only_use_controls_values_and_entries_that_exist():
+    """An action that names a missing facet value or entry would stall the recorder half-way through."""
+    entries = build_demo.wikilib.load_entries(REPO_ROOT / "entries")
+    by_id = {entry.id: entry for entry in entries}
+    catalogue = {field["path"]: field for field in build_demo.build_site.field_catalogue()}
+    known = {"tick", "untick", "type", "clear", "open", "show_field", "scroll", "scroll_to", "scroll_top"}
     for scene in build_demo.load_scenes()["scenes"]:
-        for state in scene.get("states", []):
-            for pair in filter(None, state["link"].split("&")):
-                key, _, value = pair.partition("=")
-                if key.startswith("f."):
-                    assert key[2:] in catalogue, (scene["id"], key)
-                elif key.startswith(("min.", "max.")):
-                    assert key[4:] in catalogue, (scene["id"], key)
-                elif key == "open":
-                    assert value in entry_ids, (scene["id"], value)
-                else:
-                    assert key == "q", (scene["id"], key)
+        for beat in scene["beats"]:
+            for action in beat["actions"]:
+                where = (scene["id"], action)
+                assert action["do"] in known, where
+                if action["do"] in {"tick", "untick"}:
+                    assert catalogue[action["field"]]["control"] == "facet", where
+                    if action["field"] == "badges":
+                        values = {badge for entry in entries for badge in build_demo.wikilib.badges(entry.data)}
+                    else:
+                        values = {build_demo.wikilib._facet_key(v) for entry in entries
+                                  for v in build_demo.wikilib.get_values(entry.data, action["field"])}
+                    assert action["value"] in values, where
+                if action["do"] in {"open", "show_field", "scroll_to"}:
+                    assert action["entry"] in by_id, where
+                if action["do"] == "show_field":
+                    data = by_id[action["entry"]].data
+                    assert action["field"] in data or any(
+                        isinstance(value, dict) and action["field"] in value for value in data.values()
+                    ), where
 
 
 def test_demo_runs_five_to_seven_minutes_at_speaking_pace():

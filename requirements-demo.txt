@@ -1,0 +1,4 @@
+# Only for building the draft demo video (demo/build_demo.py).
+# After installing, fetch the browser once:  playwright install chromium-headless-shell
+-r requirements.txt
+playwright>=1.49

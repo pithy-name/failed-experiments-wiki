@@ -5,7 +5,11 @@
 #
 # Scene kinds:
 #   card      title, optional subtitle, bullet lines, footer
-#   page      the real browse page, loaded from one or more filter links (`states`)
+#   page      the real browse page, driven beat by beat: each beat is one sentence of
+#             narration (`say`) plus the actions done while it is spoken (`actions`):
+#             tick / untick a facet value, type in the search box, clear, open an entry,
+#             scroll, scroll_to an entry, scroll_top, show_field (scroll to a field of an
+#             open entry and outline it)
 #   terminal  real commands, run when the video is built; their real output is shown
 #   file      an excerpt of a real file in the repository
 #
@@ -54,36 +58,57 @@ scenes:
 
   - id: s03-browse
     kind: page
-    states:
-      - link: ""
-    narration: >
-      This is the wiki as a single web page, built from Markdown files.
-      Fifteen entries so far, all taken from real LessWrong and Alignment Forum posts.
-      Each card carries badges: agent-written, unreviewed, retry welcome.
-      The first five carry a note saying they are model drafts that I still have to verify.
+    beats:
+      - say: "This is the wiki as a single web page, built from Markdown files."
+      - say: "Fifteen entries so far, all taken from real LessWrong and Alignment Forum posts."
+        actions:
+          - {do: scroll, px: 420}
+      - say: "Each card carries badges: agent-written, unreviewed, retry welcome."
+        actions:
+          - {do: scroll_to, entry: fe-2026-0006}
+      - say: "The first five carry a note saying they are model drafts that I still have to verify."
+        actions:
+          - {do: scroll_top}
     update_when: "The last sentence goes once the gold entries are verified. The count changes if entries are added."
 
   - id: s04-filter
     kind: page
-    states:
-      - link: "f.failure_type=hyperparams_unexplored"
-      - link: "f.badges=agent-written&f.failure_type=hypothesis_false"
-      - link: "q=steganography"
-    narration: >
-      Every field is a filter. Here are the failures where the hyperparameters were never properly explored.
-      Here, entries an agent wrote where the hypothesis itself looks false.
-      And full-text search across every field.
+    beats:
+      - say: "Every field is a filter."
+      - say: "Here are the failures where the hyperparameters were never properly explored."
+        actions:
+          - {do: tick, field: failure_type, value: hyperparams_unexplored}
+      - say: "Here, entries an agent wrote where the hypothesis itself looks false."
+        actions:
+          - {do: untick, field: failure_type, value: hyperparams_unexplored}
+          - {do: tick, field: badges, value: agent-written}
+          - {do: tick, field: failure_type, value: hypothesis_false}
+      - say: "And full-text search across every field."
+        actions:
+          - {do: clear}
+          - {do: type, text: steganography}
 
   - id: s05-entry
     kind: page
-    states:
-      - link: "q=steganography&open=fe-2026-0010"
-    narration: >
-      Open one. It links the original post, and carries a short quote that a validator found, word for word, in that post.
-      Claim scope says exactly what was tested: one setup, one small model, two hundred training steps.
-      Confidence that this is a true negative: low. Retry welcome: yes.
-      That matters: the entry records the author's own view that a better setup would very likely succeed.
-      So it warns you about a pitfall, without telling you the idea is dead.
+    start_link: "q=steganography"
+    beats:
+      - say: "Open one."
+        actions:
+          - {do: open, entry: fe-2026-0010}
+      - say: "It links the original post, and carries a short quote that a validator found, word for word, in that post."
+        actions:
+          - {do: show_field, entry: fe-2026-0010, field: quote}
+      - say: "Claim scope says exactly what was tested: one setup, one small model, two hundred training steps."
+        actions:
+          - {do: show_field, entry: fe-2026-0010, field: claim_scope}
+      - say: "Confidence that this is a true negative: low. Retry welcome: yes."
+        actions:
+          - {do: show_field, entry: fe-2026-0010, field: confidence_true_negative}
+          - {do: show_field, entry: fe-2026-0010, field: retry_welcome}
+      - say: "That matters: the entry records the author's own view that a better setup would very likely succeed."
+        actions:
+          - {do: show_field, entry: fe-2026-0010, field: limitations}
+      - say: "So it warns you about a pitfall, without telling you the idea is dead."
 
   - id: s06-file
     kind: file
@@ -109,9 +134,10 @@ scenes:
 
   - id: s08-answer
     kind: file
-    path: "evals/results/ask/q5.md"
-    ranges: [[1, 10], [12, 20], [22, 29]]
+    path: "demo/answers/steering.md"
+    ranges: [[1, 6], [8, 15], [17, 19]]
     wrap: true
+    note: "The answer on screen was written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. It is not one of the eval answers (those were written when the wiki held 10 entries) and no judge has scored it; the orchestrator read it against the entry it cites."
     narration: >
       And this is what the ask skill wrote for that plan. Five parts, always the same:
       already tried, where it went wrong, what to avoid, worth retrying, and not found.
@@ -120,10 +146,11 @@ scenes:
 
   - id: s09-notfound
     kind: file
-    path: "evals/results/ask/q7.md"
+    path: "demo/answers/debate.md"
     first_line: 1
-    last_line: 23
+    last_line: 16
     wrap: true
+    note: "Written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. Not one of the eval answers."
     narration: >
       Ask about something the wiki does not cover, here debate with human judges, and it says so plainly:
       nothing matches, and that means nobody has filed an entry, not that the idea is untested.
@@ -155,7 +182,8 @@ scenes:
     kind: file
     path: ".github/ISSUE_TEMPLATE/new-entry.yml"
     first_line: 1
-    last_line: 28
+    last_line: 26
+    wrap: true
     narration: >
       People contribute with a GitHub issue form. No git needed.
       A workflow turns the form into an entry and a pull request, marked as written by a person.
@@ -186,6 +214,7 @@ scenes:
     commands:
       - "cp -R evals/results $TMP/results && python evals/run_evals.py --results $TMP/results"
       - "grep -E 'Field|failure_type|retry_welcome|method|checks_done|hypothesis|claim_scope|limitations' $TMP/results/RESULTS.md | head -8 | cut -c1-80"
+    wrap: true
     narration: >
       The skills are evaluated with one command. The contribute skill's drafts are compared, field by field,
       with five reference entries: seventy-eight percent agreement overall.

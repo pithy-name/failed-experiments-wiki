@@ -6,7 +6,7 @@ PY     := .venv/bin/python
 PORT   ?= 8001
 HANDLE ?=
 
-.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-video set-handle evals sync-gold scout facets
+.PHONY: help setup test validate validate-gold site db datasette datasette-check mcp-smoke check-facts demo-script demo-setup demo-video set-handle evals sync-gold scout facets
 
 help:
 	@echo "make setup          create .venv and install everything"
@@ -20,7 +20,8 @@ help:
 	@echo "make mcp-smoke      start the MCP server as the plugin does and call it over stdio"
 	@echo "make check-facts    check that every number and model name in an entry occurs in its post"
 	@echo "make demo-script    write demo/script.md from demo/scenes.yaml"
-	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs Chrome, ffmpeg, macOS say; run outside the sandbox)"
+	@echo "make demo-setup     install what the demo video needs (Playwright and its headless browser)"
+	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs ffmpeg; the voice needs macOS say, outside the sandbox)"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
 	@echo "make sync-gold HANDLE=<github handle>   publish verified gold entries into entries/"
 	@echo "make set-handle HANDLE=<github handle>  replace the HANDLE-TBD placeholder in the seed entries"
@@ -59,6 +60,10 @@ check-facts:
 
 demo-script:
 	$(PY) demo/build_demo.py --script-only
+
+demo-setup:
+	$(PY) -m pip install -r requirements-demo.txt
+	$(PY) -m playwright install chromium-headless-shell
 
 demo-video:
 	$(PY) demo/build_demo.py

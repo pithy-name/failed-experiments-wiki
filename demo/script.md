@@ -5,17 +5,18 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 ## How to read this
 
 - **Narration** is written for you to read aloud, in your voice. Change any of it in `demo/scenes.yaml`.
-- **On screen** is what the draft video shows for that scene. Every frame is a real page state, a real file or real command output.
+- **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.
 - **Update when** flags lines that are true today and will need changing as the project moves.
 - Timings are estimated at 150 words a minute, plus 0.9 s of pause per scene.
 - Narration length: 891 words.
 
 ## What the draft video is, and is not
 
-- It is a sequence of real screens assembled into a video: `demo/out/demo-draft.mp4`, with subtitles in `demo/out/demo-draft.srt`.
-- It is not a live capture. There is no mouse pointer and nothing is typed on screen. Filter changes appear as cuts between page states.
-- The voice is macOS text-to-speech, there only so you can judge pacing. Record your own over it, or re-record the screens live using this script.
-- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent and the narration says so where it matters.
+- `demo/out/demo-draft.mp4` (1920×1080), with subtitles in `demo/out/demo-draft.srt`. Build it with `make demo-video`.
+- A headless browser is driven through the real browse page with real clicks, typing and scrolling. A frame is captured after every step and the frames are joined into a video.
+- It is not a capture of a person's screen. The orange pointer ring and the outline around a field are drawn by the recorder, and motion is step by step, not continuous.
+- The caption bar shows the narration. A voice, when present, is macOS text-to-speech: a scratch track for pacing. Record your own over it (`--no-captions` gives a clean picture), or re-record live with `demo/live-demo-script.md`.
+- It shows no GitHub screens and no Claude Code session, because neither exists yet for this project: there is no remote, and the plugin has not been loaded. Scenes 7 to 10 and 12 show the local equivalent, and the narration says so where it matters.
 
 ## Scenes
 
@@ -37,7 +38,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ### 3. `s03-browse` · 0:56–1:17 (21 s)
 
-**On screen:** The browse page (`site/index.html`): `no filters`
+**On screen:** The browse page in a headless browser: scroll down 420 px; scroll to `fe-2026-0006`; scroll back to the top.
 
 **Narration:**
 
@@ -47,7 +48,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ### 4. `s04-filter` · 1:17–1:31 (14 s)
 
-**On screen:** The browse page (`site/index.html`): `#f.failure_type=hyperparams_unexplored`, then `#f.badges=agent-written&f.failure_type=hypothesis_false`, then `#q=steganography`
+**On screen:** The browse page in a headless browser: tick **failure type → hyperparams_unexplored**; untick **failure type → hyperparams_unexplored**; tick **badges → agent-written**; tick **failure type → hypothesis_false**; click **Clear all filters**; type `steganography` in the search box.
 
 **Narration:**
 
@@ -55,7 +56,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ### 5. `s05-entry` · 1:31–2:04 (33 s)
 
-**On screen:** The browse page (`site/index.html`): `#q=steganography&open=fe-2026-0010`
+**On screen:** The browse page in a headless browser, starting from the link `#q=steganography`: open **All fields** on `fe-2026-0010`; scroll to **quote** and outline it; scroll to **claim scope** and outline it; scroll to **confidence true negative** and outline it; scroll to **retry welcome** and outline it; scroll to **limitations** and outline it.
 
 **Narration:**
 
@@ -79,19 +80,23 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ### 8. `s08-answer` · 2:46–3:09 (24 s)
 
-**On screen:** File `evals/results/ask/q5.md`, lines 1–10, then 12–20, then 22–29
+**On screen:** File `demo/answers/steering.md`, lines 1–6, then 8–15, then 17–19
 
 **Narration:**
 
 > And this is what the ask skill wrote for that plan. Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found. Every claim cites an entry ID. It says how weak the evidence is, a single unreviewed report with low confidence, and what a better attempt would need.
 
+**Note:** The answer on screen was written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. It is not one of the eval answers (those were written when the wiki held 10 entries) and no judge has scored it; the orchestrator read it against the entry it cites.
+
 ### 9. `s09-notfound` · 3:09–3:28 (18 s)
 
-**On screen:** File `evals/results/ask/q7.md`, lines 1–23
+**On screen:** File `demo/answers/debate.md`, lines 1–16
 
 **Narration:**
 
 > Ask about something the wiki does not cover, here debate with human judges, and it says so plainly: nothing matches, and that means nobody has filed an entry, not that the idea is untested. It does not fill the gap from its own memory.
+
+**Note:** Written by the ask skill for this demo on 2026-11-15, against the 15-entry wiki. Not one of the eval answers.
 
 ### 10. `s10-contribute` · 3:28–3:48 (20 s)
 
@@ -113,7 +118,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ### 12. `s12-human` · 4:12–4:31 (19 s)
 
-**On screen:** File `.github/ISSUE_TEMPLATE/new-entry.yml`, lines 1–28
+**On screen:** File `.github/ISSUE_TEMPLATE/new-entry.yml`, lines 1–26
 
 **Narration:**
 
@@ -185,7 +190,7 @@ The build checks these against the repository and stops if one is out of date.
 
 ## The live-recording variant
 
-Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live:
+Once the repository is on GitHub and the plugin loads in Claude Code, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):
 
 | Scene | Record instead |
 |---|---|
@@ -193,5 +198,5 @@ Once the repository is on GitHub and the plugin loads in Claude Code, these scen
 | 10 (contribute) | Same session: "Contribute this post: <a LessWrong URL not yet in the wiki>". Show the pull request it opens, with the badges. |
 | 11 (validate) | The failed check on that pull request, or the same terminal commands. |
 | 12 (human path) | GitHub → Issues → New entry: submit the form, show the pull request the workflow opens. |
-| 13 (review) | Run the human review command live (see `TODO.md`), then `git log --oneline --grep Review`. |
+| 13 (review) | Run the human review command live (see `TODO.md`, T4), then `git log --oneline --grep Review`. |
 | 14 (Datasette) | `make datasette`, then the entries table with its facets in a browser. |
