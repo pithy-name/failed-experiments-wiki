@@ -78,6 +78,19 @@ def page(context, site_url):
     page.close()
 
 
+@pytest.fixture(scope="module")
+def snap(request):
+    """Save a screenshot when pytest runs with --snap-dir, so a person (or the agent) can look at what the checks saw."""
+    folder = request.config.getoption("--snap-dir")
+    if folder:
+        Path(folder).mkdir(parents=True, exist_ok=True)
+
+    def take(page, name: str, full_page: bool = False) -> None:
+        if folder:
+            page.screenshot(path=str(Path(folder) / f"{name}.png"), full_page=full_page)
+    return take
+
+
 def shown_ids(page) -> list[str]:
     return page.evaluate("() => Array.from(document.querySelectorAll('article.card')).map(card => card.id.replace('entry-', ''))")
 
@@ -104,7 +117,9 @@ def all_strings(value) -> list[str]:
     return [] if value is None else [str(value)]
 
 
-def test_page_loads_all_entries_with_no_errors_and_no_outside_requests(page, site_url):
+def test_page_loads_all_entries_with_no_errors_and_no_outside_requests(page, site_url, snap):
+    snap(page, "page-01-default")
+    snap(page, "page-02-default-full", full_page=True)
     assert page.locator("#count").inner_text() == f"{len(ENTRIES)} of {len(ENTRIES)} entries"
     assert shown_ids(page) == [entry.id for entry in ENTRIES]
     assert page.problems == []
@@ -173,8 +188,9 @@ def test_every_range_field_filters_inclusively_and_drops_entries_without_the_fie
 
 
 @pytest.mark.parametrize("term", ["steganography", "GPT-2", "random directions", "zzz-no-such-word", "fe-2026-0009", "pre-registered"])
-def test_search_finds_text_in_any_field_or_the_body(page, term):
+def test_search_finds_text_in_any_field_or_the_body(page, term, snap):
     page.locator("#search").fill(term)
+    snap(page, "page-05-search-" + "".join(ch if ch.isalnum() else "-" for ch in term))
     words = term.lower().split()
     expected = []
     for entry in ENTRIES:
@@ -186,11 +202,12 @@ def test_search_finds_text_in_any_field_or_the_body(page, term):
         assert "nobody has filed one" in page.locator("#results").inner_text()
 
 
-def test_filters_combine_and_clear_resets_everything(page):
+def test_filters_combine_and_clear_resets_everything(page, snap):
     checkbox(page, "badges", "agent-written").check()
     checkbox(page, "failure_type", "hypothesis_false").check()
     checkbox(page, "failure_type", "unknown").check()
     page.locator("#search").fill("sae")
+    snap(page, "page-04-combined-filters")
     expected = [
         e.id for e in ENTRIES
         if "agent-written" in wikilib.badges(e.data) and e.data["failure_type"] in {"hypothesis_false", "unknown"}
@@ -204,13 +221,16 @@ def test_filters_combine_and_clear_resets_everything(page):
     assert page.evaluate("() => location.hash") in {"", "#"}
 
 
-def test_a_filtered_view_survives_as_a_link(page, context, site_url):
+def test_a_filtered_view_survives_as_a_link(page, context, site_url, snap):
     checkbox(page, "method", "sae").check()
     page.locator("#search").fill("probe")
     page.locator('input[data-range="source.published"][data-bound="min"]').fill("2024-01-01")
+    page.locator('input[data-range="source.published"][data-bound="max"]').fill("2026-12-31")
     before = shown_ids(page)
     link = page.evaluate("() => location.hash")
     assert "f.method=sae" in link and "q=probe" in link and "min.source.published=2024-01-01" in link
+    assert "max.source.published=2026-12-31" in link
+    snap(page, "page-06-range-and-link")
 
     other = context.new_page()
     other.goto(site_url + link)
@@ -218,6 +238,56 @@ def test_a_filtered_view_survives_as_a_link(page, context, site_url):
     assert shown_ids(other) == before
     assert other.locator("#search").input_value() == "probe"
     assert checkbox(other, "method", "sae").is_checked()
+    other.close()
+
+
+def test_every_facet_value_round_trips_through_a_link(page, context, site_url):
+    """Values contain spaces, slashes, colons and the like; each must survive being written to the link and read back."""
+    other = context.new_page()
+    checked = 0
+    for field in CATALOGUE:
+        if field["control"] != "facet":
+            continue
+        for value in sorted({v for entry in ENTRIES for v in values_of(entry, field["path"])}):
+            box = checkbox(page, field["path"], value)
+            box.check()
+            link, before = page.evaluate("() => location.hash"), shown_ids(page)
+            box.uncheck()
+            other.goto("about:blank")
+            other.goto(site_url + link)
+            other.wait_for_selector("#count")
+            assert shown_ids(other) == before, (field["path"], value, link)
+            assert checkbox(other, field["path"], value).is_checked(), (field["path"], value, link)
+            assert other.locator("input[type=checkbox]:checked").count() == 1, (field["path"], value, link)
+            checked += 1
+    other.close()
+    assert checked >= 100, checked
+
+
+def test_an_opened_entry_is_part_of_the_link(page, context, site_url, snap):
+    entry = ENTRIES[8]
+    page.locator(f"#entry-{entry.id} details.all-fields > summary").click()
+    page.wait_for_function("() => location.hash.indexOf('open=') !== -1")
+    link = page.evaluate("() => location.hash")
+    assert f"open={entry.id}" in link
+
+    # a filter change redraws the cards; the opened one must stay open
+    page.locator("#search").fill(entry.data["title"].split()[0])
+    assert entry.id in shown_ids(page)
+    assert page.locator(f"#entry-{entry.id} details.all-fields").evaluate("el => el.open")
+    page.locator("#search").fill("")
+
+    # closing it takes it out of the link again
+    page.locator(f"#entry-{entry.id} details.all-fields > summary").click()
+    page.wait_for_function("() => location.hash.indexOf('open=') === -1")
+    page.locator(f"#entry-{entry.id} details.all-fields > summary").click()
+    page.wait_for_function("() => location.hash.indexOf('open=') !== -1")
+    other = context.new_page()
+    other.goto(site_url + link)
+    other.wait_for_selector("article.card")
+    assert other.locator(f"#entry-{entry.id} details.all-fields").evaluate("el => el.open")
+    assert other.locator("details.all-fields[open]").count() == 1
+    snap(other, "page-07-opened-from-link")
     other.close()
 
 
@@ -240,6 +310,20 @@ def test_the_full_view_of_every_entry_shows_every_field_it_has(page):
         assert top[:3] == ["id", "title", "research_area"], entry.id
 
 
+def test_full_view_screens(page, snap):
+    """Screens only: the full view of one agent-written and one human-drafted entry, top to bottom."""
+    for entry_id in ("fe-2026-0001", "fe-2026-0007"):
+        card = page.locator(f"#entry-{entry_id}")
+        card.locator("details.all-fields > summary").click()
+        card.scroll_into_view_if_needed()
+        page.evaluate("(id) => document.getElementById(id).scrollIntoView({block: 'start'})", f"entry-{entry_id}")
+        snap(page, f"page-08-all-fields-{entry_id}-top")
+        page.evaluate("() => window.scrollBy(0, 640)")
+        snap(page, f"page-08-all-fields-{entry_id}-next")
+        page.evaluate("() => window.scrollBy(0, 640)")
+        snap(page, f"page-08-all-fields-{entry_id}-last")
+
+
 def test_each_card_shows_the_right_badges_quote_and_links(page):
     names = {"agent-written": "Agent-written", "unreviewed": "Unreviewed", "contested": "Contested", "superseded": "Superseded",
              "retry-welcome": "Retry welcome"}
@@ -259,7 +343,7 @@ def test_each_card_shows_the_right_badges_quote_and_links(page):
             assert card.locator(".contributor-note").inner_text() == note
 
 
-def test_narrow_screens_get_one_column_and_no_sideways_scroll(context, site_url):
+def test_narrow_screens_get_one_column_and_no_sideways_scroll(context, site_url, snap):
     page = context.new_page()
     page.set_viewport_size({"width": 390, "height": 844})
     page.goto(site_url)
@@ -269,10 +353,13 @@ def test_narrow_screens_get_one_column_and_no_sideways_scroll(context, site_url)
     panel = page.locator("aside").bounding_box()
     first = page.locator("article.card").first.bounding_box()
     assert first["y"] > panel["y"] + panel["height"] - 1          # results come below the filters, not beside them
+    snap(page, "page-09-narrow-top")
+    page.locator("article.card").first.scroll_into_view_if_needed()
+    snap(page, "page-09-narrow-first-card")
     page.close()
 
 
-def test_dark_colour_scheme_is_dark_and_readable(context, site_url):
+def test_dark_colour_scheme_is_dark_and_readable(context, site_url, snap):
     page = context.new_page()
     page.emulate_media(color_scheme="dark")
     page.goto(site_url)
@@ -286,10 +373,13 @@ def test_dark_colour_scheme_is_dark_and_readable(context, site_url):
     assert brightness("body", "backgroundColor") < 60
     assert brightness("article.card", "backgroundColor") < 80
     assert brightness("h2.card-title", "color") > 180
+    snap(page, "page-10-dark")
+    page.locator("details.all-fields > summary").first.click()
+    snap(page, "page-10-dark-all-fields")
     page.close()
 
 
-def test_hostile_entry_text_is_shown_as_text_and_runs_nothing(context, tmp_path):
+def test_hostile_entry_text_is_shown_as_text_and_runs_nothing(context, tmp_path, snap):
     hostile = copy.deepcopy(ENTRIES[0].data)
     hostile["title"] = 'Probe <img src=x onerror="window.__pwned=1"> </script><script>window.__pwned=2</script> end'
     hostile["limitations"] = "<b>bold?</b> <a href=\"javascript:window.__pwned=3\">link</a>"
@@ -311,6 +401,7 @@ def test_hostile_entry_text_is_shown_as_text_and_runs_nothing(context, tmp_path)
     assert page.locator("h2.card-title").inner_text() == hostile["title"]
     assert page.locator("article.card img, article.card svg, article.card b, article.card script").count() == 0
     assert page.locator('article.card a[href^="javascript:"]').count() == 0
+    snap(page, "page-11-hostile-text")
     page.close()
 
 
@@ -348,9 +439,11 @@ def table_ids(page) -> list[str]:
     return page.locator("table.rows-and-columns tbody tr td.col-id").all_inner_texts()
 
 
-def test_datasette_lists_every_entry_with_its_facets(datasette_page):
+def test_datasette_lists_every_entry_with_its_facets(datasette_page, snap):
     page = datasette_page
     page.goto("http://datasette.test/wiki/entries")
+    snap(page, "datasette-01-entries")
+    snap(page, "datasette-01-entries-full", full_page=True)
     assert f"{len(ENTRIES)} rows" in page.locator("h3.table-row-count, h3").first.inner_text()
     assert sorted(table_ids(page)) == [entry.id for entry in ENTRIES]
     facets = page.locator(".facet-results").inner_text()
@@ -359,36 +452,42 @@ def test_datasette_lists_every_entry_with_its_facets(datasette_page):
     assert "Every column can be filtered" in page.locator("body").inner_text()
 
 
-def test_datasette_facet_links_and_search_filter_in_the_browser(datasette_page):
+def test_datasette_facet_links_and_search_filter_in_the_browser(datasette_page, snap):
     page = datasette_page
     page.goto("http://datasette.test/wiki/entries")
     page.locator(".facet-results a", has_text="hypothesis_false").first.click()
     page.wait_for_load_state()
     expected = [e.id for e in ENTRIES if e.data["failure_type"] == "hypothesis_false"]
     assert sorted(table_ids(page)) == expected
+    snap(page, "datasette-02-facet-clicked")
 
     page.goto("http://datasette.test/wiki/entries?method__arraycontains=sae")
     assert sorted(table_ids(page)) == [e.id for e in ENTRIES if "sae" in e.data["method"]]
+    snap(page, "datasette-03-list-field-filter")
 
     page.goto("http://datasette.test/wiki/entries")
     page.locator('input[name="_search"]').fill("steganography")
     page.locator('input[name="_search"]').press("Enter")
     page.wait_for_load_state()
     assert sorted(table_ids(page)) == ["fe-2026-0010", "fe-2026-0011"]
+    snap(page, "datasette-04-search")
 
     page.goto("http://datasette.test/wiki/entries?source_published__gte=2026-01-01&_sort=source_published")
     assert sorted(table_ids(page)) == [e.id for e in ENTRIES if e.data["source"]["published"] >= "2026-01-01"]
 
 
-def test_datasette_shows_the_list_tables_and_a_single_entry(datasette_page):
+def test_datasette_shows_the_list_tables_and_a_single_entry(datasette_page, snap):
     page = datasette_page
     page.goto("http://datasette.test/wiki")
+    snap(page, "datasette-05-database")
     body = page.locator("body").inner_text()
     for table in ("entries", "entry_models", "entry_method", "entry_reviewers", "entry_badges"):
         assert table in body, table
     page.goto("http://datasette.test/")
+    snap(page, "datasette-06-home")
     assert "never judge people" in page.locator("body").inner_text()
     page.goto("http://datasette.test/wiki/entries/fe-2026-0001")
     assert BY_ID["fe-2026-0001"].data["title"] in page.locator("body").inner_text()
+    snap(page, "datasette-07-one-entry")
     page.goto("http://datasette.test/wiki/entry_models?developer=unknown")
     assert "rows" in page.locator("h3").first.inner_text()
