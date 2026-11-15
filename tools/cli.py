@@ -56,6 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--filter", action="append", default=[], metavar="FIELD=VALUE", help="repeatable; same field twice = OR")
     p.add_argument("--filters", help="filters as a JSON object")
     p.add_argument("--limit", type=int, default=20)
+    p.add_argument("--brief", action="store_true", help="one line per result instead of JSON, for reading at a terminal")
 
     p = sub.add_parser("get", help="one entry in full")
     p.add_argument("id")
@@ -100,6 +101,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "search":
         out = wikilib.search(wikilib.load_entries(entries_dir), args.query, _parse_filters(args.filter, args.filters), args.limit)
+        if args.brief:
+            print(f"{out['match_count']} of {out['total_entries_in_wiki']} entries match (keyword search; terms: {', '.join(out['query_terms']) or 'none'})")
+            for item in out["results"]:
+                print(f"  {item['id']}  score {item['score']:>3}  {item['failure_type']}, confidence {item['confidence_true_negative']}  [{', '.join(item['badges'])}]")
+                print(f"      {item['title']}")
+            return 0
     elif args.command == "get":
         entry = wikilib.find_entry(wikilib.load_entries(entries_dir), args.id)
         out = (
