@@ -165,7 +165,8 @@ def test_pending_gold_drafts_are_published_unreviewed_with_their_note_and_withou
     gold_dir.mkdir()
     gold = copy.deepcopy(valid_entry)
     gold["gold_status"] = "pending_maintainer_verification"
-    gold["contributor"] = {"type": "human", "handle": wikilib.PLACEHOLDER_HANDLE, "note": "Model draft awaiting verification."}
+    gold["contributor"] = {"type": "agent", "handle": wikilib.PLACEHOLDER_HANDLE, "agent_model": "some-model", "tool": "gold-draft",
+                           "note": "Model draft awaiting verification."}
     gold["review"] = {"status": "reviewed", "reviewers": [{"handle": "x", "type": "human", "date": "2026-11-14"}]}  # must not survive
     body = "Public summary.\n\n## Verification notes for the maintainer\n\n- private pointer"
     (gold_dir / "fe-2026-0001.md").write_text(wikilib.dump_entry(gold, body), encoding="utf-8")
@@ -175,21 +176,44 @@ def test_pending_gold_drafts_are_published_unreviewed_with_their_note_and_withou
     entry = wikilib.load_entry(entries / "fe-2026-0001.md")
     assert entry.data["review"] == {"status": "unreviewed"}
     assert entry.data["contributor"]["note"] == "Model draft awaiting verification."
+    assert entry.data["contributor"]["type"] == "agent" and "agent-written" in wikilib.badges(entry.data)
     assert "gold_status" not in entry.data
     assert entry.body == "Public summary."
     assert sync_gold.publish_drafts(gold_dir, entries, quote_mode="cached")[0]["reason"] == "entry file already exists"
 
     without_note = copy.deepcopy(gold)
     without_note["id"] = "fe-2026-0002"
-    without_note["contributor"] = {"type": "human", "handle": "someone"}
+    without_note["contributor"] = {"type": "agent", "handle": "someone", "agent_model": "some-model"}
     (gold_dir / "fe-2026-0002.md").write_text(wikilib.dump_entry(without_note), encoding="utf-8")
     assert sync_gold.publish_drafts(gold_dir, entries, quote_mode="cached")[1]["action"] == "rejected"
+
+    # A draft a model wrote must not be filed under a person, note or no note: three cold reviewers were misled by exactly that.
+    filed_as_person = copy.deepcopy(gold)
+    filed_as_person["id"] = "fe-2026-0003"
+    filed_as_person["contributor"] = {"type": "human", "handle": "someone", "note": "Model draft awaiting verification."}
+    (gold_dir / "fe-2026-0003.md").write_text(wikilib.dump_entry(filed_as_person), encoding="utf-8")
+    outcome = sync_gold.publish_drafts(gold_dir, entries, quote_mode="cached")[2]
+    assert outcome["action"] == "rejected" and "agent" in outcome["issues"][0]
+
+
+def test_the_real_gold_drafts_and_their_entries_are_labelled_as_model_written_until_verified():
+    for gold_path in sorted((REPO_ROOT / "evals" / "gold").glob("fe-*.md")):
+        gold = wikilib.load_entry(gold_path).data
+        entry = wikilib.load_entry(REPO_ROOT / "entries" / gold_path.name).data
+        if gold.get("gold_status") == "verified":
+            assert entry["contributor"]["type"] == "human" and entry["review"]["status"] == "reviewed", gold_path.name
+        else:
+            for data in (gold, entry):
+                assert data["contributor"]["type"] == "agent" and data["contributor"].get("agent_model"), gold_path.name
+                assert data["contributor"].get("note"), gold_path.name
+            assert "agent-written" in wikilib.badges(entry), gold_path.name
 
 
 def test_sync_gold_publishes_only_verified_entries_as_human_reviewed(workspace):
     entries, gold_dir = workspace["entries"], workspace["gold"]
     pending = copy.deepcopy(workspace["valid"])
-    pending["contributor"] = {"type": "human", "handle": wikilib.PLACEHOLDER_HANDLE, "note": "Draft awaiting verification."}
+    pending["contributor"] = {"type": "agent", "handle": wikilib.PLACEHOLDER_HANDLE, "agent_model": "some-model", "tool": "gold-draft",
+                              "note": "Draft awaiting verification."}
     (entries / "fe-2026-0001.md").write_text(wikilib.dump_entry(pending), encoding="utf-8")
 
     outcomes = sync_gold.sync("maintainer-handle", gold_dir, entries, quote_mode="cached")
