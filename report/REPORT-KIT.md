@@ -17,9 +17,10 @@ that regenerates it; rerun before you quote it if anything has changed since.
 
 | # | Trap | What is true | Where it comes from |
 |---|---|---|---|
-| 1 | The submission guide says "10 entries (5 written by the author, 5 by the agent)". | 15 entries from 10 posts. The 5 gold entries are **model drafts awaiting your verification**, not written by you. 10 are agent-written. If you verify the gold entries before submitting (TODO T7), say so; if not, say they are unverified drafts. | `entries/`, `evals/gold/` (`gold_status`), `DONE.md` D6 |
+| 1 | The submission guide says "10 entries (5 written by the author, 5 by the agent)". | 15 entries from 10 posts, all model-written today. 5 of them are the reference ("gold") entries: **model drafts awaiting your verification**, labelled agent-written until you verify them (DEC-71). If you verify them before submitting (TODO T7), they become yours and you can say so; if not, say they are unverified drafts. | `entries/`, `evals/gold/` (`gold_status`), `DONE.md` D6 |
 | 2 | Calling the eval numbers results. | They are provisional: the gold set is unverified, and one vendor's models wrote the drafts, the grades and the gold. Report them as a spot-check with that caveat, or verify first. | `evals/results/RESULTS.md` line 3 |
 | 3 | Saying pull requests, the issue-form workflow or the validation Action were shown working. | Nothing has run on GitHub. The scripts those paths call were run locally and in a throwaway clone. Say "locally" unless you push and watch them run (TODO T6). | `VERIFICATION.md`, coverage table, last rows |
+| 4 | Saying negative-results venues have "no shared index", as the planning documents do. | The ICBINB initiative has a "Repository of Unexpected Negative Results": a prototype on Notion whose stated goal is "to facilitate spread of information (as a wiki or shared database) for other researchers to benefit from previous attempts of others". It is ML-wide, not AI-safety-specific. Its contents, size and whether it is active were **not** checked (the listing is on an external Notion page). Cite it as the closest ML-wide effort and say how this wiki differs (agents contribute and read; trust labels; quotes verified against the source; an assistant), instead of claiming nothing of the kind exists. Open the Notion page before you describe what is in it. | https://icbinb.cc/icbinb-repository-of-unexpected-negative-results.html, fetched 2026-11-15 |
 
 ## Figures and tables that are ready
 
@@ -69,8 +70,12 @@ Points to make, in the order the guide gives:
 
 Only the sources marked checked in "References" below may be cited as they stand.
 
-- **Negative-results venues** publish standalone papers with no shared index. (Needs a source you open: ICBINB or Insights from Negative Results in NLP are in the unchecked list.)
-- **Failure memories inside AI research agents** do not span projects or labs. (All in the unchecked list.)
+- **Negative-results venues** publish standalone papers: the ICBINB workshops (ICLR 2026 and 2025, NeurIPS 2023 and 2022 are on its site) and the Workshop on Insights from Negative Results in NLP (seven editions, 2020 to 2026). Checked 2026-11-15. **But see trap 4:** ICBINB also has a repository prototype with the same aim as this wiki, for ML at large.
+- **A call for publishing negative results in ML:** Karl et al., "Position: Embracing Negative Results in Machine Learning" (arXiv 2406.03980, June 2024). Checked 2026-11-15.
+- **Failure memories inside AI research agents.** Two were checked on 2026-11-15, from their abstracts only:
+  - "Negative Knowledge as Failure-aware Shared Memory for AutoResearch" (Wang, arXiv 2606.21024): a curator agent turns each failed attempt into a typed record in a shared bank that a research agent must adopt or reject before its next experiment. The abstract calls it "a collective infrastructure for scientific memory" and does not say whether it spans separate projects or labs.
+  - "EvoScientist" (Lyu et al., arXiv 2603.08127): a multi-agent AI scientist whose ideation memory records "previously unsuccessful directions"; the memory belongs to the one system.
+  - So the accurate claim is narrower than the planning documents': these are memories for agents inside a research system, with no public wiki that people also read and write. "None spans labs" is not established by the abstracts.
 - **swarms.wiki:** incidents, not experiments; no assistant and no MCP server. Checked.
 - **Earlier proposals for this exact idea, and why they stalled:** Aaron Scher's shortform on a pre-registration database (review burden, private work, info hazards, buy-in, cost of writing up negatives). Checked. The Shallow Review's "Graveyard" works at agenda level, not experiment level. Checked.
 - **The "wrongful convictions" risk:** "The Memory of Failure Should Be Lossy". Title and abstract checked; **the specific figures were not**, so cite the argument, not the percentages, unless you open the paper.
@@ -102,7 +107,7 @@ Only the sources marked checked in "References" below may be cited as they stand
 
 | Result | Number | Caveat to state | Source / regenerate |
 |---|---|---|---|
-| Entries in the wiki | 15, from 10 posts | 5 are model drafts awaiting the author's verification; 10 are agent-written; 1 has a review, by an agent | `make validate` |
+| Entries in the wiki | 15, from 10 posts | All 15 are model-written; 5 of those are reference drafts awaiting the author's verification; 1 has a review, by an agent | `make validate` |
 | Scouting funnel | 211 candidates → 212 classified → 49 judged genuine failure write-ups → 9 support every required field | Single-model labels on one candidate list; not an estimate of how many such posts exist | `scouting/yields.md` |
 | Which field posts lack | hypothesis 20, claim scope 18, models 16, failure type 11, result direction 1 (of the audited posts that did not pass) | A post can lack several | `scouting/yields.md` |
 | Best search routes | phrase "negative result" 57%, tag activation-engineering 78%, tag sparse-autoencoders 60%; tag replication-crisis 0% | Small counts per route | `scouting/yields.md`, "By route" |
@@ -146,9 +151,20 @@ Checked on 2026-11-11 (Claude opened the primary source; the list is `negative-r
 | "My Failed AI Safety Research Projects (Q1/Q2 2025)" | https://www.boristhebrave.com/2025/06/19/my-failed-ai-safety-research-projects-q1-q2-2025/ | |
 | Corm, "I had Claude read every AI safety paper since 2020" | https://www.lesswrong.com/posts/CpWFrT9Grr5t7L3vx/ | |
 
+Checked on 2026-11-15 (the live page was fetched and only what it says is recorded here). Open each yourself before citing:
+
+| Source | URL | What the page confirmed |
+|---|---|---|
+| ICBINB initiative | https://icbinb.cc | "a movement within the ML community for well-executed meaningful research beyond bold numbers"; workshops at ICLR 2026, ICLR 2025, NeurIPS 2023, NeurIPS 2022 |
+| ICBINB Repository of Unexpected Negative Results | https://icbinb.cc/icbinb-repository-of-unexpected-negative-results.html | A prototype on Notion meant to work "as a wiki or shared database"; contents, size and activity not shown on the page |
+| Workshop on Insights from Negative Results in NLP | https://aclanthology.org/venues/insights/ | Editions 2020 to 2026; the 2026 volume is the seventh |
+| Karl, Kemeter, Dax, Sierak (2024), "Position: Embracing Negative Results in Machine Learning", arXiv 2406.03980 | https://arxiv.org/abs/2406.03980 | Title, authors, date (6 Jun 2024), abstract. No venue is named on the arXiv page |
+| Wang (2026), "Negative Knowledge as Failure-aware Shared Memory for AutoResearch", arXiv 2606.21024 | https://arxiv.org/abs/2606.21024 | Title, author, date (19 Jun 2026), abstract only |
+| Lyu et al. (2026), "EvoScientist: Towards Multi-Agent Evolving AI Scientists for End-to-End Scientific Discovery", arXiv 2603.08127 | https://arxiv.org/abs/2603.08127 | Title, authors, date (9 Mar 2026; revised 5 Oct 2026), abstract only |
+
 The ten posts the entries draw on are primary sources too; each entry's `source.url` was fetched and its quote found in the text (`make validate`).
 
-**Not checked, do not cite without opening:** everything else in §15 of that file (the agent failure-memory papers, the ML publication-bias papers, the other-fields examples such as ASRS, Registered Reports and the Springer Nature survey, the ICBINB and Insights workshops).
+**Not checked, do not cite without opening:** everything else in §15 of that file (the other agent failure-memory papers, the other ML publication-bias papers, and the other-fields examples such as ASRS, Registered Reports and the Springer Nature survey).
 
 ### 9. Appendix: limitations and dual-use (required)
 
@@ -198,5 +214,5 @@ Do not say results were verified by the author for anything you have not checked
 | LLM usage statement; final text written by you | draft above |
 | Every reference opened and checked | nine checked by Claude on 2026-11-11; open them yourself |
 | Preexisting work marked | `README.md` has the section; say the same in the report |
-| Repository link; video link if made | TODO T6; `demo/out/demo-draft.mp4` |
+| Repository link; video link if made | TODO T6. Two cuts exist: `demo/out/demo-short.mp4` (under five minutes, what the sprint asks for) and `demo/out/demo-draft.mp4` (the fuller one) |
 | Submitted before Mon Nov 16, 11:59 UTC | yours |
