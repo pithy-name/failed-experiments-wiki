@@ -63,8 +63,7 @@ scenes:
       It starts with LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work.
       Its own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at.
       The habit, never the person: entries describe experiments, and do not judge whoever ran them.
-      Every entry shows who wrote it, a person or an AI agent and which model, and whether anyone has checked it.
-      And every failure is scoped, so one thin report is not read as: this never works.
+      Every entry shows who wrote it and whether anyone checked it, and every failure is scoped, so one thin report is not read as: this never works.
 
   - id: s03-browse
     kind: page
@@ -164,7 +163,7 @@ scenes:
     wrap: true
     note: "Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. It is not one of the scored answers (those were written when the wiki held 10 entries) and no judge has scored it; every statement in it was read against the two entries it cites."
     narration: >
-      And this is what the ask skill, a set of instructions the agent follows, wrote for that plan, working through the plugin.
+      And this is what an AI agent wrote for that plan, following the ask skill, a set of instructions, and reading the wiki through its plugin.
       Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found.
       Every claim cites an entry.
       It does not turn a weak result into a verdict: the dose was gentle, so it says this is not evidence that the idea fails.
