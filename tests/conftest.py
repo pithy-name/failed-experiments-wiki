@@ -75,6 +75,10 @@ def fake_cache(tmp_path, monkeypatch):
     (cache / "posts" / f"{FAKE_POST_ID}.json").write_text(json.dumps(post), encoding="utf-8")
     monkeypatch.setenv("FEWIKI_CACHE", str(cache))
     monkeypatch.setenv("FEWIKI_HANDLE", "test-handle")
+    # Tests create throwaway repositories. If the caller's shell points git at another
+    # repository through these variables, the fixtures would write to that one instead.
+    for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "FEWIKI_COMMIT_TRAILER", "FEWIKI_REPO"):
+        monkeypatch.delenv(name, raising=False)
 
     def no_network(url, payload):
         raise lw.SourceUnreachable(f"network blocked in tests: {url}")
