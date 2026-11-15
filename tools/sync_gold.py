@@ -2,8 +2,9 @@
 
 The gold entries in evals/gold/ are the ground truth for the evals. Each is
 also published as a wiki entry with the same ID. While a gold entry is a model
-draft (gold_status: pending_maintainer_verification) its copy in entries/ is marked
-unreviewed and carries a note saying so.
+draft (gold_status: pending_maintainer_verification) its copy in entries/ is labelled
+as what it is: written by an agent (contributor.type: agent, with the model),
+unreviewed, and carrying a note that it awaits verification.
 
 When the maintainer has checked a gold file against its post and set
 `gold_status: verified`, this script copies its content into entries/<id>.md,
@@ -57,8 +58,14 @@ def publish_drafts(gold_dir: Path = GOLD_DIR, entries_dir: Path = wikilib.ENTRIE
         if target.exists():
             outcomes.append({"id": entry_id, "action": "skipped", "reason": "entry file already exists"})
             continue
-        if not (data.get("contributor") or {}).get("note"):
+        contributor = data.get("contributor") or {}
+        if not contributor.get("note"):
             outcomes.append({"id": entry_id, "action": "rejected", "issues": ["a pending gold draft must carry contributor.note saying it awaits verification"]})
+            continue
+        if contributor.get("type") != "agent" or not contributor.get("agent_model"):
+            outcomes.append({"id": entry_id, "action": "rejected", "issues": [
+                "a pending gold draft was written by a model, so contributor.type must be agent with agent_model set; "
+                "it becomes a person's entry only when the maintainer verifies it (sync)"]})
             continue
         data["review"] = {"status": "unreviewed"}
         issues = wikilib.validate_data(data, file_name=target.name, quote_mode=quote_mode)
