@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "failed-experiments-wiki": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/mcp/run.sh"
+    }
+  }
+}
