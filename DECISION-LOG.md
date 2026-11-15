@@ -109,6 +109,17 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 
 | DEC-55 | The history was loaded into this folder at the end of the session. | The maintainer ran `git init -b main` here. The orchestrator then ran the fetch from `history.bundle` and `git reset`: clean status, 51 commits, all branches and the tag. Later commits are made in this repository directly. The scratch git directory is no longer used. |
 
+## I. After the build (2026-11-15)
+
+| ID | Decision | Reason |
+|---|---|---|
+| DEC-56 | The to-do list moved from `DONE.md` to `TODO.md`; the live demo script moved to `demo/live-demo-script.md`. | The maintainer asked that what remains to be done not live in a file called "done". Task IDs are unchanged; finished tasks stay listed as done. Nothing was dropped. |
+| DEC-57 | `history.bundle` was moved to `_trash-review/`. | The maintainer's instruction, once the history was loaded. Nothing is deleted by the assistant. |
+| DEC-58 | The draft demo video is an assembled recording, not a live screen capture: headless-Chrome screenshots of the real page, real files and real command output, joined by ffmpeg, with a text-to-speech scratch voice. | The maintainer asked for a headless recording. No live capture is possible without a display, and the plugin and GitHub screens do not exist yet. The script and the video say what they are. |
+| DEC-59 | The video itself was not produced in the assistant's session. `make demo-video` produces it from a normal terminal. | Headless Chrome must bind a local socket and macOS `say` needs a system service; the session sandbox refuses both. Everything else in the pipeline was run: scene pages, the real commands, and the video assembly with placeholder frames. |
+| DEC-60 | The browse page keeps its filters in the URL after `#`, and loads them from there. | Needed so each demo shot is a real page state reachable by link, not a mock-up. It is also a feature in its own right: a filtered view can be shared. |
+| DEC-61 | One source for the demo: `demo/scenes.yaml` generates both `demo/script.md` and the video, and lists the numbers the narration states. The build stops if one is out of date. | The narration says numbers aloud ("fifteen entries", "seventy-eight percent"). They will change, and a script that silently disagrees with the repository is worse than none. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.

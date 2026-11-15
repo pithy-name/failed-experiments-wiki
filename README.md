@@ -9,8 +9,9 @@ Built for the Apart Research **AI x Epistemics Research Sprint** (Track 2,
 Trust Infrastructure), November 2026. The working name is
 `failed-experiments-wiki`.
 
-**Start with [`DONE.md`](DONE.md)**: what works, how to see it working, what is
-provisional, and the demo script. Design choices and their reasons are in
+**Start with [`DONE.md`](DONE.md)**: what works, how to see it working, and what
+is provisional. What is left to do is in [`TODO.md`](TODO.md). The demo narration
+is in [`demo/script.md`](demo/script.md). Design choices and their reasons are in
 [`DECISION-LOG.md`](DECISION-LOG.md).
 
 ## The idea
@@ -44,6 +45,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `plugin/` | Claude Code plugin: MCP server and the `contribute`, `ask`, `review` skills |
 | `evals/` | Gold entries, eval prompts, the scorer, results |
 | `scouting/` | Candidates, classification labels, yields, field audits, seed selection |
+| `demo/` | Demo narration (`scenes.yaml` → `script.md`) and the builder for the draft video |
 | `.github/` | Issue form and the two workflows |
 | `tests/` | Test suite |
 

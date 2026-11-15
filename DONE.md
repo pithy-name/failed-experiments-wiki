@@ -5,7 +5,7 @@ posts. **Three things did not happen on GitHub, because no GitHub repository
 exists yet** (your choice at the start: no pushes). Each is marked UNVERIFIED
 below with the steps to verify it.
 
-Read section 5 first: it is your to-do list, shortest task first.
+What is left for you to do is in `TODO.md`, shortest task first. This file records what was built and how it was verified.
 
 Every "verified" below was run in this build session on 2026-11-14. Where
 something was not run, it says so.
@@ -138,7 +138,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 | P3 | Every eval number | Gold is unverified; one vendor's models wrote the drafts, the grades and the gold. | T7, then `make evals`. |
 | P4 | The exception post (`fe-2026-0010`, `fe-2026-0011`) | Does not meet your qualification rule: no stated hypothesis. | Your decision (T3). |
 | P5 | `contributor.handle: HANDLE-TBD` in all 15 entries | The session could not read your `gh` login. | T2. |
-| P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder, then loaded here from `history.bundle` once you ran `git init` (T1, done). Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | Nothing: it is what it is. Say so if anyone reads the history as a timeline. |
+| P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder, then loaded here from `history.bundle` once you ran `git init` (T1, done; the bundle is now in `_trash-review/`). Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | Nothing: it is what it is. Say so if anyone reads the history as a timeline. |
 | P7 | Pull requests, the issue-form workflow, the validation Action | No remote. | T6. |
 | P8 | Plugin loaded in Claude Code | Never loaded. | T8. |
 | P9 | Web page in a real browser, Datasette on a port | Sandbox. | T5. |
@@ -149,7 +149,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 
 - `_trash-review/`: three empty or six-byte probe files I created while testing whether the folder was writable. Git-ignored.
 - `.git/`: was a partial directory left by my two failed `git init` attempts. Your `git init` turned it into the real repository; nothing to remove.
-- `history.bundle`: a spare copy of the history, git-ignored. Remove it when you no longer want it.
+- `_trash-review/history.bundle`: a spare copy of the history, moved there on 2026-11-15 at your request. Remove it when you no longer want it.
 
 **Departures from the PRD** (all in `DECISION-LOG.md`): classification went past 60 posts (DEC-32); one optional schema field added, `contributor.note` (DEC-13); a sixth MCP tool, `fetch_source` (DEC-22); the source cache sits inside this folder, git-ignored (DEC-52); the decision log is named `DECISION-LOG.md` because writing `DECISIONS.md` was denied by the session's permission settings.
 
@@ -231,43 +231,21 @@ Most entries concern sparse autoencoders or nearby interpretability methods. Tha
 
 ---
 
-## 4. Demo script (about 4 minutes)
+## 4. Demo
 
-Before recording: do T1, T2, T5 and T6. If you skip T6, the two GitHub steps
-below become "here is the form and the workflow file", and you say so. If the
-plugin does not load (T8), use the fallback under the table.
+Moved out of this file on 2026-11-15:
 
-| Time | Show | Say |
-|---|---|---|
-| 0:00–0:25 | `README.md`, top | "Failed experiments stay in file drawers, so people repeat dead ends. This is a wiki of failed AI-safety experiments that people and agents both write to and both read. Entries describe experiments, never people." |
-| 0:25–1:10 | `site/index.html` in a browser. Tick **failure type → hyperparams_unexplored**, then **badges → agent-written**. Open "All fields" on `fe-2026-0010`. Type `steganography` in search. | "Fifteen entries from real LessWrong posts. Every field is a filter. Each card shows who wrote it, whether anyone reviewed it, a quote the validator found in the post, and how far to trust the negative: this one says retry welcome, low confidence, and the post itself notes later work succeeded." **(D4, D6)** |
-| 1:10–1:25 | `make datasette`, the entries table with facets. | "The same data in Datasette, for SQL and JSON." **(D4)** |
-| 1:25–2:10 | Claude Code with the plugin. Type: *"I want to steer along an eval-awareness direction to stop a model sandbagging. What's been tried?"* | "The ask skill answers from the wiki only: already tried, where it went wrong, what to avoid, worth retrying, not found. It cites entry IDs and says how weak the evidence is." Then ask about debate with human judges: "And it says plainly when it has nothing." **(D5)** |
-| 2:10–2:50 | Same session: *"Contribute this post: <a LessWrong URL not yet in the wiki>"*. Show the pull request it opens, with the badges. | "An agent turns a write-up into an entry. It cannot mark its own work as reviewed. The entry lands as agent-written and unreviewed." **(D1)** |
-| 2:50–3:10 | In an entry file, change `failure_type` to `bad_luck`; run `make validate`. Revert. | "One validator guards every path: locally, in the MCP server, and on every pull request. It also checks the quote really is in the post." **(D7)** |
-| 3:10–3:30 | GitHub → Issues → New entry form. Show the pull request the workflow opened. | "People contribute with a form. No git needed." **(D2)** |
-| 3:30–3:50 | Run the review command from T4 live, or show its commit: `git log --oneline --grep Review`. | "Review is a separate step. It records who reviewed, when and what they checked, and git history keeps it." **(D3)** |
-| 3:50–4:10 | `make evals`, then `evals/results/RESULTS.md`. | "Evals run with one command: field accuracy of the contribute skill against five verified entries, and whether the ask skill cites the right entry without inventing failures. Five posts, one vendor: a spot-check, not a benchmark." **(D8)** |
-| 4:10–4:20 | `scouting/yields.md`, the funnel. | "One finding: of 49 genuine failure write-ups we found, only 9 stated enough to fill a structured entry. The fields most often missing are the ones that stop a failure report from reading as 'this never works'." |
-
-**Fallback if the plugin does not load:** open a plain Claude Code session in this folder and say: *"Follow plugin/skills/ask/SKILL.md using tools/cli.py. My plan: …"*. The skills name those commands as the alternative to the MCP tools, and that is how they were exercised in this build.
+- `demo/script.md`: narration for a 6-minute demo, scene by scene, generated from `demo/scenes.yaml`.
+- `demo/out/demo-draft.mp4`: the draft video, built by `make demo-video` (`TODO.md`, T9). Not built yet: the
+  screenshot and voice steps cannot run inside the build sandbox.
+- `demo/live-demo-script.md`: the shorter script for recording live, which used to be this section.
 
 ---
 
-## 5. Your to-do list, shortest first
+## 5. What is left for you
 
-| ID | Task | Time | Exact steps |
-|---|---|---|---|
-| T1 | Load the commit history | **DONE** | You ran `git init -b main` in this folder at the end of the session, and I then ran the rest: `git fetch --update-head-ok history.bundle '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'` and `git reset`. Result: `git status` clean, 51 commits, 12 branches, tag `pre-seed`. `history.bundle` is now only a spare copy; it is git-ignored. |
-| T2 | Set your GitHub handle | 1 min | `make set-handle HANDLE=<your handle>` then commit as it prints. (Your git user name is `pithy-name`. Whether that is also your GitHub handle was not assumed.) |
-| T3 | Decide on the exception post | 2 min | Keep `fe-2026-0010` and `fe-2026-0011` (they say plainly that the post poses a question), or back them out: `git revert -m 1 c20c7d1` then `git revert -m 1 61b12aa`, then `make site`. Backing out leaves 13 entries from 9 posts. |
-| T4 | Do the human review (D3) | 5 min | 1. `.venv/bin/python tools/cli.py get fe-2026-0008` and open its `source.url` (a short post). 2. Check each field against the post; `plugin/skills/review/SKILL.md` step 3 is the checklist. 3. Record it: `.venv/bin/python tools/cli.py review fe-2026-0008 reviewed --human --handle <your handle> --notes "Checked every field against the post."` (use `contested` and say which field if something is wrong). 4. With a remote this opens a pull request; without one, `.venv/bin/python tools/cli.py merge-local <the branch it printed>`. 5. `git log --oneline --grep Review` shows it. |
-| T5 | Look at both browse UIs and pick one | 5 min | `make site` and open `site/index.html`; `make datasette` and open http://localhost:8001/wiki/entries. Recommendation: the web page (D4). Nobody has seen either rendered: check before recording. |
-| T6 | Put it on GitHub | 10–20 min | 1. `gh repo create failed-experiments-wiki --private --source . --push`, then `git push origin --all --tags`. 2. Watch the first "Validate entries" run in the Actions tab (D7). 3. Settings → Actions → General → allow GitHub Actions to create and approve pull requests. 4. Create the label `new-entry`. 5. Issues → New issue → New entry: submit one, watch the pull request appear (D2). 6. `make site` again so entry links point to GitHub. **Note:** this gives no pull requests for the existing agent entries, because their branches are already merged. For a real pull request in the demo, contribute a new post (D1). An alternative that I have not tested: push `main` first at commit `291c14b` (the last commit before the agent entries), then push the `entry/*` branches and open pull requests from them, then push the full `main`. Before the repository ever goes public: it contains your first name in a field value (`pending_maintainer_verification`) and in the decision log. |
-| T7 | Verify the 5 gold entries | 45–60 min | For each `evals/gold/fe-2026-000N.md`: open its post, use the "Verification notes for the maintainer" at the bottom (they give line numbers into the cached post text in `.cache/lw/text/`), correct any field, set `gold_status: verified`. Then `make validate-gold`, `make sync-gold HANDLE=<your handle>`, commit, `make evals`. Text fields you changed show as STALE: `evals/README.md` gives the one prompt that regrades them. Two rules to decide across the set: whether well-known facts the post does not state (for example a model's developer) may be filled in, and whether `retry_welcome` should be true for a medium-confidence negative. The skill and the gold drafts differ on both, and that is where much of the scored disagreement comes from. |
-| T8 | Load the plugin once | 5 min | Try `claude --plugin-dir plugin` from the repository root. I did not confirm that flag against the Claude Code documentation; if it is wrong, add the folder through `/plugin`. Check the MCP server starts and the three skills appear. The server itself starts and answers (`make mcp-smoke`); what is untested is Claude Code loading it. |
-
-**T1 history:** the procedure was first tested on a scratch copy with the same partial `.git/` directory (DEC-54), then run for real in this folder once `git init` had been run (DEC-55).
+Moved to `TODO.md` on 2026-11-15, with the same task IDs (T1 to T8) and one new task (T9, the demo video).
+Every "T" reference in this file points there. T1, loading the commit history, is done.
 
 ---
 
