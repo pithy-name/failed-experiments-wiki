@@ -107,6 +107,8 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 
 | DEC-54 | The hand-over command in `DONE.md` (T1) was tested on a scratch copy, not in this folder. | The copy held the tracked files plus a partial `.git/` like the one here (`description`, `hooks/`, `info/` only). Running `git init -b main`, the `git fetch --update-head-ok history.bundle …` line and `git reset` there gave a clean `git status`, the full history, all entry and review branches and the `pre-seed` tag. The test was run once with the bundle as it stood before this row was written, and repeated on the final bundle after this row was committed. It could not be run in this folder: the sandbox refuses `git init` here. |
 
+| DEC-55 | The history was loaded into this folder at the end of the session. | The maintainer ran `git init -b main` here. The orchestrator then ran the fetch from `history.bundle` and `git reset`: clean status, 51 commits, all branches and the tag. Later commits are made in this repository directly. The scratch git directory is no longer used. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.

@@ -138,7 +138,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 | P3 | Every eval number | Gold is unverified; one vendor's models wrote the drafts, the grades and the gold. | T7, then `make evals`. |
 | P4 | The exception post (`fe-2026-0010`, `fe-2026-0011`) | Does not meet your qualification rule: no stated hypothesis. | Your decision (T3). |
 | P5 | `contributor.handle: HANDLE-TBD` in all 15 entries | The session could not read your `gh` login. | T2. |
-| P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder. Handed over as `history.bundle`. Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | T1. |
+| P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder, then loaded here from `history.bundle` once you ran `git init` (T1, done). Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | Nothing: it is what it is. Say so if anyone reads the history as a timeline. |
 | P7 | Pull requests, the issue-form workflow, the validation Action | No remote. | T6. |
 | P8 | Plugin loaded in Claude Code | Never loaded. | T8. |
 | P9 | Web page in a real browser, Datasette on a port | Sandbox. | T5. |
@@ -148,7 +148,8 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 **Left over in this folder, for you to remove** (I do not delete anything):
 
 - `_trash-review/`: three empty or six-byte probe files I created while testing whether the folder was writable. Git-ignored.
-- `.git/`: a partial directory (only `description`, `hooks/`, `info/`) left by my two failed `git init` attempts. T1 turns it into a real repository, so it needs no separate action.
+- `.git/`: was a partial directory left by my two failed `git init` attempts. Your `git init` turned it into the real repository; nothing to remove.
+- `history.bundle`: a spare copy of the history, git-ignored. Remove it when you no longer want it.
 
 **Departures from the PRD** (all in `DECISION-LOG.md`): classification went past 60 posts (DEC-32); one optional schema field added, `contributor.note` (DEC-13); a sixth MCP tool, `fetch_source` (DEC-22); the source cache sits inside this folder, git-ignored (DEC-52); the decision log is named `DECISION-LOG.md` because writing `DECISIONS.md` was denied by the session's permission settings.
 
@@ -257,7 +258,7 @@ plugin does not load (T8), use the fallback under the table.
 
 | ID | Task | Time | Exact steps |
 |---|---|---|---|
-| T1 | Load the commit history | 1 min | From this folder: `git init -b main && git fetch --update-head-ok history.bundle '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*' && git reset`. Then `git status` should show nothing to commit and `git log --oneline` the history. See "T1 was tested" below. |
+| T1 | Load the commit history | **DONE** | You ran `git init -b main` in this folder at the end of the session, and I then ran the rest: `git fetch --update-head-ok history.bundle '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'` and `git reset`. Result: `git status` clean, 51 commits, 12 branches, tag `pre-seed`. `history.bundle` is now only a spare copy; it is git-ignored. |
 | T2 | Set your GitHub handle | 1 min | `make set-handle HANDLE=<your handle>` then commit as it prints. (Your git user name is `pithy-name`. Whether that is also your GitHub handle was not assumed.) |
 | T3 | Decide on the exception post | 2 min | Keep `fe-2026-0010` and `fe-2026-0011` (they say plainly that the post poses a question), or back them out: `git revert -m 1 c20c7d1` then `git revert -m 1 61b12aa`, then `make site`. Backing out leaves 13 entries from 9 posts. |
 | T4 | Do the human review (D3) | 5 min | 1. `.venv/bin/python tools/cli.py get fe-2026-0008` and open its `source.url` (a short post). 2. Check each field against the post; `plugin/skills/review/SKILL.md` step 3 is the checklist. 3. Record it: `.venv/bin/python tools/cli.py review fe-2026-0008 reviewed --human --handle <your handle> --notes "Checked every field against the post."` (use `contested` and say which field if something is wrong). 4. With a remote this opens a pull request; without one, `.venv/bin/python tools/cli.py merge-local <the branch it printed>`. 5. `git log --oneline --grep Review` shows it. |
@@ -266,7 +267,7 @@ plugin does not load (T8), use the fallback under the table.
 | T7 | Verify the 5 gold entries | 45–60 min | For each `evals/gold/fe-2026-000N.md`: open its post, use the "Verification notes for the maintainer" at the bottom (they give line numbers into the cached post text in `.cache/lw/text/`), correct any field, set `gold_status: verified`. Then `make validate-gold`, `make sync-gold HANDLE=<your handle>`, commit, `make evals`. Text fields you changed show as STALE: `evals/README.md` gives the one prompt that regrades them. Two rules to decide across the set: whether well-known facts the post does not state (for example a model's developer) may be filled in, and whether `retry_welcome` should be true for a medium-confidence negative. The skill and the gold drafts differ on both, and that is where much of the scored disagreement comes from. |
 | T8 | Load the plugin once | 5 min | Try `claude --plugin-dir plugin` from the repository root. I did not confirm that flag against the Claude Code documentation; if it is wrong, add the folder through `/plugin`. Check the MCP server starts and the three skills appear. The server itself starts and answers (`make mcp-smoke`); what is untested is Claude Code loading it. |
 
-**T1 was tested** on a scratch copy of this folder's tracked files that had the same partial `.git/` directory, using the final `history.bundle`: the result is recorded at the end of `DECISION-LOG.md` (DEC-54). It has not been run in this folder itself, because the sandbox forbids it.
+**T1 history:** the procedure was first tested on a scratch copy with the same partial `.git/` directory (DEC-54), then run for real in this folder once `git init` had been run (DEC-55).
 
 ---
 
