@@ -101,6 +101,10 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-49 | The agent review of `fe-2026-0007` was recorded as `reviewed` although the reviewer was the same model that wrote the entry. | The review skill allows it and requires the notes to say so, which they do; the web page labels it "Reviewed by an agent only". It demonstrates the mechanism. It is not independent vetting. |
 | DEC-50 | The test fixtures now clear `GIT_DIR` and related variables. | Running the suite with those variables exported let the fixtures write to the scratch history: its author settings were changed and four commits were recorded under the test identity. They were recreated with the same trees and messages under the right author. |
 
+| DEC-51 | Five entries were added beyond the 10 seeds (`fe-2026-0011` to `fe-2026-0015`), all agent-written and unreviewed. | Late in the run the maintainer said 10 was a minimum. No further post met the rule, so the extra entries are further distinct failed experiments from three posts that had already qualified, drafted by the skill only where the post states every required field. One draft was rejected by the orchestrator because the post had predicted the result. `fe-2026-0011` shares the exception of `fe-2026-0010` (same post). The gold posts were not mined, to keep eval outputs and wiki entries apart. The `ask` eval answers were written when the wiki held 10 entries. |
+| DEC-52 | The source cache is `.cache/` inside the repository folder, git-ignored. | The PRD says post texts are cached outside the repo. The sandbox could write only inside this folder. Nothing in `.cache/` is tracked, and no post text is in any commit. |
+| DEC-53 | The review notes recorded for `fe-2026-0007` are the reviewer's first written decision. | The orchestrator applied the decision file while the reviewing subagent was still running; the subagent then rewrote its notes with slightly different wording and the same verdict. The recorded review is the earlier wording. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.
