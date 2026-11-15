@@ -60,7 +60,7 @@ scenes:
       - "Trust is visible. Who wrote it, on what evidence, and whether anyone checked."
       - "A failure is scoped. One report is not \"this never works\"."
     narration: >
-      It starts with LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work.
+      It starts with what is already public but hard to find: LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work.
       Its own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at.
       The habit, never the person: entries describe experiments, and do not judge whoever ran them.
       Every entry shows who wrote it and whether anyone checked it, and every failure is scoped, so one thin report is not read as: this never works.
@@ -83,7 +83,7 @@ scenes:
   - id: s04-filter
     kind: page
     beats:
-      - say: "Every field is a filter: the result, the method, the model, who wrote it, the source, the dates."
+      - say: "Every field is a filter, from the result to the source."
         actions:
           - {do: scroll_panel, px: 1500}
           - {do: panel_top}
@@ -145,16 +145,15 @@ scenes:
 
   - id: s07b-plugin
     kind: file
-    short: false
     path: "demo/answers/plugin-session.md"
     first_line: 1
     last_line: 18
     wrap: true
     note: "A saved transcript of a real headless Claude Code session with the plugin loaded, run on 2026-11-15 with only the wiki's own tools available. `make verify PLUGIN=1` repeats it."
     narration: >
-      AI agents reach the wiki through a plugin for Claude Code. This is a real session with the plugin loaded.
-      The agent lists the six tools the wiki gives it, to search, read, submit and review,
-      then runs a search through them, and reports that both entries it found are unreviewed.
+      AI agents reach the wiki through a plugin. This is a real session:
+      the agent lists the six tools the wiki gives it, runs a search through them,
+      and reports that both entries it found are unreviewed.
 
   - id: s08-answer
     kind: file
@@ -205,8 +204,7 @@ scenes:
     wrap: true
     narration: >
       One validator guards every path. Change a failure type to a value that is not on the list, and it refuses.
-      Change the quote to a sentence the post never said, and it refuses that too.
-      It checks every quote against the text of the post, here from a saved copy.
+      Change the quote to a sentence the post never said, and it refuses that too, checking against a saved copy of the post.
       All fifteen real entries pass.
 
   - id: s12-human
@@ -278,13 +276,13 @@ scenes:
 
   - id: s17-close
     kind: card
-    title: "Where it stands, and what comes next"
+    title: "Each experiment can be less wrong than the one before it"
+    subtitle: "Where this stands, and what comes next"
     bullets:
       - "A local proof of concept. Not public yet."
       - "First: ask the authors. They can confirm their entries, or opt out."
       - "Then: a public site, and a hosted server so agents connect without cloning"
       - "Then: more sources than LessWrong and the Alignment Forum"
-    footer: "Each experiment can be less wrong than the one before it."
     narration: >
       This is a local proof of concept. It is not public yet.
       Before it is, the authors of these posts get asked: they can confirm their entries, or opt out.
