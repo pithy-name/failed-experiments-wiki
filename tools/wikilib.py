@@ -421,8 +421,10 @@ def search(entries: Iterable[Entry], query: str = "", filters: dict | None = Non
         "total_entries_in_wiki": len(entries),
         "match_count": len(results),
         "results": results[:limit],
-        "note": "Keyword match only. No match here means no entry uses these words, not that nothing related exists: "
-        "retry with synonyms and with filters from list_facets before concluding 'not found'.",
+        "note": "Keyword match only, ranked: an entry is listed when it contains ANY of the query terms, so check "
+        "matched_terms and score; a hit on one common word is a weak match, not a finding. No match here means no entry "
+        "uses these words, not that nothing related exists: retry with synonyms and with filters from list_facets before "
+        "concluding 'not found'.",
     }
 
 
