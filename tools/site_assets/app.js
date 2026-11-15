@@ -119,7 +119,9 @@
       if (controls.length === 0) { return; }
       var details = el("details", "group");
       details.setAttribute("data-group", group.id);
-      details.open = !!group.open || groupHasActiveFilter(group.id);
+      // On a narrow screen the panel sits above the results, so groups start closed unless one of their filters is in use.
+      var narrow = typeof matchMedia === "function" && matchMedia("(max-width: 860px)").matches;
+      details.open = (!!group.open && !narrow) || groupHasActiveFilter(group.id);
       details.appendChild(el("summary", null, group.label));
       controls.forEach(function (control) { details.appendChild(control); });
       panel.appendChild(details);
