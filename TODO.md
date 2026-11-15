@@ -13,7 +13,7 @@ by ID. A finished task stays in the table, marked DONE, so the record is kept.
 | T3 | Decide on the exception post | 2 min | open |
 | T4 | Do the human review (D3) | 5 min | open |
 | T5 | Look at both browse UIs and pick one | 5 min | open |
-| T9 | Build the draft demo video and review the script | 5 min + your review | open |
+| T9 | Review the demo script and the draft video | 10 min + your edits | open (video built) |
 | T6 | Put it on GitHub | 10–20 min | open |
 | T7 | Verify the 5 gold entries | 45–60 min | open |
 | T8 | Load the plugin once | 5 min | open |
@@ -74,21 +74,29 @@ Recommendation: the web page (see `DONE.md`, D4). Nobody has seen either one
 rendered in a real browser yet, so check before recording anything. A filtered
 view of the page can now be shared as a link: the filters are in the URL after `#`.
 
-## T9. Build the draft demo video and review the script
+## T9. Review the demo script and the draft video
+
+The draft video exists: `demo/out/demo-draft.mp4` (6:11, 1920×1080, captions,
+no voice) with `demo/out/demo-draft.srt`. It was built and checked frame by
+frame in the build session (DEC-62).
 
 1. Read `demo/script.md`: the narration, scene by scene, with timings and the
    lines that will need updating. Edit the wording in `demo/scenes.yaml`.
-2. Build the video from a normal terminal (not from inside Claude Code's
-   sandbox, where Chrome cannot start): `make demo-video`
-   This takes a minute or two and writes `demo/out/demo-draft.mp4` and
-   `demo/out/demo-draft.srt`.
-3. Watch it. It is a draft for pacing and content: real screens, no mouse
-   pointer, a text-to-speech voice. Then either record your own voice over it,
-   or record the screens live with the script (`demo/live-demo-script.md`).
+2. Watch `demo/out/demo-draft.mp4`. It shows the real page driven by real
+   clicks, typing and scrolling in a headless browser, real files and real
+   command output. The orange pointer ring and field outline are drawn by the
+   recorder; motion is step by step.
+3. To add the text-to-speech scratch voice, rebuild from a normal terminal
+   (macOS `say` does not work inside Claude Code's sandbox): `make demo-video`.
+   It takes about a minute. On a machine without the browser yet:
+   `make demo-setup` first.
+4. Then either record your own voice over a clean picture
+   (`.venv/bin/python demo/build_demo.py --no-captions --no-voice`), or record
+   the screens live with `demo/live-demo-script.md`.
 
-Not yet verified by anyone: the screenshot step and the voice step have never
-run. Everything before and after them has (scene pages, real command output,
-video assembly with placeholder frames).
+Not verified: the voice step has never run, so the timings in the script are
+estimates at 150 words a minute. With a voice they are measured and the script
+is regenerated with them.
 
 ## T6. Put it on GitHub
 
@@ -146,5 +154,7 @@ Nothing was deleted during the build. These are yours to remove:
 - `_trash-review/history.bundle`: spare copy of the commit history (T1).
 - `_trash-review/` also holds three empty or six-byte probe files from testing
   whether the folder was writable.
-- `demo/out/`: demo build outputs, including a placeholder video from testing
-  the assembly. Git-ignored. `make demo-video` writes its own files there.
+- `demo/out/`: demo build outputs (the draft video, its frames, audio and scene
+  pages). Git-ignored; rebuilt by `make demo-video`.
+- `_trash-review/demo-out-first-pass/`, `-second-pass/`, `-third-pass/`: frames and
+  videos from earlier builds of the demo, set aside while fixing what the review found.

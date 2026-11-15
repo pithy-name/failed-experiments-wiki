@@ -236,8 +236,8 @@ Most entries concern sparse autoencoders or nearby interpretability methods. Tha
 Moved out of this file on 2026-11-15:
 
 - `demo/script.md`: narration for a 6-minute demo, scene by scene, generated from `demo/scenes.yaml`.
-- `demo/out/demo-draft.mp4`: the draft video, built by `make demo-video` (`TODO.md`, T9). Not built yet: the
-  screenshot and voice steps cannot run inside the build sandbox.
+- `demo/out/demo-draft.mp4`: the draft video (6:11, captions, no voice), built by `make demo-video` and reviewed
+  frame by frame in the build session (DEC-62). The voice step cannot run inside the build sandbox (`TODO.md`, T9).
 - `demo/live-demo-script.md`: the shorter script for recording live, which used to be this section.
 
 ---
