@@ -50,6 +50,12 @@ python tools/cli.py get fe-2026-0001
    "dictionary learning"); and filters taken from `list_facets` (`method`,
    `research_area`, `models.name`). In a small wiki, also list everything with
    an empty query and scan the titles.
+   - Read `score` and `matched_terms` on each hit. A hit on one common word is
+     a weak match; do not treat it as relevant without reading the entry.
+   - `method`, `checks_done`, `models.name` and `benchmarks` are free-text
+     tags, not a fixed vocabulary. One idea can sit under several spellings
+     (`sae`, `sae-probing`, `sparse-autoencoders`), so a filter on one value
+     can miss entries. Never conclude "not found" from a filter alone.
 4. **Read every plausible entry** with `get_entry`. Keep the ones that bear on
    the plan: same or closely related method, hypothesis or setup. Drop the rest.
 5. **Answer in the format below.** If nothing relevant was found, say so in
@@ -79,8 +85,15 @@ Use exactly these five headings, in this order.
 
 Rules for the sections:
 
+- **Badges line:** when an entry's status is `reviewed`, say who reviewed it,
+  from `reviewed_by`: "reviewed by a person", or "reviewed by an agent only"
+  (add "the same model that wrote it" when the tool says so). An agent-only
+  review is a weak check, not vetting; never write plain "reviewed" for one.
 - **Already tried:** every relevant entry, strongest evidence first. If there is
-  none, write "Nothing in the wiki matches this plan."
+  none, write "Nothing in the wiki matches this plan." An entry that is only
+  adjacent (same tool or area, a different question) may be listed last,
+  starting with "Adjacent only:" and saying how it differs. Entries you judged
+  irrelevant from their titles go under Not found, named as "not opened".
 - **Where it went wrong:** use the entry's own `failure_type` value and its
   reasons. Do not upgrade "underpowered" to "does not work".
 - **What to avoid:** each pitfall traced to an entry ID. No generic advice.
