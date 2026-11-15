@@ -1,0 +1,3 @@
+# Runtime: all the validator and the entry tools need.
+PyYAML>=6.0
+jsonschema>=4.20

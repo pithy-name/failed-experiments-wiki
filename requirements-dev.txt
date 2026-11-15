@@ -1,0 +1,6 @@
+# Everything: MCP server, Datasette browser, tests.
+-r requirements.txt
+fastmcp>=2.0
+datasette>=0.65,<1.0
+sqlite-utils>=3.36
+pytest>=8.0
