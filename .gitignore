@@ -12,6 +12,9 @@ wiki.db
 # Demo build outputs: frames, audio, video (demo/script.md and demo/scenes.yaml are tracked)
 demo/out/
 
+# The page built only to take the report's screenshots
+report/figures/_site/
+
 # Session-log drafts that could not be written to the central log
 _session-log-update-*.md
 
