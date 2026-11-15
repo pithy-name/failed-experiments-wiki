@@ -105,3 +105,8 @@ def git_repo(tmp_path, valid_entry):
     run_git(repo, "add", "entries/fe-2026-0001.md")
     run_git(repo, "commit", "-q", "-m", "Add first entry")
     return repo
+
+
+def pytest_addoption(parser):
+    parser.addoption("--snap-dir", default=None,
+                     help="folder for screenshots taken by the browser tests (tests/test_e2e_browser.py); none are taken without it")
