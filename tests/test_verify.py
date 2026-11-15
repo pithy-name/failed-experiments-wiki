@@ -39,7 +39,9 @@ def test_every_check_is_complete_and_can_fail():
 
 
 def test_commands_that_write_never_run_in_the_real_repository():
-    writers = ("submit", "review ", "merge-local", "issue_to_entry", "sync_gold", "set_handle", "run_evals", "build_db", "build_site")
+    # build_demo is here because its --script-only run rewrote demo/script.md in the real repository once (DEC-77)
+    writers = ("submit", "review ", "merge-local", "issue_to_entry", "sync_gold", "set_handle", "run_evals", "build_db", "build_site",
+               "build_demo")
     for check in SPEC["checks"]:
         if check.get("cwd") != "repo":
             continue
