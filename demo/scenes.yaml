@@ -37,19 +37,22 @@ facts:
   ask_passed: 6
   ask_total: 7
   gold_verified: 0           # how many of the 5 gold entries are verified
+  agent_written: 15          # entries whose contributor is an agent
+  reviewed: 1                # entries with review.status reviewed
+  reviewed_by_a_person: 0
   has_github_remote: false
 
 scenes:
   - id: s01-title
     kind: card
     title: "A wiki of failed AI-safety experiments"
-    subtitle: "that people and AI agents both write to, and both read"
+    subtitle: "that people and AI agents can both write to, and both read"
     footer: "Apart Research · AI x Epistemics Sprint · Track 2, Trust Infrastructure: signals that people and machines can both read, and know how far to trust"
     narration: >
       When an AI-safety experiment does not work, the result usually stays in a file drawer, or in a post nobody can find.
-      For AI safety, we found no shared record of what was tried and where it failed.
+      For AI safety, I found no shared record of what was tried and where it failed.
       So the next team repeats the dead end, and scarce safety compute goes to ideas that were already ruled out.
-      This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents both write to, and both read.
+      This is a proof of concept of a fix: a wiki of failed experiments that people and AI agents can both write to, and both read.
 
   - id: s02-idea
     kind: card
@@ -61,21 +64,21 @@ scenes:
       - "A failure is scoped. One report is not \"this never works\"."
     narration: >
       It starts with what is already public but hard to find: LessWrong and the Alignment Forum, a community that already posts candid write-ups of what did not work.
-      Its own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at.
+      LessWrong's own name states the goal: be less wrong. Repeating a known mistake, or ignoring evidence that is one search away, is the habit this is aimed at.
       The habit, never the person: entries describe experiments, and do not judge whoever ran them.
-      Every entry shows who wrote it and whether anyone checked it, and every failure is scoped, so one thin report is not read as: this never works.
+      And every failure is scoped, so one thin report is not read as: this never works.
 
   - id: s03-browse
     kind: page
     beats:
-      - say: "This is the wiki: one web page built from plain text files, with no server."
-      - say: "Fifteen entries so far, each taken from a real LessWrong or Alignment Forum post."
+      - say: "This is the wiki: one web page, built from plain text files."
+      - say: "Fifteen entries so far, each from a real post."
         actions:
           - {do: scroll, px: 420}
-      - say: "Badges say how far to trust each one: written by an agent, not yet reviewed, open to a retry."
+      - say: "Two badges say how far to trust an entry, and one invites a retry. So far all fifteen were written by an agent, and the only review was done by an agent too."
         actions:
           - {do: scroll_to, entry: fe-2026-0006}
-      - say: "The first five are meant to become my own reference entries. For now they are model drafts, labelled as written by an agent until I verify them, and each card says so."
+      - say: "The first five are model drafts of my own reference entries, and each of those five says so until I verify it."
         actions:
           - {do: scroll_top}
     update_when: "The last sentence goes once the gold entries are verified. The count changes if entries are added."
@@ -141,7 +144,7 @@ scenes:
     narration: >
       Now the question this is for. Say a researcher plans to steer a model along a direction for
       "it thinks it is being evaluated", to stop it sandbagging, that is, underperforming on purpose.
-      Has that been tried? A plain keyword search already ranks first the one entry that tested exactly this.
+      Has that been tried? A keyword search ranks first the one entry that tested exactly this.
 
   - id: s07b-plugin
     kind: file
@@ -162,12 +165,12 @@ scenes:
     wrap: true
     note: "Written by the ask skill through the plugin, in a headless Claude Code session on 2026-11-15, against the 15-entry wiki. It is not one of the scored answers (those were written when the wiki held 10 entries) and no judge has scored it; every statement in it was read against the two entries it cites."
     narration: >
-      And this is what an AI agent wrote for that plan, following the ask skill, a set of instructions, and reading the wiki through its plugin.
+      For this demo, an AI agent then wrote this answer, following the ask skill, a set of instructions, and reading the wiki through its plugin.
       Five parts, always the same: already tried, where it went wrong, what to avoid, worth retrying, and not found.
-      Every claim cites an entry.
+      Every claim cites its entry, and here they all rest on one.
       It does not turn a weak result into a verdict: the dose was gentle, so it says this is not evidence that the idea fails.
       It ends by saying that all of it rests on one unreviewed entry.
-      This answer was written for the demo, and is not one of the scored ones.
+      Nobody has scored this answer for accuracy.
 
   - id: s09-notfound
     kind: file
@@ -189,9 +192,10 @@ scenes:
       - "grep -A5 -E '^(contributor|review):' entries/fe-2026-0012.md"
     wrap: true
     narration: >
-      Agents also write. The contribute skill reads a post, drafts one entry for each failed experiment, and submits it.
+      Agents also write: the contribute skill reads a post, drafts an entry for each failed experiment, and submits it.
       Each submission lands on its own branch, and merges only if validation passes.
-      The agent cannot set its own trust fields. The system stamps the entry: written by an agent, which model, and unreviewed.
+      The system, not the agent, writes the trust fields: written by an agent, which model, unreviewed.
+      A draft that claims otherwise is overwritten, and merging is not review.
     update_when: "With a GitHub remote, show the pull request instead of the local branch graph."
 
   - id: s11-validate
@@ -205,7 +209,7 @@ scenes:
     narration: >
       One validator guards every path. Change a failure type to a value that is not on the list, and it refuses.
       Change the quote to a sentence the post never said, and it refuses that too, checking against a saved copy of the post.
-      All fifteen real entries pass.
+      All fifteen real entries pass. It checks form and quotes, not whether a summary is right.
 
   - id: s12-human
     kind: file
@@ -262,7 +266,7 @@ scenes:
     kind: card
     title: "A finding from building it"
     bullets:
-      - "212 candidate posts, labelled by a small model"
+      - "212 candidate posts from keyword and tag searches, labelled by a small model"
       - "49 are genuine write-ups of failed experiments"
       - "9 state enough to fill every required field (checked field by field by a stronger model)"
       - "Of the 40 that fall short: 20 lack a stated expectation, 18 lack exactly what was tested"
@@ -279,12 +283,13 @@ scenes:
     title: "Each experiment can be less wrong than the one before it"
     subtitle: "Where this stands, and what comes next"
     bullets:
+      - "So far: 15 entries, all written by an agent. One review, by an agent. None by a person."
       - "A local proof of concept. Not public yet."
       - "First: ask the authors. They can confirm their entries, or opt out."
       - "Then: a public site, and a hosted server so agents connect without cloning"
       - "Then: more sources than LessWrong and the Alignment Forum"
     narration: >
-      This is a local proof of concept. It is not public yet.
-      Before it is, the authors of these posts get asked: they can confirm their entries, or opt out.
-      After that, a public site, and a hosted server so agents can connect without cloning anything.
+      This is a local proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted.
+      Before it goes public, the authors get asked: they can confirm their entries, or opt out.
+      After that, a public site and a hosted server for agents.
       If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
