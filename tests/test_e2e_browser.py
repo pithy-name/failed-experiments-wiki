@@ -223,12 +223,13 @@ def test_filters_combine_and_clear_resets_everything(page, snap):
 
 def test_a_filtered_view_survives_as_a_link(page, context, site_url, snap):
     checkbox(page, "method", "sae").check()
-    page.locator("#search").fill("probe")
+    page.locator("#search").fill("dead")
     page.locator('input[data-range="source.published"][data-bound="min"]').fill("2024-01-01")
     page.locator('input[data-range="source.published"][data-bound="max"]').fill("2026-12-31")
     before = shown_ids(page)
+    assert 0 < len(before) < len(ENTRIES), before          # a view that shows nothing would prove nothing
     link = page.evaluate("() => location.hash")
-    assert "f.method=sae" in link and "q=probe" in link and "min.source.published=2024-01-01" in link
+    assert "f.method=sae" in link and "q=dead" in link and "min.source.published=2024-01-01" in link
     assert "max.source.published=2026-12-31" in link
     snap(page, "page-06-range-and-link")
 
@@ -236,7 +237,7 @@ def test_a_filtered_view_survives_as_a_link(page, context, site_url, snap):
     other.goto(site_url + link)
     other.wait_for_selector("#count")
     assert shown_ids(other) == before
-    assert other.locator("#search").input_value() == "probe"
+    assert other.locator("#search").input_value() == "dead"
     assert checkbox(other, "method", "sae").is_checked()
     other.close()
 
@@ -353,7 +354,15 @@ def test_narrow_screens_get_one_column_and_no_sideways_scroll(context, site_url,
     panel = page.locator("aside").bounding_box()
     first = page.locator("article.card").first.bounding_box()
     assert first["y"] > panel["y"] + panel["height"] - 1          # results come below the filters, not beside them
+    # on a phone the filter groups start closed, so the first result is not screens away
+    assert page.locator("details.group[open]").count() == 0
+    assert first["y"] < 844 * 1.5, first["y"]
     snap(page, "page-09-narrow-top")
+    page.goto("about:blank")
+    page.goto(site_url + "#f.method=sae")
+    page.wait_for_selector("article.card")
+    assert page.locator("details.group[open]").count() == 1          # a group with a filter in use stays open
+    assert checkbox(page, "method", "sae").is_visible()
     page.locator("article.card").first.scroll_into_view_if_needed()
     snap(page, "page-09-narrow-first-card")
     page.close()
