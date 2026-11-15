@@ -196,6 +196,21 @@ def test_pending_gold_drafts_are_published_unreviewed_with_their_note_and_withou
     assert outcome["action"] == "rejected" and "agent" in outcome["issues"][0]
 
 
+def test_search_ranks_the_expected_entry_first_for_every_eval_question_that_has_one():
+    """The questions the ask skill is scored on, run through search on the real wiki: a guard on changes to the scorer."""
+    entries = wikilib.load_entries(REPO_ROOT / "entries")
+    questions = json.loads((REPO_ROOT / "evals" / "ask_questions.json").read_text(encoding="utf-8"))
+    questions = questions["questions"] if isinstance(questions, dict) else questions
+    with_answer = [q for q in questions if q.get("expected_entry_id")]
+    assert len(with_answer) >= 3
+    for question in with_answer:
+        found = wikilib.search(entries, question["question"])
+        top = found["results"][0]
+        assert top["id"] == question["expected_entry_id"], (question["qid"], [(r["id"], r["score"]) for r in found["results"][:3]])
+        if len(found["results"]) > 1:
+            assert top["score"] >= 2 * found["results"][1]["score"], (question["qid"], top["score"], found["results"][1]["score"])
+
+
 def test_the_real_gold_drafts_and_their_entries_are_labelled_as_model_written_until_verified():
     for gold_path in sorted((REPO_ROOT / "evals" / "gold").glob("fe-*.md")):
         gold = wikilib.load_entry(gold_path).data
