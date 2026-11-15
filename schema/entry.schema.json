@@ -149,7 +149,10 @@
       "additionalProperties": false,
       "required": ["type", "url", "title", "authors", "published", "quote"],
       "properties": {
-        "type": { "enum": ["lesswrong", "alignment_forum"] },
+        "type": {
+          "enum": ["lesswrong", "alignment_forum"],
+          "description": "Where the post was published. alignment_forum means an Alignment Forum crosspost: url is still the LessWrong address, and crosspost_url the Alignment Forum one."
+        },
         "url": { "type": "string", "pattern": "^https://(www\\.)?(lesswrong\\.com|alignmentforum\\.org|greaterwrong\\.com)/posts/[A-Za-z0-9]+(/[^\\s]*)?$" },
         "crosspost_url": { "type": "string", "pattern": "^https://[^\\s]+$" },
         "lw_tags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
