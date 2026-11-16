@@ -9,7 +9,7 @@ sys.path.insert(0, str(REPO / "tools"))
 import make_print_pack  # noqa: E402
 
 POST = "We expected the probe to transfer. It did not: accuracy stayed at chance on the held-out set. We only tried layer 20."
-MARK = re.compile(r"\*\*⟦[^⟧/][^⟧]*⟧\*\* | \*\*⟦/⟧\*\*")     # an opening mark and its one added space, or a closing mark and its
+MARK = re.compile(r"\*\*\*⟦[^⟧/][^⟧]*⟧\*\*\* | \*\*\*⟦/[^⟧]*⟧\*\*\*")     # an opening mark and its one added space, or a closing mark and its
 
 
 def notes(*pairs):
@@ -22,7 +22,7 @@ def notes(*pairs):
 
 def test_a_passage_found_in_the_post_is_marked_where_it_sits():
     marked, placed, missing = make_print_pack.annotate(POST, notes(("fe-2026-0001", "hypothesis", "We expected the probe to transfer.")))
-    assert marked.startswith("**⟦HYPOTHESIS · 0001⟧** We expected the probe to transfer. **⟦/⟧**")
+    assert marked.startswith("***⟦HYPOTHESIS · 0001⟧*** We expected the probe to transfer. ***⟦/HYPOTHESIS · 0001⟧***")
     assert placed == {("fe-2026-0001", "hypothesis"): 1}
     assert missing == []
 
@@ -48,14 +48,14 @@ def test_fields_and_entries_that_share_a_passage_share_one_mark():
     passage = "We only tried layer 20."
     marked, placed, _ = make_print_pack.annotate(POST, notes(
         ("fe-2026-0001", "claim_scope", passage), ("fe-2026-0001", "limitations", passage), ("fe-2026-0002", "claim_scope", passage)))
-    assert marked.count("⟦/⟧") == 1
+    assert marked.count("⟦/") == 1
     assert "⟦SCOPE, LIMITATIONS · 0001 | SCOPE · 0002⟧" in marked
     assert sum(placed.values()) == 3
 
 
 def test_a_post_with_one_entry_is_marked_without_the_entry_number():
     marked, _, _ = make_print_pack.annotate(POST, notes(("fe-2026-0001", "hypothesis", "We expected the probe to transfer.")), show_entry=False)
-    assert marked.startswith("**⟦HYPOTHESIS⟧** We expected")
+    assert marked.startswith("***⟦HYPOTHESIS⟧*** We expected")
 
 
 HTML = ("<p>Intro words.</p><h2>Setup</h2><ul><li>first point</li><li>second point</li></ul>"
@@ -71,8 +71,8 @@ def test_the_posts_own_headings_lists_and_tables_are_printed_as_such():
 def test_a_marked_line_is_still_recognised_and_keeps_its_mark():
     marked, _, _ = make_print_pack.annotate(TEXT, notes(("fe-2026-0001", "result", "second point"), ("fe-2026-0001", "models", ".224")), show_entry=False)
     shaped = make_print_pack.shape_post(marked, HTML)
-    assert "- **⟦RESULT⟧** second point **⟦/⟧**" in shaped
-    assert "| L1 | **⟦MODELS⟧** .224 **⟦/⟧** |" in shaped
+    assert "- ***⟦RESULT⟧*** second point ***⟦/RESULT⟧***" in shaped
+    assert "| L1 | ***⟦MODELS⟧*** .224 ***⟦/MODELS⟧*** |" in shaped
 
 
 def test_shaping_a_post_changes_layout_and_never_words():
@@ -91,6 +91,18 @@ def test_a_code_block_prints_as_one_block():
     html = "<p>The format:</p><pre><code>&lt;start&gt;user\n\n[prompt]\n&lt;end&gt;</code></pre><p>After.</p>"
     assert make_print_pack.shape_post("The format:\n\n<start>user\n\n[prompt]\n\n<end>\n\nAfter.", html) == (
         "The format:\n\n```\n<start>user\n[prompt]\n<end>\n```\n\nAfter.")
+
+
+def test_footnotes_print_under_their_own_post():
+    body = "A claim.[^1] Another.[^2]\n\n[^1]: First note.\n[^2]: Second note."
+    assert make_print_pack.footnotes_with_the_post(body) == (
+        "A claim.<sup>[1]</sup> Another.<sup>[2]</sup>\n\n#### Footnotes\n\n1. First note.\n2. Second note.")
+
+
+def test_compact_drops_blank_lines_that_markdown_does_not_need():
+    text = "Para one.\n\nPara two.\n\n\n## Heading\n\nText.\n\n\n---\n\n# Post 1\n\n- item\n\n```\na\n\n\nb\n```"
+    assert make_print_pack.compact(text) == (
+        "Para one.\n\nPara two.\n## Heading\nText.\n\n---\n# Post 1\n- item\n\n```\na\n\n\nb\n```")
 
 
 def test_models_print_on_one_line_and_say_what_is_unknown():
