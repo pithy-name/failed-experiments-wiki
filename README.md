@@ -1,13 +1,12 @@
-# Failed-experiments wiki (proof of concept)
+# Carpe Ingot: a Wiki of Negative Experiment Results (proof of concept)
 
-A wiki of **failed AI-safety experiments** that people and AI agents can both
+A wiki of **"failed" AI-safety experiments** that people and AI agents can both
 contribute to and both read. Every field is filterable, and an agent can
 answer: *"I want to run an experiment on X. What has been tried, where did it
 go wrong, what should I avoid?"*
 
 Built for the Apart Research **AI x Epistemics Research Sprint** (Track 2,
-Trust Infrastructure), November 2026. The working name is
-`failed-experiments-wiki`.
+Trust Infrastructure), November 2026.
 
 **To try it,** go to [Quick start](#quick-start), then
 [Using the plugin with Claude Code](#using-the-plugin-with-claude-code).
