@@ -12,7 +12,7 @@
 checks:
   # ---- First, while the clone is still exactly the repository -----------------------------
   - id: demo-script
-    requirement: D8
+    requirement: demo
     title: The demo script regenerates from its one source
     proves: The narration script is a pure product of demo/scenes.yaml, and the numbers it speaks match the repository.
     commands:
@@ -23,7 +23,7 @@ checks:
 
   # ---- D5: one validator on every path -------------------------------------------------
   - id: validate-all
-    requirement: D5
+    requirement: D7
     title: Every entry passes the validator
     proves: Every entry in the wiki is schema-valid and its quote is found in its post.
     commands:
@@ -33,7 +33,7 @@ checks:
         expect: ["0 error(s)"]
 
   - id: validate-closed-list
-    requirement: D5
+    requirement: D7
     title: A value outside a closed list is refused
     proves: Closed lists are enforced; an invented failure type cannot enter the wiki.
     commands:
@@ -42,7 +42,7 @@ checks:
         expect: ["bad_luck", "failure_type"]
 
   - id: validate-source
-    requirement: D5
+    requirement: D7
     title: An entry without a source link is refused
     proves: Every entry must link the post it describes.
     commands:
@@ -51,7 +51,7 @@ checks:
         expect: ["url"]
 
   - id: validate-quote
-    requirement: D5
+    requirement: D7
     title: A quote that is not in the post, or too long, is refused
     proves: Quotes are checked word for word against the post text, and capped at 15 words.
     commands:
@@ -63,7 +63,7 @@ checks:
         expect: ["quote_length"]
 
   - id: validate-required-and-types
-    requirement: D5
+    requirement: D7
     title: Missing fields and wrong field types are refused
     proves: Required fields must be present and of the right type (the real mistake two agent drafts made during seeding).
     commands:
@@ -75,7 +75,7 @@ checks:
         expect: ["limitations"]
 
   - id: validate-identity
-    requirement: D5
+    requirement: D7
     title: IDs must match file names and be unique
     proves: An entry cannot sit under another entry's ID, and two files cannot share one.
     commands:
@@ -87,7 +87,7 @@ checks:
         expect: ["duplicate_id"]
 
   - id: validate-trust-fields
-    requirement: D5
+    requirement: D7
     title: Trust labels cannot be hollow
     proves: An entry cannot be marked reviewed without a named reviewer, and an agent-written entry must name its model.
     commands:
@@ -100,7 +100,7 @@ checks:
 
   # ---- D1: tools for agents and people, reading ------------------------------------------
   - id: read-search
-    requirement: D1
+    requirement: D5
     title: Search by words and by fields
     proves: The command-line twin of the agent tools finds entries by text and by field filters, and says plainly when nothing matches.
     commands:
@@ -116,7 +116,7 @@ checks:
         reject: ["fe-2026-00"]
 
   - id: read-get-and-facets
-    requirement: D1
+    requirement: D5
     title: Get one entry; list every filterable field
     proves: An agent can read an entry in full and discover which fields and values exist.
     commands:
@@ -137,7 +137,7 @@ checks:
         expect: ["Some negative steganography results"]
 
   - id: mcp-server
-    requirement: D1
+    requirement: D5
     title: The MCP server starts the way the plugin starts it
     proves: The plugin's launcher starts the server over stdio and all six tools answer.
     commands:
@@ -268,7 +268,7 @@ checks:
 
   # ---- D7: evals -------------------------------------------------------------------------
   - id: evals
-    requirement: D7
+    requirement: D8
     title: The eval scores reproduce
     proves: Re-scoring the saved skill outputs against the gold set gives the published numbers, and they are labelled provisional.
     commands:
@@ -302,7 +302,7 @@ checks:
 
   # ---- Maintainer steps ------------------------------------------------------------------
   - id: gold-sync
-    requirement: D7
+    requirement: D8
     title: Verifying a gold entry publishes it as human-reviewed
     proves: When the maintainer marks a gold entry verified, the sync copies it into the wiki as reviewed by a named person; pending ones are left alone.
     commands:
@@ -339,7 +339,7 @@ checks:
         expect: ["0 error(s)"]
 
   - id: demo-numbers-guard
-    requirement: D8
+    requirement: demo
     title: The demo refuses to state numbers that are out of date
     proves: By now this clone holds more entries and a verified reference entry, so the numbers the narration speaks are wrong for it, and the build stops and says which.
     commands:
@@ -348,7 +348,7 @@ checks:
         expect: ["out of date", "entries: the narration assumes"]
 
   - id: test-suite
-    requirement: D5
+    requirement: all
     title: The whole test suite passes, browser tests included
     proves: Unit tests, the page script in a JavaScript engine, and the real-browser end-to-end tests all pass.
     cwd: repo
@@ -362,7 +362,7 @@ checks:
   # The sessions get no built-in tools (no shell, no file edits): only the plugin's own read tools and, for the
   # skill checks, the Skill tool. User settings are not loaded, so the run does not depend on one person's setup.
   - id: plugin-tools-live
-    requirement: D1
+    requirement: D5
     optional: plugin
     title: Claude Code loads the plugin and its tools answer
     proves: A Claude Code session started with the plugin sees all six wiki tools and a live search returns the right entries.
@@ -391,7 +391,7 @@ checks:
         expect: ["failed-experiments-wiki:ask", "failed-experiments-wiki:contribute", "failed-experiments-wiki:review"]
 
   - id: plugin-ask-live
-    requirement: D1
+    requirement: D5
     optional: plugin
     title: The ask skill answers a real question through the plugin
     proves: Asked about a planned experiment, the skill searches the wiki through the plugin's tools and answers from the matching entry, with its trust labels and a not-found section.
@@ -463,7 +463,7 @@ coverage:
   - function: Demo script and video build
     status: recorded
     checks: [demo-script, demo-numbers-guard]
-    evidence: "The script regenerates unchanged, and the build refuses to run once the numbers it speaks are out of date. The two video cuts were built and their frames reviewed separately; they are not rebuilt in this run."
+    evidence: "The script regenerates unchanged, and the build refuses to run once the numbers it speaks are out of date. The demo cuts (full, short, narrated short) were built and their frames reviewed separately; they are not rebuilt in this run."
   - function: Test suite
     status: recorded
     checks: [test-suite]
@@ -481,7 +481,7 @@ coverage:
     evidence: "Not part of this run, so no frame here. Each was run live through the plugin in a first-use trial on 2026-11-15, in a scratch clone with no remote (`reviews/`, DEC-75): the `contribute` skill filed entries on branches and the `review` skill recorded a review. The tools they call are recorded above."
   - function: GitHub (pull requests, the issue-form workflow, the validation Action)
     status: not checkable
-    evidence: "The repository has no remote and nothing may be pushed without the maintainer. The scripts the workflows call are recorded above; the workflow files themselves have never run."
+    evidence: "This script runs in a clone with no remote. The repository was pushed on 2026-11-15 and is public. The validation workflow has run there: its first run failed on a test-suite bug, every run since has passed. No pull request has been opened, and the issue-form workflow has never run."
   - function: Demo voice track
     status: not checkable
-    evidence: "Text-to-speech scratch track; the draft video is captions only."
+    evidence: "Checked by hand 2026-11-16: each demo cut has one audio stream (`ffprobe`). Whether the voice matches the script is not machine-checked."
