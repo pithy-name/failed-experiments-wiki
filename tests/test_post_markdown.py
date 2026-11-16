@@ -66,7 +66,7 @@ def test_a_passage_is_marked_although_emphasis_and_a_footnote_marker_sit_inside_
     markdown, stream = post_markdown.convert(html)
     notes = {"entries": {"fe-2026-0001": {"hypothesis": [{"snippet": "We expected the probe[1] to transfer."}], "result": [{"snippet": "not in the post"}]}}}
     marked, placed, missing = post_markdown.place_marks(markdown, stream, notes, LABELS, show_entry=False)
-    assert marked == "**⟦HYPOTHESIS⟧** We *expected* the probe[^1] to transfer **⟦/⟧**. It did not."
+    assert marked == "***⟦HYPOTHESIS⟧*** We *expected* the probe[^1] to transfer ***⟦/HYPOTHESIS⟧***. It did not."
     assert placed == {("fe-2026-0001", "hypothesis"): 1}
     assert missing == [("fe-2026-0001", "result", "not in the post")]
 
@@ -75,4 +75,4 @@ def test_a_mark_never_splits_emphasis_or_a_footnote_marker():
     html = '<p>Before <strong>bold claim</strong><span class="footnote-reference" data-footnote-index="2"><sup><a>[2]</a></sup></span> after.</p>'
     markdown, stream = post_markdown.convert(html)
     marked, _, _ = post_markdown.place_marks(markdown, stream, {"entries": {"fe-2026-0001": {"result": [{"snippet": "bold claim[2]"}]}}}, LABELS, show_entry=False)
-    assert marked == "Before **⟦RESULT⟧** **bold claim**[^2] **⟦/⟧** after."
+    assert marked == "Before ***⟦RESULT⟧*** **bold claim**[^2] ***⟦/RESULT⟧*** after."
