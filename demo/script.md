@@ -8,7 +8,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 - **On screen** is what the draft video shows for that scene: the real page driven by real clicks, a real file, or real command output.
 - **Update when** flags lines that are true today and will need changing as the project moves.
 - Timings are estimated at 175 words a minute, plus 0.9 s of pause per scene. A built video's measured timings are in `demo/out/timings.json`; the text-to-speech voice runs a little faster than the estimate.
-- Narration length: 1156 words.
+- Narration length: 1150 words.
 
 ## What the draft video is, and is not
 
@@ -128,17 +128,17 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > One validator guards every path. Change a failure type to a value that is not on the list, and it refuses. Change the quote to a sentence the post never said, and it refuses that too, checking against a saved copy of the post. All fifteen real entries pass. It checks form and quotes, not whether a summary is right.
 
-### 13. `s12-human` · 4:36–4:53 (17 s) *(not in the short cut)*
+### 13. `s12-human` · 4:36–4:51 (16 s) *(not in the short cut)*
 
 **On screen:** File `.github/ISSUE_TEMPLATE/new-entry.yml`, lines 1–26
 
 **Narration:**
 
-> People contribute by filling in a form, with no git needed. A script turns the form into an entry marked as written by a person. The form and the script are tested on this machine. There is no GitHub repository yet, so the form has not run there.
+> People contribute by filling in a form, with no git needed. A script turns the form into an entry marked as written by a person. The form and the script are tested on this machine. Nobody has submitted the form on GitHub yet.
 
-**Update when:** Drop the last two sentences, and show the real issue and pull request, once the workflow has run on GitHub.
+**Update when:** Drop the last sentence, and show the real issue and pull request, once the workflow has run on GitHub.
 
-### 14. `s13-review` · 4:53–5:15 (21 s) *(not in the short cut)*
+### 14. `s13-review` · 4:51–5:13 (21 s) *(not in the short cut)*
 
 **On screen:** Terminal, real output of: `git log --date=short --format='%h %ad %s' --grep='Review fe-2026-0007'`; `grep -A10 '^review:' entries/fe-2026-0007.md`
 
@@ -148,7 +148,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 **Update when:** Add your own human review here once it is done, and drop the last sentence.
 
-### 15. `s14-datasette` · 5:15–5:25 (10 s) *(not in the short cut)*
+### 15. `s14-datasette` · 5:13–5:23 (10 s) *(not in the short cut)*
 
 **On screen:** Datasette's own pages in the headless browser, served in process: `/wiki/entries`; `/wiki/entries?failure_type=hypothesis_false`
 
@@ -156,7 +156,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > For people who want a table, SQL and JSON, the same entries load into Datasette. It offers a facet on every field, and one click filters the table.
 
-### 16. `s15-evals` · 5:25–5:57 (32 s) *(not in the short cut)*
+### 16. `s15-evals` · 5:23–5:55 (32 s) *(not in the short cut)*
 
 **On screen:** Terminal, real output of: `cp -R evals/results $TMP/results && python evals/run_evals.py --results $TMP/results`; `grep -E 'Overall field accuracy|^. Field|failure_type|source.url|models.name|.method.|checks_done|hypothesis|claim_scope|limitations' $TMP/results/RESULTS.md | cut -c1-96 | head -10`
 
@@ -166,7 +166,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 **Update when:** Re-run after the gold entries are verified, and say the new numbers. Drop 'provisional' only then.
 
-### 17. `s16-finding` · 5:57–6:25 (29 s)
+### 17. `s16-finding` · 5:55–6:24 (29 s)
 
 **On screen:** Title card: A finding from building it
 
@@ -174,15 +174,15 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Building it produced a finding. A small model labelled two hundred and twelve candidate posts, and judged forty-nine to be genuine write-ups of failed experiments. A stronger model then checked each of those, field by field. Only nine stated enough to fill a structured entry. What the other forty most often left out: what the authors expected, and exactly what they tested. Those are the same two things a reader needs, to avoid reading a failure report as: this never works.
 
-### 18. `s17-close` · 6:25–6:52 (27 s)
+### 18. `s17-close` · 6:24–6:50 (26 s)
 
 **On screen:** Title card: Each experiment can be less wrong than the one before it
 
 **Narration:**
 
-> This is a local proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted. Before it goes public, the authors get asked: they can confirm their entries, or opt out. After that, a public site and a hosted server for agents. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
+> This is a proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted. Before it goes public, the authors get asked: they can confirm their entries, or opt out. After that, a public site and a hosted server for agents. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
 
-**Total: 6:52** (413 s). **Short cut: 4:59** (300 s).
+**Total: 6:50** (410 s). **Short cut: 4:59** (299 s).
 
 ## Numbers the narration states
 
@@ -201,7 +201,7 @@ The build checks these against the repository and stops if one is out of date.
 | agent_written | 15 |
 | reviewed | 1 |
 | reviewed_by_a_person | 0 |
-| has_github_remote | False |
+| has_github_remote | True |
 
 ## The live-recording variant
 
