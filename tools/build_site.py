@@ -97,7 +97,8 @@ def embed_json(payload: dict) -> str:
 
 def build_payload(entries: list[wikilib.Entry], repo_url: str | None) -> dict:
     return {
-        "built": dt.date.today().isoformat(),
+        # Not today's date: the page is committed, and must come out the same on any machine and any day.
+        "built": max((str((entry.data.get("dates") or {}).get("updated", "")) for entry in entries), default=""),
         "repo_url": repo_url,
         "groups": GROUPS,
         "fields": field_catalogue(),
@@ -157,7 +158,7 @@ def render(payload: dict) -> str:
   </main>
 </div>
 <footer class="site">
-  <p>{count} entries. Built {html.escape(payload["built"])} by <code>tools/build_site.py</code>. {remote_note}</p>
+  <p>{count} entries, last changed {html.escape(payload["built"])}. Built by <code>tools/build_site.py</code>. {remote_note}</p>
   <p>A filter that matches nothing means nobody has filed an entry, not that an idea is untested.</p>
 </footer>
 <script type="application/json" id="fewiki-data">{embed_json(payload)}</script>
