@@ -342,8 +342,8 @@ def place_marks(markdown: str, stream: list, annotations: dict, labels: dict, sh
     inserts = []
     for (start, end), by_entry in spans.items():
         label = " | ".join(", ".join(dict.fromkeys(names)) + (f" · {short}" if show_entry else "") for short, names in sorted(by_entry.items()))
-        inserts.append((start, 1, f"**⟦{label}⟧** "))
-        inserts.append((end, 0, " **⟦/⟧**"))
+        inserts.append((start, 1, f"***⟦{label}⟧*** "))
+        inserts.append((end, 0, f" ***⟦/{label}⟧***"))
     for position, _, mark in sorted(inserts, key=lambda item: (-item[0], item[1])):
         markdown = markdown[:position] + mark + markdown[position:]
     return markdown, placed, missing
