@@ -53,6 +53,41 @@ def test_fields_and_entries_that_share_a_passage_share_one_mark():
     assert sum(placed.values()) == 3
 
 
+def test_a_post_with_one_entry_is_marked_without_the_entry_number():
+    marked, _, _ = make_print_pack.annotate(POST, notes(("fe-2026-0001", "hypothesis", "We expected the probe to transfer.")), show_entry=False)
+    assert marked.startswith("**⟦HYPOTHESIS⟧** We expected")
+
+
+HTML = ("<p>Intro words.</p><h2>Setup</h2><ul><li>first point</li><li>second point</li></ul>"
+        "<table><tr><td>Layer</td><td>Score</td></tr><tr><td>L1</td><td>.224</td></tr></table><h3>Detail</h3><p>Closing words.</p>")
+TEXT = "TITLE: T\nAUTHORS: A\n----\nIntro words.\n\nSetup\n\nfirst point\n\nsecond point\n\nLayer\n\nScore\n\nL1\n\n.224\n\nDetail\n\nClosing words."
+
+
+def test_the_posts_own_headings_lists_and_tables_are_printed_as_such():
+    assert make_print_pack.shape_post(TEXT, HTML) == (
+        "Intro words.\n\n### Setup\n\n- first point\n- second point\n\n| Layer | Score |\n|---|---|\n| L1 | .224 |\n\n#### Detail\n\nClosing words.")
+
+
+def test_a_marked_line_is_still_recognised_and_keeps_its_mark():
+    marked, _, _ = make_print_pack.annotate(TEXT, notes(("fe-2026-0001", "result", "second point"), ("fe-2026-0001", "models", ".224")), show_entry=False)
+    shaped = make_print_pack.shape_post(marked, HTML)
+    assert "- **⟦RESULT⟧** second point **⟦/⟧**" in shaped
+    assert "| L1 | **⟦MODELS⟧** .224 **⟦/⟧** |" in shaped
+
+
+def test_shaping_a_post_changes_layout_and_never_words():
+    body = TEXT.split("----\n", 1)[1]
+    assert make_print_pack.post_words(make_print_pack.shape_post(TEXT, HTML)) == make_print_pack.post_words(body)
+    assert make_print_pack.shape_post(TEXT, "") == body                      # nothing known about the post: printed as it was
+
+
+def test_models_print_on_one_line_and_say_what_is_unknown():
+    assert make_print_pack.model_names([
+        {"name": "gpt2-large", "developer": "unknown", "size": "unknown"},
+        {"name": "GPT-3.5-Turbo", "developer": "OpenAI", "version": "unknown", "access": "api"},
+    ]) == "gpt2-large (all else unknown); GPT-3.5-Turbo (developer OpenAI, access api; rest unknown)"
+
+
 def test_hand_wrapped_text_becomes_one_line_per_paragraph_and_list_item():
     wrapped = "A paragraph wrapped\nby hand.\n\n1. A step that\n   runs on.\n   - a nested point\n     that runs on\n\n## Heading\nText under it."
     assert make_print_pack.reflow(wrapped) == (
