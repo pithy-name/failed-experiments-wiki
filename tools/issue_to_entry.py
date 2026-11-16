@@ -24,6 +24,9 @@ import wikilib  # noqa: E402
 
 NO_RESPONSE = {"_no response_", "none", ""}
 
+# GitHub reserves "None" as a dropdown option, so the form says "no hazard" for the schema's "none".
+INFO_HAZARD_FROM_FORM = {"no hazard": "none"}
+
 # Form label -> key used below. Labels must match .github/ISSUE_TEMPLATE/new-entry.yml.
 LABELS = {
     "Entry title": "title",
@@ -156,7 +159,7 @@ def entry_from_fields(fields: dict[str, str]) -> tuple[dict, str]:
         "retry_welcome": get("retry_welcome").strip().lower() == "yes",
         "evidence_level": get("evidence_level"),
         "source": source,
-        "info_hazard": get("info_hazard") or "none",
+        "info_hazard": INFO_HAZARD_FROM_FORM.get(get("info_hazard"), get("info_hazard")) or "none",
     }
     for key in ("limitations", "revival_conditions"):
         if get(key):
