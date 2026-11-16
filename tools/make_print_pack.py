@@ -41,13 +41,13 @@ LABEL = dict(FIELD_LABELS)
 GUIDE = """## How to review one entry, step by step
 
 You need a pen. Each post below comes with the entries drawn from it, and then the post's own text with the
-passage behind each field marked where it sits, like this: **⟦HYPOTHESIS · 0001⟧** …the passage… **⟦/⟧**.
-The number is the last four digits of the entry ID, so a post with several entries shows which entry a mark belongs to.
+passage behind each field marked where it sits, like this: **⟦HYPOTHESIS⟧** …the passage… **⟦/⟧**.
+When a post has several entries, the mark also says which one: **⟦HYPOTHESIS · 0010⟧** is entry fe-2026-0010.
 
 1. **Read the post's text first, start to finish,** without looking at the entry. Ignore the marks on this pass.
    Ask yourself: what did they try, what did they expect, what happened, and how sure are they?
-2. **Read the entry's table.** For each row, find its mark in the post text and read the sentence around it.
-3. **Tick or cross each row.** A row is right when the post says it. It is wrong when the post says something
+2. **Read the entry's checklist.** For each field, find its mark in the post text and read the sentence around it.
+3. **Tick or cross each box.** A field is right when the post says it. It is wrong when the post says something
    else, says less (the entry overreaches), or does not say it at all.
 4. **Check these harder, in this order:**
    1. **Quote:** is it in the post word for word, 15 words or fewer, and does it state the negative result?
@@ -62,9 +62,9 @@ The number is the last four digits of the entry ID, so a post with several entri
 5. **Read the box "Flagged before you start".** A model listed there every claim it could not find in the post.
    Each one is either a real error in the entry or a passage the model missed; you decide which.
 6. **Decide:**
-   - every row ticked: **reviewed**;
-   - any row crossed: **contested**, and write which field and what the post says instead;
-   - write the corrected value beside the row if you want the entry fixed.
+   - every box ticked: **reviewed**;
+   - any box crossed: **contested**, and write which field and what the post says instead;
+   - write the corrected value in the margin if you want the entry fixed.
 7. **Record it** (or hand the marked-up pages back and it will be recorded for you):
    - a reference ("gold") entry, IDs 0001 to 0005: correct `evals/gold/<id>.md`, set `gold_status: verified`,
      then `make sync-gold HANDLE=<your handle>`;
@@ -195,7 +195,7 @@ def entry_rows(data: dict) -> list[tuple[str, str, str]]:
     return [(name, cell(value), key) for name, value, key in rows if value not in (None, "", [])]
 
 
-def annotate(text: str, annotations: dict) -> tuple[str, dict, list]:
+def annotate(text: str, annotations: dict, show_entry: bool = True) -> tuple[str, dict, list]:
     """The post text with a mark around every passage found by exact search.
 
     Returns the marked text, how many passages were placed per (entry, field), and the passages not found.
@@ -215,12 +215,112 @@ def annotate(text: str, annotations: dict) -> tuple[str, dict, list]:
                 placed[(entry_id, field)] = placed.get((entry_id, field), 0) + 1
     inserts = []
     for (start, end), by_entry in spans.items():
-        label = " | ".join(f"{', '.join(dict.fromkeys(names))} · {short}" for short, names in sorted(by_entry.items()))
+        label = " | ".join(", ".join(dict.fromkeys(names)) + (f" · {short}" if show_entry else "") for short, names in sorted(by_entry.items()))
         inserts.append((start, 1, f"**⟦{label}⟧** "))
         inserts.append((end, 0, " **⟦/⟧**"))
     for position, _, mark in sorted(inserts, key=lambda item: (-item[0], item[1])):
         text = text[:position] + mark + text[position:]
     return text, placed, missing
+
+
+_MARK = re.compile(r"\*\*⟦[^⟧/][^⟧]*⟧\*\* ?| ?\*\*⟦/⟧\*\*")
+
+
+def post_structure(html: str) -> tuple[list, set, list]:
+    """The post's headings, one-line list items and tables, spelled as its plain text spells them."""
+    def plain(fragment):
+        return lw.html_to_text(fragment)
+
+    def one_line(value):
+        return bool(value) and "\n" not in value
+
+    headings = [(int(level), plain(inner)) for level, inner in re.findall(r"<h([1-6])[^>]*>(.*?)</h\1>", html or "", flags=re.S)]
+    items = {plain(inner) for inner in re.findall(r"<li[^>]*>(.*?)</li>", html or "", flags=re.S)}
+    tables = []
+    for table in re.findall(r"<table.*?</table>", html or "", flags=re.S):
+        rows = [[plain(inner) for inner in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, flags=re.S)] for row in re.findall(r"<tr.*?</tr>", table, flags=re.S)]
+        rows = [row for row in rows if row]
+        if rows and all(one_line(value) for row in rows for value in row):      # an empty or many-line cell: leave the table as text
+            tables.append(rows)
+    return [(level, value) for level, value in headings if one_line(value)], {value for value in items if one_line(value)}, tables
+
+
+def shape_post(marked: str, html: str) -> str:
+    """The marked plain text as Markdown with the post's own headings, lists and tables, so it prints compactly.
+
+    Only layout changes: a line that is a heading, a list item or a table cell in the post's HTML is printed as one.
+    Anything that cannot be matched exactly is left as a paragraph. The words are never changed.
+    """
+    headings, items, tables = post_structure(html)
+    top = min((level for level, _ in headings), default=1)
+    lines = marked.split("\n")
+    if "----" in lines[:12]:                                   # the cache's own header repeats what is printed above the entries
+        cut = lines.index("----")
+        if not any("⟦" in line for line in lines[:cut]):
+            lines = lines[cut + 1:]
+    blocks = [line.strip() for line in lines if line.strip()]
+    raw = [_MARK.sub("", block).strip() for block in blocks]
+    out, index, next_heading = [], 0, 0
+    while index < len(blocks):
+        table = next((rows for rows in tables if raw[index:index + sum(map(len, rows))] == [value for row in rows for value in row]), None)
+        if table:
+            width, cursor, rendered = max(map(len, table)), index, []
+            for number, row in enumerate(table):
+                cells = [blocks[cursor + offset].replace("|", "\\|") for offset in range(len(row))] + [""] * (width - len(row))
+                cursor += len(row)
+                rendered.append("| " + " | ".join(cells) + " |")
+                if number == 0:
+                    rendered.append("|" + "---|" * width)
+            out.append(("table", "\n".join(rendered)))
+            tables.remove(table)
+            index = cursor
+            continue
+        ahead = next((offset for offset in range(3) if next_heading + offset < len(headings) and headings[next_heading + offset][1] == raw[index]), None)
+        if ahead is not None:
+            level = headings[next_heading + ahead][0]
+            next_heading += ahead + 1
+            out.append(("heading", "#" * min(6, 3 + level - top) + " " + blocks[index]))
+        elif raw[index] in items:
+            out.append(("item", "- " + blocks[index]))
+        else:
+            out.append(("text", blocks[index]))
+        index += 1
+    text = ""
+    for position, (kind, block) in enumerate(out):
+        joiner = "" if position == 0 else ("\n" if kind == "item" and out[position - 1][0] == "item" else "\n\n")
+        text += joiner + block
+    plain = "\n".join(lines).strip()
+    return text if post_words(text) == post_words(plain) else plain          # layout only: if a word moved or went missing, print it unshaped
+
+
+def post_words(text: str) -> list[str]:
+    """The words of a printed post, without the marks and the layout characters around them."""
+    return re.findall(r"\w+", re.sub(r"\*\*⟦[^⟧]*⟧\*\*", " ", text))
+
+
+def model_names(models) -> str:
+    """Models on one line: the name, what the entry states about it, and a note when the rest is unknown."""
+    parts = []
+    for model in models or []:
+        known = [f"{key} {value}" for key, value in model.items() if key != "name" and value not in (None, "", "unknown")]
+        unknown = any(value == "unknown" for key, value in model.items() if key != "name")
+        detail = "; ".join(filter(None, [", ".join(known), "rest unknown" if unknown and known else ("all else unknown" if unknown else "")]))
+        parts.append(str(model.get("name")) + (f" ({detail})" if detail else ""))
+    return "; ".join(parts)
+
+
+def entry_checklist(entry, placed: dict) -> list[str]:
+    """One entry as tick boxes: long fields one per line, short ones together, so it prints in a fraction of a table's space."""
+    long_rows, short_rows = [], []
+    for name, value, key in entry_rows(entry.data):
+        if name == "models":
+            value = cell(model_names(entry.data.get("models")))
+        unmarked = " *(no mark in the post)*" if key and not placed.get((entry.id, key)) else ""
+        if len(value) > 70:
+            long_rows.append(f"- ☐ **{name}:** {value}{unmarked}")
+        else:
+            short_rows.append(f"☐ **{name}:** {value}{unmarked}")
+    return long_rows + ["", " · ".join(short_rows)]
 
 
 def post_section(number: int, post_id: str, entries: list, audit: dict | None) -> tuple[str, dict]:
@@ -243,26 +343,25 @@ def post_section(number: int, post_id: str, entries: list, audit: dict | None) -
         lines += ["", "> The post text is not in the local cache, so this post could not be printed. Run "
                       f"`.venv/bin/python tools/cli.py fetch-source {first['url']} --save` and rebuild."]
         return "\n".join(lines), stats
-    marked, placed, missing = annotate(text_path.read_text(encoding="utf-8"), annotations)
+    marked, placed, missing = annotate(text_path.read_text(encoding="utf-8"), annotations, show_entry=len(entries) > 1)
     stats["placed"], stats["missing"] = sum(placed.values()), len(missing)
+    cached = load_json(REPO / ".cache" / "lw" / "posts" / f"{post_id}.json", {})
+    html = ((cached.get("contents") or {}).get("html") if isinstance(cached, dict) else "") or ""
+    lines += ["", "## Entries"]
 
     for entry in entries:
         data = entry.data
         who = data.get("contributor") or {}
         review = data.get("review") or {}
-        lines += ["", f"## Entry {entry.id}", "",
+        lines += ["", f"### Entry {entry.id}", "",
                   f"Written by: {who.get('type')}" + (f" ({who.get('agent_model')}, {who.get('tool')})" if who.get("agent_model") else "")
-                  + f" · Review status: {review.get('status')}" + (f" · {who['note']}" if who.get("note") else ""), "",
-                  "| Field | The entry says | Marks in the post | Right? | Your correction |", "|---|---|---|---|---|"]
-        for name, value, key in entry_rows(data):
-            count = placed.get((entry.id, key), 0) if key else None
-            marks = "" if count is None else (f"{count} × ⟦{LABEL[key]} · {entry.id[-4:]}⟧" if count else "none placed")
-            lines.append(f"| `{name}` | {value} | {marks} | ☐ yes ☐ no | |")
+                  + f" · Review status: {review.get('status')}" + (f" · {who['note']}" if who.get("note") else ""), ""]
+        lines += entry_checklist(entry, placed)
         if entry.body:
-            lines += ["", "**The entry's notes (its free text):** " + " ".join(entry.body.split())]
+            lines += ["", "☐ **The entry's notes (its free text):** " + " ".join(entry.body.split())]
         flagged = (annotations.get("not_in_post") or {}).get(entry.id) or {}
         stats["flagged"] += len(flagged)
-        lines += ["", "**Flagged before you start** (claims a model could not find in the post; each is an error in the entry or a passage it missed):", ""]
+        lines += ["", "**Flagged before you start** (a model could not find these in the post; each is an error in the entry or a passage it missed):", ""]
         lines += [f"- ☐ `{field}`: {' '.join(str(reason).split())}" for field, reason in flagged.items()] or ["- Nothing flagged."]
         lines += ["", "**Decision:** ☐ reviewed ☐ contested (fields: ______________________) &nbsp; **Date:** __________"]
     if missing:
@@ -270,7 +369,7 @@ def post_section(number: int, post_id: str, entries: list, audit: dict | None) -
                       + "; ".join(sorted({f"{entry_id[-4:]} {field}" for entry_id, field, _ in missing})) + ".*"]
     if not annotations:
         lines += ["", "*No marks: the passages for this post have not been located yet.*"]
-    lines += ["", f"## The post's text, marked ({first['title']})", "", marked.strip()]
+    lines += ["", "## The post's text, marked", "", shape_post(marked, html)]
     return "\n".join(lines), stats
 
 
@@ -285,15 +384,16 @@ def review_pack() -> str:
            "Printed for the maintainer's own review. It holds full post texts, so it stays out of the repository.", "",
            "**What is in here:** how to review an entry; the list of posts behind the wiki; then each post with its entries "
            "and its marked text; then the posts that were judged genuine failure write-ups and left out, with the reason.", "",
-           reflow(GUIDE), "", "## The posts behind the wiki", "",
-           "| # | Post | Authors | Date posted | Entries | Meets your rule? | Link |", "|---|---|---|---|---|---|---|"]
+           "**What to print:** this file is everything in one. The same posts are in `posts/`, one per file: print 01 to 05 "
+           "to verify the reference entries, and 08 for the single human review. Nothing in `annotations/` is for printing.", "",
+           reflow(GUIDE), "", "## The posts behind the wiki", ""]
     sections, totals = [], {"placed": 0, "missing": 0, "flagged": 0}
     for number, (post_id, group) in enumerate(by_post.items(), start=1):
         source = group[0].data["source"]
         unsupported = (audits.get(post_id) or {}).get("unsupported_fields")
-        rule = "not audited" if post_id not in audits else ("yes" if not unsupported else "**no**: lacks " + ", ".join(unsupported))
-        out.append(f"| {number} | {cell(source['title'])} | {cell(source['authors'])} | {source['published']} | "
-                   f"{', '.join(entry.id[-4:] for entry in group)} | {rule} | {source['url']} |")
+        rule = "not audited" if post_id not in audits else ("meets your rule" if not unsupported else "**does not meet your rule**: lacks " + ", ".join(unsupported))
+        out.append(f"{number}. **{cell(source['title'])}.** {cell(source['authors'])}, posted {source['published']}. "
+                   f"Entries {', '.join(entry.id[-4:] for entry in group)}; {rule}. {source['url']}")
         section, stats = post_section(number, post_id, group, audits.get(post_id))
         sections.append(section)
         # the same section as its own file, so one post can be printed at a time
@@ -312,10 +412,10 @@ def review_pack() -> str:
             "A small model judged each of these a genuine write-up of a failed experiment. A stronger model then checked "
             "whether the post itself states every required field, and found it does not. They are not in the wiki. "
             "If the rule is relaxed (for example, by letting an entry say \"the post states no expectation\"), these are the candidates.", "",
-            "| Post | The post does not state | Link |", "|---|---|---|"]
+            ]
     for row in sorted(left_out, key=lambda item: (len(item.get("unsupported_fields") or []), item["title"])):
-        out.append(f"| {cell(row['title'])} | {', '.join(row.get('unsupported_fields') or []) or 'see the audit notes'} | "
-                   f"https://www.lesswrong.com/posts/{row['post_id']} |")
+        out.append(f"- **{cell(row['title'])}.** Does not state: {', '.join(row.get('unsupported_fields') or []) or 'see the audit notes'}. "
+                   f"https://www.lesswrong.com/posts/{row['post_id']}")
     return "\n".join(out) + "\n"
 
 
