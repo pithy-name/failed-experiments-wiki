@@ -81,6 +81,18 @@ def test_shaping_a_post_changes_layout_and_never_words():
     assert make_print_pack.shape_post(TEXT, "") == body                      # nothing known about the post: printed as it was
 
 
+def test_a_table_with_an_empty_corner_cell_is_still_a_table():
+    html = "<table><tr><td></td><td>Train</td><td>Test</td></tr><tr><td>GemmaScope</td><td>0.1</td><td>0.2</td></tr></table>"
+    assert make_print_pack.shape_post("Before.\n\nTrain\n\nTest\n\nGemmaScope\n\n0.1\n\n0.2\n\nAfter.", html) == (
+        "Before.\n\n|  | Train | Test |\n|---|---|---|\n| GemmaScope | 0.1 | 0.2 |\n\nAfter.")
+
+
+def test_a_code_block_prints_as_one_block():
+    html = "<p>The format:</p><pre><code>&lt;start&gt;user\n\n[prompt]\n&lt;end&gt;</code></pre><p>After.</p>"
+    assert make_print_pack.shape_post("The format:\n\n<start>user\n\n[prompt]\n\n<end>\n\nAfter.", html) == (
+        "The format:\n\n```\n<start>user\n[prompt]\n<end>\n```\n\nAfter.")
+
+
 def test_models_print_on_one_line_and_say_what_is_unknown():
     assert make_print_pack.model_names([
         {"name": "gpt2-large", "developer": "unknown", "size": "unknown"},
