@@ -97,8 +97,8 @@ body:
   - type: dropdown
     id: confidence_true_negative
     attributes:
-      label: Confidence this is a true negative
-      description: How sure are you that the idea, as scoped, really does not work?
+      label: Strength of evidence
+      description: "How strong is the evidence for this result, as scoped? This applies to null and neutral results as well as negative ones. low: one run, underpowered, or a possible bug. medium: adequate power, one setup. high: controls, several setups, or replicated."
       options: [low, medium, high]
     validations:
       required: true
