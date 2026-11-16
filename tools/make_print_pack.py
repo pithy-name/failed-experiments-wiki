@@ -42,8 +42,8 @@ LABEL = dict(FIELD_LABELS)
 GUIDE = """## How to review one entry, step by step
 
 You need a pen. Each post below comes with the entries drawn from it, and then the post's own text with the
-passage behind each field marked where it sits, like this: **⟦HYPOTHESIS⟧** …the passage… **⟦/⟧**.
-When a post has several entries, the mark also says which one: **⟦HYPOTHESIS · 0010⟧** is entry fe-2026-0010.
+passage behind each field marked where it sits, like this: ***⟦HYPOTHESIS⟧*** …the passage… ***⟦/HYPOTHESIS⟧***.
+When a post has several entries, the mark also says which one: ***⟦HYPOTHESIS · 0010⟧*** is entry fe-2026-0010.
 
 1. **Read the post's text first, start to finish,** without looking at the entry. Ignore the marks on this pass.
    Ask yourself: what did they try, what did they expect, what happened, and how sure are they?
@@ -218,14 +218,14 @@ def annotate(text: str, annotations: dict, show_entry: bool = True) -> tuple[str
     inserts = []
     for (start, end), by_entry in spans.items():
         label = " | ".join(", ".join(dict.fromkeys(names)) + (f" · {short}" if show_entry else "") for short, names in sorted(by_entry.items()))
-        inserts.append((start, 1, f"**⟦{label}⟧** "))
-        inserts.append((end, 0, " **⟦/⟧**"))
+        inserts.append((start, 1, f"***⟦{label}⟧*** "))
+        inserts.append((end, 0, f" ***⟦/{label}⟧***"))
     for position, _, mark in sorted(inserts, key=lambda item: (-item[0], item[1])):
         text = text[:position] + mark + text[position:]
     return text, placed, missing
 
 
-_MARK = re.compile(r"\*\*⟦[^⟧/][^⟧]*⟧\*\* ?| ?\*\*⟦/⟧\*\*")
+_MARK = re.compile(r"\*\*\*⟦[^⟧/][^⟧]*⟧\*\*\* ?| ?\*\*\*⟦/[^⟧]*⟧\*\*\*")
 
 
 def post_structure(html: str) -> tuple[list, set, list, list]:
@@ -308,7 +308,7 @@ def shape_post(marked: str, html: str) -> str:
 
 def post_words(text: str) -> list[str]:
     """The words of a printed post, without the marks and the layout characters around them."""
-    return re.findall(r"\w+", re.sub(r"\*\*⟦[^⟧]*⟧\*\*", " ", text))
+    return re.findall(r"\w+", re.sub(r"\*\*\*⟦[^⟧]*⟧\*\*\*", " ", text))
 
 
 def model_names(models) -> str:
@@ -334,6 +334,21 @@ def entry_checklist(entry, placed: dict) -> list[str]:
         else:
             short_rows.append(f"☐ **{name}:** {value}{unmarked}")
     return long_rows + ["", " · ".join(short_rows)]
+
+
+def footnotes_with_the_post(body: str) -> str:
+    """Footnotes as plain numbered text under the post. A Markdown viewer moves real footnotes to the end of the whole file,
+    which in a pack of ten posts is a hundred pages from where they are cited."""
+    lines, seen = [], False
+    for line in body.split("\n"):
+        definition = re.match(r"^\[\^(\d+)\]: (.*)$", line)
+        if definition:
+            if not seen:
+                lines += ["#### Footnotes", ""]
+                seen = True
+            line = f"{definition.group(1)}. {definition.group(2)}"
+        lines.append(line)
+    return re.sub(r"\[\^(\d+)\]", r"<sup>[\1]</sup>", "\n".join(lines))
 
 
 def post_section(number: int, post_id: str, entries: list, audit: dict | None) -> tuple[str, dict]:
@@ -390,7 +405,7 @@ def post_section(number: int, post_id: str, entries: list, audit: dict | None) -
                       + "; ".join(sorted({f"{entry_id[-4:]} {field}" for entry_id, field, _ in missing})) + ".*"]
     if not annotations:
         lines += ["", "*No marks: the passages for this post have not been located yet.*"]
-    lines += ["", "## The post's text, marked", "", body]
+    lines += ["", "## The post's text, marked", "", footnotes_with_the_post(body)]
     return "\n".join(lines), stats
 
 
@@ -405,8 +420,7 @@ def review_pack() -> str:
            "Printed for the maintainer's own review. It holds full post texts, so it stays out of the repository.", "",
            "**What is in here:** how to review an entry; the list of posts behind the wiki; then each post with its entries "
            "and its marked text; then the posts that were judged genuine failure write-ups and left out, with the reason.", "",
-           "**What to print:** this file is everything in one. The same posts are in `posts/`, one per file: print 01 to 05 "
-           "to verify the reference entries, and 08 for the single human review. Nothing in `annotations/` is for printing.", "",
+           "**Print this file.** Posts 1 to 5 carry the reference entries to verify; post 8 is the shortest, for the single human review.", "",
            reflow(GUIDE), "", "## The posts behind the wiki", ""]
     sections, totals = [], {"placed": 0, "missing": 0, "flagged": 0}
     for number, (post_id, group) in enumerate(by_post.items(), start=1):
@@ -420,10 +434,10 @@ def review_pack() -> str:
         # the same section as its own file, so one post can be printed at a time
         (OUT / "posts").mkdir(parents=True, exist_ok=True)
         (OUT / "posts" / f"post-{number:02d}-{'-'.join(entry.id[-4:] for entry in group)}.md").write_text(
-            section.replace("\n\n---\n\n", "", 1).lstrip() + "\n", encoding="utf-8")
+            compact(section.replace("\n\n---\n\n", "", 1).lstrip()) + "\n", encoding="utf-8")
         for key in totals:
             totals[key] += stats[key]
-    (OUT / "posts" / "post-00-how-to-review.md").write_text("# How to review an entry\n\n" + "\n".join(out[8:]) + "\n", encoding="utf-8")    # the guide and the list, to print once
+    (OUT / "posts" / "post-00-how-to-review.md").write_text(compact("# How to review an entry\n\n" + "\n".join(out[8:])) + "\n", encoding="utf-8")    # the guide and the list, to print once
     out += ["", f"Marks placed across all posts: {totals['placed']}. Proposed passages not found and dropped: {totals['missing']}. "
                 f"Claims flagged as not found in a post: {totals['flagged']}."]
     out += sections
@@ -518,12 +532,30 @@ def tools_markdown() -> str:
     return "\n".join(lines) + "\n"
 
 
+def compact(text: str) -> str:
+    """Only the blank lines Markdown needs: one between paragraphs and blocks, one before a --- rule (without it the line
+    above would become a heading), none after a heading or a rule, and never two in a row. Code blocks are left alone."""
+    out, fenced = [], False
+    for line in text.strip("\n").split("\n"):
+        if line.strip().startswith("```"):
+            fenced = not fenced
+        if not fenced and not line.strip():
+            if not out or not out[-1].strip() or out[-1].startswith("#") or out[-1].strip() == "---":
+                continue                                           # a second blank, or one after a heading or a rule
+            out.append("")
+            continue
+        if not fenced and line.startswith("#") and out and not out[-1].strip():
+            out.pop()                                              # no blank before a heading
+        out.append(line)
+    return "\n".join(out).rstrip("\n")
+
+
 def main() -> int:
     OUT.mkdir(exist_ok=True)
     outputs = {
-        OUT / "1-human-review-pack.md": review_pack(),
-        OUT / "2-schema.md": schema_markdown(),
-        OUT / "3-skills-and-tools.md": tools_markdown(),
+        OUT / "1-human-review-pack.md": compact(review_pack()) + "\n",
+        OUT / "2-schema.md": compact(schema_markdown()) + "\n",
+        OUT / "3-skills-and-tools.md": compact(tools_markdown()) + "\n",
         REPO / "schema" / "SCHEMA.md": schema_markdown(),
     }
     for path, text in outputs.items():
