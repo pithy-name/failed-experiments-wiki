@@ -9,14 +9,14 @@ by ID. A finished task stays in the table, marked DONE, so the record is kept.
 | ID | Task | Time | Status |
 |---|---|---|---|
 | T1 | Load the commit history | 1 min | **DONE** 2026-11-14 |
-| T11 | Confirm or undo two changes made for you overnight | 3 min | open |
+| T11 | Confirm or undo two changes made for you overnight | 3 min | (b) the handle: **confirmed by you** 2026-11-15. (a) the reference entries' label: open |
 | T2 | Set your GitHub handle | 1 min | **DONE** 2026-11-15 (set to your `gh` login; see T11) |
 | T3 | Decide on the exception post | 2 min | open |
-| T4 | Do the human review (D3) | 5 min | open |
+| T4 | Do the human review (D3) | 5 min | open. Printable: `_print/posts/post-08-0008.md` (`make print-pack`) |
 | T5 | Look at both browse UIs and pick one | 5 min | open |
-| T9 | Review the demo script and the two cuts of the video | 10 min + your edits | open (both built, voiced, rewritten after a cold review) |
-| T6 | Put it on GitHub | 10–20 min | open |
-| T7 | Verify the 5 gold entries | 45–60 min | open |
+| T9 | Review the demo script and the two cuts of the video | 10 min + your edits | short cut **watched by you** 2026-11-15; script edits still open |
+| T6 | Put it on GitHub | 10–20 min | step 1 **DONE by you** 2026-11-15 (private repository). Open: watch the validation Action pass (its first run failed on a test-suite bug, since fixed), then steps 3 to 6 |
+| T7 | Verify the 5 gold entries | 45–60 min | open. Printable, with each field's passage marked in the post: `_print/posts/post-01` to `post-05` |
 | T8 | Load the plugin once | 5 min | **DONE** 2026-11-15, headless (an interactive try is optional) |
 | T10 | Choose a licence | 5 min | open |
 
