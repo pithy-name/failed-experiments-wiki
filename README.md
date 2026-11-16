@@ -1,4 +1,4 @@
-# Carpe Ingot: a Wiki of Negative Experiment Results (proof of concept)
+# Carpe Ignota: a Wiki of Negative Experiment Results (proof of concept)
 
 A wiki of **"failed" AI-safety experiments** that people and AI agents can both
 contribute to and both read. Every field is filterable, and an agent can
