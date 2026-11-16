@@ -269,6 +269,7 @@ def command_env(work: Path, clone: Path, fix: Path, ids: dict) -> dict:
         "FEWIKI_CACHE": str(REPO / ".cache" / "lw"),              # post texts already fetched; the clone has none
         "FEWIKI_PYTHON": str(PY),
         "FEWIKI_HANDLE": "verification-run",
+        "FEWIKI_DEMO_REMOTE_URL": wikilib.remote_url(REPO) or "",    # the clone has no remote; the narration describes the real repository
         "ISSUE_AUTHOR": "verification-run", "ISSUE_NUMBER": "1",
         "DAY": dt.date.today().strftime("%Y%m%d"),
         "PLAYWRIGHT_BROWSERS_PATH": os.environ.get("PLAYWRIGHT_BROWSERS_PATH", ""),
