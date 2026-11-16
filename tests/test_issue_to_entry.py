@@ -162,7 +162,25 @@ def test_template_dropdowns_match_the_schema_closed_lists():
     assert options["failure_type"] == props["failure_type"]["enum"]
     assert options["confidence_true_negative"] == props["confidence_true_negative"]["enum"]
     assert options["evidence_level"] == props["evidence_level"]["enum"]
-    assert options["info_hazard"] == props["info_hazard"]["enum"]
+    form_to_schema = issue_to_entry.INFO_HAZARD_FROM_FORM
+    assert [form_to_schema.get(o, o) for o in options["info_hazard"]] == props["info_hazard"]["enum"]
+
+
+def test_no_dropdown_option_uses_a_word_github_reserves():
+    # GitHub rejects the whole form, silently, if a dropdown option is "None".
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    for item in template["body"]:
+        if item["type"] == "dropdown":
+            assert all(str(o).strip().lower() != "none" for o in item["attributes"]["options"]), item["id"]
+
+
+def test_no_hazard_option_becomes_info_hazard_none(tmp_path):
+    body = ISSUE_BODY.replace("### Info hazard\n\nnone", "### Info hazard\n\nno hazard")
+    assert body != ISSUE_BODY
+    outcome = issue_to_entry.convert(body, "octocat", tmp_path, quote_mode="cached")
+    assert outcome["ok"], outcome
+    data, _ = wikilib.parse_entry_text(outcome["text"])
+    assert data["info_hazard"] == "none"
 
 
 def test_issue_becomes_a_valid_human_entry(tmp_path):
