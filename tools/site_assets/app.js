@@ -249,6 +249,7 @@
     meta.appendChild(metaRow("Confidence it is a true negative", data.confidence_true_negative || ""));
     meta.appendChild(metaRow("Evidence", data.evidence_level || ""));
     meta.appendChild(metaRow("Review", (data.review || {}).status || ""));
+    meta.appendChild(metaRow("Post published", (data.source || {}).published || ""));
     // A contributor note qualifies who wrote the entry (for example a model draft awaiting a person's verification),
     // so the "Written by" line must not be read without it.
     meta.appendChild(metaRow("Written by", ((data.contributor || {}).type || "") + " · " + ((data.contributor || {}).handle || "")
