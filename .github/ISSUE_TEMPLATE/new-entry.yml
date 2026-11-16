@@ -39,14 +39,19 @@ body:
       description: Exactly what was tested (setup, models, data, scale), so the entry cannot be read as "X never works".
     validations:
       required: true
-  - type: input
+  - type: dropdown
     id: method
     attributes:
       label: Method
-      description: "Technique tags, comma-separated."
-      placeholder: "sae, linear-probing"
-    validations:
-      required: true
+      description: "Techniques used. Choose every one that applies; add any that are missing under Other methods."
+      multiple: true
+      options: [activation-statistics, activation-steering, auxk, batchtopk, behavioral-testing, chat-sae-finetuning, circuit-discovery, coefficient-of-variation, counterfactual-prediction, cross-model-training, dense-linear-probing, difference-of-means, direction-ablation, fine-tuning, free-vs-paid-tier-comparison, future-token-prediction, gradient-attribution, held-out-jailbreak-split, iterated-fine-tuning, j-lens, judge-evaluation, jumprelu, k-sparse-probing, linear-probing, llm-as-judge-filtering, logistic-regression, logit-lens, lora, manual-scoring, per-sample-normalization, poor-mans-rl, ppo, privileged-access-test, prompted-sandbagging-model, prompting, random-direction-null, rank-metric, re-implementation, rl, sae, sae-probing, sae-reconstruction-probing, scratchpad-review, sparse-autoencoders, synthetic-activations, topk, training-details-in-system-prompt]
+  - type: input
+    id: method_other
+    attributes:
+      label: Other methods
+      description: "Optional. Techniques not in the list above, comma-separated."
+      placeholder: "custom-probe, reward-modeling"
   - type: textarea
     id: models
     attributes:
