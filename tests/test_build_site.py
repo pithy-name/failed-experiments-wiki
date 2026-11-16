@@ -169,6 +169,21 @@ def test_cli_builds_the_page(site, capsys):
     assert build_site.main(["--entries", str(site["entries"]), "--out", str(out), "--repo-url", "https://example.com/x/y"]) == 2
 
 
+def test_the_page_does_not_depend_on_the_day_it_is_built(tmp_path, monkeypatch):
+    """The first run on GitHub failed because the page carried the build date, and the runner's clock is in UTC."""
+    entries = wikilib.load_entries(REPO_ROOT / "entries")
+    payload = build_site.build_payload(entries, None)
+    assert payload["built"] == max(str((entry.data.get("dates") or {}).get("updated", "")) for entry in entries)
+
+    class Tomorrow(build_site.dt.date):
+        @classmethod
+        def today(cls):
+            return cls(2099, 1, 1)
+
+    monkeypatch.setattr(build_site.dt, "date", Tomorrow)
+    assert build_site.render(build_site.build_payload(entries, None)) == build_site.render(payload)
+
+
 def test_the_tracked_page_is_what_the_builder_makes_now(tmp_path):
     """site/index.html is committed so it opens straight from a checkout; it must not lag behind the entries or the script."""
     fresh = tmp_path / "index.html"
