@@ -40,7 +40,7 @@ facts:
   agent_written: 15          # entries whose contributor is an agent
   reviewed: 1                # entries with review.status reviewed
   reviewed_by_a_person: 0
-  has_github_remote: false
+  has_github_remote: true
 
 scenes:
   - id: s01-title
@@ -221,8 +221,8 @@ scenes:
     narration: >
       People contribute by filling in a form, with no git needed.
       A script turns the form into an entry marked as written by a person.
-      The form and the script are tested on this machine. There is no GitHub repository yet, so the form has not run there.
-    update_when: "Drop the last two sentences, and show the real issue and pull request, once the workflow has run on GitHub."
+      The form and the script are tested on this machine. Nobody has submitted the form on GitHub yet.
+    update_when: "Drop the last sentence, and show the real issue and pull request, once the workflow has run on GitHub."
 
   - id: s13-review
     kind: terminal
@@ -284,12 +284,12 @@ scenes:
     subtitle: "Where this stands, and what comes next"
     bullets:
       - "So far: 15 entries, all written by an agent. One review, by an agent. None by a person."
-      - "A local proof of concept. Not public yet."
+      - "A proof of concept in a private repository. Not public yet."
       - "First: ask the authors. They can confirm their entries, or opt out."
       - "Then: a public site, and a hosted server so agents connect without cloning"
       - "Then: more sources than LessWrong and the Alignment Forum"
     narration: >
-      This is a local proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted.
+      This is a proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted.
       Before it goes public, the authors get asked: they can confirm their entries, or opt out.
       After that, a public site and a hosted server for agents.
       If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
