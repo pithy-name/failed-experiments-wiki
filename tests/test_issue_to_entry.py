@@ -63,7 +63,7 @@ _No response_
 
 hypothesis_false
 
-### Confidence this is a true negative
+### Strength of evidence
 
 low
 
@@ -164,6 +164,16 @@ def test_template_dropdowns_match_the_schema_closed_lists():
     assert options["evidence_level"] == props["evidence_level"]["enum"]
     form_to_schema = issue_to_entry.INFO_HAZARD_FROM_FORM
     assert [form_to_schema.get(o, o) for o in options["info_hazard"]] == props["info_hazard"]["enum"]
+
+
+def test_evidence_question_covers_null_results_and_anchors_each_level():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    field = next(i["attributes"] for i in template["body"] if i.get("id") == "confidence_true_negative")
+    assert field["label"] == "Strength of evidence"
+    text = field["description"].lower()
+    assert "null" in text
+    for level in ("low:", "medium:", "high:"):
+        assert level in text
 
 
 def test_no_dropdown_option_uses_a_word_github_reserves():
