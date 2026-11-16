@@ -15,6 +15,9 @@ demo/out/
 # The page built only to take the report's screenshots
 report/figures/_site/
 
+# Print packs for the maintainer's review. They hold full post texts, which are never committed.
+_print/
+
 # Session-log drafts that could not be written to the central log
 _session-log-update-*.md
 
