@@ -156,7 +156,8 @@ def repo_facts() -> dict:
         "agent_written": sum(1 for entry in entries if (entry.data.get("contributor") or {}).get("type") == "agent"),
         "reviewed": sum(1 for entry in entries if (entry.data.get("review") or {}).get("status") == "reviewed"),
         "reviewed_by_a_person": sum(1 for entry in entries if wikilib.reviewed_by(entry.data) == "a person"),
-        "has_github_remote": bool(build_site.github_web_url(wikilib.remote_url(REPO))),
+        # FEWIKI_DEMO_REMOTE_URL: set by the verification run, whose clone has its remote removed on purpose
+        "has_github_remote": bool(build_site.github_web_url(os.environ.get("FEWIKI_DEMO_REMOTE_URL") or wikilib.remote_url(REPO))),
     }
 
 
