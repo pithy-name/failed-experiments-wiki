@@ -94,3 +94,12 @@ def test_paths_with_the_users_name_are_kept_off_screen(tmp_path):
     shown = build_demo.scrub(f"{REPO_ROOT}/entries/x.md and {tmp_path}/y and {home}/elsewhere", tmp_path)
     assert shown == "./entries/x.md and $TMP/y and ~/elsewhere"
     assert home not in shown
+
+
+def test_a_clone_with_no_remote_can_be_told_which_remote_the_narration_describes(monkeypatch):
+    """The verification run works in a clone with its remote removed; the narration is still about the real repository."""
+    monkeypatch.setattr(build_demo.wikilib, "remote_url", lambda repo: None)
+    monkeypatch.delenv("FEWIKI_DEMO_REMOTE_URL", raising=False)
+    assert build_demo.repo_facts()["has_github_remote"] is False
+    monkeypatch.setenv("FEWIKI_DEMO_REMOTE_URL", "git@github.com:someone/some-wiki.git")
+    assert build_demo.repo_facts()["has_github_remote"] is True
