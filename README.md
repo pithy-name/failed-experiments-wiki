@@ -56,9 +56,13 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `plugin/` | Claude Code plugin: MCP server and the `contribute`, `ask`, `review` skills |
 | `evals/` | Gold entries, eval prompts, the scorer, results |
 | `scouting/` | Candidates, classification labels, yields, field audits, seed selection |
-| `demo/` | Demo narration (`scenes.yaml` → `script.md`) and the builder for the draft video |
+| `demo/` | Demo narration (`scenes.yaml` → `script.md`) and the builder for the demo videos |
 | `.github/` | Issue form and the two workflows |
 | `tests/` | Test suite |
+| `reviews/` | Cold-review records and what was changed (`reviews/README.md`) |
+| `report/` | Report drafts, figures and the report kit |
+| `schema/SCHEMA.md` | The schema as a printable table |
+| `datasette/` | Datasette settings |
 
 ## Quick start
 
@@ -86,8 +90,9 @@ server runs from the `.venv` that `make setup` creates.
 - **How far to trust the negative:** `claim_scope`, `failure_type`,
   `confidence_true_negative` and `retry_welcome` keep a thin failure report
   from reading as "this never works".
-- **What changed and why:** git history. Every submission and every review is
-  its own commit on its own branch.
+- **What changed and why:** git history. Every submission and every review made
+  through the tools is its own commit on its own branch. The five reference
+  entries and later maintainer edits were committed directly to `main`.
 
 Badges are derived, never stored: `agent-written`, `unreviewed`, `contested`,
 `superseded`, `retry-welcome`.
@@ -103,8 +108,9 @@ one it says so and names the local branch. The entry is stored as agent-written
 and unreviewed.
 
 **As a person:** open a "New entry" issue. A workflow turns the form into an
-entry file and a pull request, marked `contributor.type: human`. This needs the
-repository to be on GitHub, which it is not yet; the script the workflow runs
+entry file and a pull request, marked `contributor.type: human`. The repository
+is on GitHub, but this workflow has not run yet: no issue has been filed, and the
+`new-entry` label it needs has not been created. The script the workflow runs
 (`tools/issue_to_entry.py`) is tested locally.
 
 **Reviewing:** the `review` skill, or a person, checks an entry against its
@@ -166,8 +172,8 @@ You do not have to name a skill. Plain requests work:
 **What writing does.** `submit_entry` and `review_entry` never change `main`.
 Each commits to its own branch (`entry/<id>` or `review/<id>-<date>`). With a
 GitHub remote they push that branch and open a pull request with your `gh`
-login. Without a remote, which is the case today, they stop at the local branch
-and print the command that merges it:
+login. Without a remote (a clone with `origin` removed, for example), they stop
+at the local branch and print the command that merges it:
 `.venv/bin/python tools/cli.py merge-local <branch>`.
 
 **Your name goes on what you file.** An entry or review made through the
@@ -218,4 +224,5 @@ through the tools.
 
 This is a proof of concept with 15 entries from 10 posts. Nothing is hosted. The evals
 are a spot-check on 5 posts with one model vendor, not a benchmark. See
-`DONE.md` for what is verified and what is not.
+`VERIFICATION.md` for what was run and `DONE.md` for the status of each
+requirement.

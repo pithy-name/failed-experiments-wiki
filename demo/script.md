@@ -12,11 +12,11 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 ## What the draft video is, and is not
 
-- `demo/out/demo-draft.mp4` (1920×1080), with subtitles in `demo/out/demo-draft.srt`. Build it with `make demo-video`.
+- `demo/out/demo-draft.mp4` (1920×1080), with subtitles in `demo/out/demo-draft.srt`. Build it with `make demo-video`. The short cuts are `demo/out/demo-short.mp4` (`make demo-short`) and `demo/out/demo-short-voice.mp4`, the narrated short cut embedded in the README.
 - A headless browser is driven through the real browse page with real clicks, typing and scrolling. A frame is captured after every step and the frames are joined into a video.
 - It is not a capture of a person's screen. The orange pointer ring and the outline around a field are drawn by the recorder, and motion is step by step, not continuous.
-- The caption bar shows the narration. A voice, when present, is macOS text-to-speech: a scratch track for pacing. Record your own over it (`--no-captions` gives a clean picture), or re-record live with `demo/live-demo-script.md`.
-- It shows no GitHub screens, because the project has no GitHub repository yet. The narration says so in the scenes where a viewer would otherwise assume one (the file scene, the form scene and the close).
+- The caption bar shows the narration, and the cuts carry a voice track. `--no-captions` gives a clean picture if you want to record your own voice, or re-record live with `demo/live-demo-script.md`.
+- It shows no GitHub screens. It was recorded before the repository went public, so the close says "not public yet"; the repository is now public on GitHub. The form scene says the form has not been submitted on GitHub, which is still true.
 - The Claude Code session it shows is a saved transcript of a real headless session with the plugin loaded (`demo/answers/plugin-session.md`), not a live capture. The two `ask` answers on screen are saved files too; each scene's note says where its file came from.
 - Scenes marked *(not in the short cut)* are left out by `--short`, which builds `demo/out/demo-short.mp4` for places that ask for a video of five minutes or less.
 
@@ -118,7 +118,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > Agents also write: the contribute skill reads a post, drafts an entry for each failed experiment, and submits it. Each submission lands on its own branch, and merges only if validation passes. The system, not the agent, writes the trust fields: written by an agent, which model, unreviewed. A draft that claims otherwise is overwritten, and merging is not review.
 
-**Update when:** With a GitHub remote, show the pull request instead of the local branch graph.
+**Update when:** Once a pull request exists for an entry, show it instead of the local branch graph.
 
 ### 12. `s11-validate` · 4:14–4:36 (21 s)
 
@@ -182,7 +182,7 @@ Generated from `demo/scenes.yaml` by `demo/build_demo.py`. Edit the YAML, not th
 
 > This is a proof of concept, not public yet. No person has written or reviewed an entry so far, and no author has been contacted. Before it goes public, the authors get asked: they can confirm their entries, or opt out. After that, a public site and a hosted server for agents. If you remember one thing, make it the aim: each experiment can be less wrong than the one before it. Thank you.
 
-**Total: 6:50** (410 s). **Short cut: 4:59** (299 s).
+**Total: 6:50** (410 s). **Short cut: 4:59** (299 s). Estimates from word counts; measured on 2026-11-16 with `ffprobe`: full 6:34, short 5:03, narrated short 4:53.
 
 ## Numbers the narration states
 
@@ -205,13 +205,13 @@ The build checks these against the repository and stops if one is out of date.
 
 ## The live-recording variant
 
-The plugin loads in Claude Code (checked headless; see `VERIFICATION.md`). Once the repository is also on GitHub, these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):
+The plugin loads in Claude Code (checked headless; see `VERIFICATION.md`). The repository is on GitHub now, so these scenes are better recorded live (`demo/live-demo-script.md` has the shorter script):
 
-| Scene | Record instead |
+| Scene id | Record instead |
 |---|---|
-| 7–9 (ask) | A Claude Code session with the plugin: type the plan from scene 7, show the five-part answer; then the debate question from scene 9. |
-| 10 (contribute) | Same session: "Contribute this post: <a LessWrong URL not yet in the wiki>". Show the pull request it opens, with the badges. |
-| 11 (validate) | The failed check on that pull request, or the same terminal commands. |
-| 12 (human path) | GitHub → Issues → New entry: submit the form, show the pull request the workflow opens. |
-| 13 (review) | Run the human review command live (see `TODO.md`, T4), then `git log --oneline --grep Review`. |
-| 14 (Datasette) | `make datasette`, then the entries table with its facets in a browser. |
+| `s07`–`s09` (ask) | A Claude Code session with the plugin: type the plan from `s07`, show the five-part answer; then the debate question from `s09`. |
+| `s10` (contribute) | Same session: "Contribute this post: <a LessWrong URL not yet in the wiki>". Show the pull request it opens, with the badges. |
+| `s11` (validate) | The failed check on that pull request, or the same terminal commands. |
+| `s12` (human path) | GitHub → Issues → New entry: submit the form, show the pull request the workflow opens. |
+| `s13` (review) | Run the human review command live (see `TODO.md`, T4), then `git log --oneline --grep Review`. |
+| `s14` (Datasette) | `make datasette`, then the entries table with its facets in a browser. |

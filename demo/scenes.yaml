@@ -196,7 +196,7 @@ scenes:
       Each submission lands on its own branch, and merges only if validation passes.
       The system, not the agent, writes the trust fields: written by an agent, which model, unreviewed.
       A draft that claims otherwise is overwritten, and merging is not review.
-    update_when: "With a GitHub remote, show the pull request instead of the local branch graph."
+    update_when: "Once a pull request exists for an entry, show it instead of the local branch graph."
 
   - id: s11-validate
     kind: terminal

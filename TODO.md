@@ -15,7 +15,7 @@ by ID. A finished task stays in the table, marked DONE, so the record is kept.
 | T4 | Do the human review (D3) | 5 min | open. Printable: `_print/posts/post-08-0008.md` (`make print-pack`) |
 | T5 | Look at both browse UIs and pick one | 5 min | open |
 | T9 | Review the demo script and the two cuts of the video | 10 min + your edits | short cut **watched by you** 2026-11-15; script edits still open |
-| T6 | Put it on GitHub | 10–20 min | step 1 **DONE by you** 2026-11-15 (private repository). Open: watch the validation Action pass (its first run failed on a test-suite bug, since fixed), then steps 3 to 6 |
+| T6 | Put it on GitHub | 10–20 min | step 1 **DONE by you** 2026-11-15 (the repository is now public). Step 2 **DONE**: the validation Action's first run failed on a test-suite bug (since fixed); every run since has passed. Open: steps 3 to 6 (no `new-entry` label, no issue filed, no pull request yet) |
 | T7 | Verify the 5 gold entries | 45–60 min | open. Printable, with each field's passage marked in the post: `_print/posts/post-01` to `post-05` |
 | T8 | Load the plugin once | 5 min | **DONE** 2026-11-15, headless (an interactive try is optional) |
 | T10 | Choose a licence | 5 min | open |
@@ -27,7 +27,7 @@ Run every command from the repository root.
 You ran `git init -b main` in this folder at the end of the build session, and
 the rest was then run for you: `git fetch --update-head-ok history.bundle
 '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'` and `git reset`.
-Result: `git status` clean, 51 commits, 12 branches, tag `pre-seed`.
+Result on 2026-11-14: `git status` clean, 51 commits, 12 branches, tag `pre-seed`. (Now: tags `pre-seed` and `poc-0.0.1`; count commits with `git rev-list --count HEAD`.)
 
 The procedure was first tested on a scratch copy with the same partial `.git/`
 directory (DEC-54), then run for real here (DEC-55).
@@ -71,7 +71,9 @@ prediction. Two entries rest on it, `fe-2026-0010` and `fe-2026-0011`, and both
 say plainly that the post poses a question.
 
 - Keep them: nothing to do.
-- Back them out: `git revert -m 1 c20c7d1` then `git revert -m 1 61b12aa`, then
+- Back them out (untested): `git revert -m 1 6fb495c` then `git revert -m 1 e032ad5`. Later
+  commits `cfa27a6` and `61409d9` edit the same two entries, so expect conflicts; if so,
+  `git rm entries/fe-2026-0010.md entries/fe-2026-0011.md` and commit. Then
   `make site`. That leaves 13 entries from 9 posts. The demo opens
   `fe-2026-0010` in scene 5, so `demo/scenes.yaml` would need another entry there.
 
@@ -102,14 +104,15 @@ What is left is your own look, and any browser other than Chromium.
 
 ## T9. Review the demo script and the two cuts of the video
 
-Two videos exist, both 1920×1080 with captions and a text-to-speech scratch voice:
+Three cuts exist, all with captions and a voice track:
 
 | File | Length | For |
 |---|---|---|
-| `demo/out/demo-draft.mp4` | between six and seven minutes | The five-to-seven-minute demo you asked for: every scene |
-| `demo/out/demo-short.mp4` | about four and a half minutes | The sprint form, which suggests three to five minutes. It leaves out the scenes marked *(not in the short cut)* in `demo/script.md` |
+| `demo/out/demo-draft.mp4` | 6:34 | The five-to-seven-minute demo you asked for: every scene |
+| `demo/out/demo-short.mp4` | 5:03 | The sprint form, which suggests three to five minutes. It leaves out the scenes marked *(not in the short cut)* in `demo/script.md` |
+| `demo/out/demo-short-voice.mp4` | 4:53 | The narrated short cut, embedded in the README |
 
-Both were rebuilt on 2026-11-15 after a reviewer who was told nothing about the
+The full cut was rebuilt on 2026-11-15 and the short cuts on 2026-11-16, after a reviewer who was told nothing about the
 project read the frames and the narration (DEC-70). Its record is
 `demo/out/review/human-reader-demo.md`: what it understood, and 22 findings.
 The rewrite answers them; the frames were looked at again afterwards.
@@ -146,13 +149,12 @@ purpose, so it is the same on every machine; a build's measured timings are in
 6. `make site` again, so entry links point to GitHub.
 
 This gives no pull requests for the existing agent entries, because their
-branches are already merged. For a real pull request in the demo, contribute a
-new post (D1). An alternative that has not been tested: push `main` first at
-commit `291c14b` (the last commit before the agent entries), then push the
-`entry/*` branches and open pull requests from them, then push the full `main`.
+branches were merged before the push. The `entry/*` and `review/*` branches are
+on the remote, but no pull request exists for any of them. For a real pull
+request in the demo, contribute a new post (D1).
 
-Before the repository ever goes public: it contains your first name in a field
-value (`pending_maintainer_verification`) and in the decision log.
+The repository is public. Tracked files outside `report/` contain no first
+name; the `report/` drafts carry your by-line.
 
 ## T7. Verify the 5 gold entries
 
@@ -188,7 +190,7 @@ spelled two ways across entries, so a filter on one spelling misses the other.
 Recommendation: `GPT-2 small` and `HarmBench`, changed in both the gold file and
 its entry. Each post spells its own way, so this is a naming rule, not a correction.
 
-After this, update `demo/scenes.yaml` (the `facts`, and scenes 3 and 15).
+After this, update `demo/scenes.yaml` (the `facts`, and the scenes `s03-browse` and `s15-evals`).
 
 ## T8. Load the plugin once — DONE, headless
 
@@ -201,9 +203,9 @@ live search, and ran the `ask` skill on one question. The frames are in
 `claude plugin validate plugin` passes, with warnings for a missing author,
 licence (T10) and icon.
 
-Still open if you want it: an interactive session, and a live run of the
-`contribute` and `review` skills through the plugin (do that in a scratch clone,
-because they write branches).
+Still open if you want it: an interactive session. (A live run of the
+`contribute` and `review` skills through the plugin was done on 2026-11-15, in a
+scratch clone: DEC-75.)
 
 What this task said before (kept for the record): "Try `claude --plugin-dir plugin`
 from the repository root. That flag was not confirmed against the Claude Code
