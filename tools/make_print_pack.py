@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import ast
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -72,10 +73,73 @@ The number is the last four digits of the entry ID, so a post with several entri
 **What the marks are, and are not.** A model placed them after the entries were written, by searching the post
 for the passage each field most plausibly rests on. They are a reading aid, not proof: a mark shows where to
 look, and you judge whether the passage really supports the field. Passages that could not be found by exact
-search were dropped and are counted under each post.
+search were dropped and are counted under each post. When the same words occur more than once in a post, the mark
+sits on the first occurrence, which may not be the one the field rests on (rare: a handful of passages in the whole pack).
 
 **Date posted** is `source.published` in each entry and is shown at the top of each post below.
 """
+
+
+_STARTS_A_BLOCK = re.compile(r"^\s*(?:[-*+] |\d+[.)] |#|\||>|```|---\s*$)")
+
+
+def reflow(markdown: str) -> str:
+    """Join lines that were wrapped by hand, so each paragraph or list item is one line and the printer wraps it.
+
+    Some Markdown viewers print a single line break as a line break, which leaves hand-wrapped text ragged and long.
+    Fenced code, tables, headings and quotes are left as they are.
+    """
+    out, fenced = [], False
+    for line in markdown.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            fenced = not fenced
+            out.append(line)
+            continue
+        previous = out[-1].strip() if out else ""
+        continues = (not fenced and stripped and previous and not _STARTS_A_BLOCK.match(line)
+                     and not previous.startswith(("```", "#", "|", ">")) and previous != "---")
+        if continues:
+            out[-1] = out[-1].rstrip() + " " + stripped
+        else:
+            out.append(line)
+    return "\n".join(out)
+
+
+def front_matter_as_list(text: str) -> str:
+    """A skill file's YAML header as a short list, so it prints as text and not as a rule and a run-on line."""
+    if not text.startswith("---\n") or "\n---" not in text[4:]:
+        return text
+    header, body = text[4:].split("\n---", 1)
+    items = []
+    for line in header.split("\n"):
+        key, colon, value = line.partition(":")
+        if colon and key.strip() and not line.startswith((" ", "\t")):
+            items.append(f"- **{key.strip()}:** {value.strip()}")
+        elif items and line.strip():
+            items[-1] += " " + line.strip()
+    return "\n".join(items) + "\n" + body.lstrip("-")
+
+
+def docstring_as_prose(doc: str) -> str:
+    """A tool's docstring as paragraphs and a list of its arguments, not as a fixed-width block that cannot wrap."""
+    logical: list[str] = []
+    for line in doc.split("\n"):
+        if not line.strip():
+            logical.append("")
+        elif line.startswith((" ", "\t")) and logical and logical[-1]:
+            logical[-1] += " " + line.strip()
+        else:
+            logical.append(line.strip())
+    out = []
+    for line in logical:
+        argument = re.match(r"^(\w+): (.+)$", line)
+        line = line.replace("<", "\\<")
+        if argument:
+            out.append(f"- **{argument.group(1)}:** " + argument.group(2).replace("<", "\\<"))
+        elif line:
+            out += ["", line, ""]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()
 
 
 def load_json(path: Path, default):
@@ -221,7 +285,7 @@ def review_pack() -> str:
            "Printed for the maintainer's own review. It holds full post texts, so it stays out of the repository.", "",
            "**What is in here:** how to review an entry; the list of posts behind the wiki; then each post with its entries "
            "and its marked text; then the posts that were judged genuine failure write-ups and left out, with the reason.", "",
-           GUIDE, "", "## The posts behind the wiki", "",
+           reflow(GUIDE), "", "## The posts behind the wiki", "",
            "| # | Post | Authors | Date posted | Entries | Meets your rule? | Link |", "|---|---|---|---|---|---|---|"]
     sections, totals = [], {"placed": 0, "missing": 0, "flagged": 0}
     for number, (post_id, group) in enumerate(by_post.items(), start=1):
@@ -311,7 +375,7 @@ def schema_markdown() -> str:
 def tools_markdown() -> str:
     server = (REPO / "plugin" / "mcp" / "server.py").read_text(encoding="utf-8")
     lines = ["# The plugin: three skills and six tools", "",
-             "**Skills** are instructions a model follows. They live in `plugin/skills/<name>/SKILL.md` and are printed in full below.",
+             "**Skills** are instructions a model follows. They live in `plugin/skills/<name>/SKILL.md` and are printed in full below.", "",
              "**Tools** are functions the model calls through the plugin's MCP server (a local program, `plugin/mcp/server.py`). "
              "The same six are on the command line as `tools/cli.py`.", "",
              "| Tool | Reads or writes | What it is for |", "|---|---|---|",
@@ -325,10 +389,10 @@ def tools_markdown() -> str:
     for node in ast.parse(server).body:
         if isinstance(node, ast.FunctionDef) and any(isinstance(d, ast.Attribute) and d.attr == "tool" for d in node.decorator_list):
             arguments = ", ".join(argument.arg for argument in node.args.args)
-            lines += [f"### `{node.name}({arguments})`", "", "```", ast.get_docstring(node) or "", "```", ""]
+            lines += [f"### `{node.name}({arguments})`", "", docstring_as_prose(ast.get_docstring(node) or ""), ""]
     for name in ("ask", "contribute", "review"):
         text = (REPO / "plugin" / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
-        lines += ["\n---\n", f"# Skill file: `plugin/skills/{name}/SKILL.md`", "", text.strip(), ""]
+        lines += ["\n---\n", f"# Skill file: `plugin/skills/{name}/SKILL.md`", "", reflow(front_matter_as_list(text)).strip(), ""]
     return "\n".join(lines) + "\n"
 
 
