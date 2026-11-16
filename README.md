@@ -8,9 +8,9 @@ go wrong, what should I avoid?"*
 Built for the Apart Research **AI x Epistemics Research Sprint** (Track 2,
 Trust Infrastructure), November 2026.
 
-**Demo video** (4:45; the narration is a text-to-speech scratch track):
+**Demo video** (4:53):
 
-https://github.com/user-attachments/assets/d006e33d-1caf-4342-8efe-812da87f7551
+https://github.com/user-attachments/assets/1b8c06d5-12a7-4331-a53b-89e936cdb058
 
 **To try it,** go to [Quick start](#quick-start), then
 [Using the plugin with Claude Code](#using-the-plugin-with-claude-code).
