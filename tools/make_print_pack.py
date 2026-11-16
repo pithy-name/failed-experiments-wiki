@@ -26,6 +26,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lw  # noqa: E402
+import post_markdown  # noqa: E402
 import wikilib  # noqa: E402
 
 REPO = wikilib.REPO_ROOT
@@ -72,8 +73,9 @@ When a post has several entries, the mark also says which one: **⟦HYPOTHESIS �
 
 **What the marks are, and are not.** A model placed them after the entries were written, by searching the post
 for the passage each field most plausibly rests on. They are a reading aid, not proof: a mark shows where to
-look, and you judge whether the passage really supports the field. Passages that could not be found by exact
-search were dropped and are counted under each post. When the same words occur more than once in a post, the mark
+look, and you judge whether the passage really supports the field. Passages that could not be found in the post's
+own words were dropped and are counted under each post. The post is printed from its own page: headings, lists,
+footnotes, maths and figures as they are there (figures load from the web when you print). When the same words occur more than once in a post, the mark
 sits on the first occurrence, which may not be the one the field rests on (rare: a handful of passages in the whole pack).
 
 **Date posted** is `source.published` in each entry and is shown at the top of each post below.
@@ -226,8 +228,8 @@ def annotate(text: str, annotations: dict, show_entry: bool = True) -> tuple[str
 _MARK = re.compile(r"\*\*⟦[^⟧/][^⟧]*⟧\*\* ?| ?\*\*⟦/⟧\*\*")
 
 
-def post_structure(html: str) -> tuple[list, set, list]:
-    """The post's headings, one-line list items and tables, spelled as its plain text spells them."""
+def post_structure(html: str) -> tuple[list, set, list, list]:
+    """The post's headings, one-line list items, tables and code blocks, spelled as its plain text spells them."""
     def plain(fragment):
         return lw.html_to_text(fragment)
 
@@ -239,10 +241,12 @@ def post_structure(html: str) -> tuple[list, set, list]:
     tables = []
     for table in re.findall(r"<table.*?</table>", html or "", flags=re.S):
         rows = [[plain(inner) for inner in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, flags=re.S)] for row in re.findall(r"<tr.*?</tr>", table, flags=re.S)]
-        rows = [row for row in rows if row]
-        if rows and all(one_line(value) for row in rows for value in row):      # an empty or many-line cell: leave the table as text
+        rows = [row for row in rows if any(row)]
+        if rows and all("\n" not in value for row in rows for value in row):    # a many-line cell: leave the table as text
             tables.append(rows)
-    return [(level, value) for level, value in headings if one_line(value)], {value for value in items if one_line(value)}, tables
+    code = [[line for line in plain(inner).split("\n") if line.strip()] for inner in re.findall(r"<pre[^>]*>(.*?)</pre>", html or "", flags=re.S)]
+    return ([(level, value) for level, value in headings if one_line(value)], {value for value in items if one_line(value)}, tables,
+            [lines for lines in code if lines])
 
 
 def shape_post(marked: str, html: str) -> str:
@@ -251,7 +255,7 @@ def shape_post(marked: str, html: str) -> str:
     Only layout changes: a line that is a heading, a list item or a table cell in the post's HTML is printed as one.
     Anything that cannot be matched exactly is left as a paragraph. The words are never changed.
     """
-    headings, items, tables = post_structure(html)
+    headings, items, tables, code = post_structure(html)
     top = min((level for level, _ in headings), default=1)
     lines = marked.split("\n")
     if "----" in lines[:12]:                                   # the cache's own header repeats what is printed above the entries
@@ -262,18 +266,27 @@ def shape_post(marked: str, html: str) -> str:
     raw = [_MARK.sub("", block).strip() for block in blocks]
     out, index, next_heading = [], 0, 0
     while index < len(blocks):
-        table = next((rows for rows in tables if raw[index:index + sum(map(len, rows))] == [value for row in rows for value in row]), None)
+        table = next((rows for rows in tables
+                      if raw[index:index + sum(1 for row in rows for value in row if value)] == [value for row in rows for value in row if value]), None)
         if table:
             width, cursor, rendered = max(map(len, table)), index, []
             for number, row in enumerate(table):
-                cells = [blocks[cursor + offset].replace("|", "\\|") for offset in range(len(row))] + [""] * (width - len(row))
-                cursor += len(row)
+                cells = []
+                for value in row + [""] * (width - len(row)):                # an empty cell has no line in the plain text
+                    cells.append(blocks[cursor].replace("|", "\\|") if value else "")
+                    cursor += 1 if value else 0
                 rendered.append("| " + " | ".join(cells) + " |")
                 if number == 0:
                     rendered.append("|" + "---|" * width)
             out.append(("table", "\n".join(rendered)))
             tables.remove(table)
             index = cursor
+            continue
+        block = next((lines for lines in code if raw[index:index + len(lines)] == lines), None)
+        if block:
+            out.append(("code", "```\n" + "\n".join(blocks[index:index + len(block)]) + "\n```"))
+            code.remove(block)
+            index += len(block)
             continue
         ahead = next((offset for offset in range(3) if next_heading + offset < len(headings) and headings[next_heading + offset][1] == raw[index]), None)
         if ahead is not None:
@@ -343,10 +356,18 @@ def post_section(number: int, post_id: str, entries: list, audit: dict | None) -
         lines += ["", "> The post text is not in the local cache, so this post could not be printed. Run "
                       f"`.venv/bin/python tools/cli.py fetch-source {first['url']} --save` and rebuild."]
         return "\n".join(lines), stats
-    marked, placed, missing = annotate(text_path.read_text(encoding="utf-8"), annotations, show_entry=len(entries) > 1)
-    stats["placed"], stats["missing"] = sum(placed.values()), len(missing)
     cached = load_json(REPO / ".cache" / "lw" / "posts" / f"{post_id}.json", {})
     html = ((cached.get("contents") or {}).get("html") if isinstance(cached, dict) else "") or ""
+    body = None
+    if html:                                                   # the page's own HTML: headings, lists, footnotes, maths, figures
+        markdown, stream = post_markdown.convert(html)
+        if post_markdown.same_words(html, stream):             # every word of the page, in order, and nothing else
+            body, placed, missing = post_markdown.place_marks(markdown, stream, annotations, LABEL, show_entry=len(entries) > 1)
+    if body is None:                                           # no HTML in the cache, or a word would differ: the plain text
+        marked, placed, missing = annotate(text_path.read_text(encoding="utf-8"), annotations, show_entry=len(entries) > 1)
+        body = shape_post(marked, html)
+        print(f"  post {number}: printed from the plain text (the HTML was missing or did not convert word for word)")
+    stats["placed"], stats["missing"] = sum(placed.values()), len(missing)
     lines += ["", "## Entries"]
 
     for entry in entries:
@@ -369,7 +390,7 @@ def post_section(number: int, post_id: str, entries: list, audit: dict | None) -
                       + "; ".join(sorted({f"{entry_id[-4:]} {field}" for entry_id, field, _ in missing})) + ".*"]
     if not annotations:
         lines += ["", "*No marks: the passages for this post have not been located yet.*"]
-    lines += ["", "## The post's text, marked", "", shape_post(marked, html)]
+    lines += ["", "## The post's text, marked", "", body]
     return "\n".join(lines), stats
 
 
@@ -395,13 +416,14 @@ def review_pack() -> str:
         out.append(f"{number}. **{cell(source['title'])}.** {cell(source['authors'])}, posted {source['published']}. "
                    f"Entries {', '.join(entry.id[-4:] for entry in group)}; {rule}. {source['url']}")
         section, stats = post_section(number, post_id, group, audits.get(post_id))
-        sections.append(section)
+        sections.append(re.sub(r"\[\^(\d+)\]", rf"[^{number}-\1]", section))      # ten posts in one file: keep their footnotes apart
         # the same section as its own file, so one post can be printed at a time
         (OUT / "posts").mkdir(parents=True, exist_ok=True)
         (OUT / "posts" / f"post-{number:02d}-{'-'.join(entry.id[-4:] for entry in group)}.md").write_text(
             section.replace("\n\n---\n\n", "", 1).lstrip() + "\n", encoding="utf-8")
         for key in totals:
             totals[key] += stats[key]
+    (OUT / "posts" / "post-00-how-to-review.md").write_text("# How to review an entry\n\n" + "\n".join(out[8:]) + "\n", encoding="utf-8")    # the guide and the list, to print once
     out += ["", f"Marks placed across all posts: {totals['placed']}. Proposed passages not found and dropped: {totals['missing']}. "
                 f"Claims flagged as not found in a post: {totals['flagged']}."]
     out += sections
