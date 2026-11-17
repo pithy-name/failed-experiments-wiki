@@ -22,6 +22,77 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lw  # noqa: E402
 import wikilib  # noqa: E402
 
+TEMPLATE_PATH = Path(__file__).resolve().parent.parent / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml"
+
+
+def load_template() -> dict:
+    import yaml
+    return yaml.safe_load(TEMPLATE_PATH.read_text(encoding="utf-8"))
+
+
+def form_answers(draft: dict, body: str) -> dict[str, str]:
+    """Each form field's answer, as text, keyed by the converter's field key."""
+    result, source = draft.get("result", {}), draft["source"]
+
+    def number(value) -> str:
+        return "" if value is None else str(value)
+
+    return {
+        "title": draft["title"],
+        "research_area": ", ".join(draft["research_area"]),
+        "hypothesis": draft["hypothesis"],
+        "claim_scope": draft["claim_scope"],
+        "method": ", ".join(draft["method"]),
+        "models": "\n".join(" | ".join(str(model.get(key, "unknown")) for key in ("name", "developer", "version", "size", "access"))
+                            for model in draft["models"]),
+        "benchmarks": "\n".join(draft.get("benchmarks", [])),
+        "result_direction": result.get("direction", ""),
+        "effect_size": number(result.get("effect_size")),
+        "ci_low": number(result.get("ci_low")),
+        "ci_high": number(result.get("ci_high")),
+        "n": number(result.get("n")),
+        "failure_type": draft["failure_type"],
+        "confidence_true_negative": draft["confidence_true_negative"],
+        "checks_done": ", ".join(draft.get("checks_done", [])),
+        "limitations": draft.get("limitations", ""),
+        "revival_conditions": draft.get("revival_conditions", ""),
+        "retry_welcome": "yes" if draft.get("retry_welcome") else "no",
+        "evidence_level": draft["evidence_level"],
+        "source_url": source["url"],
+        "crosspost_url": source.get("crosspost_url", ""),
+        "source_title": source["title"],
+        "source_authors": ", ".join(source["authors"]),
+        "source_published": str(source["published"]),
+        "source_section": source.get("section", ""),
+        "source_quote": source["quote"],
+        "lw_tags": ", ".join(source.get("lw_tags", [])),
+        "experiment_date": str((draft.get("dates") or {}).get("experiment", "")),
+        "related": ", ".join(f"{item['id']}:{item['relation']}" for item in draft.get("related", [])),
+        # the form's own option text, which the converter maps back to the schema value
+        "info_hazard": {v: k for k, v in INFO_HAZARD_FROM_FORM.items()}.get(draft.get("info_hazard", "none"), draft.get("info_hazard", "none")),
+        "ai_draft_model": "",
+        "notes": body,
+    }
+
+
+def form_body(answers: dict[str, str], ticked: bool = True) -> str:
+    """The text GitHub sends for a submitted form, with the labels taken from the form itself."""
+    parts = []
+    for item in load_template()["body"]:
+        label = (item.get("attributes") or {}).get("label")
+        if item.get("type") == "markdown" or not label:
+            continue
+        key = LABELS.get(label)
+        if key is None:
+            raise SystemExit(f"the issue form has a field the converter does not know: '{label}'")
+        if key == "confirm":
+            options = item["attributes"]["options"]
+            answer = "\n".join(f"- [{'x' if ticked else ' '}] {option['label']}" for option in options)
+        else:
+            answer = answers[key]
+        parts.append(f"### {label}\n\n{answer if str(answer).strip() else '_No response_'}\n")
+    return "\n".join(parts)
+
 NO_RESPONSE = {"_no response_", "none", ""}
 
 # GitHub reserves "None" as a dropdown option, so the form says "no hazard" for the schema's "none".
@@ -59,6 +130,7 @@ LABELS = {
     "Experiment date": "experiment_date",
     "Related entries": "related",
     "Info hazard": "info_hazard",
+    "AI first-pass model": "ai_draft_model",
     "Notes": "notes",
     "Before you submit": "confirm",
 }
@@ -190,6 +262,9 @@ def convert(body: str, author: str, repo: Path, quote_mode: str = "online") -> d
     except FormError as exc:
         return {"ok": False, "problems": [str(exc)]}
     data = wikilib.prepare_new_entry(draft, repo=repo, contributor_type="human", handle=author)
+    model = fields.get("ai_draft_model", "").strip()
+    if model:
+        data["contributor"]["note"] = f"First pass drafted by {model}; edited and submitted by a person."
     issues = wikilib.validate_data(data, file_name=f"{data['id']}.md", quote_mode=quote_mode)
     if wikilib.has_errors(issues):
         return {"ok": False, "problems": [f"[{i.code}] {i.message}" for i in issues if i.level == "error"]}
