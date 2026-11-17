@@ -18,7 +18,7 @@ The same method as the demo video: a headless browser shows each step and a fram
 |---|---|---|---|---|
 | `demo-script` | demo | The narration script is a pure product of demo/scenes.yaml, and the numbers it speaks match the repository. | **PASS** | `001-demo-script-1.png` |
 | `validate-all` | D7 | Every entry in the wiki is schema-valid and its quote is found in its post. | **PASS** | `002-validate-all-1.png` |
-| `validate-closed-list` | D7 | Closed lists are enforced; an invented failure type cannot enter the wiki. | **PASS** | `003-validate-closed-list-1.png` |
+| `validate-closed-list` | D7 | Closed lists are enforced; an invented `failure_type` value cannot enter the wiki. | **PASS** | `003-validate-closed-list-1.png` |
 | `validate-source` | D7 | Every entry must link the post it describes. | **PASS** | `004-validate-source-1.png` |
 | `validate-quote` | D7 | Quotes are checked word for word against the post text, and capped at 15 words. | **PASS** | `005-validate-quote-1.png` |
 | `validate-required-and-types` | D7 | Required fields must be present and of the right type (the real mistake two agent drafts made during seeding). | **PASS** | `006-validate-required-and-types-1.png` |
