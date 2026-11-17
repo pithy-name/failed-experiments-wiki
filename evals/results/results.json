@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T23:47:11-08:00",
+  "generated": "2026-11-16T20:45:31-08:00",
   "provisional": true,
   "provisional_reason": "5 of 5 gold entries are model drafts awaiting the maintainer's verification (fe-2026-0001, fe-2026-0002, fe-2026-0003, fe-2026-0004, fe-2026-0005).",
   "contribute": {
@@ -25,7 +25,7 @@
               "skill": "hypothesis_false",
               "score": 1.0
             },
-            "confidence_true_negative": {
+            "evidence_strength": {
               "kind": "exact",
               "gold": "medium",
               "skill": "medium",
@@ -300,7 +300,7 @@
               "skill": "hypothesis_false",
               "score": 1.0
             },
-            "confidence_true_negative": {
+            "evidence_strength": {
               "kind": "exact",
               "gold": "medium",
               "skill": "medium",
@@ -550,7 +550,7 @@
               "skill": "underpowered",
               "score": 0.0
             },
-            "confidence_true_negative": {
+            "evidence_strength": {
               "kind": "exact",
               "gold": "low",
               "skill": "low",
@@ -801,7 +801,7 @@
               "skill": "hypothesis_false",
               "score": 1.0
             },
-            "confidence_true_negative": {
+            "evidence_strength": {
               "kind": "exact",
               "gold": "medium",
               "skill": "low",
@@ -1043,7 +1043,7 @@
               "skill": "hyperparams_unexplored",
               "score": 1.0
             },
-            "confidence_true_negative": {
+            "evidence_strength": {
               "kind": "exact",
               "gold": "low",
               "skill": "low",
@@ -1299,7 +1299,7 @@
         "n": 5,
         "unscored": 0
       },
-      "confidence_true_negative": {
+      "evidence_strength": {
         "accuracy": 0.8,
         "n": 5,
         "unscored": 0
