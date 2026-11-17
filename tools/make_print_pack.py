@@ -34,7 +34,7 @@ OUT = REPO / "_print"
 TEXT_DIR = REPO / ".cache" / "lw" / "text"
 FIELD_LABELS = [
     ("hypothesis", "HYPOTHESIS"), ("claim_scope", "SCOPE"), ("method", "METHOD"), ("models", "MODELS"), ("benchmarks", "BENCHMARKS"),
-    ("result", "RESULT"), ("failure_type", "FAILURE TYPE"), ("confidence_true_negative", "CONFIDENCE"), ("checks_done", "CHECKS"),
+    ("result", "RESULT"), ("failure_type", "LIKELY REASON"), ("evidence_strength", "EVIDENCE"), ("checks_done", "CHECKS"),
     ("limitations", "LIMITATIONS"), ("revival_conditions", "REVIVAL"), ("retry_welcome", "RETRY"), ("quote", "QUOTE"),
 ]
 LABEL = dict(FIELD_LABELS)
@@ -56,8 +56,8 @@ When a post has several entries, the mark also says which one: ***⟦HYPOTHESIS 
       works" when the post tested one setup is wrong.
    3. **Hypothesis:** does the post state this expectation, or did the entry invent one?
    4. **Result direction and numbers:** does every number appear in the post?
-   5. **Failure type and confidence:** does the post give that cause, and that much certainty? `hypothesis_false`
-      with `high` confidence needs strong support.
+   5. **Likely reason and evidence strength:** does the post give that cause, and evidence that strong? `hypothesis_false`
+      with `high` evidence strength needs strong support.
    6. **Models and benchmarks:** each one named in the post; nothing added from general knowledge.
    7. **Tone:** it describes the experiment and says nothing about the authors' skill or effort.
 5. **Read the box "Flagged before you start".** A model listed there every claim it could not find in the post.
@@ -182,7 +182,7 @@ def entry_rows(data: dict) -> list[tuple[str, str, str]]:
         ("result.direction", result.get("direction"), "result"),
         ("result numbers", numbers, "result"),
         ("failure_type", data.get("failure_type"), "failure_type"),
-        ("confidence_true_negative", data.get("confidence_true_negative"), "confidence_true_negative"),
+        ("evidence_strength", data.get("evidence_strength"), "evidence_strength"),
         ("checks_done", data.get("checks_done"), "checks_done"),
         ("limitations", data.get("limitations"), "limitations"),
         ("revival_conditions", data.get("revival_conditions"), "revival_conditions"),
@@ -416,10 +416,10 @@ def review_pack() -> str:
         by_post.setdefault(lw.post_id_from_url(entry.data["source"]["url"]), []).append(entry)
     audits = {row["post_id"]: row for row in load_json(REPO / "scouting" / "field_audit" / "summary.json", [])}
 
-    out = ["# Human review pack: the failed-experiments wiki", "",
+    out = ["# Human review pack: Carpe Ignota", "",
            "Printed for the maintainer's own review. It holds full post texts, so it stays out of the repository.", "",
            "**What is in here:** how to review an entry; the list of posts behind the wiki; then each post with its entries "
-           "and its marked text; then the posts that were judged genuine failure write-ups and left out, with the reason.", "",
+           "and its marked text; then the posts that were judged genuine write-ups of negative results and left out, with the reason.", "",
            "**Print this file.** Posts 1 to 5 carry the reference entries to verify; post 8 is the shortest, for the single human review.", "",
            reflow(GUIDE), "", "## The posts behind the wiki", ""]
     sections, totals = [], {"placed": 0, "missing": 0, "flagged": 0}
@@ -444,8 +444,8 @@ def review_pack() -> str:
 
     used = set(by_post)
     left_out = [row for row in audits.values() if row["post_id"] not in used]
-    out += ["\n\n---\n\n# Posts judged genuine failure write-ups and left out", "",
-            "A small model judged each of these a genuine write-up of a failed experiment. A stronger model then checked "
+    out += ["\n\n---\n\n# Posts judged genuine write-ups of negative results and left out", "",
+            "A small model judged each of these a genuine write-up of an experiment with a negative result. A stronger model then checked "
             "whether the post itself states every required field, and found it does not. They are not in the wiki. "
             "If the rule is relaxed (for example, by letting an entry say \"the post states no expectation\"), these are the candidates.", "",
             ]
