@@ -122,61 +122,7 @@ def write_entry(path: Path, data: dict, body: str = "") -> None:
 
 def issue_body(draft: dict, body: str, ticked: bool = True) -> str:
     """The text GitHub would send for a submitted form, with the labels taken from the form itself."""
-    template = yaml.safe_load((REPO / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
-    result, source = draft.get("result", {}), draft["source"]
-
-    def number(value) -> str:
-        return "" if value is None else str(value)
-
-    answers = {
-        "title": draft["title"],
-        "research_area": ", ".join(draft["research_area"]),
-        "hypothesis": draft["hypothesis"],
-        "claim_scope": draft["claim_scope"],
-        "method": ", ".join(draft["method"]),
-        "models": "\n".join(" | ".join(str(model.get(key, "unknown")) for key in ("name", "developer", "version", "size", "access"))
-                            for model in draft["models"]),
-        "benchmarks": "\n".join(draft.get("benchmarks", [])),
-        "result_direction": result.get("direction", ""),
-        "effect_size": number(result.get("effect_size")),
-        "ci_low": number(result.get("ci_low")),
-        "ci_high": number(result.get("ci_high")),
-        "n": number(result.get("n")),
-        "failure_type": draft["failure_type"],
-        "confidence_true_negative": draft["confidence_true_negative"],
-        "checks_done": ", ".join(draft.get("checks_done", [])),
-        "limitations": draft.get("limitations", ""),
-        "revival_conditions": draft.get("revival_conditions", ""),
-        "retry_welcome": "Yes" if draft.get("retry_welcome") else "No",
-        "evidence_level": draft["evidence_level"],
-        "source_url": source["url"],
-        "crosspost_url": source.get("crosspost_url", ""),
-        "source_title": source["title"],
-        "source_authors": ", ".join(source["authors"]),
-        "source_published": str(source["published"]),
-        "source_section": source.get("section", ""),
-        "source_quote": source["quote"],
-        "lw_tags": ", ".join(source.get("lw_tags", [])),
-        "experiment_date": str((draft.get("dates") or {}).get("experiment", "")),
-        "related": ", ".join(f"{item['id']}:{item['relation']}" for item in draft.get("related", [])),
-        "info_hazard": draft.get("info_hazard", "none"),
-        "notes": body,
-    }
-    parts = []
-    for item in template["body"]:
-        label = (item.get("attributes") or {}).get("label")
-        if item.get("type") == "markdown" or not label:
-            continue
-        key = issue_to_entry.LABELS.get(label)
-        if key is None:
-            raise SystemExit(f"the issue form has a field the converter does not know: '{label}'")
-        if key == "confirm":
-            options = item["attributes"]["options"]
-            answer = "\n".join(f"- [{'x' if ticked else ' '}] {option['label']}" for option in options)
-        else:
-            answer = answers[key]
-        parts.append(f"### {label}\n\n{answer if str(answer).strip() else '_No response_'}\n")
-    return "\n".join(parts)
+    return issue_to_entry.form_body(issue_to_entry.form_answers(draft, body), ticked=ticked)
 
 
 def make_fixtures(work: Path, clone: Path) -> dict:
