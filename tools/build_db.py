@@ -54,7 +54,7 @@ FTS_COLUMNS = [
     "source_quote", "contributor_note", "body",
 ]
 SCALAR_FACETS = [
-    "result_direction", "failure_type", "confidence_true_negative", "retry_welcome", "evidence_level", "source_type",
+    "result_direction", "failure_type", "evidence_strength", "retry_welcome", "evidence_level", "source_type",
     "contributor_type", "review_status", "info_hazard",
 ]
 ARRAY_FACETS = ["badges", "research_area", "method", "models_name", "benchmarks"]
@@ -145,9 +145,10 @@ def build(entries_dir: Path, db_path: Path) -> dict:
 
 def metadata(db_name: str = "wiki") -> dict:
     return {
-        "title": "Failed-experiments wiki",
+        "title": "Carpe Ignota",
         "description": (
-            "A wiki of failed AI-safety experiments, drawn from LessWrong and the Alignment Forum. Entries describe "
+            "A wiki of negative results in AI safety (null, neutral, smaller than expected, or opposite to the hypothesis), "
+            "drawn from LessWrong and the Alignment Forum. Entries describe "
             "experiments and never judge people. Agent-written and unreviewed entries are labelled in the badges column."
         ),
         "databases": {

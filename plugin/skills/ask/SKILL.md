@@ -1,25 +1,27 @@
 ---
 name: ask
-description: Answer "what has been tried on this, where did it go wrong, what should I avoid?" from the failed-experiments wiki. Use when the user describes an AI-safety experiment they plan to run, or asks whether an idea has already failed.
+description: Answer "what has been tried on this, where did it go wrong, what should I avoid?" from Carpe Ignota, the wiki of negative results in AI safety. Use when the user describes an AI-safety experiment they plan to run, or asks whether an idea has already been tried without success.
 ---
 
 # ask: what's been tried?
 
 The user describes a research plan. You tell them what the wiki holds on it,
-citing entry IDs, and you say plainly when the wiki holds nothing.
+citing entry IDs, and you say plainly when the wiki holds nothing. Every entry
+is a negative result: an experiment whose result was null, neutral, smaller
+than expected, or opposite to the hypothesis.
 
 **Version:** ask-skill v0.1
 
 ## Ground rules
 
-- **Only the wiki.** Every failure you state must come from an entry, with its
-  ID. Never add failures from your own memory of the literature. If you know of
+- **Only the wiki.** Every negative result you state must come from an entry,
+  with its ID. Never add results from your own memory of the literature. If you know of
   relevant work that is not in the wiki, you may say "the wiki has no entry on
   this" but you must not describe that work as a wiki finding.
 - **Weak evidence is labelled weak.** An entry is one report of one setup. Say
-  how strong it is: `evidence_level`, `confidence_true_negative`, and whether
+  how strong it is: `evidence_level`, `evidence_strength`, and whether
   it is agent-written or unreviewed.
-- **A scoped failure is not "this never works".** Report `claim_scope` faithfully.
+- **A scoped negative result is not "this never works".** Report `claim_scope` faithfully.
 - **Relevance is your judgement.** Search is keyword-based, so a hit can be
   irrelevant and a relevant entry can use different words. Read an entry before
   citing it, and cite it only if it bears on the user's plan.
@@ -44,7 +46,8 @@ python tools/cli.py get fe-2026-0001
 1. **Break the plan down** into its method, models, research area, benchmark
    and the effect the user hopes for.
 2. **See what the wiki covers.** Call `list_facets` once: it shows every
-   method, area, model and failure type in use, and how many entries exist.
+   method, area, model and likely reason (`failure_type`) in use, and how many
+   entries exist.
 3. **Search several ways.** At least three searches: the user's own key terms;
    synonyms and neighbouring terms (e.g. "SAE", "sparse autoencoder",
    "dictionary learning"); and filters taken from `list_facets` (`method`,
@@ -68,10 +71,10 @@ Use exactly these five headings, in this order.
 ```
 ## Already tried
 - **fe-YYYY-NNNN** — one-line summary of what was tried and what happened.
-  Models: … · Evidence: <evidence_level>, confidence it is a true negative: <low|medium|high> · Badges: <agent-written, unreviewed, … or "reviewed">
+  Models: … · Evidence: <evidence_level>, strength of evidence: <low|medium|high> · Badges: <agent-written, unreviewed, … or "reviewed">
 
 ## Where it went wrong
-- **fe-YYYY-NNNN** — failure type `<failure_type>`: the reasons the entry gives.
+- **fe-YYYY-NNNN** — likely reason `<failure_type>`: the reasons the entry gives.
 
 ## What to avoid
 - A concrete pitfall, phrased as advice for the user's plan (from fe-YYYY-NNNN).
@@ -98,7 +101,7 @@ Rules for the sections:
   reasons. Do not upgrade "underpowered" to "does not work".
 - **What to avoid:** each pitfall traced to an entry ID. No generic advice.
 - **Worth retrying:** list an entry here when `retry_welcome` is true, or
-  `confidence_true_negative` is `low`, or `failure_type` is `underpowered`,
+  `evidence_strength` is `low`, or `failure_type` is `underpowered`,
   `implementation_bug_suspected`, `measurement_noise` or
   `hyperparams_unexplored`. Give its `revival_conditions` if it has any. If no
   cited entry qualifies, write "None of the entries above."

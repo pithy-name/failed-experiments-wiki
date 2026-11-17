@@ -35,7 +35,11 @@
     ok(/^https?:\/\//.test(a.href) || /^\.\.\/entries\/fe-\d{4}-\d{4}\.md$/.test(a.href), "link target is http(s) or an entry file: " + a.href);
   });
 
-  ok(filters.textContent.indexOf("failure type") !== -1, "facet for failure_type exists");
+  ok(filters.textContent.indexOf("likely reason") !== -1, "facet for failure_type exists, labelled likely reason");
+  ok(filters.textContent.indexOf("failure type") === -1, "failure_type is not labelled failure type");
+  ok(filters.textContent.indexOf("evidence strength") !== -1, "facet for evidence_strength exists");
+  ok(page.indexOf("Likely reason") !== -1 && page.indexOf("Strength of evidence") !== -1, "cards label the likely reason and the strength of evidence");
+  ok(page.indexOf("true negative") === -1, "cards no longer speak of a true negative");
   ok(filters.textContent.indexOf("source › published") !== -1, "range control for the published date exists");
   ok(filters.textContent.indexOf("result › ci low") === -1, "fields no entry uses are hidden");
 

@@ -47,7 +47,7 @@ def _read_draft(path: Path) -> tuple[dict, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Failed-experiments wiki CLI (JSON output).")
+    parser = argparse.ArgumentParser(description="Carpe Ignota wiki CLI (JSON output).")
     parser.add_argument("--repo", default=str(wikilib.REPO_ROOT), help="repository root (default: this checkout)")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -104,7 +104,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.brief:
             print(f"{out['match_count']} of {out['total_entries_in_wiki']} entries match (keyword search; terms: {', '.join(out['query_terms']) or 'none'})")
             for item in out["results"]:
-                print(f"  {item['id']}  score {item['score']:>3}  {item['failure_type']}, confidence {item['confidence_true_negative']}  [{', '.join(item['badges'])}]")
+                print(f"  {item['id']}  score {item['score']:>3}  {item['failure_type']}, evidence strength {item['evidence_strength']}  [{', '.join(item['badges'])}]")
                 print(f"      {item['title']}")
             return 0
     elif args.command == "get":

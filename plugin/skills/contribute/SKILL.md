@@ -1,12 +1,13 @@
 ---
 name: contribute
-description: Turn a LessWrong or Alignment Forum write-up of a failed AI-safety experiment into one or more entries for the failed-experiments wiki, and submit them as a pull request. Use when the user gives a post URL (or pastes a write-up with its URL) and asks to add it, file it, or contribute it to the wiki.
+description: Turn a LessWrong or Alignment Forum write-up of an AI-safety experiment with a negative result (null, neutral, smaller than expected, or opposite to the hypothesis) into one or more entries for Carpe Ignota, the negative-results wiki, and submit them as a pull request. Use when the user gives a post URL (or pastes a write-up with its URL) and asks to add it, file it, or contribute it to the wiki.
 ---
 
 # contribute: write-up → wiki entries
 
-You turn one write-up of a failed experiment into schema-valid wiki entries and
-submit them. Everything you submit is stored as **agent-written** and
+You turn one write-up of an experiment with a negative result into
+schema-valid wiki entries and submit them. A negative result is one that was
+null, neutral, smaller than expected, or opposite to the hypothesis. Everything you submit is stored as **agent-written** and
 **unreviewed**; a person or another agent reviews it later.
 
 **Version:** contribute-skill v0.3
@@ -30,10 +31,10 @@ list and the validator rejected them. The seed entries and the evals in
   don't have much expertise in X" or "this is below my usual standard", do not
   carry that into the entry. Record what it means for the experiment instead
   (what was not tuned, how long it ran, what was not tried).
-- **A failure is scoped.** One post showing that X did not work in one setup is
+- **A negative result is scoped.** One post showing that X did not work in one setup is
   not evidence that X never works. `claim_scope` exists to say so.
 - **Not every post belongs.** If the post is not a write-up of an experiment
-  that was actually run and that failed, say so and submit nothing.
+  that was actually run and that gave a negative result, say so and submit nothing.
 
 ## Tools
 
@@ -70,18 +71,18 @@ python tools/cli.py submit --file <draft.md> --agent-model <your model id>
    - a sentence of 15 words or fewer that states the negative result (the quote).
 
    If one is missing, **do not submit that experiment.** Tell the user which
-   field the post does not support. Most failure write-ups fall short here
+   field the post does not support. Most write-ups of negative results fall short here
    (during seeding, 9 of 49 passed), so declining is the normal outcome, not a
    failure of yours. `unknown` is for details the post leaves out (a model's
-   version, the cause of the failure). It is not a way to file an experiment
+   version, the likely reason for the result). It is not a way to file an experiment
    the post barely describes: an entry with `models: unknown`,
    `failure_type: unknown` and a vague result tells a reader nothing, and its
    passing the validator would make it look sounder than it is. A round-up
-   post that mentions many failed projects in a paragraph each usually
+   post that mentions many unsuccessful projects in a paragraph each usually
    supports none of them.
-4. **Split into experiments.** One entry per distinct failed experiment
+4. **Split into experiments.** One entry per distinct experiment with a negative result
    (different hypothesis, method or setup). Several results of one experiment
-   are one entry. A post listing three unrelated failed projects is three
+   are one entry. A post listing three unrelated unsuccessful projects is three
    entries. Skip parts of the post that worked.
 5. **Check for duplicates.** `search_entries` with the method, the model and
    the topic. If an entry for the same post and experiment exists, stop and say
@@ -139,12 +140,12 @@ are lists of strings. `models` and `related` are lists of objects.
 | `benchmarks` (optional) | Benchmarks or datasets named in the post. |
 | `result.direction` | `null` (no effect), `opposite`, `smaller_than_expected`, `mixed`, `did_not_replicate`. When a metric improved a little but the method gave nothing usable, that is `smaller_than_expected`. Use `mixed` only when some results were clearly positive and others clearly negative. |
 | `result.effect_size`, `ci_low`, `ci_high`, `n` (optional) | Only numbers the post reports for the main result. Leave out when in doubt. |
-| `failure_type` | Why it failed, as far as the post says: `hypothesis_false` (the idea, as scoped, seems wrong), `underpowered` (too little data or compute to tell), `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown`. Choose `hypothesis_false` only when the post argues the idea itself does not hold. When the authors say only that the work "did not accomplish anything useful" and give no cause, that is `unknown`. |
-| `confidence_true_negative` | How sure a reader can be that the idea, as scoped, really does not work: `low`, `medium`, `high`. One quick attempt with caveats is `low`. Careful controls, baselines and several setups is `high`. |
+| `failure_type` | The likely reason for the result, as far as the post says (the form calls it "Likely reason"): `hypothesis_false` (the idea, as scoped, seems wrong), `underpowered` (too little data or compute to tell), `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown`. Choose `hypothesis_false` only when the post argues the idea itself does not hold. When the authors say only that the work "did not accomplish anything useful" and give no cause, that is `unknown`. |
+| `evidence_strength` | How strong the evidence is for the result, as scoped, whether it was null, neutral, smaller than expected or opposite: `low`, `medium`, `high`. One quick attempt with caveats is `low`. Careful controls, baselines and several setups is `high`. |
 | `checks_done` (optional) | Checks the post reports, as tags: e.g. `positive-control`, `baseline-comparison`, `seed-sweep`, `noise-floor`, `bug-audit`, `hyperparameter-sweep`. |
 | `limitations` (optional) | What was not tried, as the post says. |
 | `revival_conditions` (optional) | When it would be worth retrying, if the post says or clearly implies. |
-| `retry_welcome` | `true` when the evidence is weak enough that a better attempt is worthwhile (low confidence, underpowered, unexplored hyperparameters, suspected bug). Otherwise `false`. |
+| `retry_welcome` | `true` when the evidence is weak enough that a better attempt is worthwhile (low evidence strength, underpowered, unexplored hyperparameters, suspected bug). Otherwise `false`. |
 | `evidence_level` | `author_report` when the authors describe their own experiment; `third_party_report` when the post reports someone else's; `independent_reproduction` when it is a replication of another team's result. |
 | `source.type` | `alignment_forum` if `fetch_source` says the post is an Alignment Forum crosspost, else `lesswrong`. |
 | `source.url` | `url_lesswrong` from `fetch_source`. |
@@ -154,7 +155,7 @@ are lists of strings. `models` and `related` are lists of objects.
 | `source.quote` | **15 words or fewer, copied character for character** from the post, stating the negative result. Not stitched from two places. Curly quotes, apostrophes and dashes are safe: the check treats them the same as their plain forms. |
 | `dates.experiment` (optional) | Only if the post says when the experiment ran. |
 | `related` (optional) | Existing entries on the same idea: `id` and `relation` (`replicates`, `contradicts`, `extends`, `same_hypothesis`). |
-| `info_hazard` | `none`, or `review_needed` if the failed experiment is an attack or capability attempt whose details could help misuse. |
+| `info_hazard` | `none`, or `review_needed` if the experiment is an attack or capability attempt whose details could help misuse, even though it did not work. |
 
 `body` (optional): two or three sentences of context in your own words, such as
 what the authors concluded or decided next. No post text.

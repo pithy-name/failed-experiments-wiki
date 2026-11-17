@@ -1,4 +1,4 @@
-# Failed-experiments wiki: one-command entry points.
+# Carpe Ignota (negative-results wiki): one-command entry points.
 # Run from the repository root. `make setup` once, then any target.
 
 PYTHON ?= python3.11

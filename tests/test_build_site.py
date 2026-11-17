@@ -76,6 +76,20 @@ def test_page_is_one_self_contained_file(site):
     assert not re.search(r"<script[^>]*\ssrc=", page)
 
 
+def test_page_is_titled_carpe_ignota_and_framed_as_negative_results(site):
+    page = site["html"]
+    assert "<title>Carpe Ignota" in page and "<h1>Carpe Ignota</h1>" in page
+    assert "negative results" in page.lower()
+    assert "failed-experiments wiki" not in page.lower()
+
+
+def test_failure_type_is_labelled_likely_reason(site):
+    payload, _ = payload_of(site["html"])
+    labels = {field["path"]: field["label"] for field in payload["fields"]}
+    assert labels["failure_type"] == "likely reason"
+    assert labels["evidence_strength"] == "evidence strength"
+
+
 def test_every_schema_field_has_a_control(site):
     payload, _ = payload_of(site["html"])
     catalogue = {field["path"]: field for field in payload["fields"]}

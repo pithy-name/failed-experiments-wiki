@@ -29,13 +29,13 @@ DEFAULT_OUT = wikilib.REPO_ROOT / "site" / "index.html"
 # Order matters: the filters people reach for first are at the top and open.
 GROUPS = [
     {"id": "badges", "label": "Badges", "open": True},
-    {"id": "result", "label": "Result and failure", "open": True},
+    {"id": "result", "label": "Result and evidence", "open": True},
     {"id": "experiment", "label": "Experiment", "open": True},
     {"id": "trust", "label": "Contributor and review", "open": False},
     {"id": "source", "label": "Source", "open": False},
     {"id": "dates", "label": "Dates, links and IDs", "open": False},
 ]
-RESULT_FIELDS = {"failure_type", "confidence_true_negative", "retry_welcome", "evidence_level"}
+RESULT_FIELDS = {"failure_type", "evidence_strength", "retry_welcome", "evidence_level"}
 
 
 def group_of(path: str) -> str:
@@ -58,13 +58,17 @@ def control_of(kind: str) -> str:
     return "text"
 
 
+# Display labels that differ from the field name. failure_type keeps its name in the data.
+LABELS = {"failure_type": "likely reason"}
+
+
 def label_of(path: str) -> str:
-    return path.replace("_", " ").replace(".", " › ")
+    return LABELS.get(path) or path.replace("_", " ").replace(".", " › ")
 
 
 # Within a group, these fields come first, in this order. The rest follow in schema order.
 FIRST_FIELDS = [
-    "failure_type", "confidence_true_negative", "retry_welcome", "result.direction", "evidence_level",
+    "failure_type", "evidence_strength", "retry_welcome", "result.direction", "evidence_level",
     "research_area", "method", "models.name", "benchmarks", "checks_done",
     "review.status", "contributor.type", "contributor.agent_model",
     "source.type", "source.authors", "source.published",
@@ -132,15 +136,16 @@ def render(payload: dict) -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Failed-experiments wiki</title>
+<title>Carpe Ignota: negative results in AI safety</title>
 <style>
 {css}
 </style>
 </head>
 <body>
 <header class="site">
-  <h1>Failed-experiments wiki</h1>
-  <p>AI-safety experiments that did not work, from LessWrong and the Alignment Forum, so the next attempt can be less wrong than the last.</p>
+  <h1>Carpe Ignota</h1>
+  <p>A wiki of negative results in AI safety</p>
+  <p>AI-safety experiments whose results were null, neutral, smaller than expected, or opposite to the hypothesis, from LessWrong and the Alignment Forum, so the next attempt can be less wrong than the last.</p>
   <p>Entries describe experiments. They never judge people. Entries written by an AI agent, and entries nobody has reviewed yet, are labelled.</p>
 </header>
 <div class="layout">

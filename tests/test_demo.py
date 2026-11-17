@@ -57,9 +57,11 @@ def test_page_actions_only_use_controls_values_and_entries_that_exist():
                 if action["do"] in {"open", "show_field", "scroll_to"}:
                     assert action["entry"] in by_id, where
                 if action["do"] == "show_field":
+                    # scenes.yaml matches the recorded video, so it may name a field by its old name
+                    field = build_demo.wikilib.RENAMED_FIELDS.get(action["field"], action["field"])
                     data = by_id[action["entry"]].data
-                    assert action["field"] in data or any(
-                        isinstance(value, dict) and action["field"] in value for value in data.values()
+                    assert field in data or any(
+                        isinstance(value, dict) and field in value for value in data.values()
                     ), where
 
 

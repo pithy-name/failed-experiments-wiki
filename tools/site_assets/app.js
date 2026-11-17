@@ -245,8 +245,8 @@
     meta.appendChild(metaRow("Method", chips(data.method || [])));
     meta.appendChild(metaRow("Models", chips(FewikiFilter.getValues(data, "models.name"))));
     meta.appendChild(metaRow("Result", (data.result || {}).direction || ""));
-    meta.appendChild(metaRow("Failure type", data.failure_type || ""));
-    meta.appendChild(metaRow("Confidence it is a true negative", data.confidence_true_negative || ""));
+    meta.appendChild(metaRow("Likely reason", data.failure_type || ""));
+    meta.appendChild(metaRow("Strength of evidence", data.evidence_strength || ""));
     meta.appendChild(metaRow("Evidence", data.evidence_level || ""));
     meta.appendChild(metaRow("Review", (data.review || {}).status || ""));
     meta.appendChild(metaRow("Post published", (data.source || {}).published || ""));

@@ -25,8 +25,8 @@ An entry is a Markdown file, `entries/fe-YYYY-NNNN.md`, with these fields in its
 | `result.ci_low` | number |  |  |  |
 | `result.ci_high` | number |  |  |  |
 | `result.n` | integer |  |  | Sample size, if reported. |
-| `failure_type` | one of | yes | `hypothesis_false`, `underpowered`, `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown` |  |
-| `confidence_true_negative` | one of | yes | `low`, `medium`, `high` | How sure we are that the idea, as scoped, really does not work. |
+| `failure_type` | one of | yes | `hypothesis_false`, `underpowered`, `implementation_bug_ruled_out`, `implementation_bug_suspected`, `measurement_noise`, `hyperparams_unexplored`, `infrastructure`, `worked_but_abandoned`, `unknown` | The likely reason for the result, as far as the source says. |
+| `evidence_strength` | one of | yes | `low`, `medium`, `high` | How strong the evidence is for the result, as scoped. Applies to null and neutral results as well as smaller-than-expected and opposite ones. |
 | `checks_done` | list of values |  |  | e.g. positive-control, noise-floor, bug-audit, seed-sweep. |
 | `limitations` | string |  |  | What was not tried. |
 | `revival_conditions` | string |  |  | When it would be worth retrying. |

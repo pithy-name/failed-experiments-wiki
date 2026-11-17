@@ -35,7 +35,7 @@ checks:
   - id: validate-closed-list
     requirement: D7
     title: A value outside a closed list is refused
-    proves: Closed lists are enforced; an invented failure type cannot enter the wiki.
+    proves: Closed lists are enforced; an invented `failure_type` value cannot enter the wiki.
     commands:
       - run: python tools/validate.py $FIX/bad/value-not-on-the-list/fe-2026-0008.md --quotes cached
         expect_exit: 1

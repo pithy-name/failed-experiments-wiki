@@ -129,3 +129,10 @@ def test_datasette_lists_filters_searches_and_facets_without_a_port(built):
     failure_counts = {item["value"]: item["count"] for item in facets["failure_type"]["results"]}
     assert failure_counts == {"hypothesis_false": 1, "underpowered": 1}
     assert {item["value"] for item in facets["method"]["results"]} == {"activation-steering", "sae", "linear-probing"}
+
+
+def test_metadata_names_the_wiki_and_facets_evidence_strength():
+    meta = build_db.metadata()
+    assert meta["title"] == "Carpe Ignota"
+    assert "negative results" in meta["description"] and "failed" not in meta["description"]
+    assert "evidence_strength" in meta["databases"]["wiki"]["tables"]["entries"]["facets"]

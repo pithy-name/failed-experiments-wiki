@@ -1,12 +1,13 @@
-name: New entry (failed experiment)
-description: File a failed AI-safety experiment written up on LessWrong or the Alignment Forum. A bot turns this form into a pull request.
+name: New entry (negative result)
+description: File a negative result from an AI-safety experiment written up on LessWrong or the Alignment Forum. A bot turns this form into a pull request.
 title: "[entry] "
 labels: ["new-entry"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for filing this. Entries describe **experiments, never people**: say what was tried and what happened, without judging anyone.
+        Thank you for filing this. An entry records a **negative result**: an experiment whose result was null, neutral, smaller than expected, or opposite to the hypothesis.
+        Entries describe **experiments, never people**: say what was tried and what happened, without judging anyone.
         A bot converts this form into an entry file and opens a pull request. Your entry is published as **unreviewed** until someone reviews it.
         Field labels below are read by the bot: please do not edit them.
   - type: input
@@ -95,15 +96,16 @@ body:
   - type: dropdown
     id: failure_type
     attributes:
-      label: Failure type
+      label: Likely reason
+      description: Why the result came out this way, as far as the post says. unknown when the post gives no cause.
       options: [hypothesis_false, underpowered, implementation_bug_ruled_out, implementation_bug_suspected, measurement_noise, hyperparams_unexplored, infrastructure, worked_but_abandoned, unknown]
     validations:
       required: true
   - type: dropdown
-    id: confidence_true_negative
+    id: evidence_strength
     attributes:
       label: Strength of evidence
-      description: "How strong is the evidence for this result, as scoped? This applies to null and neutral results as well as negative ones. low: one run, underpowered, or a possible bug. medium: adequate power, one setup. high: controls, several setups, or replicated."
+      description: "How strong is the evidence for this result, as scoped? This applies to null and neutral results as well as smaller-than-expected and opposite ones. low: one run, underpowered, or a possible bug. medium: adequate power, one setup. high: controls, several setups, or replicated."
       options: [low, medium, high]
     validations:
       required: true
@@ -202,7 +204,7 @@ body:
     id: info_hazard
     attributes:
       label: Info hazard
-      description: Choose review_needed if the details could help misuse (for example a failed attack attempt that reveals a path).
+      description: Choose review_needed if the details could help misuse (for example an attack attempt that did not work but reveals a path).
       options: [no hazard, review_needed]
     validations:
       required: true

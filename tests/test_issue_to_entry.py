@@ -63,7 +63,7 @@ _No response_
 
 200
 
-### Failure type
+### Likely reason
 
 hypothesis_false
 
@@ -164,7 +164,7 @@ def test_template_dropdowns_match_the_schema_closed_lists():
     assert options["research_area"] == props["research_area"]["items"]["enum"]
     assert options["result_direction"] == props["result"]["properties"]["direction"]["enum"]
     assert options["failure_type"] == props["failure_type"]["enum"]
-    assert options["confidence_true_negative"] == props["confidence_true_negative"]["enum"]
+    assert options["evidence_strength"] == props["evidence_strength"]["enum"]
     assert options["evidence_level"] == props["evidence_level"]["enum"]
     form_to_schema = issue_to_entry.INFO_HAZARD_FROM_FORM
     assert [form_to_schema.get(o, o) for o in options["info_hazard"]] == props["info_hazard"]["enum"]
@@ -199,12 +199,24 @@ def test_no_method_at_all_is_refused(tmp_path):
 
 def test_evidence_question_covers_null_results_and_anchors_each_level():
     template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
-    field = next(i["attributes"] for i in template["body"] if i.get("id") == "confidence_true_negative")
+    field = next(i["attributes"] for i in template["body"] if i.get("id") == "evidence_strength")
     assert field["label"] == "Strength of evidence"
     text = field["description"].lower()
     assert "null" in text
     for level in ("low:", "medium:", "high:"):
         assert level in text
+
+
+def test_form_is_framed_as_negative_results_and_defines_them():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    assert template["name"] == "New entry (negative result)"
+    assert "negative result" in template["description"].lower()
+    intro = template["body"][0]["attributes"]["value"].lower()
+    for kind in ("null", "neutral", "smaller than expected", "opposite"):
+        assert kind in intro, kind
+    failure_type = next(i["attributes"] for i in template["body"] if i.get("id") == "failure_type")
+    assert failure_type["label"] == "Likely reason"
+    assert "failed" not in yaml.safe_dump(template).lower()
 
 
 def test_research_areas_are_alphabetical_with_other_last():
@@ -243,6 +255,7 @@ def test_issue_becomes_a_valid_human_entry(tmp_path):
     assert data["models"][1] == {"name": "GPT-2 medium", "developer": "OpenAI", "version": "unknown", "size": "355M", "access": "open-weight"}
     assert data["result"] == {"direction": "null", "n": 200}
     assert data["retry_welcome"] is True
+    assert data["evidence_strength"] == "low" and "confidence_true_negative" not in data
     assert data["source"]["authors"] == ["Test Author", "Second Author"]
     assert data["source"]["type"] == "lesswrong"
     assert "benchmarks" not in data and "revival_conditions" not in data

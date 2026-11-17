@@ -1,4 +1,4 @@
-"""Core library of the failed-experiments wiki.
+"""Core library of Carpe Ignota, the wiki of negative results in AI safety.
 
 Everything else is a thin wrapper around this module: the validator CLI
 (tools/validate.py), the general CLI (tools/cli.py), the MCP server
@@ -34,7 +34,7 @@ MAX_QUOTE_WORDS = 15
 # Order of top-level keys when an entry is written to disk.
 KEY_ORDER = [
     "id", "title", "research_area", "hypothesis", "claim_scope", "method", "models", "benchmarks",
-    "result", "failure_type", "confidence_true_negative", "checks_done", "limitations",
+    "result", "failure_type", "evidence_strength", "checks_done", "limitations",
     "revival_conditions", "retry_welcome", "evidence_level", "source", "contributor", "review",
     "dates", "related", "info_hazard",
 ]
@@ -69,7 +69,7 @@ FIELDS: list[tuple[str, str]] = [
     ("result.ci_high", "number"),
     ("result.n", "number"),
     ("failure_type", "enum"),
-    ("confidence_true_negative", "enum"),
+    ("evidence_strength", "enum"),
     ("checks_done", "list"),
     ("limitations", "text"),
     ("revival_conditions", "text"),
@@ -107,6 +107,10 @@ RANGE_KINDS = {"number", "date"}
 TEXT_KINDS = {"text"}
 
 RETRY_FAILURE_TYPES = {"underpowered", "implementation_bug_suspected", "measurement_noise", "hyperparams_unexplored"}
+
+# Old top-level field name -> current name. Saved model drafts in evals/results/ and the demo scenes,
+# which match a recorded video, still use the old names and are never rewritten.
+RENAMED_FIELDS = {"confidence_true_negative": "evidence_strength"}
 
 
 class EntryError(Exception):
@@ -166,6 +170,11 @@ def normalize_data(data: dict) -> dict:
     # A bare `direction: null` in YAML parses to None. The schema value is the string "null".
     if isinstance(result, dict) and "direction" in result and result["direction"] is None:
         result["direction"] = "null"
+    # Read an old field name as the current one (RENAMED_FIELDS). Only when the current key is absent:
+    # with both present, the old key stays and the schema rejects it as an unknown field.
+    for old, new in RENAMED_FIELDS.items():
+        if old in data and new not in data:
+            data[new] = data.pop(old)
     return data
 
 
@@ -442,7 +451,7 @@ def summarize(entry: Entry) -> dict:
         "models": [m.get("name") for m in data.get("models") or [] if isinstance(m, dict)],
         "result_direction": (data.get("result") or {}).get("direction"),
         "failure_type": data.get("failure_type"),
-        "confidence_true_negative": data.get("confidence_true_negative"),
+        "evidence_strength": data.get("evidence_strength"),
         "retry_welcome": data.get("retry_welcome"),
         "evidence_level": data.get("evidence_level"),
         "review_status": (data.get("review") or {}).get("status"),

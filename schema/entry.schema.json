@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.invalid/failed-experiments-wiki/entry.schema.json",
-  "title": "Failed-experiments wiki entry",
-  "description": "Front matter of one entry file in entries/. Every field is filterable. Closed lists are the enums below; research_area is a controlled list extendable by pull request.",
+  "title": "Carpe Ignota entry",
+  "description": "Front matter of one entry file in entries/. An entry records one negative result: an experiment whose result was null, neutral, smaller than expected, or opposite to the hypothesis. Every field is filterable. Closed lists are the enums below; research_area is a controlled list extendable by pull request.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,7 +15,7 @@
     "models",
     "result",
     "failure_type",
-    "confidence_true_negative",
+    "evidence_strength",
     "retry_welcome",
     "evidence_level",
     "source",
@@ -123,11 +123,12 @@
         "infrastructure",
         "worked_but_abandoned",
         "unknown"
-      ]
+      ],
+      "description": "The likely reason for the result, as far as the source says."
     },
-    "confidence_true_negative": {
+    "evidence_strength": {
       "enum": ["low", "medium", "high"],
-      "description": "How sure we are that the idea, as scoped, really does not work."
+      "description": "How strong the evidence is for the result, as scoped. Applies to null and neutral results as well as smaller-than-expected and opposite ones."
     },
     "checks_done": {
       "type": "array",

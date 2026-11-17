@@ -4,7 +4,7 @@
 > These numbers compare one model's drafts with another model pass, not with human ground truth.
 > Do not cite them as accuracy until the gold entries are verified and this file is regenerated.
 
-Generated 2026-11-14T23:47:11-08:00 by `python evals/run_evals.py` (deterministic re-scoring of saved outputs).
+Generated 2026-11-16T20:45:31-08:00 by `python evals/run_evals.py` (deterministic re-scoring of saved outputs).
 
 This is a spot-check on 5 posts with one model vendor. It is not a benchmark.
 
@@ -19,7 +19,7 @@ This is a spot-check on 5 posts with one model vendor. It is not a benchmark.
 |---|---|---|---|---|
 | `result.direction` | exact | 80% | 5 | 0 |
 | `failure_type` | exact | 80% | 5 | 0 |
-| `confidence_true_negative` | exact | 80% | 5 | 0 |
+| `evidence_strength` | exact | 80% | 5 | 0 |
 | `retry_welcome` | exact | 60% | 5 | 0 |
 | `evidence_level` | exact | 80% | 5 | 0 |
 | `info_hazard` | exact | 100% | 5 | 0 |
@@ -73,7 +73,7 @@ Mismatches (gold vs skill), exact and list fields:
 - `fe-2026-0003` `benchmarks`: gold `['harmbench']` / skill `['harm-bench']`
 - `fe-2026-0003` `checks_done`: gold `['manual-scratchpad-reading', 'prompt-set-widening']` / skill `['comparison-to-published-rate', 'manual-scratchpad-review', 'widened-prompt-set', 'with-and-without-training-details']`
 - `fe-2026-0004` `result.direction`: gold `null` / skill `mixed`
-- `fe-2026-0004` `confidence_true_negative`: gold `medium` / skill `low`
+- `fe-2026-0004` `evidence_strength`: gold `medium` / skill `low`
 - `fe-2026-0004` `result.n`: gold `5` / skill `None`
 - `fe-2026-0004` `method`: gold `['circuit-discovery', 'gradient-attribution', 'sparse-autoencoders']` / skill `['circuit-discovery', 'gradient-attribution', 'replication', 'sae']`
 - `fe-2026-0004` `models.access`: gold `['open-weight']` / skill `['unknown']`

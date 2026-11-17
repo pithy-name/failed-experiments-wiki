@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review an entry of the failed-experiments wiki against its source post and record the outcome (reviewed or contested). Use when the user asks to review, check, verify or vet a wiki entry, or names an entry ID to review.
+description: Review an entry of Carpe Ignota, the negative-results wiki, against its source post and record the outcome (reviewed or contested). Use when the user asks to review, check, verify or vet a wiki entry, or names an entry ID to review.
 ---
 
 # review: check an entry against its source
@@ -52,9 +52,11 @@ python tools/cli.py review fe-2026-0006 reviewed --notes "…" --agent-model <yo
      that reads as "X never works" when the post tested one setup fails here.
    - **Method, models, benchmarks:** named in the post; nothing added.
    - **Result:** `result.direction` fits; any numbers match the post.
-   - **Failure type and confidence:** supported by what the post says about
-     why it failed and how thoroughly it was checked. `hypothesis_false` with
-     `high` confidence needs strong support in the post.
+   - **Likely reason and evidence strength:** `failure_type` and
+     `evidence_strength` are supported by what the post says about why the
+     result came out as it did and how thoroughly it was checked.
+     `hypothesis_false` with `high` evidence strength needs strong support in
+     the post.
    - **Checks, limitations, revival conditions, retry_welcome:** consistent
      with the post.
    - **Info hazard:** `review_needed` if the details could help misuse.

@@ -503,7 +503,8 @@ class Recorder:
                      }
                      return false;
                    }""",
-                [f"entry-{action['entry']}", action["field"]],
+                # scenes.yaml matches the recorded video and may use a field's old name
+                [f"entry-{action['entry']}", wikilib.RENAMED_FIELDS.get(action["field"], action["field"])],
             )
             if not found:
                 raise SystemExit(f"{scene_id}: field '{action['field']}' is not shown in {action['entry']}")

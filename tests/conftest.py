@@ -35,7 +35,7 @@ VALID_ENTRY = {
     "benchmarks": ["toy-refusal-set"],
     "result": {"direction": "null", "n": 200},
     "failure_type": "hypothesis_false",
-    "confidence_true_negative": "low",
+    "evidence_strength": "low",
     "checks_done": ["seed-sweep"],
     "limitations": "Only one layer was tried.",
     "revival_conditions": "A sweep over layers and coefficients.",

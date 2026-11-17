@@ -56,7 +56,7 @@ def test_method_tags_must_be_lowercase_hyphen(valid_entry):
     [
         (("failure_type",), "bad_luck"),
         (("result", "direction"), "negative"),
-        (("confidence_true_negative",), "certain"),
+        (("evidence_strength",), "certain"),
         (("evidence_level",), "rumour"),
         (("review", "status"), "approved"),
         (("contributor", "type"), "bot"),
