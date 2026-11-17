@@ -39,7 +39,7 @@ import lw  # noqa: E402
 import wikilib  # noqa: E402
 
 EXACT_FIELDS = [
-    "result.direction", "failure_type", "confidence_true_negative", "retry_welcome", "evidence_level",
+    "result.direction", "failure_type", "evidence_strength", "retry_welcome", "evidence_level",
     "info_hazard", "source.type", "source.url", "source.crosspost_url", "source.published",
     "result.effect_size", "result.ci_low", "result.ci_high", "result.n",
 ]
