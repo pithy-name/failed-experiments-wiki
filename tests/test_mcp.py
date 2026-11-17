@@ -48,6 +48,7 @@ def test_server_exposes_the_prd_tools(server):
     assert {"search_entries", "get_entry", "list_facets", "submit_entry", "review_entry"} <= set(tools)
     assert "fetch_source" in tools
     assert all(tool.description for tool in tools.values())
+    assert "negative results" in server.mcp.instructions and "failed" not in server.mcp.instructions
 
 
 def test_search_get_and_facets(server):
