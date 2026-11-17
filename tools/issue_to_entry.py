@@ -37,12 +37,18 @@ def form_answers(draft: dict, body: str) -> dict[str, str]:
     def number(value) -> str:
         return "" if value is None else str(value)
 
+    # The Method dropdown only offers its listed options; anything else goes under Other methods.
+    listed = set(next(i for i in load_template()["body"] if i.get("id") == "method")["attributes"]["options"])
+    chosen = [m for m in draft["method"] if m in listed]
+    other = [m for m in draft["method"] if m not in listed]
+
     return {
         "title": draft["title"],
         "research_area": ", ".join(draft["research_area"]),
         "hypothesis": draft["hypothesis"],
         "claim_scope": draft["claim_scope"],
-        "method": ", ".join(draft["method"]),
+        "method": ", ".join(chosen),
+        "method_other": ", ".join(other),
         "models": "\n".join(" | ".join(str(model.get(key, "unknown")) for key in ("name", "developer", "version", "size", "access"))
                             for model in draft["models"]),
         "benchmarks": "\n".join(draft.get("benchmarks", [])),
@@ -105,6 +111,7 @@ LABELS = {
     "Hypothesis": "hypothesis",
     "Claim scope": "claim_scope",
     "Method": "method",
+    "Other methods": "method_other",
     "Models": "models",
     "Benchmarks": "benchmarks",
     "Result direction": "result_direction",
@@ -113,7 +120,7 @@ LABELS = {
     "Confidence interval high": "ci_high",
     "Sample size": "n",
     "Failure type": "failure_type",
-    "Confidence this is a true negative": "confidence_true_negative",
+    "Strength of evidence": "confidence_true_negative",
     "Checks done": "checks_done",
     "Limitations": "limitations",
     "Revival conditions": "revival_conditions",
@@ -160,6 +167,16 @@ def parse_issue_body(body: str) -> dict[str, str]:
 
 def _split(value: str) -> list[str]:
     return [part.strip() for part in re.split(r"[,\n]", value or "") if part.strip()]
+
+
+def _methods(chosen: str, other: str) -> list[str]:
+    """Dropdown choices first, then any typed-in methods; normalized, without repeats."""
+    out: list[str] = []
+    for part in _split(chosen) + _split(other):
+        tag = wikilib.normalize_tag(part)
+        if tag and tag not in out:
+            out.append(tag)
+    return out
 
 
 def _number(value: str, label: str, integer: bool = False):
@@ -223,7 +240,7 @@ def entry_from_fields(fields: dict[str, str]) -> tuple[dict, str]:
         "research_area": _split(get("research_area")),
         "hypothesis": get("hypothesis"),
         "claim_scope": get("claim_scope"),
-        "method": _split(get("method")),
+        "method": _methods(get("method"), get("method_other")),
         "models": _models(get("models")),
         "result": result,
         "failure_type": get("failure_type"),

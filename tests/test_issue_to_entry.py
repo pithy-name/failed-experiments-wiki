@@ -28,7 +28,11 @@ One steering vector, one layer, GPT-2 small, 200 prompts; nothing beyond that wa
 
 ### Method
 
-Activation Steering, probing
+activation-steering
+
+### Other methods
+
+Probing
 
 ### Models
 
@@ -63,7 +67,7 @@ _No response_
 
 hypothesis_false
 
-### Confidence this is a true negative
+### Strength of evidence
 
 low
 
@@ -164,6 +168,50 @@ def test_template_dropdowns_match_the_schema_closed_lists():
     assert options["evidence_level"] == props["evidence_level"]["enum"]
     form_to_schema = issue_to_entry.INFO_HAZARD_FROM_FORM
     assert [form_to_schema.get(o, o) for o in options["info_hazard"]] == props["info_hazard"]["enum"]
+
+
+def test_method_is_a_sorted_multiselect_covering_every_method_in_the_wiki():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    field = next(i for i in template["body"] if i.get("id") == "method")
+    assert field["type"] == "dropdown" and field["attributes"]["multiple"] is True
+    options = field["attributes"]["options"]
+    assert options == sorted(set(options))
+    assert all(o == wikilib.normalize_tag(o) for o in options)
+    # Entries may use typed-in methods the list does not have yet; `make method-report` tracks those.
+    # Requiring every entry method to be listed here would fail CI on the first write-in entry.
+
+
+def test_method_combines_dropdown_choices_and_other_methods(tmp_path):
+    body = ISSUE_BODY.replace("### Method\n\nactivation-steering", "### Method\n\nactivation-steering, linear-probing")
+    body = body.replace("### Other methods\n\nProbing", "### Other methods\n\nCustom Probe, linear-probing")
+    outcome = issue_to_entry.convert(body, "octocat", tmp_path, quote_mode="cached")
+    assert outcome["ok"], outcome
+    data, _ = wikilib.parse_entry_text(outcome["text"])
+    assert data["method"] == ["activation-steering", "linear-probing", "custom-probe"]
+
+
+def test_no_method_at_all_is_refused(tmp_path):
+    body = ISSUE_BODY.replace("### Method\n\nactivation-steering", "### Method\n\n_No response_")
+    body = body.replace("### Other methods\n\nProbing", "### Other methods\n\n_No response_")
+    outcome = issue_to_entry.convert(body, "octocat", tmp_path, quote_mode="cached")
+    assert not outcome["ok"]
+
+
+def test_evidence_question_covers_null_results_and_anchors_each_level():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    field = next(i["attributes"] for i in template["body"] if i.get("id") == "confidence_true_negative")
+    assert field["label"] == "Strength of evidence"
+    text = field["description"].lower()
+    assert "null" in text
+    for level in ("low:", "medium:", "high:"):
+        assert level in text
+
+
+def test_research_areas_are_alphabetical_with_other_last():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    options = next(i["attributes"]["options"] for i in template["body"] if i.get("id") == "research_area")
+    assert options[-1] == "other"
+    assert options[:-1] == sorted(options[:-1])
 
 
 def test_no_dropdown_option_uses_a_word_github_reserves():

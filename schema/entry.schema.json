@@ -43,18 +43,18 @@
       "uniqueItems": true,
       "items": {
         "enum": [
-          "interpretability",
-          "steering",
-          "evals",
-          "honesty",
-          "sycophancy",
-          "control",
-          "oversight",
-          "robustness",
-          "rlhf",
-          "alignment-training",
           "agents",
+          "alignment-training",
+          "control",
+          "evals",
           "governance",
+          "honesty",
+          "interpretability",
+          "oversight",
+          "rlhf",
+          "robustness",
+          "steering",
+          "sycophancy",
           "other"
         ]
       }
