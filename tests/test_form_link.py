@@ -33,7 +33,7 @@ def test_link_prefills_text_fields_by_id_and_lists_the_dropdowns():
     # only text fields go in the link; dropdowns and checkboxes are listed for the person to pick
     assert all(TYPES[k] in ("input", "textarea") for k in query if k not in ("template", "title"))
     chosen = dict(choices)
-    assert chosen["Failure type"] == draft["failure_type"]
+    assert chosen["Likely reason"] == draft["failure_type"]
     # every listed choice is an option the form actually offers
     options = {item["attributes"]["label"]: item["attributes"]["options"] for item in TEMPLATE["body"] if item["type"] == "dropdown"}
     for label, value in choices:
