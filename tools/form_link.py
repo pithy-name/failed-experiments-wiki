@@ -41,8 +41,8 @@ def submitted_body(draft: dict, body: str, model: str) -> str:
     return issue_to_entry.form_body(_answers(draft, body, model))
 
 
-def build(draft: dict, body: str, model: str, repo: str) -> tuple[str, list[tuple[str, str]], list[str]]:
-    """(link, choices to pick by hand as (label, value), warnings)."""
+def build(draft: dict, body: str, model: str, repo: str) -> tuple[str, list[tuple[str, str]], list[tuple[str, str]]]:
+    """(link, choices to pick by hand, fields too long for the link to paste by hand); each list is (label, value)."""
     answers = _answers(draft, body, model)
     text_params: dict[str, str] = {}
     choices: list[tuple[str, str]] = []
@@ -64,13 +64,12 @@ def build(draft: dict, body: str, model: str, repo: str) -> tuple[str, list[tupl
         head = {"template": issue_to_entry.TEMPLATE_PATH.name, "title": f"[entry] {draft['title']}"}
         return f"https://github.com/{repo}/issues/new?" + urlencode({**head, **params}, quote_via=quote)
 
-    warnings: list[str] = []
+    paste: list[tuple[str, str]] = []
     labels_by_id = {item["id"]: item["attributes"]["label"] for item in issue_to_entry.load_template()["body"] if item.get("id")}
     while len(url_for(text_params)) > MAX_URL and text_params:
         longest = max((k for k in text_params if k != "ai_draft_model"), key=lambda k: len(text_params[k]))
-        choices.append((labels_by_id[longest], text_params.pop(longest)))
-        warnings.append(f"'{labels_by_id[longest]}' was too long for the link; paste it into the form by hand.")
-    return url_for(text_params), choices, warnings
+        paste.append((labels_by_id[longest], text_params.pop(longest)))
+    return url_for(text_params), choices, paste
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -81,13 +80,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     data, body = wikilib.parse_entry_text(Path(args.file).read_text(encoding="utf-8"))
     draft = {k: v for k, v in data.items() if k not in ("id", "contributor", "review", "dates")}
-    url, choices, warnings = build(draft, body, args.model, args.repo)
+    url, choices, paste = build(draft, body, args.model, args.repo)
     print(url)
+    if paste:
+        print(f"\nPASTE THESE FIRST: {len(paste)} field(s) were too long for the link and are empty in the form.")
+        for label, value in paste:
+            print(f"\n--- {label} ---\n{value}")
     print("\nPick these in the form:")
     for label, value in choices:
         print(f"- {label}: {value}")
-    for warning in warnings:
-        print(f"Warning: {warning}", file=sys.stderr)
     return 0
 
 
