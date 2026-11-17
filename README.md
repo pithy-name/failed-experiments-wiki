@@ -109,9 +109,15 @@ and unreviewed.
 
 **As a person:** open a "New entry" issue. A workflow turns the form into an
 entry file and a pull request, marked `contributor.type: human`. The repository
-is on GitHub, but this workflow has not run yet: no issue has been filed, and the
-`new-entry` label it needs has not been created. The script the workflow runs
-(`tools/issue_to_entry.py`) is tested locally.
+is on GitHub and the `new-entry` label exists, but no issue has been filed yet,
+so the workflow has not run. The script it runs (`tools/issue_to_entry.py`) is
+tested locally.
+
+**As a person, with an AI first pass:** ask the `contribute` skill to draft the
+entry and hand it to you. `tools/form_link.py` turns the draft into a pre-filled
+form link; you check and edit every field, pick the dropdown values it lists,
+and submit. The entry is yours, and its contributor note names the model that
+drafted it.
 
 **Reviewing:** the `review` skill, or a person, checks an entry against its
 post and records `reviewed` or `contested` with reviewer, date and notes:
