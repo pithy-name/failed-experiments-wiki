@@ -174,6 +174,8 @@ Write the draft file as above, then run:
 .venv/bin/python tools/form_link.py --file <draft.md> --model <your model id>
 ```
 
-Give the person the link it prints and the list of dropdown values to pick.
+Give the person the link it prints, any fields it says to paste first (fields
+too long for the link arrive empty in the form), and the list of dropdown
+values to pick.
 They check and edit every field, then submit. The form records your model in
 "AI first-pass model", so the entry is theirs but shows it had an AI first pass.
