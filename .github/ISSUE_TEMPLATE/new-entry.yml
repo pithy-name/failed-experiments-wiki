@@ -10,7 +10,7 @@ body:
         A bot converts this form into an entry file and opens a pull request. Your entry is published as **unreviewed** until someone reviews it.
         Field labels below are read by the bot: please do not edit them.
   - type: input
-    id: title
+    id: entry_title
     attributes:
       label: Entry title
       description: "One line, scoped: what was tried, on what, what happened."
@@ -201,6 +201,11 @@ body:
       options: [no hazard, review_needed]
     validations:
       required: true
+  - type: input
+    id: ai_draft_model
+    attributes:
+      label: AI first-pass model
+      description: "Filled in when an AI model drafted this form for you. Keep it if any of its text remains; clear it only if you rewrote every field."
   - type: textarea
     id: notes
     attributes:
