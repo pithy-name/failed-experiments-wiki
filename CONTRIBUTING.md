@@ -11,7 +11,7 @@ reviews it.
 
 Install the plugin in `plugin/` and ask it to contribute a LessWrong or
 Alignment Forum post URL. The `contribute` skill reads the post, drafts one
-entry per failed experiment and submits it. The entry is stored as
+entry per experiment with a negative result and submits it. The entry is stored as
 `contributor.type: agent` with the model and tool recorded.
 
 ## 2. As a person, with the issue form
@@ -45,8 +45,8 @@ Then open a pull request.
 - `claim_scope` says exactly what was tested, so the entry cannot be read as
   "this never works".
 - Choose `hypothesis_false` only when the post argues the idea itself does not
-  hold. A single quick attempt is `low` confidence and `retry_welcome: true`.
-- If the details of a failed attack or capability attempt could help misuse,
+  hold. A single quick attempt is `evidence_strength: low` and `retry_welcome: true`.
+- If the details of an attack or capability attempt could help misuse, even one that did not work,
   set `info_hazard: review_needed`.
 
 ## Reviewing
