@@ -37,6 +37,37 @@ def test_dump_and_parse_round_trip(valid_entry):
     assert text.index("id:") < text.index("title:") < text.index("source:") < text.index("info_hazard:")
 
 
+def test_renamed_fields_name_the_old_key_and_its_replacement():
+    assert wikilib.RENAMED_FIELDS == {"confidence_true_negative": "evidence_strength"}
+    assert set(wikilib.RENAMED_FIELDS.values()) <= {path for path, _ in wikilib.FIELDS}
+
+
+def test_old_confidence_key_is_read_as_evidence_strength(valid_entry):
+    """Saved eval drafts in evals/results/ predate the rename; they must still load and score."""
+    text = wikilib.dump_entry(valid_entry)
+    assert "evidence_strength:" in text
+    data, _ = wikilib.parse_entry_text(text.replace("evidence_strength:", "confidence_true_negative:"))
+    assert data["evidence_strength"] == valid_entry["evidence_strength"]
+    assert "confidence_true_negative" not in data
+    old = copy.deepcopy(valid_entry)
+    old["confidence_true_negative"] = old.pop("evidence_strength")
+    assert wikilib.normalize_data(old)["evidence_strength"] == valid_entry["evidence_strength"]
+
+
+def test_old_confidence_key_does_not_override_evidence_strength(valid_entry):
+    both = copy.deepcopy(valid_entry)
+    both["confidence_true_negative"] = "high"
+    data = wikilib.normalize_data(both)
+    assert data["evidence_strength"] == valid_entry["evidence_strength"]
+    assert data["confidence_true_negative"] == "high"     # left in place, so the validator rejects it as an unknown field
+
+
+def test_summary_carries_evidence_strength(valid_entry):
+    summary = wikilib.summarize(Entry(data=valid_entry))
+    assert summary["evidence_strength"] == valid_entry["evidence_strength"]
+    assert "confidence_true_negative" not in summary
+
+
 def test_badges_follow_the_prd_rules(valid_entry):
     assert wikilib.badges(valid_entry) == ["agent-written", "unreviewed", "retry-welcome"]
     human = copy.deepcopy(valid_entry)
