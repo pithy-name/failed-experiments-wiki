@@ -1,7 +1,9 @@
 # Carpe Ignota: a Wiki of Negative Experiment Results (proof of concept)
 
-A wiki of **"failed" AI-safety experiments** that people and AI agents can both
-contribute to and both read. Every field is filterable, and an agent can
+A wiki of **negative results** from AI-safety experiments that people and AI
+agents can both contribute to and both read. A negative result is one that was
+null, neutral, smaller than expected, or opposite to the hypothesis: not only
+an outright failure. Every field is filterable, and an agent can
 answer: *"I want to run an experiment on X. What has been tried, where did it
 go wrong, what should I avoid?"*
 
@@ -27,13 +29,13 @@ https://github.com/user-attachments/assets/1b8c06d5-12a7-4331-a53b-89e936cdb058
 
 ## The idea
 
-Failed experiments mostly stay in file drawers or scattered posts, so people
+Negative results mostly stay in file drawers or scattered posts, so people
 repeat dead ends. The goal here is that each experiment can be *less wrong*
 than the one before it. Repeating a known mistake, not sharing what you
 learned, and ignoring evidence that is at your fingertips are all avoidable.
 
 This is aimed at habits, not at individuals. In postmortem terms, the fix is a
-system that makes failures easy to find. **Entries describe experiments. They
+system that makes negative results easy to find. **Entries describe experiments. They
 never judge people.**
 
 The proof of concept draws only on **LessWrong and the Alignment Forum**.
@@ -87,9 +89,9 @@ server runs from the `.venv` that `make setup` creates.
   `contested` or `superseded`, with reviewers, dates and notes.
 - **What it rests on:** a link to the post, and a quote of 15 words or fewer
   that the validator finds in the post text.
-- **How far to trust the negative:** `claim_scope`, `failure_type`,
-  `confidence_true_negative` and `retry_welcome` keep a thin failure report
-  from reading as "this never works".
+- **How far to trust the result:** `claim_scope`, `failure_type` (shown as
+  "likely reason"), `evidence_strength` and `retry_welcome` keep a thin report
+  of a negative result from reading as "this never works".
 - **What changed and why:** git history. Every submission and every review made
   through the tools is its own commit on its own branch. The five reference
   entries and later maintainer edits were committed directly to `main`.
@@ -101,8 +103,8 @@ Badges are derived, never stored: `agent-written`, `unreviewed`, `contested`,
 
 **As an agent** (Claude Code): load the plugin
 ([below](#using-the-plugin-with-claude-code)), then ask it to contribute a post
-URL. The `contribute` skill reads the post, drafts one entry per failed
-experiment, and calls `submit_entry`, which validates the entry and commits it
+URL. The `contribute` skill reads the post, drafts one entry per experiment
+with a negative result, and calls `submit_entry`, which validates the entry and commits it
 on a new branch. With a GitHub remote it then opens a pull request; without
 one it says so and names the local branch. The entry is stored as agent-written
 and unreviewed.
@@ -131,7 +133,7 @@ post and records `reviewed` or `contested` with reviewer, date and notes:
 
 With the plugin loaded, describe your plan and the `ask` skill answers in
 five parts: already tried, where it went wrong, what to avoid, worth retrying,
-not found. It cites entry IDs, never states a failure that is not in an entry,
+not found. It cites entry IDs, never states a result that is not in an entry,
 and says plainly when the wiki has nothing.
 
 Without the plugin, the same tools are on the command line:
@@ -160,7 +162,7 @@ Without the plugin, the same tools are on the command line:
 | Kind | Name | What it does |
 |---|---|---|
 | Skill | `/failed-experiments-wiki:ask` | Answers "what has been tried on this, where did it go wrong, what should I avoid?" |
-| Skill | `/failed-experiments-wiki:contribute` | Turns a LessWrong or Alignment Forum post into one entry per failed experiment and submits it |
+| Skill | `/failed-experiments-wiki:contribute` | Turns a LessWrong or Alignment Forum post into one entry per experiment with a negative result and submits it |
 | Skill | `/failed-experiments-wiki:review` | Checks an entry against its post and records the outcome |
 | Tool | `search_entries` | Keyword search and filters on any field |
 | Tool | `get_entry` | One entry in full |
@@ -197,7 +199,7 @@ credentials.
 **What a post needs before it can be filed.** The `contribute` skill declines
 an experiment unless the post itself states what was expected, exactly what
 was tested, the result, and a quotable sentence of 15 words or fewer. Most
-failure write-ups fall short of that (9 of 49 during seeding), so "this post
+write-ups of negative results fall short of that (9 of 49 during seeding), so "this post
 does not support an entry" is a common and correct answer. A post that works:
 `https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders`
 (already in the wiki, so the skill will say so).
