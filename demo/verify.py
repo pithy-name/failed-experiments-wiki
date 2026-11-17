@@ -128,12 +128,18 @@ def issue_body(draft: dict, body: str, ticked: bool = True) -> str:
     def number(value) -> str:
         return "" if value is None else str(value)
 
+    # The Method dropdown only offers its listed options; anything else goes under Other methods.
+    listed = set(next(i for i in template["body"] if i.get("id") == "method")["attributes"]["options"])
+    chosen = [m for m in draft["method"] if m in listed]
+    other = [m for m in draft["method"] if m not in listed]
+
     answers = {
         "title": draft["title"],
         "research_area": ", ".join(draft["research_area"]),
         "hypothesis": draft["hypothesis"],
         "claim_scope": draft["claim_scope"],
-        "method": ", ".join(draft["method"]),
+        "method": ", ".join(chosen),
+        "method_other": ", ".join(other),
         "models": "\n".join(" | ".join(str(model.get(key, "unknown")) for key in ("name", "developer", "version", "size", "access"))
                             for model in draft["models"]),
         "benchmarks": "\n".join(draft.get("benchmarks", [])),

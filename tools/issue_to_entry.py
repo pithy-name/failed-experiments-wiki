@@ -34,6 +34,7 @@ LABELS = {
     "Hypothesis": "hypothesis",
     "Claim scope": "claim_scope",
     "Method": "method",
+    "Other methods": "method_other",
     "Models": "models",
     "Benchmarks": "benchmarks",
     "Result direction": "result_direction",
@@ -88,6 +89,16 @@ def parse_issue_body(body: str) -> dict[str, str]:
 
 def _split(value: str) -> list[str]:
     return [part.strip() for part in re.split(r"[,\n]", value or "") if part.strip()]
+
+
+def _methods(chosen: str, other: str) -> list[str]:
+    """Dropdown choices first, then any typed-in methods; normalized, without repeats."""
+    out: list[str] = []
+    for part in _split(chosen) + _split(other):
+        tag = wikilib.normalize_tag(part)
+        if tag and tag not in out:
+            out.append(tag)
+    return out
 
 
 def _number(value: str, label: str, integer: bool = False):
@@ -151,7 +162,7 @@ def entry_from_fields(fields: dict[str, str]) -> tuple[dict, str]:
         "research_area": _split(get("research_area")),
         "hypothesis": get("hypothesis"),
         "claim_scope": get("claim_scope"),
-        "method": _split(get("method")),
+        "method": _methods(get("method"), get("method_other")),
         "models": _models(get("models")),
         "result": result,
         "failure_type": get("failure_type"),
