@@ -16,10 +16,10 @@ spec.loader.exec_module(run_evals)
 
 ANSWER = """## Already tried
 - **fe-2026-0001** — activation steering on GPT-2 small did not change refusal rates.
-  Models: GPT-2 small · Evidence: author_report, confidence it is a true negative: low · Badges: agent-written, unreviewed
+  Models: GPT-2 small · Evidence: author_report, strength of evidence: low · Badges: agent-written, unreviewed
 
 ## Where it went wrong
-- **fe-2026-0001** — failure type `hypothesis_false`: one layer, no effect.
+- **fe-2026-0001** — likely reason `hypothesis_false`: one layer, no effect.
 
 ## What to avoid
 - Do not conclude from a single layer (from fe-2026-0001).
@@ -102,6 +102,18 @@ def test_results_are_provisional_while_gold_is_unverified_and_ungraded_fields_ar
     assert item["quote_valid"] is True and item["schema_valid"] is True
     report = (workspace["results"] / "RESULTS.md").read_text(encoding="utf-8")
     assert "PROVISIONAL" in report and "gold `hypothesis_false` / skill `underpowered`" in report
+
+
+def test_saved_drafts_with_the_old_confidence_key_still_score_evidence_strength(workspace):
+    """Drafts saved before the rename say confidence_true_negative; they are not rewritten."""
+    path = workspace["results"] / "contribute" / "fe-2026-0001" / "draft-1.md"
+    text = path.read_text(encoding="utf-8")
+    assert "evidence_strength: low" in text
+    path.write_text(text.replace("evidence_strength:", "confidence_true_negative:"), encoding="utf-8")
+    assert "confidence_true_negative: low" in path.read_text(encoding="utf-8")
+    item = run(workspace)["contribute"]["items"][0]["result"]
+    assert item["fields"]["evidence_strength"]["score"] == 1.0
+    assert item["schema_valid"] is True
 
 
 def test_rubric_grades_count_only_while_they_match_the_graded_texts(workspace):
