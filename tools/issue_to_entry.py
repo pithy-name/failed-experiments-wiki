@@ -43,7 +43,7 @@ LABELS = {
     "Confidence interval high": "ci_high",
     "Sample size": "n",
     "Failure type": "failure_type",
-    "Confidence this is a true negative": "confidence_true_negative",
+    "Strength of evidence": "confidence_true_negative",
     "Checks done": "checks_done",
     "Limitations": "limitations",
     "Revival conditions": "revival_conditions",

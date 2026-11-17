@@ -131,7 +131,7 @@ are lists of strings. `models` and `related` are lists of objects.
 | Field | How to fill it |
 |---|---|
 | `title` | One line: what was tried, on what, what happened. Scoped. E.g. "SAE probes did not beat linear probes for harmful-intent detection on Gemma 2". |
-| `research_area` | One or more of: `interpretability`, `steering`, `evals`, `honesty`, `sycophancy`, `control`, `oversight`, `robustness`, `rlhf`, `alignment-training`, `agents`, `governance`, `other`. |
+| `research_area` | One or more of: `agents`, `alignment-training`, `control`, `evals`, `governance`, `honesty`, `interpretability`, `oversight`, `rlhf`, `robustness`, `steering`, `sycophancy`, `other`. |
 | `hypothesis` | What the authors expected or hoped to find, as the post states it. |
 | `claim_scope` | Exactly what was tested: setup, models, data, scale, and what was not covered. Write it so nobody can read the entry as "X never works". |
 | `method` | Technique tags, lowercase with hyphens: e.g. `sae`, `activation-steering`, `linear-probing`, `fine-tuning`, `prompting`, `rl`, `debate`. |

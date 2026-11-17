@@ -67,7 +67,7 @@ _No response_
 
 hypothesis_false
 
-### Confidence this is a true negative
+### Strength of evidence
 
 low
 
@@ -195,6 +195,23 @@ def test_no_method_at_all_is_refused(tmp_path):
     body = body.replace("### Other methods\n\nProbing", "### Other methods\n\n_No response_")
     outcome = issue_to_entry.convert(body, "octocat", tmp_path, quote_mode="cached")
     assert not outcome["ok"]
+
+
+def test_evidence_question_covers_null_results_and_anchors_each_level():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    field = next(i["attributes"] for i in template["body"] if i.get("id") == "confidence_true_negative")
+    assert field["label"] == "Strength of evidence"
+    text = field["description"].lower()
+    assert "null" in text
+    for level in ("low:", "medium:", "high:"):
+        assert level in text
+
+
+def test_research_areas_are_alphabetical_with_other_last():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    options = next(i["attributes"]["options"] for i in template["body"] if i.get("id") == "research_area")
+    assert options[-1] == "other"
+    assert options[:-1] == sorted(options[:-1])
 
 
 def test_no_dropdown_option_uses_a_word_github_reserves():
