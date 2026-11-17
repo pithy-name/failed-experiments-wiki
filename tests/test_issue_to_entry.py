@@ -166,6 +166,13 @@ def test_template_dropdowns_match_the_schema_closed_lists():
     assert [form_to_schema.get(o, o) for o in options["info_hazard"]] == props["info_hazard"]["enum"]
 
 
+def test_research_areas_are_alphabetical_with_other_last():
+    template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))
+    options = next(i["attributes"]["options"] for i in template["body"] if i.get("id") == "research_area")
+    assert options[-1] == "other"
+    assert options[:-1] == sorted(options[:-1])
+
+
 def test_no_dropdown_option_uses_a_word_github_reserves():
     # GitHub rejects the whole form, silently, if a dropdown option is "None".
     template = yaml.safe_load((REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "new-entry.yml").read_text(encoding="utf-8"))

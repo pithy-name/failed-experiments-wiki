@@ -8,7 +8,7 @@ An entry is a Markdown file, `entries/fe-YYYY-NNNN.md`, with these fields in its
 |---|---|---|---|---|
 | `id` | string | yes | pattern `^fe-[0-9]{4}-[0-9]{4}$` | fe-YYYY-NNNN, unique. YYYY is the year the entry was created. |
 | `title` | string | yes | pattern `^[^\n]+$`; at most 240 characters | One line, scoped: what was tried, on what, what happened. |
-| `research_area` | list, each one of | yes | `interpretability`, `steering`, `evals`, `honesty`, `sycophancy`, `control`, `oversight`, `robustness`, `rlhf`, `alignment-training`, `agents`, `governance`, `other` |  |
+| `research_area` | list, each one of | yes | `agents`, `alignment-training`, `control`, `evals`, `governance`, `honesty`, `interpretability`, `oversight`, `rlhf`, `robustness`, `steering`, `sycophancy`, `other` |  |
 | `hypothesis` | string | yes |  | What was expected. |
 | `claim_scope` | string | yes |  | Exactly what was tested, so the entry cannot be read as 'X never works'. |
 | `method` | list of values | yes |  | Techniques, free tags normalized to lowercase-hyphen. |
