@@ -1,4 +1,4 @@
-"""Local MCP server of the failed-experiments wiki (FastMCP, stdio).
+"""Local MCP server of Carpe Ignota, the wiki of negative results in AI safety (FastMCP, stdio).
 
 A thin wrapper over tools/wikilib.py. Read tools need no GitHub credentials.
 Write tools commit on a new branch and open a pull request with the user's
@@ -26,8 +26,9 @@ CONTRIBUTE_TOOL = f"contribute-skill v{wikilib.TOOL_VERSION}"
 mcp = FastMCP(
     "failed-experiments-wiki",
     instructions=(
-        "A wiki of failed AI-safety experiments. Use search_entries and get_entry to find what has been tried and "
-        "where it went wrong; cite entry IDs. Never state a failure that is not in an entry. Entries with the badges "
+        "A wiki of negative results in AI safety: experiments whose results were null, neutral, smaller than expected, "
+        "or opposite to the hypothesis. Use search_entries and get_entry to find what has been tried and "
+        "where it went wrong; cite entry IDs. Never state a negative result that is not in an entry. Entries with the badges "
         "'agent-written' or 'unreviewed' have not been checked by a person: say so when you rely on them. "
         "'reviewed' is not the same as vetted: read `reviewed_by`, and say so when the review was by an agent only. "
         "Entries describe experiments, never judge people. Writing (submit_entry, review_entry) commits to a new "
