@@ -21,7 +21,7 @@ def _draft():
 
 def test_link_prefills_text_fields_by_id_and_lists_the_dropdowns():
     draft, body = _draft()
-    url, choices, warnings = form_link.build(draft, body, model="claude-sonnet-5-5", repo="owner/wiki")
+    url, choices, paste = form_link.build(draft, body, model="claude-sonnet-5-5", repo="owner/wiki")
     parsed = urlparse(url)
     assert parsed.netloc == "github.com" and parsed.path == "/owner/wiki/issues/new"
     query = {k: v[0] for k, v in parse_qs(parsed.query).items()}
@@ -40,7 +40,7 @@ def test_link_prefills_text_fields_by_id_and_lists_the_dropdowns():
         if label in options:
             assert all(v.strip() in options[label] for v in value.split(",")), (label, value)
     assert "Before you submit" in " ".join(label for label, _ in choices) or any("tick" in v.lower() for _, v in choices)
-    assert not warnings
+    assert paste == []
 
 
 def test_a_submitted_link_round_trips_to_the_same_entry():
@@ -51,13 +51,34 @@ def test_a_submitted_link_round_trips_to_the_same_entry():
     assert notes.strip() == body.strip()
 
 
-def test_a_link_that_is_too_long_warns_and_moves_the_longest_fields_to_the_list():
+def test_fields_too_long_for_the_link_go_to_a_separate_paste_list():
     draft, body = _draft()
     draft["hypothesis"] = "word " * 3000
-    url, choices, warnings = form_link.build(draft, body, model="m", repo="owner/wiki")
+    url, choices, paste = form_link.build(draft, body, model="m", repo="owner/wiki")
     assert len(url) <= form_link.MAX_URL
-    assert warnings
-    assert "Hypothesis" in dict(choices)
+    assert dict(paste)["Hypothesis"] == draft["hypothesis"]
+    assert "Hypothesis" not in dict(choices)
+    assert "hypothesis" not in parse_qs(urlparse(url).query)
+
+
+def test_the_paste_list_is_printed_before_the_pick_list(tmp_path, capsys):
+    draft, body = _draft()
+    draft["hypothesis"] = "word " * 3000
+    data = {**draft, "id": "fe-2026-9999"}
+    path = tmp_path / "draft.md"
+    path.write_text(wikilib.dump_entry(data, body), encoding="utf-8")
+    assert form_link.main(["--file", str(path), "--model", "m", "--repo", "owner/wiki"]) == 0
+    out = capsys.readouterr().out
+    assert out.index("PASTE") < out.index("Pick these")
+    assert out.index("Hypothesis") < out.index("Pick these")
+
+
+def test_no_paste_section_when_everything_fits(tmp_path, capsys):
+    draft, body = _draft()
+    path = tmp_path / "draft.md"
+    path.write_text(wikilib.dump_entry({**draft, "id": "fe-2026-9999"}, body), encoding="utf-8")
+    form_link.main(["--file", str(path), "--model", "m", "--repo", "owner/wiki"])
+    assert "PASTE" not in capsys.readouterr().out
 
 
 def test_ai_first_pass_model_is_recorded_as_a_contributor_note(tmp_path):
