@@ -164,3 +164,16 @@ what the authors concluded or decided next. No post text.
 If you are asked for a draft only (for example in an eval), write the entry as
 Markdown with YAML front matter to the path you are given and do not call
 `submit_entry`. Leave out `id`, `contributor`, `review` and `dates`.
+
+## Handing a draft to a person (pre-filled form)
+
+If the person wants to submit the entry themselves, do not call `submit_entry`.
+Write the draft file as above, then run:
+
+```
+.venv/bin/python tools/form_link.py --file <draft.md> --model <your model id>
+```
+
+Give the person the link it prints and the list of dropdown values to pick.
+They check and edit every field, then submit. The form records your model in
+"AI first-pass model", so the entry is theirs but shows it had an AI first pass.
