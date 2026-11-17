@@ -1,6 +1,6 @@
 {
   "name": "failed-experiments-wiki",
-  "description": "Read and contribute to a wiki of failed AI-safety experiments: a local MCP server plus the contribute, ask and review skills.",
+  "description": "Read and contribute to Carpe Ignota, a wiki of negative results in AI safety: a local MCP server plus the contribute, ask and review skills.",
   "version": "0.1.0",
   "keywords": ["ai-safety", "negative-results", "wiki", "mcp"]
 }
