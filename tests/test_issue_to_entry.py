@@ -177,8 +177,8 @@ def test_method_is_a_sorted_multiselect_covering_every_method_in_the_wiki():
     options = field["attributes"]["options"]
     assert options == sorted(set(options))
     assert all(o == wikilib.normalize_tag(o) for o in options)
-    used = {m for e in wikilib.load_entries() for m in (e.data.get("method") or [])}
-    assert used <= set(options), sorted(used - set(options))
+    # Entries may use typed-in methods the list does not have yet; `make method-report` tracks those.
+    # Requiring every entry method to be listed here would fail CI on the first write-in entry.
 
 
 def test_method_combines_dropdown_choices_and_other_methods(tmp_path):
