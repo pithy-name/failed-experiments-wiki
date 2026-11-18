@@ -18,7 +18,6 @@ The README's repository table says what the main scripts are for. This file adds
 
 | Script | What it does |
 |---|---|
-| `form_link.py` | Turns an AI-drafted entry into a pre-filled issue-form link for a person to edit and submit. |
 | `method_report.py` | Lists write-in methods the form's Method dropdown lacks. |
 | `set_handle.py` | Replaces the placeholder handle on entries with the maintainer's GitHub login. |
 | `datasette_check.py` | Checks the Datasette database without opening a port. |
