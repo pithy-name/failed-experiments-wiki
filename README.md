@@ -20,7 +20,7 @@ https://github.com/user-attachments/assets/1b8c06d5-12a7-4331-a53b-89e936cdb058
 | Read | For |
 |---|---|
 | [`DONE.md`](DONE.md) | What was built, and the status of each requirement |
-| [`VERIFICATION.md`](VERIFICATION.md) | Every function exercised, with what passed and what cannot be checked yet |
+| [`VERIFICATION.md`](VERIFICATION.md) | A verification run: each check, its result, and the commit it ran on |
 | [`TODO.md`](TODO.md) | What is left for the maintainer |
 | [`demo/script.md`](demo/script.md) | The demo narration |
 | [`DECISION-LOG.md`](DECISION-LOG.md) | Design choices and their reasons |
@@ -51,6 +51,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `tools/build_site.py` → `site/index.html` | Static browse page, one self-contained file |
 | `tools/build_db.py` → `wiki.db` | SQLite database for Datasette |
 | `tools/issue_to_entry.py` | Turns a submitted issue form into an entry |
+| `tools/form_link.py` | Turns an AI draft into a pre-filled issue-form link for a person to check and submit |
 | `tools/sync_gold.py` | Publishes verified gold entries into `entries/` |
 | `tools/scout/` | Scouting scripts and the classifier and audit prompts |
 | `plugin/` | Claude Code plugin: MCP server and the `contribute`, `ask`, `review` skills |
@@ -63,6 +64,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `report/` | Report drafts, figures and the report kit |
 | `schema/SCHEMA.md` | The schema as a printable table |
 | `datasette/` | Datasette settings |
+| `CLAUDE.md`, `tools/CLAUDE.md` | Rules for agents maintaining the repository |
 
 ## Quick start
 
@@ -107,16 +109,14 @@ on a new branch. With a GitHub remote it then opens a pull request; without
 one it says so and names the local branch. The entry is stored as agent-written
 and unreviewed.
 
-**As a person:** open a "New entry" issue. A workflow turns the form into an
-entry file and a pull request, marked `contributor.type: human`. The repository
-is on GitHub and the `new-entry` label exists, but no issue has been filed yet,
-so the workflow has not run. The script it runs (`tools/issue_to_entry.py`) is
-tested locally.
+**As a person:** open a ["New entry" issue](https://github.com/pithy-name/failed-experiments-wiki/issues/new/choose).
+A workflow turns the form into an entry file and a pull request, marked
+`contributor.type: human`. Its status is in `DONE.md` (D2).
 
 **As a person, with an AI first pass:** ask the `contribute` skill to draft the
 entry and hand it to you. `tools/form_link.py` turns the draft into a pre-filled
-form link; you check and edit every field, pick the dropdown values it lists,
-and submit. The entry is yours, and its contributor note names the model that
+form link; you paste any fields it prints as too long for the link, check and
+edit every field, pick the dropdown values it lists, and submit. The entry is yours, and its contributor note names the model that
 drafted it.
 
 **Reviewing:** the `review` skill, or a person, checks an entry against its
@@ -197,7 +197,7 @@ credentials.
 **What a post needs before it can be filed.** The `contribute` skill declines
 an experiment unless the post itself states what was expected, exactly what
 was tested, the result, and a quotable sentence of 15 words or fewer. Most
-failure write-ups fall short of that (9 of 49 during seeding), so "this post
+failure write-ups fall short of that (`scouting/yields.md`), so "this post
 does not support an entry" is a common and correct answer. A post that works:
 `https://www.lesswrong.com/posts/EC5H7xakTgxxNXm5g/sanity-checks-for-sanity-checks-for-sparse-autoencoders`
 (already in the wiki, so the skill will say so).
@@ -207,9 +207,7 @@ to `reviewed`, and tools then report `reviewed_by: an agent only` (and say when
 it was the same model that wrote the entry). Treat only a person's review as
 vetting.
 
-Checked on 2026-11-15 in headless sessions (see `VERIFICATION.md`): the plugin
-loads, the six tools and three skills register, and the `ask` skill answers
-through the tools.
+What has been checked inside Claude Code: `VERIFICATION.md`.
 
 ## What is stored, and what is not
 
@@ -231,7 +229,8 @@ uses third-party open-source Python packages, listed in the
 
 ## Limits
 
-This is a proof of concept with 15 entries from 10 posts. Nothing is hosted. The evals
-are a spot-check on 5 posts with one model vendor, not a benchmark. See
+This is a proof of concept with a small seed set (`DONE.md`, D6). The browse page and
+Datasette are not hosted; build them locally. The evals are a spot-check on the gold
+posts with one model vendor, not a benchmark. See
 `VERIFICATION.md` for what was run and `DONE.md` for the status of each
 requirement.
