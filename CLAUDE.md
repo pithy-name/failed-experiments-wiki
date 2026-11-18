@@ -5,7 +5,9 @@ Read `README.md` first: it says what the project is, how to set it up and run it
 ## Keep these in sync
 
 - **Form, converter and schema.** `.github/ISSUE_TEMPLATE/new-entry.yml`, `tools/issue_to_entry.py` and `schema/entry.schema.json` describe the same fields. The converter maps form **labels**, not ids, to fields, so renaming a label means updating `LABELS`. `tests/test_issue_to_entry.py` enforces the match.
-- **GitHub reserves "None" as a dropdown option** and silently drops a form that offers it. The form says "no hazard"; the converter maps it back to `none`.
+- **Never offer "None" as a dropdown option:** the form vanished from GitHub until it was removed (DEC-85). The form says "no hazard"; the converter maps it back to `none`.
+- **Status files describe `main` as it stands,** never an unmerged pull request.
+- **ID order.** Every file with IDs lists them in ID order.
 - **Generated files.** Edit the source, regenerate, and commit both. Never hand-edit the output.
 
 | Generated file | Source | Regenerate with |
@@ -14,6 +16,11 @@ Read `README.md` first: it says what the project is, how to set it up and run it
 | `schema/SCHEMA.md` | `schema/entry.schema.json` | `make print-pack` |
 | `demo/script.md` | `demo/scenes.yaml`, `demo/build_demo.py` | `make demo-script` |
 | `VERIFICATION.md` | `demo/verify.yaml`, `demo/verify.py` | `make verify` (slow: drives a browser) |
+
+## The No Rot Rule
+
+- **One home per fact.** Each fact lives in one file; other files point to it instead of repeating it. For status: `DONE.md` holds status, `TODO.md` tasks, `DECISION-LOG.md` decisions, `VERIFICATION.md` checks, and `DONE.md` holds no task steps.
+- **Nothing that goes stale.** No line that needs updating after the next change, such as counts, "since then" lists or test totals. Point to a fixed marker instead: a tag, a DEC ID, a task ID.
 
 ## Entries
 

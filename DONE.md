@@ -4,10 +4,10 @@ The proof of concept is built and works locally, with **15 entries** from 10
 posts. The repository was pushed to GitHub on 2026-11-15 and is public. The
 validation workflow has run there: its first run failed on a test-suite bug
 (since fixed) and every run since has passed. **Two things have not happened on
-GitHub:** no pull request has been opened (D1, D3), and the issue-form workflow
-has never run (D2). Each is marked UNVERIFIED below with the steps to verify it.
+GitHub:** the wiki's own tools have never opened a pull request for an entry or
+a review (D1, D3), and the issue-form workflow has never run (D2). Each is marked UNVERIFIED below.
 
-What is left for you to do is in `TODO.md`, shortest task first. This file records what was built and how it was verified.
+What is left for you to do is in `TODO.md`. This file records what was built and how it was verified.
 
 Every "verified" below was run in this build session on 2026-11-14. Where
 something was not run, it says so.
@@ -44,7 +44,7 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 | ID | Capability | Status | In one line |
 |---|---|---|---|
 | D1 | An LLM can contribute | **PASS locally · pull request UNVERIFIED** | Skill drafts → validator → branch → merge worked for 10 entries. No pull request was opened: the build had no remote. A remote exists now; the pull-request code path is still untested (T6). |
-| D2 | A person can contribute | **BUILT · live run UNVERIFIED** | Issue form and workflow exist; the form-to-entry conversion passes its tests. The workflow has never run on GitHub. |
+| D2 | A person can contribute | **BUILT · live run UNVERIFIED** | Issue form and workflow exist; the form-to-entry conversion passes its tests. The form shows on GitHub, but no issue has been filed, so the workflow has never run there. |
 | D3 | A person or agent can review | **PASS locally · pull request UNVERIFIED (remote now exists)** | An agent review changed `fe-2026-0007` from unreviewed to reviewed, with reviewer, date and notes, in its own commit. The human review is yours to do (T4). |
 | D4 | Browse and filter by hand | **PASS, seen in a browser and on a port** (2026-11-15; was "PASS by test · not seen in a browser or on a port") | Both UIs list all 15 entries and filter on every field. Every value of every field was ticked in a real browser and compared with the entry files; Datasette was rendered in process and on a local port. |
 | D5 | An agent can ask "what's been tried?" | **PASS, including inside Claude Code** (2026-11-15; was "inside Claude Code UNVERIFIED") | 7 answers in the required five-part format, two of them an honest "not found". The plugin was then loaded in headless Claude Code sessions: six tools, three skills, a live search, and the `ask` skill answering one question through the plugin's tools. |
@@ -62,23 +62,26 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
   - Entries `entries/fe-2026-0006.md` to `fe-2026-0015.md`: `contributor.type: agent`,
     `agent_model: claude-sonnet-5-5`, `tool: contribute-skill v0.1` (v0.2 for `0011`–`0015`), `review.status: unreviewed`.
   - Ten branches `entry/fe-2026-0006` … `entry/fe-2026-0015`, each with one commit, each merged with a merge commit:
-    `git log --oneline --graph`.
+    `git log --oneline --graph`. The commits were made in build order from files that
+    already existed, so their timestamps cluster late in the session and do not show the real pace of work.
   - Two of the first five drafts were **rejected by the validator** on first submission
     (`limitations` written as a list) and resubmitted after the fix. The skill
     file now states the field types (v0.2).
 - **See it:** `.venv/bin/python tools/cli.py get fe-2026-0006` shows the badges `agent-written`, `unreviewed`, `retry-welcome`.
-- **UNVERIFIED, and how to verify:**
-  1. A real pull request. After T6, run the skill on a new post and `submit_entry` will push the branch and run `gh pr create`. That code path has never run.
+- **UNVERIFIED:**
+  1. A real pull request: `submit_entry` pushes the branch and runs `gh pr create`, and that code path has never run (T6).
   2. The plugin loaded in Claude Code (T8). *Verified 2026-11-15 for loading, the tools and the `ask` skill (`VERIFICATION.md`, the `plugin-…-live` checks). The `contribute` and `review` skills were also run live through the plugin on 2026-11-15, in a scratch clone with no remote (DEC-75).*
   3. The subagents had no command access, so they read the post from the cache the orchestrator prepared, not through `fetch_source`, and the orchestrator ran the submit step with their drafts.
 
 ### D2. A person can contribute
 
-- **Built:** `.github/ISSUE_TEMPLATE/new-entry.yml`, `.github/workflows/issue-to-pr.yml`, `tools/issue_to_entry.py`.
+- **Built:** `.github/ISSUE_TEMPLATE/new-entry.yml`, `.github/workflows/issue-to-pr.yml`, `tools/issue_to_entry.py`, and `tools/form_link.py`, which pre-fills the form from an AI draft (DEC-89).
 - **Verified:** `.venv/bin/python -m pytest tests/test_issue_to_entry.py -q` → 6 passed. The tests feed a realistic issue-form body and check the result is a schema-valid entry with `contributor.type: human`, that the form's labels and dropdowns match the schema, and that bad forms are refused with a readable reason.
 - **Verified 2026-11-15:** form text built from the form's own labels was run through the converter in a throwaway clone: it produced a valid entry marked human-written and unreviewed, every field came through unchanged, and unticked boxes or a value outside a closed list were refused with the reason (`VERIFICATION.md`: `issue-form`, `issue-form-refusals`, `issue-form-round-trip`).
-- **UNVERIFIED:** the workflow has never run. No test issue was filed from the build session, because an entry filed by an agent must not sit in the wiki as a person's (DEC-43). The repository now exists; the live run is T6 step 5.
-- **To verify:** T6, steps 3–5. Fallback if the Action fails: copy an entry file by hand, `make validate`, open a pull request.
+- **Fixed 2026-11-16:** GitHub did not show the form until a dropdown option "None" was renamed (DEC-85).
+- **UNVERIFIED:**
+  1. The workflow has never run. No test issue was filed from the build session, because an entry filed by an agent must not sit in the wiki as a person's (DEC-43). The live run is T12.
+  2. Whether GitHub fills every text field from a `tools/form_link.py` link (T12).
 
 ### D3. A person or agent can review
 
@@ -86,7 +89,6 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 - **Evidence:** `git log --oneline --grep "Review fe-2026-0007"` shows the review commit on branch `review/fe-2026-0007-20261114` and its merge. `entries/fe-2026-0007.md` has `review.status: reviewed` and a reviewer with `type: agent`, the date, the model and notes.
 - **Read this:** that review was done by the same model that wrote the entry. The notes say so, and the web page labels it "Reviewed by an agent only". Treat it as a demonstration of the mechanism, not as vetting.
 - **Verified 2026-11-15, in a throwaway clone:** a human review marking an entry contested and an agent review marking one reviewed, each on its own branch and merged through validation; and a draft that claimed to be human-written and already reviewed was still stamped agent-written and unreviewed (`VERIFICATION.md`: `review-contested`, `review-by-agent`, `submit-cannot-self-promote`).
-- **Your human review:** T4.
 
 ### D4. Browse and filter by hand
 
@@ -157,31 +159,13 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
   - The full table and every mismatch are in `evals/results/RESULTS.md`.
 - `make evals` re-scores saved outputs and calls no model. Producing the outputs and the grades is a model step, documented in `evals/README.md`.
 
-**Whole test suite:** `make test` → 101 passed on 2026-11-14. It has grown since (browser tests, verification-spec tests); `VERIFICATION.md` records the current run under `test-suite`.
-
 ---
 
-## 2. What is provisional, cut or left over
-
-| ID | Item | Why | What makes it final |
-|---|---|---|---|
-| P1 | The 5 gold entries (`evals/gold/`) | Drafted by a model, not by you. `gold_status: pending_maintainer_verification`. | T7. |
-| P2 | The copies of those 5 in `entries/` | **Changed 2026-11-15 (DEC-71):** now `contributor.type: agent` with the model named, the note kept, and the agent-written badge shown. Before: marked `contributor.type: human` as you instructed, with the note, and no agent-written badge. | Confirm or undo (T11 a); `make sync-gold` after T7 makes them yours. |
-| P3 | Every eval number | Gold is unverified; one vendor's models wrote the drafts, the grades and the gold. | T7, then `make evals`. |
-| P4 | The exception post (`fe-2026-0010`, `fe-2026-0011`) | Does not meet your qualification rule: no stated hypothesis. | Your decision (T3). |
-| P5 | The handle on all 15 entries | **Resolved 2026-11-15 (DEC-72):** set to your `gh` login. Before: `contributor.handle: HANDLE-TBD`, because the session could not read it. | Confirm or undo (T11 b). |
-| P6 | Git history | Built in a scratch git directory, because the sandbox refused `git init` in this folder, then loaded here from `history.bundle` once you ran `git init` (T1, done; the bundle is now in `_trash-review/`). Commits were made in build order from files that already existed, so their timestamps cluster late in the session and do not show the real pace of work. | Nothing: it is what it is. Say so if anyone reads the history as a timeline. |
-| P7 | Pull requests, the issue-form workflow | The remote exists; no pull request has been opened and the issue-form workflow has never run. (The validation Action has run: first run failed, every run since passed.) | T6 steps 3–5. |
-| P8 | Plugin loaded in Claude Code | **Resolved 2026-11-15:** loaded in headless sessions; tools, skills and all three skills' live runs checked (DEC-68, DEC-75). Before: never loaded. | An interactive try is optional (T8). |
-| P9 | Web page in a real browser, Datasette on a port | **Resolved 2026-11-15:** both rendered and checked in headless Chromium, Datasette also on a port (DEC-64, DEC-65). Before: blocked by the sandbox. | Your own look, and other browsers (T5). |
+## 2. What was cut or left over
 
 **Cut:** nothing from the PRD's cut list.
 
-**Left over in this folder, for you to remove** (I do not delete anything):
-
-- `_trash-review/`: three empty or six-byte probe files I created while testing whether the folder was writable. Git-ignored.
-- `.git/`: was a partial directory left by my two failed `git init` attempts. Your `git init` turned it into the real repository; nothing to remove.
-- `_trash-review/history.bundle`: a spare copy of the history, moved there on 2026-11-15 at your request. Remove it when you no longer want it.
+**Left over in this folder:** `TODO.md`, "Leftovers to remove when you like".
 
 **Departures from the PRD** (all in `DECISION-LOG.md`): classification went past 60 posts (DEC-32); one optional schema field added, `contributor.note` (DEC-13); a sixth MCP tool, `fetch_source` (DEC-22); the source cache sits inside this folder, git-ignored (DEC-52); the decision log is named `DECISION-LOG.md` because writing `DECISIONS.md` was denied by the session's permission settings.
 

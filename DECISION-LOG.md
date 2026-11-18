@@ -144,6 +144,19 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-83 | The README embeds the narrated short cut (`demo/out/demo-short-voice.mp4`, 4:53). | Recorded after the fact; the reason was not logged at the time. |
 | DEC-84 | The proof of concept is tagged `poc-0.0.1`. | Recorded after the fact; the reason was not logged at the time. |
 
+## J. After the sprint deadline (2026-11-16)
+
+| ID | Decision | Reason given or recorded |
+|---|---|---|
+| DEC-85 | The info-hazard dropdown offers "no hazard" instead of "None", and the converter stores it as `none`. A test refuses any dropdown option "None". | The form did not appear under "New issue" when the maintainer tried to file an entry. GitHub's docs bar "None" as an option only when a dropdown has a default, and this one had none; but the form appeared once "None" was gone. The cause is inferred from that, not from a GitHub error message. |
+| DEC-86 | Research areas are alphabetical, with `other` last, in the form, the schema, `schema/SCHEMA.md` and the `contribute` skill. | Asked by the maintainer. One order everywhere, because a test requires the form's list to equal the schema's. |
+| DEC-87 | The evidence question is "Strength of evidence". It says it applies to null and neutral results as well as negative ones, and gives an anchor for low, medium and high. | The maintainer: the project is about negative results, and the old question (confidence that the result is a true negative) left out null and neutral ones. The anchors let contributors rate the same way. |
+| DEC-88 | Method is a multi-select of the methods the entries already use, plus a free "Other methods" field. The converter normalizes typed-in methods and drops repeats. `make method-report` lists write-ins; one used by two entries is ready to join the list. A test that every entry method appears in the list was dropped. | Asked by the maintainer. Free tags never matched gold (finding 6); a list steers contributors to tags already in use. The dropped test would fail CI on the first entry with a write-in. The maintainer's review asked whether a typed-in method already listed changes anything (no: it becomes the same tag), how often to update the list, and for metrics on write-ins; `make method-report` answers the last two. |
+| DEC-89 | `tools/form_link.py` turns an AI draft into a pre-filled form link for a person to check and submit. The form gains "AI first-pass model", which becomes the entry's contributor note. Dropdown and checkbox answers are listed for the person to pick, and fields too long for the link are printed after it, to paste before opening it. | Asked by the maintainer, as a way for a person to file an AI-drafted entry without retyping it. The entry is the person's, since they check and submit it; the note keeps the model's part visible. GitHub documents pre-filling only for text fields. The tool caps links at 8,000 characters; a field that does not fit goes to the paste list whole, rather than being cut. |
+| DEC-90 | The entry-title field's id is `entry_title`. | GitHub's own `title` link parameter sets the issue title, so a field with the id `title` could not be pre-filled separately. |
+| DEC-91 | A root `CLAUDE.md` and `tools/CLAUDE.md` hold what an agent maintaining the repository must not get wrong, with nothing repeated from the README. | Asked by the maintainer: the README introduces the project to a person with no context; the `CLAUDE.md` files are for agents. |
+| DEC-92 | The tag `poc-0.0.2` marks the Apart proof of concept: commit `22fc585`, the last before the sprint deadline (November 15, 2026, 11:59 PM AoE). The README's "Preexisting work" points to it. | Asked by the maintainer. The README said everything was written during the sprint, but commits landed after the deadline; the tag marks what was written during it. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.

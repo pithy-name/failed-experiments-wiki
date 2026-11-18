@@ -222,9 +222,12 @@ through the tools.
 
 ## Preexisting work
 
-**None.** Everything in this repository was written during the sprint
-(November 13–15, 2026). It depends on the open-source packages listed in
-`requirements.txt` and `requirements-dev.txt`.
+**None.** Everything in this repository up to the sprint deadline (November
+15, 2026, 11:59 PM AoE) was written during the sprint (November 13–15). The tag
+[`poc-0.0.2`](https://github.com/pithy-name/failed-experiments-wiki/tree/poc-0.0.2)
+marks the Apart proof of concept: the last commit before the deadline. The code
+uses third-party open-source Python packages, listed in the
+`requirements*.txt` files.
 
 ## Limits
 
