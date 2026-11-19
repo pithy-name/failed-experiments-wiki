@@ -534,7 +534,8 @@ def validate_data(data: dict, *, file_name: str | None = None, quote_mode: str =
     """Validate one entry's front matter.
 
     quote_mode:
-      "online"  - fetch the source (cache first); unreachable source is a warning
+      "online"  - fetch the source (cache first); unreachable source is a
+                  warning
       "strict"  - as online, but an unreachable source is an error
       "cached"  - use the cache only, never the network; missing cache is a warning
       "skip"    - do not check the quote against the source (a warning says so)
