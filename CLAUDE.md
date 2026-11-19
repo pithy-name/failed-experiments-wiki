@@ -15,9 +15,7 @@ Read `README.md` first: it says what the project is, how to set it up and run it
 | `site/index.html` | `entries/`, `tools/build_site.py`, `tools/site_assets/` | `make site` |
 | `schema/SCHEMA.md` | `schema/entry.schema.json` | `make print-pack` |
 | `demo/script.md` | `demo/scenes.yaml`, `demo/build_demo.py` | `make demo-script` |
-| `VERIFICATION.md` | `demo/verify.yaml`, `demo/verify.py` | `make verify` (slow: drives a browser) |
-
-`VERIFICATION.md` also records what has been checked inside Claude Code (`make verify PLUGIN=1`).
+| `VERIFICATION.md` | `demo/verify.yaml`, `demo/verify.py` | `make verify` (slow: drives a browser); `PLUGIN=1` adds the Claude Code checks |
 
 ## The No Rot Rule
 
