@@ -17,10 +17,13 @@ Read `README.md` first: it says what the project is, how to set it up and run it
 | `demo/script.md` | `demo/scenes.yaml`, `demo/build_demo.py` | `make demo-script` |
 | `VERIFICATION.md` | `demo/verify.yaml`, `demo/verify.py` | `make verify` (slow: drives a browser) |
 
+`VERIFICATION.md` also records what has been checked inside Claude Code (`make verify PLUGIN=1`).
+
 ## The No Rot Rule
 
 - **One home per fact.** Each fact lives in one file; other files point to it instead of repeating it. For status: `DONE.md` holds status, `TODO.md` tasks, `DECISION-LOG.md` decisions, `VERIFICATION.md` checks, and `DONE.md` holds no task steps.
 - **Nothing that goes stale.** No line that needs updating after the next change, such as counts, "since then" lists or test totals. Point to a fixed marker instead: a tag, a DEC ID, a task ID.
+- **Nothing outside the repository.** Never point a reader to a file outside this repository: they cannot open it. Where the repository depends on one, say it is not tracked, and give no version number.
 
 ## Entries
 
