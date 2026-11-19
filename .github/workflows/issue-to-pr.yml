@@ -1,6 +1,6 @@
 name: Issue form to entry pull request
 
-# Human contribution path (D2). When someone submits the "New entry" issue form,
+# Human contribution path. When someone submits the "New entry" issue form,
 # build an entry file from it, validate it, and open a pull request.
 # Close and reopen the issue to run the conversion again after fixing the form.
 
