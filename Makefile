@@ -24,7 +24,7 @@ help:
 	@echo "make demo-setup     install what the demo video needs (Playwright and its headless browser)"
 	@echo "make demo-video     build demo/out/demo-draft.mp4 (needs ffmpeg; the voice needs macOS say, outside the sandbox)"
 	@echo "make demo-short     the same without the scenes marked short: false -> demo/out/demo-short.mp4"
-	@echo "make verify         exercise every function in a throwaway clone and a headless browser -> VERIFICATION.md, demo/out/verify/"
+	@echo "make verify         run the verification checks in a throwaway clone and a headless browser -> VERIFICATION.md, demo/out/verify/"
 	@echo "make report-figures regenerate report/figures/ (architecture diagram, page screenshots, schema table)"
 	@echo "make print-pack     printable review packs in _print/ (git-ignored: they hold post texts) and schema/SCHEMA.md"
 	@echo "make evals          re-score saved skill outputs against the gold set -> evals/results/"
