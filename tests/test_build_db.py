@@ -1,4 +1,4 @@
-"""D4 (Datasette): the database lists all entries and every field can be filtered."""
+"""Datasette: the database lists all entries and every field can be filtered."""
 import copy
 import json
 import sqlite3
