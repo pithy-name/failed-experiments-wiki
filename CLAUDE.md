@@ -21,9 +21,10 @@ Read `README.md` first: it says what the project is, how to set it up and run it
 
 ## The No Rot Rule
 
-- **One home per fact.** Each fact lives in one file; other files point to it instead of repeating it. For status: `DONE.md` holds status, `TODO.md` tasks, `DECISION-LOG.md` decisions, `VERIFICATION.md` checks, and `DONE.md` holds no task steps.
+- **No duplication: one home per fact.** Each fact lives in one file; other files point to it instead of repeating it. A script may be named in a how-to step anywhere, but only `tools/CLAUDE.md` describes it. For status: `DONE.md` holds status, `TODO.md` tasks, `DECISION-LOG.md` decisions, `VERIFICATION.md` checks, and `DONE.md` holds no task steps.
 - **Nothing that goes stale.** No line that needs updating after the next change, such as counts, "since then" lists or test totals. Point to a fixed marker instead: a tag, a DEC ID, a task ID.
-- **Nothing outside the repository.** Never point a reader to a file outside this repository: they cannot open it. Where the repository depends on one, say it is not tracked, and give no version number.
+- **Only what a fresh clone can have.** Point a reader only to a file they can get from a fresh clone: a tracked file, or one a repository command creates, with the command named (`make setup` creates `.venv/`). Never point to a file that exists on one machine or outside the repository, such as a scratch folder, a local leftover or a private document. Where the repository depends on one, say it is not tracked and give no version number. The decision log may record what happened to such files: that is history, not a pointer.
+- **Check before saying done.** Before saying work is done, check the diff for duplication: for each fact it adds, `git grep` its key term. If the fact already lives elsewhere, keep one home and point to it.
 
 ## Entries
 
