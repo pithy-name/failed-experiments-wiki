@@ -28,7 +28,8 @@ def test_every_check_is_complete_and_can_fail():
     ids = [check["id"] for check in SPEC["checks"]]
     assert len(ids) == len(set(ids))
     for check in SPEC["checks"]:
-        # D1-D8 are requirement labels; "demo" and "all" mark checks that serve no single requirement
+        # D1-D8 are requirement labels; "demo" and "all" mark checks that serve
+        # no single requirement
         assert check["requirement"] in {f"D{n}" for n in range(1, 9)} | {"demo", "all"}, check["id"]
         assert check["title"].strip() and len(check["proves"].split()) >= 6, check["id"]
         assert check.get("cwd", "clone") in {"clone", "repo"}, check["id"]
