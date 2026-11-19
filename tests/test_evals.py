@@ -1,4 +1,4 @@
-"""D8: the eval scorer runs with one command, writes a results file, and is honest about what it has not scored."""
+"""The eval scorer runs with one command, writes a results file, and is honest about what it has not scored."""
 import copy
 import importlib.util
 import json
