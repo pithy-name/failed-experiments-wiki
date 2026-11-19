@@ -1,4 +1,4 @@
-"""Step 4 of scouting (PRD section 8): write scouting/selection.md.
+"""Step 4 of scouting: write scouting/selection.md.
 
 The choices themselves are in scouting/selection.json (who decided, which
 posts, why). This script joins them with the classification labels and the
