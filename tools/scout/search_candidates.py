@@ -1,4 +1,4 @@
-"""Step 1 of scouting (PRD section 8): deterministic candidate search.
+"""Step 1 of scouting: deterministic candidate search.
 
 Queries LessWrong by search phrase and by tag, keeps AI-related posts, and
 writes scouting/candidates.jsonl: one line per post with URL, title, authors,
