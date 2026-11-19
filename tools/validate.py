@@ -1,4 +1,4 @@
-"""The single validator of the wiki (D7).
+"""The single validator of the wiki.
 
 Used locally, by the MCP server (through tools/wikilib.py) and by the GitHub Action.
 
