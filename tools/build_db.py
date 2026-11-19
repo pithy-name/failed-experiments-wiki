@@ -1,4 +1,4 @@
-"""Build wiki.db, a SQLite database of the wiki, for browsing with Datasette (D4).
+"""Build wiki.db, a SQLite database of the wiki, for browsing with Datasette.
 
   python tools/build_db.py                 # entries/ -> wiki.db, datasette/metadata.yml
   python tools/build_db.py --serve         # build, then run Datasette on port 8001
