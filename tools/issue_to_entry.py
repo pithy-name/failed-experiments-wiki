@@ -1,4 +1,4 @@
-"""Human contribution path (D2): turn a submitted GitHub issue form into an entry file.
+"""Human contribution path: turn a submitted GitHub issue form into an entry file.
 
 Run by .github/workflows/issue-to-pr.yml. It reads the issue body from the
 ISSUE_BODY environment variable (never from the command line, so issue text is
