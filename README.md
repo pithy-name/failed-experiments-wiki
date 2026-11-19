@@ -33,12 +33,12 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | Path | What it is | For |
 |---|---|---|
 | `.github/` | The issue form and the workflows: validation on every pull request, and issue form to pull request | See how a person's submission becomes an entry, or what CI checks |
-| `datasette/` | Settings for Datasette, an open-source tool for exploring a SQLite database in the browser | Query and facet the entries with SQL: `make datasette` builds `wiki.db` and serves it |
+| `datasette/` | Settings for Datasette, an open-source tool for exploring a SQLite database in the browser | Query and facet the entries with SQL: `make datasette` builds `wiki.db` and serves it locally (nothing is hosted) |
 | [`DECISION-LOG.md`](DECISION-LOG.md) | Every design choice and its reason | Find out why something is the way it is |
 | `demo/` | The demo narration (`scenes.yaml` → [`script.md`](demo/script.md)), the demo builder, and the verification checks | Read the narration, or rebuild the demo videos |
 | [`DONE.md`](DONE.md) | What was built, and the status of each requirement | See where the project stands |
 | `entries/` | The wiki: one Markdown file per entry, all fields in YAML front matter | Read or edit an entry |
-| `evals/` | Gold entries, eval prompts, the scorer and the results | See how well the skills do, or rerun `make evals` |
+| `evals/` | Gold entries, eval prompts, the scorer and the results: a spot-check on the gold posts with one model vendor, not a benchmark | See how well the skills do, or rerun `make evals` |
 | `Makefile` | Every command, as a `make` target | Find a command: `make help` |
 | `plugin/` | The Claude Code plugin: the MCP server and the `contribute`, `ask` and `review` skills | Use the wiki from Claude Code |
 | `report/` | Report drafts, figures and the report kit | Read the sources of the sprint report |
@@ -46,7 +46,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `reviews/` | Cold-review records and what changed because of them (`reviews/README.md`) | See what first-time viewers and users found |
 | `schema/` | The entry schema (`entry.schema.json`) and the same schema as a printable table (`SCHEMA.md`) | Check what a field means or which values it allows |
 | `scouting/` | Candidate posts, classification labels, yields, field audits and the seed selection | See how the seed posts were chosen |
-| `site/` | The static browse page (`index.html`), built by `make site` | Browse and filter the entries without a server |
+| `site/` | The static browse page (`index.html`), built by `make site`; not hosted, so open it locally | Browse and filter the entries without a server |
 | `tests/` | The test suite | Run `make test`, or write a test first |
 | [`TODO.md`](TODO.md) | What is left for the maintainer | See the open tasks |
 | `tools/` | The scripts, each described in [`tools/CLAUDE.md`](tools/CLAUDE.md) | Find or change a script |
@@ -210,9 +210,3 @@ vetting.
 marks the Apart proof of concept: the last commit before the deadline. The code
 uses third-party open-source Python packages, listed in the
 `requirements*.txt` files.
-
-## Limits
-
-This is a proof of concept with a small seed set (`DONE.md`, D6). The browse page and
-Datasette are not hosted; build them locally. The evals are a spot-check on the gold
-posts with one model vendor, not a benchmark.
