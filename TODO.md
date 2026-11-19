@@ -25,6 +25,7 @@ by ID. A finished task stays in the table, marked DONE, so the record is kept.
 | T15 | Decide whether to rename the repository and plugin | 2 min | open |
 | T16 | Move dependencies to `pyproject.toml` | 30 min | open |
 | T17 | Record who made each decision | 1–2 hours | open |
+| T18 | Remove spec references from generated output | 20 min | open |
 
 Run every command from the repository root.
 
@@ -308,4 +309,11 @@ files with `dependencies` plus `dev` and `demo` extras, and update every
 Add a "Decided by" column to `DECISION-LOG.md`: maintainer, builder agent, or a
 later session at the maintainer's request. Fill it from evidence (the row, session
 logs, git authors); where none exists, write "not recorded".
+
+## T18. Remove spec references from generated output
+
+`evals/run_evals.py`, `tools/scout/yields.py` and `tools/scout/selection.py`
+write "the PRD" or "PRD section N" into `evals/results/` and `scouting/`, and
+`scouting/selection.json` says it too. The spec is not tracked. Reword the
+strings, then regenerate the output files.
 
