@@ -38,10 +38,6 @@ Result on 2026-11-14: `git status` clean, 51 commits, 12 branches, tag `pre-seed
 The procedure was first tested on a scratch copy with the same partial `.git/`
 directory (DEC-54), then run for real here (DEC-55).
 
-`history.bundle` is now only a spare copy of the history. It was moved to
-`_trash-review/history.bundle` on 2026-11-15 at your request. Delete it when
-you no longer want it.
-
 ## T2. Set your GitHub handle — DONE
 
 Done on 2026-11-15: `gh api user` returned `pithy-name`, and
@@ -178,8 +174,8 @@ Three cuts exist, all with captions and a voice track:
 | `demo/out/demo-short-voice.mp4` | 4:53 | The narrated short cut, embedded in the README |
 
 The full cut was rebuilt on 2026-11-15 and the short cuts on 2026-11-16, after a reviewer who was told nothing about the
-project read the frames and the narration (DEC-70). Its record is
-`demo/out/review/human-reader-demo.md`: what it understood, and 22 findings.
+project read the frames and the narration (DEC-70). Its findings, and what
+changed for each, are in `reviews/README.md`.
 The rewrite answers them; the frames were looked at again afterwards.
 
 1. Read `demo/script.md`: the narration, scene by scene, with timings and the
@@ -313,20 +309,3 @@ Add a "Decided by" column to `DECISION-LOG.md`: maintainer, builder agent, or a
 later session at the maintainer's request. Fill it from evidence (the row, session
 logs, git authors); where none exists, write "not recorded".
 
-## Leftovers to remove when you like
-
-Nothing was deleted during the build. These are yours to remove:
-
-- `_trash-review/history.bundle`: spare copy of the commit history (T1).
-- `_trash-review/` also holds three empty or six-byte probe files from testing
-  whether the folder was writable.
-- `demo/out/`: demo build outputs (the draft video, its frames, audio and scene
-  pages). Git-ignored; rebuilt by `make demo-video`.
-- `_trash-review/demo-out-first-pass/`, `-second-pass/`, `-third-pass/`, `-fourth-pass/`: frames and
-  videos from earlier builds of the demo, set aside while fixing what the reviews found.
-- `_trash-review/verify-run-*/`: frames of earlier verification runs (each run sets the last one aside).
-- `demo/out/verify/` and `demo/out/review/`: the current verification evidence and the cold reviewer's record. Git-ignored.
-- In the system temp folder, `fewiki-verify-*`: one throwaway clone per verification run.
-- In the session scratchpad: three scratch clones used for the eval check and the first-use trials
-  (`evalclone`, `firstuse/`, `firstuse2/`), with the trial sessions' outputs. They hold test entries on
-  branches `entry/fe-2026-0016`, `entry/fe-2026-0017` and `review/fe-2026-0008-…`; none of that is in this repository.
