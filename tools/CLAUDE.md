@@ -1,6 +1,8 @@
 # tools/
 
-What each script is for, and what to know before changing it. This is the one place scripts are described; a script's docstring is the full account. Run any script with `.venv/bin/python tools/<script>`.
+What each script is for, and what to know before changing it. This is the one
+place scripts are described; a script's docstring is the full account. Run any
+script with `.venv/bin/python tools/<script>`.
 
 ## Scripts
 
