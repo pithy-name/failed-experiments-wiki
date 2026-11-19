@@ -1,4 +1,5 @@
-"""The validator rejects every class of bad entry. One failing fixture per class."""
+"""The validator rejects every class of bad entry. One failing fixture per
+class."""
 import copy
 
 import pytest
