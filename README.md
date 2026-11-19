@@ -15,8 +15,6 @@ https://github.com/user-attachments/assets/1b8c06d5-12a7-4331-a53b-89e936cdb058
 **To try it,** go to [Quick start](#quick-start), then
 [Using the plugin with Claude Code](#using-the-plugin-with-claude-code).
 
-**To see where the project stands,** see [What is in the repository](#what-is-in-the-repository).
-
 ## The idea
 
 Failed experiments mostly stay in file drawers or scattered posts, so people
@@ -32,7 +30,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 
 ## What is in the repository
 
-| Path | What it is | Go there to |
+| Path | What it is | For |
 |---|---|---|
 | `.github/` | The issue form and the workflows: validation on every pull request, and issue form to pull request | See how a person's submission becomes an entry, or what CI checks |
 | `datasette/` | Settings for Datasette, an open-source tool for exploring a SQLite database in the browser | Query and facet the entries with SQL: `make datasette` builds `wiki.db` and serves it |
