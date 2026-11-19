@@ -28,7 +28,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SAMPLE_SIZE = 60
 KNOWN_ROUTE = "prd-known-example"
 
-# Named in the spec as examples to check first.
 KNOWN_EXAMPLES = [
     "Negative Results for SAEs On Downstream Tasks",
     "My Failed AI Safety Research Projects",
