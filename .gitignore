@@ -1,4 +1,4 @@
-# Cached source texts and API responses. Post texts must never be committed (copyright, PRD section 10).
+# Cached source texts and API responses. Post texts must never be committed (copyright).
 .cache/
 
 # Local environment and build outputs
