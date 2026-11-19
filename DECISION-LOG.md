@@ -6,7 +6,7 @@
 > except links in `README.md` and `DONE.md`.
 
 Every non-trivial decision made during the unattended build, with its reason.
-The spec is `PRD-proof-of-concept-vN.md`, which is not tracked in this repository. Where
+The spec is `PRD-proof-of-concept-vN.md` (not tracked in this repository). Where
 the build departs from the spec, the row says so.
 
 IDs are stable: refer to a decision as "DEC-07", never by position.
