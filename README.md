@@ -58,7 +58,7 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 | `evals/` | Gold entries, eval prompts, the scorer, results |
 | `scouting/` | Candidates, classification labels, yields, field audits, seed selection |
 | `demo/` | Demo narration (`scenes.yaml` → `script.md`) and the builder for the demo videos |
-| `.github/` | Issue form and the two workflows |
+| `.github/` | Issue form and the workflows |
 | `tests/` | Test suite |
 | `reviews/` | Cold-review records and what was changed (`reviews/README.md`) |
 | `report/` | Report drafts, figures and the report kit |
@@ -75,7 +75,7 @@ make validate     # validate every entry, checking each quote against its post
 make site         # build site/index.html, then open it in a browser
 make datasette    # build wiki.db and serve it at http://localhost:8001
 make evals        # re-score the skill evals -> evals/results/RESULTS.md
-make verify       # exercise every function in a throwaway clone and a headless browser -> VERIFICATION.md
+make verify       # run the verification checks in a throwaway clone and a headless browser -> VERIFICATION.md
 ```
 
 `make setup` comes first for everything else here, the plugin included: its
@@ -93,7 +93,7 @@ server runs from the `.venv` that `make setup` creates.
   `confidence_true_negative` and `retry_welcome` keep a thin failure report
   from reading as "this never works".
 - **What changed and why:** git history. Every submission and every review made
-  through the tools is its own commit on its own branch. The five reference
+  through the tools is its own commit on its own branch. The reference
   entries and later maintainer edits were committed directly to `main`.
 
 Badges are derived, never stored: `agent-written`, `unreviewed`, `contested`,
@@ -116,8 +116,8 @@ A workflow turns the form into an entry file and a pull request, marked
 **As a person, with an AI first pass:** ask the `contribute` skill to draft the
 entry and hand it to you. `tools/form_link.py` turns the draft into a pre-filled
 form link; you paste any fields it prints as too long for the link, check and
-edit every field, pick the dropdown values it lists, and submit. The entry is yours, and its contributor note names the model that
-drafted it.
+edit every field, pick the dropdown values it lists, and submit. The entry is
+yours, and its contributor note names the model that drafted it.
 
 **Reviewing:** the `review` skill, or a person, checks an entry against its
 post and records `reviewed` or `contested` with reviewer, date and notes:
@@ -207,8 +207,6 @@ to `reviewed`, and tools then report `reviewed_by: an agent only` (and say when
 it was the same model that wrote the entry). Treat only a person's review as
 vetting.
 
-What has been checked inside Claude Code: `VERIFICATION.md`.
-
 ## What is stored, and what is not
 
 - Stored: structured fields in our own words, a quote of 15 words or fewer,
@@ -231,6 +229,4 @@ uses third-party open-source Python packages, listed in the
 
 This is a proof of concept with a small seed set (`DONE.md`, D6). The browse page and
 Datasette are not hosted; build them locally. The evals are a spot-check on the gold
-posts with one model vendor, not a benchmark. See
-`VERIFICATION.md` for what was run and `DONE.md` for the status of each
-requirement.
+posts with one model vendor, not a benchmark.
