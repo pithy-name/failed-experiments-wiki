@@ -15,15 +15,7 @@ https://github.com/user-attachments/assets/1b8c06d5-12a7-4331-a53b-89e936cdb058
 **To try it,** go to [Quick start](#quick-start), then
 [Using the plugin with Claude Code](#using-the-plugin-with-claude-code).
 
-**To see where the project stands:**
-
-| Read | For |
-|---|---|
-| [`DONE.md`](DONE.md) | What was built, and the status of each requirement |
-| [`VERIFICATION.md`](VERIFICATION.md) | A verification run: each check, its result, and the commit it ran on |
-| [`TODO.md`](TODO.md) | What is left for the maintainer |
-| [`demo/script.md`](demo/script.md) | The demo narration |
-| [`DECISION-LOG.md`](DECISION-LOG.md) | Design choices and their reasons |
+**To see where the project stands,** see [What is in the repository](#what-is-in-the-repository).
 
 ## The idea
 
@@ -40,31 +32,27 @@ The proof of concept draws only on **LessWrong and the Alignment Forum**.
 
 ## What is in the repository
 
-| Path | What it is |
-|---|---|
-| `entries/` | The wiki: one Markdown file per entry, all fields in YAML front matter |
-| `schema/entry.schema.json` | The entry schema and its closed lists |
-| `tools/validate.py` | The single validator (local, MCP server, GitHub Action) |
-| `tools/wikilib.py` | Core library: read, search, facets, validate, submit, review |
-| `tools/cli.py` | Command-line twin of the MCP tools |
-| `tools/lw.py` | Polite LessWrong reader: cached, rate-limited |
-| `tools/build_site.py` → `site/index.html` | Static browse page, one self-contained file |
-| `tools/build_db.py` → `wiki.db` | SQLite database for Datasette |
-| `tools/issue_to_entry.py` | Turns a submitted issue form into an entry |
-| `tools/form_link.py` | Turns an AI draft into a pre-filled issue-form link for a person to check and submit |
-| `tools/sync_gold.py` | Publishes verified gold entries into `entries/` |
-| `tools/scout/` | Scouting scripts and the classifier and audit prompts |
-| `plugin/` | Claude Code plugin: MCP server and the `contribute`, `ask`, `review` skills |
-| `evals/` | Gold entries, eval prompts, the scorer, results |
-| `scouting/` | Candidates, classification labels, yields, field audits, seed selection |
-| `demo/` | Demo narration (`scenes.yaml` → `script.md`) and the builder for the demo videos |
-| `.github/` | Issue form and the workflows |
-| `tests/` | Test suite |
-| `reviews/` | Cold-review records and what was changed (`reviews/README.md`) |
-| `report/` | Report drafts, figures and the report kit |
-| `schema/SCHEMA.md` | The schema as a printable table |
-| `datasette/` | Datasette settings |
-| `CLAUDE.md`, `tools/CLAUDE.md` | Rules for agents maintaining the repository |
+| Path | What it is | Go there to |
+|---|---|---|
+| `.github/` | The issue form and the workflows: validation on every pull request, and issue form to pull request | See how a person's submission becomes an entry, or what CI checks |
+| `datasette/` | Settings for Datasette, an open-source tool for exploring a SQLite database in the browser | Query and facet the entries with SQL: `make datasette` builds `wiki.db` and serves it |
+| [`DECISION-LOG.md`](DECISION-LOG.md) | Every design choice and its reason | Find out why something is the way it is |
+| `demo/` | The demo narration (`scenes.yaml` → [`script.md`](demo/script.md)), the demo builder, and the verification checks | Read the narration, or rebuild the demo videos |
+| [`DONE.md`](DONE.md) | What was built, and the status of each requirement | See where the project stands |
+| `entries/` | The wiki: one Markdown file per entry, all fields in YAML front matter | Read or edit an entry |
+| `evals/` | Gold entries, eval prompts, the scorer and the results | See how well the skills do, or rerun `make evals` |
+| `Makefile` | Every command, as a `make` target | Find a command: `make help` |
+| `plugin/` | The Claude Code plugin: the MCP server and the `contribute`, `ask` and `review` skills | Use the wiki from Claude Code |
+| `report/` | Report drafts, figures and the report kit | Read the sources of the sprint report |
+| `requirements*.txt` | The third-party Python packages the code uses | See what `make setup` installs |
+| `reviews/` | Cold-review records and what changed because of them (`reviews/README.md`) | See what first-time viewers and users found |
+| `schema/` | The entry schema (`entry.schema.json`) and the same schema as a printable table (`SCHEMA.md`) | Check what a field means or which values it allows |
+| `scouting/` | Candidate posts, classification labels, yields, field audits and the seed selection | See how the seed posts were chosen |
+| `site/` | The static browse page (`index.html`), built by `make site` | Browse and filter the entries without a server |
+| `tests/` | The test suite | Run `make test`, or write a test first |
+| [`TODO.md`](TODO.md) | What is left for the maintainer | See the open tasks |
+| `tools/` | The scripts, each described in [`tools/CLAUDE.md`](tools/CLAUDE.md) | Find or change a script |
+| [`VERIFICATION.md`](VERIFICATION.md) | A verification run: each check, its result, and the commit it ran on | See what has been checked |
 
 ## Quick start
 
