@@ -1,4 +1,5 @@
-"""Web page: one self-contained file that lists all entries and filters on every field."""
+"""Web page: one self-contained file that lists all entries and filters on
+every field."""
 import copy
 import json
 import re
