@@ -1,30 +1,28 @@
 # tools/
 
-The README's repository table says what the main scripts are for. This file adds what a maintainer needs to know before changing them. Run any script with `.venv/bin/python tools/<script>`.
+What each script is for, and what to know before changing it. This is the one place scripts are described; a script's docstring is the full account. Run any script with `.venv/bin/python tools/<script>`.
 
-## Before changing a script
+## Scripts
 
-| Script | Know this |
-|---|---|
-| `wikilib.py` | Every other script imports it. Change behaviour here, never in a copy. |
-| `validate.py` | The one validator: the command line, the MCP server, the issue-form converter and CI all call it. A rule added here applies everywhere at once. |
-| `lw.py` | Caches every response and pauses between requests. Never bypass either. |
-| `issue_to_entry.py` | Runs inside the GitHub workflow. Keep it in sync with the form (root `CLAUDE.md`). |
-| `sync_gold.py` | Refuses an unverified gold entry labelled as a person's. That guard is deliberate. |
-| `check_facts.py` | A review aid, not a gate: it always exits 0. |
-| `build_site.py`, `build_db.py` | Their outputs are generated; rebuild after any entry change (root `CLAUDE.md`). |
-
-## Scripts the README does not list
-
-| Script | What it does |
-|---|---|
-| `method_report.py` | Lists write-in methods the form's Method dropdown lacks. |
-| `set_handle.py` | Replaces the placeholder handle on entries with the maintainer's GitHub login. |
-| `datasette_check.py` | Checks the Datasette database without opening a port. |
-| `mcp_smoke.py` | Starts the MCP server and calls its tools once. |
-| `make_print_pack.py`, `post_markdown.py` | Build the printable review pack and `schema/SCHEMA.md`. |
-
-`scout/` holds the corpus-scouting scripts and the classifier and field-audit prompts; their outputs go to `scouting/`.
+| Script | Purpose | Know this before changing it |
+|---|---|---|
+| `build_db.py` | Builds `wiki.db`, the SQLite database Datasette serves (`make datasette`). | Its output is generated: rebuild after any entry change (root `CLAUDE.md`). |
+| `build_site.py` | Builds `site/index.html`, the static browse page (`make site`). | Its output is generated: rebuild after any entry change (root `CLAUDE.md`). |
+| `check_facts.py` | Checks that an entry's numbers and model names appear in its source post (`make check-facts`). | A review aid, not a gate: it always exits 0. |
+| `cli.py` | Command-line twin of the MCP tools: search, get, facets, submit, review. | |
+| `datasette_check.py` | Checks the Datasette database without opening a port (`make datasette-check`). | |
+| `form_link.py` | Turns an AI draft into a pre-filled issue-form link for a person to check and submit. | |
+| `issue_to_entry.py` | Turns a submitted issue form into an entry. | Runs inside the GitHub workflow. Keep it in sync with the form (root `CLAUDE.md`). |
+| `lw.py` | Polite LessWrong reader: every response is cached and requests are paused. | Never bypass the cache or the pauses. |
+| `make_print_pack.py` | Builds the printable review pack in `_print/` and `schema/SCHEMA.md` (`make print-pack`). | |
+| `mcp_smoke.py` | Starts the MCP server and calls its tools once (`make mcp-smoke`). | |
+| `method_report.py` | Lists write-in methods the form's Method dropdown lacks (`make method-report`). | |
+| `post_markdown.py` | Turns a post's HTML into Markdown for the print pack. | Used by `make_print_pack.py`. |
+| `scout/` | The corpus-scouting scripts and the classifier and field-audit prompts. | Their outputs go to `scouting/`. |
+| `set_handle.py` | Replaces the placeholder handle on entries with the maintainer's GitHub login (`make set-handle`). | |
+| `sync_gold.py` | Publishes verified gold entries into `entries/` (`make sync-gold`). | Refuses an unverified gold entry labelled as a person's. That guard is deliberate. |
+| `validate.py` | The one validator (`make validate`): the command line, the MCP server, the issue-form converter and CI all call it. | A rule added here applies everywhere at once. |
+| `wikilib.py` | Core library: read, search, facets, validate, submit, review. | Every other script imports it. Change behaviour here, never in a copy. |
 
 ## New scripts
 
