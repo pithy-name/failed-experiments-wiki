@@ -157,6 +157,18 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-91 | A root `CLAUDE.md` and `tools/CLAUDE.md` hold what an agent maintaining the repository must not get wrong, with nothing repeated from the README. | Asked by the maintainer: the README introduces the project to a person with no context; the `CLAUDE.md` files are for agents. |
 | DEC-92 | The tag `poc-0.0.2` marks the Apart proof of concept: commit `22fc585`, the last before the sprint deadline (November 15, 2026, 11:59 PM AoE). The README's "Preexisting work" points to it. | Asked by the maintainer. The README said everything was written during the sprint, but commits landed after the deadline; the tag marks what was written during it. |
 
+## K. Documentation rules (2026-11-18 and 2026-11-19)
+
+| ID | Decision | Reason given or recorded |
+|---|---|---|
+| DEC-93 | No duplication: each fact has one home, and other files point to it. The README's repository table lists folders and root files only; `tools/CLAUDE.md` is the one place scripts are described; the README's table and Quick start do not repeat each other. | Asked by the maintainer: copies go stale. |
+| DEC-94 | Nothing that goes stale: no counts, "since then" lists or test totals in durable text. Point to a tag, a DEC ID or a task ID instead. | Asked by the maintainer, in the same review as DEC-93. |
+| DEC-95 | Only what a fresh clone can have: point a reader only to a tracked file or one a repository command creates, with the command named. The untracked spec is named as not tracked, with no version number. `TODO.md`'s list of local leftovers was removed. | Asked by the maintainer: a reader cannot open a file that is not in their clone. |
+| DEC-96 | Before saying work is done, an agent checks the diff for duplication by searching for each fact it adds. | Asked by the maintainer, after repeats were added and reported as done. |
+| DEC-97 | Code comments and docstrings cite neither requirement IDs (D1 to D8) nor sections of the spec; docs may point to code, not the reverse. The D labels in `demo/verify.py` and `demo/verify.yaml` stay: they are data. | Asked by the maintainer: those IDs and sections change, and code outlives them. |
+| DEC-98 | Every file with IDs lists them in ID order, and status files describe `main` as it stands, never an unmerged pull request. | Asked by the maintainer, after `TODO.md` rows were added out of order and a draft described an unmerged pull request as done. |
+| DEC-99 | Prose in tracked files hard-wraps at 80 columns; tables, code and unbreakable URLs are exempt. An unwrapped line is wrapped when it is changed. | Asked by the maintainer in the review of pull request #10. 80 is the width the README already uses. |
+
 ## Findings worth reporting
 
 Not decisions, but things the build turned up that belong in the report.
