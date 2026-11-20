@@ -26,6 +26,7 @@ by ID. A finished task stays in the table, marked DONE, so the record is kept.
 | T16 | Move dependencies to `pyproject.toml` | 30 min | open |
 | T17 | Record who made each decision | 1–2 hours | open |
 | T18 | Remove spec references from generated output | 20 min | open |
+| T19 | Decide how decision-log sections are grouped | 2 min | open |
 
 Run every command from the repository root.
 
@@ -316,4 +317,10 @@ logs, git authors); where none exists, write "not recorded".
 write "the PRD" or "PRD section N" into `evals/results/` and `scouting/`, and
 `scouting/selection.json` says it too. The spec is not tracked. Reword the
 strings, then regenerate the output files.
+
+## T19. Decide how decision-log sections are grouped
+
+`DECISION-LOG.md` groups the build's decisions by topic and later ones by date.
+Choose one rule for new sections: one dated section per working day, or topic
+sections. Decision IDs stay in order either way.
 
