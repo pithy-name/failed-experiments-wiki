@@ -5,9 +5,9 @@
 > so the log is here instead. Rename it if you prefer; nothing depends on the name
 > except links in `README.md` and `DONE.md`.
 
-Every non-trivial decision made during the unattended build, with its reason.
-The spec is `PRD-proof-of-concept-v3.md` (kept outside this repository). Where
-the build departs from the spec, the row says so.
+Every non-trivial decision made, with its reason. The spec is
+`PRD-proof-of-concept-vN.md` (not tracked in this repository). Where the build
+departs from the spec, the row says so.
 
 IDs are stable: refer to a decision as "DEC-07", never by position.
 
@@ -20,7 +20,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-03 | Commits are per build step, and one commit per entry, instead of one commit per file. | Chosen by the maintainer: history should read as a narrative, since git history is a trust signal here. |
 | DEC-04 | The maintainer's name may appear in tracked files while the repository is private. | Chosen by the maintainer. A scrub is needed before the repository goes public. |
 
-## B. Environment constraints that shaped the build
+## B. Environment constraints that shaped the build (unattended)
 
 | ID | Constraint | What was done about it |
 |---|---|---|
@@ -32,7 +32,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-10 | Model IDs recorded in entries and results are the documented IDs behind the `haiku` and `sonnet` aliases (`claude-haiku-5-5`, `claude-sonnet-5-5`). | The subagent interface exposes the alias, not the resolved ID, so the ID was not confirmed by the model itself. |
 | DEC-11 | Python's standard HTTP client had responses from the LessWrong search endpoint cut short behind the sandbox proxy. | `tools/lw.py` retries, then falls back to the `curl` binary for the same request. On a normal network the standard client is used. |
 
-## C. Schema and validation
+## C. Schema and validation (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
@@ -46,7 +46,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-19 | `submit_entry` assigns `id`, `contributor`, `review` and `dates` itself and ignores any values the submitter sends for them. | A contributor, human or agent, must not be able to mark its own entry as reviewed or as written by someone else. |
 | DEC-20 | `source.type` is `alignment_forum` when the post is an Alignment Forum crosspost, else `lesswrong`. `source.url` is always the LessWrong URL; `source.crosspost_url` holds the Alignment Forum URL. | Both sites serve the same post under the same ID. The LessWrong API is the one the validator reads. |
 
-## D. Architecture
+## D. Architecture (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
@@ -58,7 +58,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-26 | The issue-form workflow validates the entry itself before opening the pull request. | Pull requests opened with the default workflow token do not trigger other workflows, so `validate.yml` would not run on them automatically. |
 | DEC-27 | Issue text reaches the conversion script only through an environment variable. | Issue bodies are untrusted; interpolating them into a shell command is an injection risk. |
 
-## E. Scouting and seeding
+## E. Scouting and seeding (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
@@ -71,7 +71,7 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-34 | Posts whose failure cause fits none of the `failure_type` values were not seeded, and the gap is recorded as a finding instead of stretching a label. | Example: a debate pilot abandoned because the setup itself was invalid. The closed list has no value for that. See "Findings worth reporting" below. |
 | DEC-35 | The orchestrator approved the 10 seed posts in place of the maintainer, as instructed for this run. | Each choice and the fields it supports are in `scouting/selection.md`. |
 
-## F. Gold set and evals
+## F. Gold set and evals (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
@@ -83,13 +83,13 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-41 | When the skill writes several entries for one post, the draft that best matches gold is scored and the number of drafts is reported. | The skill is asked for one entry per distinct failed experiment; gold covers one experiment per post. |
 | DEC-42 | All eval results are labelled PROVISIONAL until every gold entry is `verified`. | The numbers currently compare one model's output with another pass of the same vendor's model. |
 
-## G. Human contribution test
+## G. Human contribution test (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
 | DEC-43 | No test issue was filed and no agent-written entry was stored as `human` to demonstrate D2. | There is no GitHub repository to file it in (DEC-02), and an entry filed by an agent must not sit in the wiki as a person's. D2 is demonstrated by tests that run the form-to-entry conversion on a realistic issue body; the live run is a step in the demo script. |
 
-## H. Decisions made later in the run
+## H. Decisions made later in the run (unattended)
 
 | ID | Decision | Reason |
 |---|---|---|
@@ -100,13 +100,10 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-48 | Two gold drafts were edited by the orchestrator before publication: `fe-2026-0001` (model name written as the post gives it) and `fe-2026-0005` (developer set to `unknown` where the drafter had used outside knowledge). | To keep one rule across the gold set: every field sourced from the post. Both edits are recorded in the files' verification notes for the maintainer to accept or reverse. |
 | DEC-49 | The agent review of `fe-2026-0007` was recorded as `reviewed` although the reviewer was the same model that wrote the entry. | The review skill allows it and requires the notes to say so, which they do; the web page labels it "Reviewed by an agent only". It demonstrates the mechanism. It is not independent vetting. |
 | DEC-50 | The test fixtures now clear `GIT_DIR` and related variables. | Running the suite with those variables exported let the fixtures write to the scratch history: its author settings were changed and four commits were recorded under the test identity. They were recreated with the same trees and messages under the right author. |
-
 | DEC-51 | Five entries were added beyond the 10 seeds (`fe-2026-0011` to `fe-2026-0015`), all agent-written and unreviewed. | Late in the run the maintainer said 10 was a minimum. No further post met the rule, so the extra entries are further distinct failed experiments from three posts that had already qualified, drafted by the skill only where the post states every required field. One draft was rejected by the orchestrator because the post had predicted the result. `fe-2026-0011` shares the exception of `fe-2026-0010` (same post). The gold posts were not mined, to keep eval outputs and wiki entries apart. The `ask` eval answers were written when the wiki held 10 entries. |
 | DEC-52 | The source cache is `.cache/` inside the repository folder, git-ignored. | The PRD says post texts are cached outside the repo. The sandbox could write only inside this folder. Nothing in `.cache/` is tracked, and no post text is in any commit. |
 | DEC-53 | The review notes recorded for `fe-2026-0007` are the reviewer's first written decision. | The orchestrator applied the decision file while the reviewing subagent was still running; the subagent then rewrote its notes with slightly different wording and the same verdict. The recorded review is the earlier wording. |
-
 | DEC-54 | The hand-over command in `TODO.md` (T1; it was in `DONE.md` when this was written) was tested on a scratch copy, not in this folder. | The copy held the tracked files plus a partial `.git/` like the one here (`description`, `hooks/`, `info/` only). Running `git init -b main`, the `git fetch --update-head-ok history.bundle …` line and `git reset` there gave a clean `git status`, the full history, all entry and review branches and the `pre-seed` tag. The test was run once with the bundle as it stood before this row was written, and repeated on the final bundle after this row was committed. It could not be run in this folder: the sandbox refuses `git init` here. |
-
 | DEC-55 | The history was loaded into this folder at the end of the session. | The maintainer ran `git init -b main` here. The orchestrator then ran the fetch from `history.bundle` and `git reset`: clean status, 51 commits, all branches and the tag. Later commits are made in this repository directly. The scratch git directory is no longer used. |
 
 ## I. After the build (2026-11-15)
@@ -119,7 +116,6 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-59 | The video itself was not produced in the assistant's session. `make demo-video` produces it from a normal terminal. *(No longer true: see DEC-62.)* | Headless Chrome must bind a local socket and macOS `say` needs a system service; the session sandbox refuses both. Everything else in the pipeline was run: scene pages, the real commands, and the video assembly with placeholder frames. |
 | DEC-60 | The browse page keeps its filters in the URL after `#`, and loads them from there. | Needed so each demo shot is a real page state reachable by link, not a mock-up. It is also a feature in its own right: a filtered view can be shared. |
 | DEC-61 | One source for the demo: `demo/scenes.yaml` generates both `demo/script.md` and the video, and lists the numbers the narration states. The build stops if one is out of date. | The narration says numbers aloud ("fifteen entries", "seventy-eight percent"). They will change, and a script that silently disagrees with the repository is worse than none. |
-
 | DEC-62 | The recorder drives Playwright's headless Chromium shell instead of taking Chrome command-line screenshots, and the draft video was built and reviewed inside the assistant's session. | The maintainer asked that the rendered screens be reviewed before hand-over. Installed Chrome and Playwright's shell both failed to start in the sandbox (no local socket, no Mach service), but the shell runs in single-process mode. Driving a browser also allows real clicks, typing and scrolling, so the page scenes are actions on the real page, not a set of link states. The voice still cannot be made in the sandbox (`say` is refused), so the reviewed draft is captioned and silent. |
 | DEC-63 | The review of the rendered frames changed the product, not only the demo. | Seen only once rendered: the filter people reach for first (failure type) sat below the fold behind range inputs, and ticking it scrolled the results away; "All fields" listed an entry's fields alphabetically instead of in schema order. Fixed in the page itself: the filter panel is sticky and scrolls on its own, the most-used filters come first, and field order is kept. In the demo: the pointer ring missed its target, two scene files overflowed, and the answers on screen said "10 entries" while the narration said fifteen, so two answers were regenerated by the `ask` skill against the current wiki (`demo/answers/`). |
 | DEC-64 | Every function is verified by a separate recorded run (`demo/verify.py`, `make verify`), not by extending the demo. Commands that write run in a throwaway clone with no remote, and the real repository is compared before and after. | The maintainer asked that all functionality be verified with the demo's recording method, including what the demo leaves out. Running it through the demo builder would have overwritten the reviewed demo frames; running write commands here would have added test entries and branches to the real wiki. A clone with its remote removed cannot push. The report is `VERIFICATION.md`. |
@@ -156,6 +152,18 @@ IDs are stable: refer to a decision as "DEC-07", never by position.
 | DEC-90 | The entry-title field's id is `entry_title`. | GitHub's own `title` link parameter sets the issue title, so a field with the id `title` could not be pre-filled separately. |
 | DEC-91 | A root `CLAUDE.md` and `tools/CLAUDE.md` hold what an agent maintaining the repository must not get wrong, with nothing repeated from the README. | Asked by the maintainer: the README introduces the project to a person with no context; the `CLAUDE.md` files are for agents. |
 | DEC-92 | The tag `poc-0.0.2` marks the Apart proof of concept: commit `22fc585`, the last before the sprint deadline (November 15, 2026, 11:59 PM AoE). The README's "Preexisting work" points to it. | Asked by the maintainer. The README said everything was written during the sprint, but commits landed after the deadline; the tag marks what was written during it. |
+
+## K. Documentation rules (2026-11-18 and 2026-11-19)
+
+| ID | Decision | Reason given or recorded |
+|---|---|---|
+| DEC-93 | No duplication: each fact has one home, and other files point to it. The README's repository table lists folders and root files only; `tools/CLAUDE.md` is the one place scripts are described; the README's table and Quick start do not repeat each other. | Asked by the maintainer: copies go stale. |
+| DEC-94 | Nothing that goes stale: no counts, "since then" lists or test totals in durable text. Point to a tag, a DEC ID or a task ID instead. | Asked by the maintainer, in the same review as DEC-93. |
+| DEC-95 | Only what a fresh clone can have: point a reader only to a tracked file or one a repository command creates, with the command named. The untracked spec is named as not tracked, with no version number. `TODO.md`'s list of local leftovers was removed. | Asked by the maintainer: a reader cannot open a file that is not in their clone. |
+| DEC-96 | Before saying work is done, an agent checks the diff for duplication by searching for each fact it adds. | Asked by the maintainer, after repeats were added and reported as done. |
+| DEC-97 | Code comments and docstrings cite neither requirement IDs (D1 to D8) nor sections of the spec; docs may point to code, not the reverse. The D labels in `demo/verify.py` and `demo/verify.yaml` stay: they are data. | Asked by the maintainer: those IDs and sections change, and code outlives them. |
+| DEC-98 | Every file with IDs lists them in ID order, and status files describe `main` as it stands, never an unmerged pull request. | Asked by the maintainer, after `TODO.md` rows were added out of order and a draft described an unmerged pull request as done. |
+| DEC-99 | Prose in tracked files hard-wraps at 80 columns; tables, code and unbreakable URLs are exempt. An unwrapped line is wrapped when it is changed. | Asked by the maintainer in the review of pull request #10. 80 is the width the README already uses. |
 
 ## Findings worth reporting
 

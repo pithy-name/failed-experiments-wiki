@@ -165,8 +165,6 @@ Run every command from the repository root. `make setup` first if `.venv/` is mi
 
 **Cut:** nothing from the PRD's cut list.
 
-**Left over in this folder:** `TODO.md`, "Leftovers to remove when you like".
-
 **Departures from the PRD** (all in `DECISION-LOG.md`): classification went past 60 posts (DEC-32); one optional schema field added, `contributor.note` (DEC-13); a sixth MCP tool, `fetch_source` (DEC-22); the source cache sits inside this folder, git-ignored (DEC-52); the decision log is named `DECISION-LOG.md` because writing `DECISIONS.md` was denied by the session's permission settings.
 
 ---

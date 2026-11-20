@@ -1,4 +1,5 @@
-"""D2: the issue form becomes a schema-valid entry marked contributor.type: human."""
+"""The issue form becomes a schema-valid entry marked
+contributor.type: human."""
 from pathlib import Path
 
 import yaml

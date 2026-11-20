@@ -1,6 +1,6 @@
 name: Validate entries
 
-# D7: the same validator that runs locally and inside the MCP server.
+# The same validator that runs locally and inside the MCP server.
 # A pull request cannot merge an entry that breaks the schema, uses a value
 # outside a closed list, lacks a source URL, or carries a quote that is not in
 # the source post.

@@ -222,7 +222,7 @@ def normalize_tag(tag: str) -> str:
 
 
 def badges(data: dict) -> list[str]:
-    """Badge rules from PRD section 6. Badges are derived, never stored."""
+    """Badge rules. Badges are derived, never stored."""
     out = []
     if (data.get("contributor") or {}).get("type") == "agent":
         out.append("agent-written")
@@ -534,7 +534,8 @@ def validate_data(data: dict, *, file_name: str | None = None, quote_mode: str =
     """Validate one entry's front matter.
 
     quote_mode:
-      "online"  - fetch the source (cache first); unreachable source is a warning (PRD 5.6)
+      "online"  - fetch the source (cache first); unreachable source is a
+                  warning
       "strict"  - as online, but an unreachable source is an error
       "cached"  - use the cache only, never the network; missing cache is a warning
       "skip"    - do not check the quote against the source (a warning says so)

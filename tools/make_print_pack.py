@@ -11,7 +11,7 @@ Writes:
   _print/3-skills-and-tools.md    the three skills in full and the six MCP tools
 
 The review pack contains full post texts, so it is for the maintainer's own reading and is never
-committed (see .gitignore and the copyright rule in the PRD). Post texts come from the local cache
+committed (see .gitignore). Post texts come from the local cache
 (.cache/lw/text/). The marked passages come from _print/annotations/<post id>.json, written by a model
 that was asked to copy each passage exactly; every passage is checked here by exact string search and
 the ones that are not found are listed, not shown.

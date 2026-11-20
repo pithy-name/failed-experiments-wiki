@@ -1,4 +1,4 @@
-"""Step 2a of scouting (PRD section 8): pick the classification sample and cache its texts.
+"""Step 2a of scouting: pick the classification sample and cache its texts.
 
 Reads scouting/candidates.jsonl, picks up to 60 posts deterministically, writes
 scouting/sample.jsonl, and fetches each sampled post into the local cache so
@@ -28,7 +28,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SAMPLE_SIZE = 60
 KNOWN_ROUTE = "prd-known-example"
 
-# Named in PRD section 8 as examples to check first.
 KNOWN_EXAMPLES = [
     "Negative Results for SAEs On Downstream Tasks",
     "My Failed AI Safety Research Projects",

@@ -1,4 +1,4 @@
-"""Build the static browse page (D4): entries/ -> site/index.html.
+"""Build the static browse page: entries/ -> site/index.html.
 
   python tools/build_site.py [--entries DIR] [--out FILE] [--repo-url URL]
 

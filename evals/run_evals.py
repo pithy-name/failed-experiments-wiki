@@ -1,4 +1,4 @@
-"""Skill evals (PRD section 9, D8). One command, one results file.
+"""Skill evals. One command, one results file.
 
   python evals/run_evals.py        (or: make evals)
 

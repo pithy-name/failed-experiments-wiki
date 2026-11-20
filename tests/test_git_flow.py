@@ -1,4 +1,4 @@
-"""D1 / D3 write path: submit and review go to branches, never straight to main."""
+"""Write path: submit and review go to branches, never straight to main."""
 import copy
 
 import wikilib

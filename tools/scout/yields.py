@@ -1,4 +1,4 @@
-"""Step 3 of scouting (PRD section 8): yields.
+"""Step 3 of scouting: yields.
 
 Merges the classifier batch files into scouting/classification*.jsonl and
 writes scouting/yields.md: yes / sampled, overall and broken down by search
