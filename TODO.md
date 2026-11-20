@@ -322,5 +322,6 @@ strings, then regenerate the output files.
 
 `DECISION-LOG.md` groups the build's decisions by topic and later ones by date.
 Choose one rule for new sections: one dated section per working day, or topic
-sections. Decision IDs stay in order either way.
+sections. Topic sections break ID order (DEC-98): a new decision filed under an
+old topic sits next to far lower IDs.
 
